@@ -18,7 +18,7 @@ public class Main {
             File file = fileService.getAllFiles().get(0);
             Terminal.reportTextAreaSize();
             fileService.getBufferedReader(file).close();
-            System.out.println("true");
+            //System.out.println("true");
         }
     }
 }
