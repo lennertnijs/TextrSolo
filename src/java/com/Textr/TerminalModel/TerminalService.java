@@ -42,4 +42,32 @@ public class TerminalService {
         }
         return null;
     }
+
+    public void enterRawInputMode(){
+        Terminal.enterRawInputMode();
+    }
+
+    public void leaveRawInputMode(){
+        Terminal.leaveRawInputMode();
+    }
+
+    public void moveCursor(int row, int column, String idk){
+        if(row <= 0 || column <= 0){
+            throw new IllegalArgumentException("The system is 1-based. All indices must be strictly positive");
+        }
+        // idk wa die string doet
+        Terminal.moveCursor(row, column, idk);
+    }
+
+
+    public void printText(int row, int column, String text){
+        if(row <= 0 || column <= 0){
+            throw new IllegalArgumentException("The system is 1-based. All indices must be strictly positive");
+        }
+        Terminal.printText(row, column, text);
+    }
+
+    public void clearScreen(){
+        Terminal.clearScreen();
+    }
 }
