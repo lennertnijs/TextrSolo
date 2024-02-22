@@ -1,4 +1,4 @@
-package com.Textr.Model;
+package com.Textr.FileModel;
 
 public class File {
 

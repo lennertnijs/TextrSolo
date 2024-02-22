@@ -1,4 +1,4 @@
-package com.Textr.Model;
+package com.Textr.FileModel;
 
 import java.util.ArrayList;
 import java.util.List;
