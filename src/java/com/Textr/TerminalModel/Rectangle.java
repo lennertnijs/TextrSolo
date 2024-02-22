@@ -42,7 +42,7 @@ public class Rectangle {
         }
 
         public Rectangle build(){
-            if(width <= 0 || height <= 0){
+            if(width < 0 || height < 0){
                 throw new IllegalArgumentException("Sizes cannot be non-positive");
             }
             return new Rectangle(this);

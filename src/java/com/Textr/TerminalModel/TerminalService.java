@@ -21,11 +21,11 @@ public class TerminalService {
             b = Terminal.readByte();
             int height = 0;
             while(b != ';'){
-                b = Terminal.readByte();
                 if ('0' <= b && b <= '9') {
                     height *= 10;
                     height += b - '0';
                 }
+                b = Terminal.readByte();
             }
 
             int width = 0;
