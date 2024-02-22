@@ -3,7 +3,7 @@ package com.Textr;
 import com.Textr.Controller.FileController;
 import com.Textr.FileModel.File;
 import com.Textr.FileModel.FileService;
-import com.Textr.TerminalModel.Rectangle;
+import com.Textr.TerminalModel.Dimension2D;
 import com.Textr.TerminalModel.TerminalService;
 import io.github.btj.termios.Terminal;
 
@@ -22,7 +22,7 @@ public class Main {
         System.out.println(fileService.getAllFiles().get(0).getText());
         terminalService.enterRawInputMode();
         terminalService.clearScreen();
-        Rectangle rect = terminalService.getTerminalArea().get();
+        Dimension2D rect = terminalService.getTerminalArea().get();
         List<File> files = fileService.getAllFiles();
         Terminal.printText(5, 5, String.format("%s x %s", rect.getWidth(), rect.getHeight()));
         Terminal.printText(15, 15,String.valueOf(files.get(0).getText()));

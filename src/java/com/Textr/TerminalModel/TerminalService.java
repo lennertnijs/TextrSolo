@@ -11,7 +11,7 @@ public class TerminalService {
 
     }
 
-    public Optional<Rectangle> getTerminalArea(){
+    public Optional<Dimension2D> getTerminalArea(){
         Terminal.reportTextAreaSize();
         try{
             int b = Terminal.readByte();
@@ -36,7 +36,7 @@ public class TerminalService {
                     width += b - '0';
                 }
             }
-            return Optional.of(Rectangle.builder().width(width).height(height).build());
+            return Optional.of(Dimension2D.builder().width(width).height(height).build());
         }catch(IOException e){
             System.out.println("Reading the window dimensions went wrong.");
         }

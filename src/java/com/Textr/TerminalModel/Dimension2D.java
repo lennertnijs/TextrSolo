@@ -1,11 +1,11 @@
 package com.Textr.TerminalModel;
 
-public class Rectangle {
+public class Dimension2D {
 
     private final int width;
     private final int height;
 
-    private Rectangle(Builder builder){
+    private Dimension2D(Builder builder){
         this.width = builder.width;
         this.height = builder.height;
     }
@@ -41,11 +41,11 @@ public class Rectangle {
             return this;
         }
 
-        public Rectangle build(){
+        public Dimension2D build(){
             if(width < 0 || height < 0){
                 throw new IllegalArgumentException("Sizes cannot be non-positive");
             }
-            return new Rectangle(this);
+            return new Dimension2D(this);
         }
     }
 }
