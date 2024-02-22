@@ -46,6 +46,48 @@ public class BufferView {
         return this.isDirty == Dirty.YES;
     }
 
+    protected void setFile(File file){
+        Objects.requireNonNull(file, "Cannot set the file of a bufferView to null.");
+        // make copy
+        this.file = file;
+    }
+
+    protected void setDimensions(Dimension2D dimensions){
+        Objects.requireNonNull(dimensions, "Cannot set the dimensions of a bufferView to null");
+        // make a copy
+        this.dimensions = dimensions;
+    }
+
+    protected void incrementInsertionIndex(){
+        int newInsertionIndex = this.insertionIndex + 1;
+        if(newInsertionIndex <= this.amountOfChars){
+            this.insertionIndex = newInsertionIndex;
+        }
+    }
+
+    protected void decrementInsertionIndex(){
+        int newInsertionIndex = this.insertionIndex - 1;
+        if(newInsertionIndex >= 0){
+            this.insertionIndex = newInsertionIndex;
+        }
+    }
+
+    protected void setDirty(){
+        this.isDirty = Dirty.YES;
+    }
+
+    protected void setNotDirty(){
+        this.isDirty = Dirty.NO;
+    }
+
+    protected void setAmountOfChars(int amount){
+        if(amount < 0){
+            throw new IllegalArgumentException("The amount of characters in a view cannot be negative.");
+        }
+        this.amountOfChars = amount;
+        this.amountOfLines = amount / this.dimensions.getWidth();
+    }
+
 
     private static class Builder{
 
