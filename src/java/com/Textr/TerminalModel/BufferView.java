@@ -11,7 +11,7 @@ public class BufferView {
     private int insertionIndex;
     private int amountOfLines;
     private int amountOfChars;
-    private Dirty isDirty;
+    private State state;
 
     public BufferView(Builder builder){
         this.file = builder.file;
@@ -19,7 +19,7 @@ public class BufferView {
         this.insertionIndex = builder.insertionIndex;
         this.amountOfLines = builder.amountOfLines;
         this.amountOfChars = builder.amountOfChars;
-        this.isDirty = builder.isDirty;
+        this.state = builder.state;
     }
 
     public File getFile(){
@@ -42,8 +42,8 @@ public class BufferView {
         return this.amountOfChars;
     }
 
-    public boolean getIsDirty(){
-        return this.isDirty == Dirty.YES;
+    public State getState(){
+        return this.state;
     }
 
     protected void setFile(File file){
@@ -73,11 +73,11 @@ public class BufferView {
     }
 
     protected void setDirty(){
-        this.isDirty = Dirty.YES;
+        this.state = State.DIRTY;
     }
 
-    protected void setNotDirty(){
-        this.isDirty = Dirty.NO;
+    protected void setClean(){
+        this.state = State.CLEAN;
     }
 
     protected void setAmountOfChars(int amount){
@@ -96,7 +96,7 @@ public class BufferView {
         private int insertionIndex = 0;
         private int amountOfLines;
         private int amountOfChars;
-        private Dirty isDirty = Dirty.NO;
+        private State state = State.CLEAN;
 
         private Builder(){
 
