@@ -7,18 +7,16 @@ import java.util.Objects;
 public class BufferView {
 
     private File file;
+    private String text;
     private Dimension2D dimensions;
     private int insertionIndex;
-    private int amountOfLines;
-    private int amountOfChars;
     private State state;
 
     public BufferView(Builder builder){
         this.file = builder.file;
+        this.text = builder.text;
         this.dimensions = builder.dimensions;
         this.insertionIndex = builder.insertionIndex;
-        this.amountOfLines = builder.amountOfLines;
-        this.amountOfChars = builder.amountOfChars;
         this.state = builder.state;
     }
 
@@ -35,11 +33,11 @@ public class BufferView {
     }
 
     public int getAmountOfLines(){
-        return this.amountOfLines;
+        return (int)Math.ceil( ((float)this.text.length()) / ((float)this.dimensions.getWidth()));
     }
 
     public int getAmountOfChars(){
-        return this.amountOfChars;
+        return this.text.length();
     }
 
     public State getState(){
@@ -60,7 +58,7 @@ public class BufferView {
 
     protected void incrementInsertionIndex(){
         int newInsertionIndex = this.insertionIndex + 1;
-        if(newInsertionIndex <= this.amountOfChars){
+        if(newInsertionIndex <= this.text.length()){
             this.insertionIndex = newInsertionIndex;
         }
     }
@@ -80,22 +78,12 @@ public class BufferView {
         this.state = State.CLEAN;
     }
 
-    protected void setAmountOfChars(int amount){
-        if(amount < 0){
-            throw new IllegalArgumentException("The amount of characters in a view cannot be negative.");
-        }
-        this.amountOfChars = amount;
-        this.amountOfLines = amount / this.dimensions.getWidth();
-    }
-
-
     private static class Builder{
 
         private File file;
+        private String text;
         private Dimension2D dimensions;
         private int insertionIndex = 0;
-        private int amountOfLines;
-        private int amountOfChars;
         private State state = State.CLEAN;
 
         private Builder(){
@@ -107,6 +95,11 @@ public class BufferView {
             return this;
         }
 
+        public Builder text(String text){
+            this.text = text;
+            return this;
+        }
+
         public Builder dimensions(Dimension2D dimensions){
             this.dimensions = dimensions;
             return this;
@@ -115,8 +108,6 @@ public class BufferView {
         public BufferView build(){
             Objects.requireNonNull(file, "Cannot build a bufferView because the file is null.");
             Objects.requireNonNull(dimensions, "Cannot build a bufferView because the dimensions are null.");
-            this.amountOfChars = file.getText().length();
-            this.amountOfLines = (int)Math.ceil( ((float)this.amountOfChars) / ((float)this.dimensions.getWidth()));
             return new BufferView(this);
         }
     }
