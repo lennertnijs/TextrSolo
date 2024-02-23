@@ -1,72 +1,108 @@
 package com.Textr.FileModel;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class File {
+public final class File {
 
-
-    // id to uniquely identify files
-    private final String url;
+    private static final AtomicInteger atomicInteger = new AtomicInteger();
+    private final int id;
+    private final String path;
     private final String text;
 
+    /**
+     * Constructor for a {@link File} object.
+     * Uses a static {@link File.Builder} to create valid {@link File}.
+     * @param builder The {@link File.Builder}. Cannot be null.
+     */
     private File(Builder builder){
-        this.url = builder.url;
+        Objects.requireNonNull(builder, "Cannot build a File with a null Builder.");
+        this.id = atomicInteger.getAndIncrement();
+        this.path = builder.path;
         this.text = builder.text;
     }
 
-    public String getUrl(){
-        return this.url;
+    /**
+     * Returns this {@link File}'s UNIQUE id.
+     * @return the {@link File}'s unique id
+     */
+    public int getId(){
+        return this.id;
     }
 
+    /**
+     * Returns this {@link File}'s file path.
+     * @return the {@link File}'s path
+     */
+    public String getPath(){
+        return this.path;
+    }
+
+    /**
+     * Returns this {@link File}'s text.
+     * @return the {@link File}'s text
+     */
     public String getText(){
         return this.text;
     }
 
+
+    /**
+     * Creates and returns a new {@link File.Builder} to build a {@link File} object with.
+     * @return the {@link File.Builder}
+     */
     public static Builder builder(){
         return new Builder();
     }
 
+    /**
+     * A package-private subclass {@link Builder} used to build valid {@link File} instances with.
+     * To obtain a {@link Builder}, use File.builder();
+     */
     public static class Builder{
 
-        private String url;
-        private String  text = "dummy";
+        private String path = null;
+        private String  text = null;
 
+        /**
+         * Constructor for the {@link File.Builder}
+         */
         private Builder(){
         }
 
-        public Builder url(String url){
-            this.url = url;
+        /**
+         * Sets the path of this {@link File.Builder} to the given file path.
+         * @param path The file path
+         *
+         * @return the {@link File.Builder}
+         */
+        public Builder path(String path){
+            this.path = path;
             return this;
         }
 
-        public File build(){
-            try(BufferedReader bufferedReader = new BufferedReader(new FileReader(url))){
-                StringBuilder stringBuilder = new StringBuilder();
-                String line;
-                while((line = bufferedReader.readLine()) != null){
-                    stringBuilder.append(removeNonAscii(line));
-                    //stringBuilder.append("\n");
-                }
-                this.text = String.valueOf(stringBuilder);
-                return new File(this);
-            }catch(IOException e){
-                System.out.println("The file could not be read.");
-            }
-            ;
-            return new File(this);
+        /**
+         * Sets the text of this {@link File.Builder} to the given text.
+         * @param text The file text
+         *
+         * @return the {@link File.Builder}
+         */
+        public Builder text(String text){
+            this.text = text;
+            return this;
         }
 
-        private String removeNonAscii(String line){
-            StringBuilder builder = new StringBuilder();
-            for(int i =0; i < line.length(); i++){
-                char c = line.charAt(i);
-                if(c >= 32 && c <= 126 || c == 10 || c == 13){
-                    builder.append(c);
-                }
-            }
-            return String.valueOf(builder);
+        /**
+         * Validates all the fields of this {@link File.Builder}.
+         * If all are valid, creates and returns a new immutable {@link File} object with these fields.
+         * @throws  NullPointerException If this {@link File.Builder}'s path or text is null.
+         *
+         * @return a newly created valid & immutable {@link File}
+         */
+        public File build(){
+            Objects.requireNonNull(path, "Cannot create a File object with a null file path.");
+            Objects.requireNonNull(text, "Cannot create a File object with a null text.");
+            return new File(this);
         }
     }
 }
