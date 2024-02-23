@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public final class File {
 
-    private static final AtomicInteger atomicInteger = new AtomicInteger();
     private final int id;
     private final String path;
     private final String text;
@@ -17,7 +16,7 @@ public final class File {
      */
     private File(Builder builder){
         Objects.requireNonNull(builder, "Cannot build a File with a null Builder.");
-        this.id = atomicInteger.getAndIncrement();
+        this.id = builder.id;
         this.path = builder.path;
         this.text = builder.text;
     }
@@ -81,7 +80,7 @@ public final class File {
      */
     @Override
     public String toString(){
-        return String.format("File[id = %d, filePath = %s, text = %s]", this.id, this.path, this.text);
+        return String.format("File[id = %d, path = %s, text = %s]", this.id, this.path, this.text);
     }
 
 
@@ -99,6 +98,7 @@ public final class File {
      */
     public static class Builder{
 
+        private int id = -1;
         private String path = null;
         private String  text = null;
 
@@ -106,6 +106,18 @@ public final class File {
          * Constructor for the {@link File.Builder}
          */
         private Builder(){
+        }
+
+        /**
+         * Sets the id of this {@link File.Builder} to the given id.
+         * IT IS IMPORTANT TO ENSURE THIS ID IS UNIQUE FOR EACH FILE.
+         * @param id The id
+         *
+         * @return the {@link File.Builder}
+         */
+        public Builder id(int id){
+            this.id = id;
+            return this;
         }
 
         /**
@@ -138,8 +150,15 @@ public final class File {
          * @return a newly created valid & immutable {@link File}
          */
         public File build(){
-            Objects.requireNonNull(path, "Cannot create a File object with a null file path.");
-            Objects.requireNonNull(text, "Cannot create a File object with a null text.");
+            if(id < 0){
+                throw new IllegalArgumentException("Cannot create a File with a negative id.");
+            }
+            try{
+                Objects.requireNonNull(path, "Cannot create a File object with a null file path.");
+                Objects.requireNonNull(text, "Cannot create a File object with a null text.");
+            }catch(NullPointerException n){
+                throw new IllegalArgumentException("Cannot create a File with a null path/text.");
+            }
             return new File(this);
         }
     }
