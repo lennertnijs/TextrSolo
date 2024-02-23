@@ -46,6 +46,44 @@ public final class File {
         return this.text;
     }
 
+    /**
+     * Compares this {@link File} to the given {@link File} and returns True if they're equal.
+     * Equality means they have the same unique identifier.
+     *
+     * @param o the other {@link File}
+     * @return True if equal, false otherwise.
+     */
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+        if(!(o instanceof File file)){
+            return false;
+        }
+        return this.id == file.id;
+    }
+
+    /**
+     * Creates a hash code for this {@link File}.
+     *
+     * @return the hash code
+     */
+    @Override
+    public int hashCode(){
+        return Objects.hash(this.id);
+    }
+
+    /**
+     * Creates and returns a {@link String} representation of this {@link File} object.
+     *
+     * @return The {@link String}
+     */
+    @Override
+    public String toString(){
+        return String.format("File[id = %d, filePath = %s, text = %s]", this.id, this.path, this.text);
+    }
+
 
     /**
      * Creates and returns a new {@link File.Builder} to build a {@link File} object with.
