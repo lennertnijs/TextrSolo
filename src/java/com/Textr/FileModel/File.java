@@ -6,6 +6,8 @@ import java.io.IOException;
 
 public class File {
 
+
+    // id to uniquely identify files
     private final String url;
     private final String text;
 
