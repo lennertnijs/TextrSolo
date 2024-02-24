@@ -13,6 +13,7 @@ public class BufferPoint {
      * @param builder The {@link BufferPoint.Builder}. Cannot be null.
      */
     private BufferPoint(Builder builder){
+        Objects.requireNonNull(builder, "Cannot build a BufferPoint with a null Builder.");
         this.x = builder.x;
         this.y = builder.y;
     }
