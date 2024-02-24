@@ -143,8 +143,12 @@ public final class File {
 
         /**
          * Validates all the fields of this {@link File.Builder}.
-         * If all are valid, creates and returns a new immutable {@link File} object with these fields.
-         * @throws  NullPointerException If this {@link File.Builder}'s path or text is null.
+         * If all are valid, creates and returns a new immutable {@link File} with these fields.
+         * More precisely, the following conditions must hold on the fields:
+         * - The id cannot be negative.
+         * - The file path cannot be null.
+         * - The text cannot be null.
+         * @throws  IllegalArgumentException If any of the fields are invalid.
          *
          * @return a newly created valid & immutable {@link File}
          */
