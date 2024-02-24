@@ -1,102 +1,96 @@
 package com.Textr.TerminalModel;
 
-import com.Textr.FileModel.File;
-
 import java.util.Objects;
 
 public class BufferView {
 
-    private File file;
-    private String text;
-    private Dimension2D dimensions;
-    private int insertionIndex;
-    private State state;
+    private final int fileId;
+    private final BufferPoint point;
+    private final Dimension2D dimensions;
+    private final String text;
+    private final int insertionIndex;
+    private final State state;
 
     public BufferView(Builder builder){
-        this.file = builder.file;
-        this.text = builder.text;
+        this.fileId = builder.fileId;
+        this.point = builder.point;
         this.dimensions = builder.dimensions;
+        this.text = builder.text;
         this.insertionIndex = builder.insertionIndex;
         this.state = builder.state;
     }
 
-    public File getFile(){
-        return this.file;
+    public int getFileId(){
+        return this.fileId;
     }
 
+    public BufferPoint getPoint(){
+        return this.point;
+    }
     public Dimension2D getDimensions(){
         return this.dimensions;
+    }
+
+    public String getText(){
+        return this.text;
     }
 
     public int getInsertionIndex(){
         return this.insertionIndex;
     }
 
-    public int getAmountOfLines(){
-        return (int)Math.ceil( ((float)this.text.length()) / ((float)this.dimensions.getWidth()));
-    }
-
-    public int getAmountOfChars(){
-        return this.text.length();
-    }
-
     public State getState(){
         return this.state;
     }
 
-    protected void setFile(File file){
-        Objects.requireNonNull(file, "Cannot set the file of a bufferView to null.");
-        // make copy
-        this.file = file;
-    }
-
-    protected void setDimensions(Dimension2D dimensions){
-        Objects.requireNonNull(dimensions, "Cannot set the dimensions of a bufferView to null");
-        // make a copy
-        this.dimensions = dimensions;
-    }
-
-    protected void incrementInsertionIndex(){
-        int newInsertionIndex = this.insertionIndex + 1;
-        if(newInsertionIndex <= this.text.length()){
-            this.insertionIndex = newInsertionIndex;
+    @Override
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
         }
-    }
-
-    protected void decrementInsertionIndex(){
-        int newInsertionIndex = this.insertionIndex - 1;
-        if(newInsertionIndex >= 0){
-            this.insertionIndex = newInsertionIndex;
+        if(!(o instanceof BufferView view)){
+            return false;
         }
+        return this.fileId == view.fileId &&
+                this.point.equals(view.point) &&
+                this.dimensions.equals(view.dimensions) &&
+                this.text.equals(view.text) &&
+                this.insertionIndex == view.insertionIndex &&
+                this.state == view.state;
     }
 
-    protected void setDirty(){
-        this.state = State.DIRTY;
+    @Override
+    public int hashCode(){
+        return Objects.hash(fileId, point, dimensions, text, insertionIndex, state);
     }
 
-    protected void setClean(){
-        this.state = State.CLEAN;
+    @Override
+    public String toString(){
+        return String.format("BufferView[fileId = %d, point = %s, dimensions = %s, " +
+                                "text = %s, insertionIndex = %d, state = %s]",
+                                fileId, point.toString(), dimensions, text, insertionIndex, state);
     }
 
     private static class Builder{
 
-        private File file;
-        private String text;
+        private int fileId;
+        private BufferPoint point;
         private Dimension2D dimensions;
+        private String text;
         private int insertionIndex = 0;
-        private State state = State.CLEAN;
+        private final State state = State.CLEAN;
 
         private Builder(){
 
         }
 
-        public Builder file(File file){
-            this.file = file;
+        public Builder fileId(int id){
+            this.fileId = id;
             return this;
         }
 
-        public Builder text(String text){
-            this.text = text;
+        public Builder point(BufferPoint point){
+            this.point = point;
             return this;
         }
 
@@ -105,9 +99,30 @@ public class BufferView {
             return this;
         }
 
+        public Builder text(String text){
+            this.text = text;
+            return this;
+        }
+
+        public Builder insertionIndex(int insertionIndex){
+            this.insertionIndex = insertionIndex;
+            return this;
+        }
+
         public BufferView build(){
-            Objects.requireNonNull(file, "Cannot build a bufferView because the file is null.");
-            Objects.requireNonNull(dimensions, "Cannot build a bufferView because the dimensions are null.");
+            if(fileId < 0){
+                throw new IllegalArgumentException("The file id of a BufferView cannot be negative.");
+            }
+            try{
+                Objects.requireNonNull(point, "The buffer point of a bufferView cannot be null");
+                Objects.requireNonNull(dimensions, "The dimensions of a bufferView cannot be null");
+                Objects.requireNonNull(text, "The text of a bufferView cannot be null");
+            }catch(NullPointerException e){
+                throw new IllegalArgumentException("Cannot build a bufferView with a null parameter");
+            }
+            if(insertionIndex < 0 || insertionIndex > text.length()){
+                throw new IllegalArgumentException("The insertion index of a bufferView must be within the text size range.");
+            }
             return new BufferView(this);
         }
     }
