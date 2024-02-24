@@ -2,40 +2,40 @@ package com.Textr.TerminalModel;
 
 import java.util.Objects;
 
-public class BufferPoint {
+public class Position {
 
     private final int x;
     private final int y;
 
     /**
-     * Constructor for a {@link BufferPoint}.
-     * Uses a static {@link BufferPoint.Builder} to create a valid {@link BufferPoint}.
-     * @param builder The {@link BufferPoint.Builder}. Cannot be null.
+     * Constructor for a {@link Position}.
+     * Uses a static {@link Position.Builder} to create a valid {@link Position}.
+     * @param builder The {@link Position.Builder}. Cannot be null.
      */
-    private BufferPoint(Builder builder){
+    private Position(Builder builder){
         Objects.requireNonNull(builder, "Cannot build a BufferPoint with a null Builder.");
         this.x = builder.x;
         this.y = builder.y;
     }
 
     /**
-     * Returns this {@link BufferPoint}'s x coordinate.
-     * @return the {@link BufferPoint}'s x coordinate
+     * Returns this {@link Position}'s x coordinate.
+     * @return the {@link Position}'s x coordinate
      */
     public int getX(){
         return this.x;
     }
 
     /**
-     * Returns this {@link BufferPoint}'s y coordinate.
-     * @return the {@link BufferPoint}'s y coordinate
+     * Returns this {@link Position}'s y coordinate.
+     * @return the {@link Position}'s y coordinate
      */
     public int getY(){
         return this.y;
     }
 
     /**
-     * Compares this {@link BufferPoint} to the given {@link Object} and returns True if they're equal.
+     * Compares this {@link Position} to the given {@link Object} and returns True if they're equal.
      * Equality means that they have the same (x, y) coordinates.
      * @param o The other {@link Object} to be compared to this
      *
@@ -46,14 +46,14 @@ public class BufferPoint {
         if(this == o){
             return true;
         }
-        if(!(o instanceof BufferPoint point)){
+        if(!(o instanceof Position point)){
             return false;
         }
         return this.x == point.x && this.y == point.y;
     }
 
     /**
-     * Generates and returns a hash code for this {@link BufferPoint}.
+     * Generates and returns a hash code for this {@link Position}.
      *
      * @return the hash code
      */
@@ -63,7 +63,7 @@ public class BufferPoint {
     }
 
     /**
-     * Creates and returns a {@link String} representation of this {@link BufferPoint}.
+     * Creates and returns a {@link String} representation of this {@link Position}.
      *
      * @return The {@link String}
      */
@@ -73,16 +73,16 @@ public class BufferPoint {
     }
 
     /**
-     * Creates and returns a new {@link BufferPoint.Builder} to build a {@link BufferPoint} object with.
-     * @return the {@link BufferPoint.Builder}
+     * Creates and returns a new {@link Position.Builder} to build a {@link Position} object with.
+     * @return the {@link Position.Builder}
      */
     public static Builder builder(){
         return new Builder();
     }
 
     /**
-     * A package-private subclass {@link BufferPoint.Builder} used to build valid {@link BufferPoint} instances with.
-     * To obtain a {@link BufferPoint.Builder}, use BufferPoint.builder();
+     * A package-private subclass {@link Position.Builder} used to build valid {@link Position} instances with.
+     * To obtain a {@link Position.Builder}, use BufferPoint.builder();
      */
     public static class Builder{
 
@@ -90,16 +90,16 @@ public class BufferPoint {
         private int y;
 
         /**
-         * Constructor for the {@link BufferPoint.Builder}
+         * Constructor for the {@link Position.Builder}
          */
         private Builder(){
         }
 
         /**
-         * Sets the x coordinate of this {@link BufferPoint.Builder} to the given x.
+         * Sets the x coordinate of this {@link Position.Builder} to the given x.
          * @param x The x coordinate
          *
-         * @return This {@link BufferPoint.Builder}
+         * @return This {@link Position.Builder}
          */
         public Builder x(int x){
             this.x = x;
@@ -107,10 +107,10 @@ public class BufferPoint {
         }
 
         /**
-         * Sets the y coordinate of this {@link BufferPoint.Builder} to the given y.
+         * Sets the y coordinate of this {@link Position.Builder} to the given y.
          * @param y The y coordinate
          *
-         * @return This {@link BufferPoint.Builder}
+         * @return This {@link Position.Builder}
          */
         public Builder y(int y){
             this.y = y;
@@ -118,20 +118,20 @@ public class BufferPoint {
         }
 
         /**
-         * Validates all the fields of this {@link BufferPoint.Builder}.
-         * If all the fields are valid, creates and returns a new immutable {@link BufferPoint} with these fields.
+         * Validates all the fields of this {@link Position.Builder}.
+         * If all the fields are valid, creates and returns a new immutable {@link Position} with these fields.
          * More precisely, the following conditions must hold on the fields:
          * - x >= 1
          * - y >= 1
          * @throws IllegalArgumentException If any of the fields are invalid.
          *
-         * @return a newly created valid & immutable {@link BufferPoint}.
+         * @return a newly created valid & immutable {@link Position}.
          */
-        public BufferPoint build(){
+        public Position build(){
             if(x <= 0 || y <= 0){
                 throw new IllegalArgumentException("The coordinates of the point cannot be negative or 0.");
             }
-            return new BufferPoint(this);
+            return new Position(this);
         }
     }
 }

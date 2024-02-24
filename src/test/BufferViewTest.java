@@ -1,4 +1,4 @@
-import com.Textr.TerminalModel.BufferPoint;
+import com.Textr.TerminalModel.Position;
 import com.Textr.TerminalModel.BufferView;
 import com.Textr.TerminalModel.Dimension2D;
 import org.junit.jupiter.api.Assertions;
@@ -8,7 +8,7 @@ public class BufferViewTest {
 
     @Test
     public void testConstructorAndGetters(){
-        BufferPoint point = BufferPoint.builder().x(5).y(5).build();
+        Position point = Position.builder().x(5).y(5).build();
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
         BufferView view = BufferView.builder().fileId(0).point(point).dimensions(dimensions).build();
         Assertions.assertAll(
@@ -20,7 +20,7 @@ public class BufferViewTest {
 
     @Test
     public void testInvalidConstructor(){
-        BufferPoint point = BufferPoint.builder().x(5).y(5).build();
+        Position point = Position.builder().x(5).y(5).build();
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
         BufferView.Builder invalidId = BufferView.builder().fileId(-1).point(point)
                 .dimensions(dimensions);
@@ -37,7 +37,7 @@ public class BufferViewTest {
 
     @Test
     public void testEqualsAndHashCode(){
-        BufferPoint point = BufferPoint.builder().x(5).y(5).build();
+        Position point = Position.builder().x(5).y(5).build();
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
         BufferView view1 = BufferView.builder().fileId(1).point(point)
                 .dimensions(dimensions).build();
@@ -58,7 +58,7 @@ public class BufferViewTest {
 
     @Test
     public void testToString(){
-        BufferPoint point = BufferPoint.builder().x(5).y(5).build();
+        Position point = Position.builder().x(5).y(5).build();
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
         BufferView view = BufferView.builder().fileId(1).point(point)
                 .dimensions(dimensions).build();

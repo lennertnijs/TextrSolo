@@ -5,7 +5,7 @@ import java.util.Objects;
 public class BufferView {
 
     private final int fileId;
-    private final BufferPoint point;
+    private final Position point;
     private final Dimension2D dimensions;
 
     /**
@@ -30,9 +30,9 @@ public class BufferView {
 
     /**
      * Returns the position of this {@link BufferView}.
-     * @return the {@link BufferView}'s position as a {@link BufferPoint}
+     * @return the {@link BufferView}'s position as a {@link Position}
      */
-    public BufferPoint getPoint(){
+    public Position getPoint(){
         return this.point;
     }
 
@@ -101,7 +101,7 @@ public class BufferView {
     public static class Builder{
 
         private int fileId;
-        private BufferPoint point;
+        private Position point;
         private Dimension2D dimensions;
 
         /**
@@ -122,12 +122,12 @@ public class BufferView {
         }
 
         /**
-         * Sets the position of this {@link BufferView.Builder} to the given {@link BufferPoint}
-         * @param point the position as a {@link BufferPoint}
+         * Sets the position of this {@link BufferView.Builder} to the given {@link Position}
+         * @param point the position as a {@link Position}
          *
          * @return This {@link BufferView.Builder}
          */
-        public Builder point(BufferPoint point){
+        public Builder point(Position point){
             this.point = point;
             return this;
         }
