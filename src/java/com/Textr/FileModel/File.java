@@ -1,7 +1,6 @@
 package com.Textr.FileModel;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public final class File {
 
