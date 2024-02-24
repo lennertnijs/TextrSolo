@@ -45,4 +45,39 @@ public class BufferViewTest {
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidInsertionIndex::build)
         );
     }
+
+    @Test
+    public void testEqualsAndHashCode(){
+        BufferPoint point = BufferPoint.builder().x(5).y(5).build();
+        Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
+        BufferView view1 = BufferView.builder().fileId(1).point(point)
+                .dimensions(dimensions).text("text").insertionIndex(1).build();
+        BufferView view2 = BufferView.builder().fileId(1).point(point)
+                .dimensions(dimensions).text("otherText").insertionIndex(1).build();
+        BufferView view3 = BufferView.builder().fileId(1).point(point)
+                .dimensions(dimensions).text("text").insertionIndex(1).build();
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(view1, view1),
+                () -> Assertions.assertEquals(view1, view3),
+                () -> Assertions.assertNotEquals(view1, view2),
+                () -> Assertions.assertNotEquals(view1, new Object()),
+                () -> Assertions.assertEquals(view1.hashCode(), view1.hashCode()),
+                () -> Assertions.assertEquals(view1.hashCode(), view3.hashCode()),
+                () -> Assertions.assertNotEquals(view2.hashCode(), view1.hashCode())
+        );
+    }
+
+    @Test
+    public void testToString(){
+        BufferPoint point = BufferPoint.builder().x(5).y(5).build();
+        Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
+        BufferView view = BufferView.builder().fileId(1).point(point)
+                .dimensions(dimensions).text("text").insertionIndex(1).build();
+        String expected = "BufferView[fileId = 1, point = BufferPoint[x = 5, y = 5], " +
+                "dimensions = com.Textr.TerminalModel.Dimension2D@17c386de, " +
+                "text = text, insertionIndex = 1, state = CLEAN]";
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(view.toString(), expected)
+        );
+    }
 }
