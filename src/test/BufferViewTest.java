@@ -1,7 +1,6 @@
 import com.Textr.TerminalModel.BufferPoint;
 import com.Textr.TerminalModel.BufferView;
 import com.Textr.TerminalModel.Dimension2D;
-import com.Textr.TerminalModel.State;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -11,15 +10,11 @@ public class BufferViewTest {
     public void testConstructorAndGetters(){
         BufferPoint point = BufferPoint.builder().x(5).y(5).build();
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
-        BufferView view = BufferView.builder().fileId(0).point(point).dimensions(dimensions)
-                .text("text").insertionIndex(4).build();
+        BufferView view = BufferView.builder().fileId(0).point(point).dimensions(dimensions).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(view.getFileId(), 0),
                 () -> Assertions.assertEquals(view.getPoint(), point),
-                () -> Assertions.assertEquals(view.getDimensions(), dimensions),
-                () -> Assertions.assertEquals(view.getText(), "text"),
-                () -> Assertions.assertEquals(view.getInsertionIndex(), 4),
-                () -> Assertions.assertEquals(view.getState(), State.CLEAN)
+                () -> Assertions.assertEquals(view.getDimensions(), dimensions)
         );
     }
 
@@ -28,21 +23,15 @@ public class BufferViewTest {
         BufferPoint point = BufferPoint.builder().x(5).y(5).build();
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
         BufferView.Builder invalidId = BufferView.builder().fileId(-1).point(point)
-                .dimensions(dimensions).text("text").insertionIndex(1);
+                .dimensions(dimensions);
         BufferView.Builder invalidPoint = BufferView.builder().fileId(0).point(null)
-                .dimensions(dimensions).text("text").insertionIndex(1);
+                .dimensions(dimensions);
         BufferView.Builder invalidDimension = BufferView.builder().fileId(0).point(point)
-                .dimensions(null).text("text").insertionIndex(1);
-        BufferView.Builder invalidText = BufferView.builder().fileId(0).point(point)
-                .dimensions(dimensions).text(null).insertionIndex(1);
-        BufferView.Builder invalidInsertionIndex = BufferView.builder().fileId(0).point(point)
-                .dimensions(dimensions).text("text").insertionIndex(5);
+                .dimensions(null);
         Assertions.assertAll(
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidId::build),
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidPoint::build),
-                () -> Assertions.assertThrows(IllegalArgumentException.class, invalidDimension::build),
-                () -> Assertions.assertThrows(IllegalArgumentException.class, invalidText::build),
-                () -> Assertions.assertThrows(IllegalArgumentException.class, invalidInsertionIndex::build)
+                () -> Assertions.assertThrows(IllegalArgumentException.class, invalidDimension::build)
         );
     }
 
@@ -51,11 +40,11 @@ public class BufferViewTest {
         BufferPoint point = BufferPoint.builder().x(5).y(5).build();
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
         BufferView view1 = BufferView.builder().fileId(1).point(point)
-                .dimensions(dimensions).text("text").insertionIndex(1).build();
-        BufferView view2 = BufferView.builder().fileId(1).point(point)
-                .dimensions(dimensions).text("otherText").insertionIndex(1).build();
+                .dimensions(dimensions).build();
+        BufferView view2 = BufferView.builder().fileId(2).point(point)
+                .dimensions(dimensions).build();
         BufferView view3 = BufferView.builder().fileId(1).point(point)
-                .dimensions(dimensions).text("text").insertionIndex(1).build();
+                .dimensions(dimensions).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(view1, view1),
                 () -> Assertions.assertEquals(view1, view3),
@@ -72,9 +61,9 @@ public class BufferViewTest {
         BufferPoint point = BufferPoint.builder().x(5).y(5).build();
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
         BufferView view = BufferView.builder().fileId(1).point(point)
-                .dimensions(dimensions).text("text").insertionIndex(1).build();
+                .dimensions(dimensions).build();
         String expected = "BufferView[fileId = 1, point = BufferPoint[x = 5, y = 5], " +
-                "dimensions = Dimension2D[width = 15, height = 15], text = text, insertionIndex = 1, state = CLEAN]";
+                "dimensions = Dimension2D[width = 15, height = 15]]";
         Assertions.assertAll(
                 () -> Assertions.assertEquals(view.toString(), expected)
         );

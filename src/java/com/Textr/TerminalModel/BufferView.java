@@ -7,9 +7,6 @@ public class BufferView {
     private final int fileId;
     private final BufferPoint point;
     private final Dimension2D dimensions;
-    private final String text;
-    private final int insertionIndex;
-    private final State state;
 
     /**
      * Constructor for a {@link BufferView}.
@@ -21,9 +18,6 @@ public class BufferView {
         this.fileId = builder.fileId;
         this.point = builder.point;
         this.dimensions = builder.dimensions;
-        this.text = builder.text;
-        this.insertionIndex = builder.insertionIndex;
-        this.state = builder.state;
     }
 
     /**
@@ -51,30 +45,6 @@ public class BufferView {
     }
 
     /**
-     * Returns the text of this {@link BufferView}
-     * @return the {@link BufferView}'s text as a {@link String}
-     */
-    public String getText(){
-        return this.text;
-    }
-
-    /**
-     * Returns the insertion point index of this {@link BufferView}
-     * @return the {@link BufferView}'s insertion point index
-     */
-    public int getInsertionIndex(){
-        return this.insertionIndex;
-    }
-
-    /**
-     * Returns the state of this {@link BufferView}
-     * @return the {@link BufferView}'s state as a {@link State}
-     */
-    public State getState(){
-        return this.state;
-    }
-
-    /**
      * Compares this {@link BufferView} to the given {@link Object} and returns True if they're equal.
      * Equality means that all of their fields are equal.
      * @param o The other {@link Object} to be compared to this
@@ -91,10 +61,7 @@ public class BufferView {
         }
         return this.fileId == view.fileId &&
                 this.point.equals(view.point) &&
-                this.dimensions.equals(view.dimensions) &&
-                this.text.equals(view.text) &&
-                this.insertionIndex == view.insertionIndex &&
-                this.state == view.state;
+                this.dimensions.equals(view.dimensions);
     }
 
     /**
@@ -104,7 +71,7 @@ public class BufferView {
      */
     @Override
     public int hashCode(){
-        return Objects.hash(fileId, point, dimensions, text, insertionIndex, state);
+        return Objects.hash(fileId, point, dimensions);
     }
 
 
@@ -115,9 +82,8 @@ public class BufferView {
      */
     @Override
     public String toString(){
-        return String.format("BufferView[fileId = %d, point = %s, dimensions = %s, " +
-                                "text = %s, insertionIndex = %d, state = %s]",
-                                fileId, point.toString(), dimensions, text, insertionIndex, state);
+        return String.format("BufferView[fileId = %d, point = %s, dimensions = %s]",
+                fileId, point.toString(), dimensions);
     }
 
     /**
@@ -137,9 +103,6 @@ public class BufferView {
         private int fileId;
         private BufferPoint point;
         private Dimension2D dimensions;
-        private String text;
-        private int insertionIndex = 0;
-        private final State state = State.CLEAN;
 
         /**
          * Constructor of the {@link BufferView.Builder}
@@ -180,28 +143,6 @@ public class BufferView {
             return this;
         }
 
-        /**
-         * Sets the text of this {@link BufferView.Builder} to the given text.
-         * @param text the text as a {@link String}
-         *
-         * @return This {@link BufferView.Builder}
-         */
-        public Builder text(String text){
-            this.text = text;
-            return this;
-        }
-
-        /**
-         * Sets the insertion point index of this {@link BufferView.Builder} to the given index.
-         * @param insertionIndex The insertion point index
-         *
-         * @return This {@link BufferView.Builder}
-         */
-        public Builder insertionIndex(int insertionIndex){
-            this.insertionIndex = insertionIndex;
-            return this;
-        }
-
 
         /**
          * Validates all the fields of this {@link BufferView.Builder}.
@@ -210,8 +151,6 @@ public class BufferView {
          * - fileId >= 0
          * - point != null
          * - dimensions != null
-         * - text != null
-         * - 0 <= insertionIndex <= text.length()
          * @throws IllegalArgumentException If any of the fields are invalid.
          *
          * @return a newly created valid & immutable {@link BufferView}.
@@ -223,12 +162,8 @@ public class BufferView {
             try{
                 Objects.requireNonNull(point, "The buffer point of a bufferView cannot be null");
                 Objects.requireNonNull(dimensions, "The dimensions of a bufferView cannot be null");
-                Objects.requireNonNull(text, "The text of a bufferView cannot be null");
             }catch(NullPointerException e){
                 throw new IllegalArgumentException("Cannot build a bufferView with a null parameter");
-            }
-            if(insertionIndex < 0 || insertionIndex > text.length()){
-                throw new IllegalArgumentException("The insertion index of a bufferView must be within the text size range.");
             }
             return new BufferView(this);
         }
