@@ -47,8 +47,8 @@ public final class File {
     /**
      * Compares this {@link File} to the given {@link File} and returns True if they're equal.
      * Equality means they have the same unique identifier.
-     *
      * @param o the other {@link File}
+     *
      * @return True if equal, false otherwise.
      */
     @Override
@@ -73,7 +73,7 @@ public final class File {
     }
 
     /**
-     * Creates and returns a {@link String} representation of this {@link File} object.
+     * Creates and returns a {@link String} representation of this {@link File}.
      *
      * @return The {@link String}
      */
