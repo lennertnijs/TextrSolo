@@ -1,4 +1,4 @@
 package com.Textr.TerminalModel;
 
-public class BufferViewService {
+public class TerminalViewService {
 }

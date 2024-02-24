@@ -42,7 +42,7 @@ public class PositionTest {
     @Test
     public void testToString(){
         Position point = Position.builder().x(1).y(2).build();
-        String expectedString = "BufferPoint[x = 1, y = 2]";
+        String expectedString = "Position[x = 1, y = 2]";
         Assertions.assertAll(
                 () -> Assertions.assertEquals(point.toString(), expectedString)
         );

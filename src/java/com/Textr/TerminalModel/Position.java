@@ -69,7 +69,7 @@ public class Position {
      */
     @Override
     public String toString(){
-        return String.format("BufferPoint[x = %d, y = %d]", this.x, this.y);
+        return String.format("Position[x = %d, y = %d]", this.x, this.y);
     }
 
     /**
