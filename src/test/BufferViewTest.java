@@ -74,8 +74,7 @@ public class BufferViewTest {
         BufferView view = BufferView.builder().fileId(1).point(point)
                 .dimensions(dimensions).text("text").insertionIndex(1).build();
         String expected = "BufferView[fileId = 1, point = BufferPoint[x = 5, y = 5], " +
-                "dimensions = com.Textr.TerminalModel.Dimension2D@17c386de, " +
-                "text = text, insertionIndex = 1, state = CLEAN]";
+                "dimensions = Dimension2D[width = 15, height = 15], text = text, insertionIndex = 1, state = CLEAN]";
         Assertions.assertAll(
                 () -> Assertions.assertEquals(view.toString(), expected)
         );

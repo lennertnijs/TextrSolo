@@ -18,6 +18,11 @@ public class Dimension2D {
         return this.height;
     }
 
+
+    @Override
+    public String toString(){
+        return String.format("Dimension2D[width = %d, height = %d]", width, height);
+    }
     public static Builder builder(){
         return new Builder();
     }
