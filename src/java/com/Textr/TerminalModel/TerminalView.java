@@ -2,7 +2,7 @@ package com.Textr.TerminalModel;
 
 import java.util.Objects;
 
-public class TerminalView {
+public final class TerminalView {
 
     private final int fileId;
     private final Position position;

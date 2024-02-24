@@ -2,7 +2,7 @@ package com.Textr.TerminalModel;
 
 import java.util.Objects;
 
-public class Dimension2D {
+public final class Dimension2D {
 
     private final int width;
     private final int height;

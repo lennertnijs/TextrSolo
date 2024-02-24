@@ -2,7 +2,7 @@ package com.Textr.TerminalModel;
 
 import java.util.Objects;
 
-public class Position {
+public final class Position {
 
     private final int x;
     private final int y;

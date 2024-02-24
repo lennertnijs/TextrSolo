@@ -2,7 +2,7 @@ package com.Textr.FileModel;
 
 import java.util.Objects;
 
-public class FileBuffer {
+public final class FileBuffer {
 
     private final int activeFileId;
     private final String  bufferText;
