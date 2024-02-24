@@ -1,7 +1,5 @@
 package com.Textr.FileModel;
 
-import com.Textr.TerminalModel.State;
-
 import java.util.Objects;
 
 public class FileBuffer {
