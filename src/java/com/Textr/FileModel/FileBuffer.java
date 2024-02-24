@@ -106,10 +106,10 @@ public class FileBuffer {
     }
 
     /**
-     * A package-private subclass {@link FileBuffer.Builder} used to build valid {@link FileBuffer} instances with.
+     * A subclass {@link FileBuffer.Builder} used to build valid {@link FileBuffer} instances with.
      * To obtain a {@link FileBuffer.Builder}, use FileBuffer.builder();
      */
-    protected static class Builder{
+    public static class Builder{
 
         private int activeFileId;
         private String bufferText;
