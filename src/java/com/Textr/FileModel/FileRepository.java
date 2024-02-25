@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+// Should store all files.
+// Should support addition, removal, retrieval
 public class FileRepository {
 
     private final List<File> files;

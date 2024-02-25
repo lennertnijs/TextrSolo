@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+// Should store all the TerminalViews
+// Should support addition, removal and retrieval at the least.
 public class TerminalViewRepository {
 
     private final List<TerminalView> terminalViews = new ArrayList<>();
