@@ -16,6 +16,17 @@ public class FileService {
         this.fileRepository = new FileRepository();
     }
 
+    /**
+     * Methods necessary:
+     * 1) create a File
+     * 2) Store a File
+     * 3) remove a File
+     * 4) get all Files()
+     * 5) ???
+     */
+
+
+
     public List<File> getAllFiles(){
         return fileRepository.getFiles();
     }
