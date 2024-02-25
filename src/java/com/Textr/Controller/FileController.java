@@ -27,4 +27,12 @@ public class FileController {
         }
         return str.charAt(0);
     }
+
+    /**
+     * Process all the inputs. Probably usefull to use STATIC to name the important keys:
+     * E.g. static int S = (ascii code of S)
+     * Needs a way to remember a CTRL press. Havent thought about this.
+     *
+     * While it is important to handle all inputs here, it might be a good idea to split it up into move functions?
+     */
 }
