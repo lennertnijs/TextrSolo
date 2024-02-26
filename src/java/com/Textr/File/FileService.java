@@ -25,13 +25,11 @@ public class FileService {
 
     /**
      * Creates a {@link File}. Uses a {@link BufferedReader} to read from the given URL.
-     * If an IOException occurs during the reading, will return an empty Optional.
-     * If the {@link File} is successfully created, returns an Optional of this {@link File}.
      *  DOES NOT YET CHECK NON ASCII CHARACTERS
-     *
      * @param url The file's url
      *
-     * @return Optional.of(File) if successful, Optional.empty() if not.
+     * @return The {@link File}
+     * @throws IllegalArgumentException When an error occurs during the reading of the file.
      */
     public File createFile(String url){
         Objects.requireNonNull(url, "Cannot create a File object with a null URL.");
@@ -39,6 +37,7 @@ public class FileService {
             StringBuilder stringBuilder = new StringBuilder();
             String line;
             while((line = bufferedReader.readLine()) != null){
+                checkForNonAscii(line);
                 stringBuilder.append(line);
                 //stringBuilder.append(System.lineSeparator());
             }
@@ -47,6 +46,14 @@ public class FileService {
             TerminalService.enterRawInputMode();
             TerminalService.clearScreen();
             throw new IllegalArgumentException("An error occurred during the reading of a File");
+        }
+    }
+
+    private void checkForNonAscii(String text){
+        for(char c : text.toCharArray()){
+            if((c < 32 && c != 10 && c != 13) || 127 <= c){
+                throw new IllegalArgumentException("A non-ASCII character was present in the File.");
+            }
         }
     }
 
