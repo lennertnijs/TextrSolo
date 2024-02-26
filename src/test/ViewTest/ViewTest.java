@@ -1,10 +1,12 @@
+package ViewTest;
+
 import com.Textr.View.Position;
 import com.Textr.View.View;
 import com.Textr.View.Dimension2D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class TerminalViewTest {
+public class ViewTest {
 
     @Test
     public void testConstructorAndGetters(){

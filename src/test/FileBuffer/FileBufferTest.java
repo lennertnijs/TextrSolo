@@ -1,3 +1,5 @@
+package FileBuffer;
+
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.State;
 import org.junit.jupiter.api.Assertions;
