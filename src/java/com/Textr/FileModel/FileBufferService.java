@@ -1,11 +1,37 @@
 package com.Textr.FileModel;
 
+import java.util.List;
+import java.util.Objects;
+
 public class FileBufferService {
 
     private final FileBufferRepo fileBufferRepo;
 
     public FileBufferService(){
         this.fileBufferRepo = new FileBufferRepo();
+    }
+
+    private FileBuffer createFileBuffer(int fileId, String text){
+        if(fileId < 0){
+            throw new IllegalArgumentException("Cannot create a FileBuffer with a negative fileId.");
+        }
+        Objects.requireNonNull(text, "Cannot create a FileBuffer because the File's text is null.");
+        return FileBuffer.builder().activeFileId(fileId).bufferText(text).insertionIndex(0).state(State.CLEAN).build();
+    }
+
+    private void storeFileBuffer(FileBuffer fileBuffer){
+        Objects.requireNonNull(fileBuffer, "Cannot store a null FileBuffer.");
+        fileBufferRepo.addFileBuffer(fileBuffer);
+    }
+
+    public void initialiseFileBuffer(File file){
+        Objects.requireNonNull(file, "Cannot initialise a fileBuffer because the File is null.");
+        FileBuffer fileBuffer = createFileBuffer(file.getId(), file.getText());
+        storeFileBuffer(fileBuffer);
+    }
+
+    public List<FileBuffer> getAllFileBuffers(){
+        return fileBufferRepo.getAllFileBuffers();
     }
 
     /**

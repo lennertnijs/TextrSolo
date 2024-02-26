@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class FileService {
 
@@ -35,29 +36,49 @@ public class FileService {
         fileRepository.addFile(Objects.requireNonNull(file, "Cannot add a null file"));
     }
 
-    public void createAndStoreFile(String url){
-        String text;
+    /**
+     * Creates a {@link File}. Uses a {@link BufferedReader} to read from the given URL.
+     * If an IOException occurs during the reading, will return an empty Optional.
+     * If the {@link File} is successfully created, returns an Optional of this {@link File}.
+     *  DOES NOT YET CHECK NON ASCII CHARACTERS
+     *
+     * @param url The file's url
+     *
+     * @return Optional.of(File) if successful, Optional.empty() if not.
+     */
+    public Optional<File> createFile(String url){
+        Objects.requireNonNull(url, "Cannot create a File object with a null URL.");
+        Optional<File> optionalFile;
         try(BufferedReader bufferedReader = new BufferedReader(new FileReader(url))){
             StringBuilder stringBuilder = new StringBuilder();
             String line;
             while((line = bufferedReader.readLine()) != null){
-                stringBuilder.append(removeNonAscii(line));
-                //stringBuilder.append("\n");
+                stringBuilder.append(line);
+                stringBuilder.append(System.lineSeparator());
             }
-            text = String.valueOf(stringBuilder);
+            File file = File.builder().id(0).path(url).text(stringBuilder.toString()).build();
+            optionalFile = Optional.of(file);
         }catch(IOException e){
-            System.out.println("The file could not be read.");
+            optionalFile = Optional.empty();
         }
-        File file = File.builder().path(url).build();
+        return optionalFile;
+    }
+
+
+    public void storeFile(File file){
+        Objects.requireNonNull(file, "Cannot store a null file.");
         fileRepository.addFile(file);
     }
 
-    public BufferedReader getBufferedReader(File file) throws IOException {
-        BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(file.getPath()));
-        this.bufferedReader = bufferedReader;
-        return bufferedReader;
-    }
 
+    public void initialiseFile(String url){
+        Objects.requireNonNull(url, "Cannot initialise a File with a null URL.");
+        Optional<File> optionalFile = createFile(url);
+        if(optionalFile.isEmpty()){
+            return;
+        }
+        fileRepository.addFile(optionalFile.get());
+    }
 
 
     private String removeNonAscii(String line){

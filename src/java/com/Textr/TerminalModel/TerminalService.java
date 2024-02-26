@@ -70,4 +70,8 @@ public class TerminalService {
     public void clearScreen(){
         Terminal.clearScreen();
     }
+
+    public void printText(Position position, String text){
+        Terminal.printText(position.getX(), position.getY(), text);
+    };
 }
