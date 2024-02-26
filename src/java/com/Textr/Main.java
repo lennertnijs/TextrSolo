@@ -2,10 +2,8 @@ package com.Textr;
 
 import com.Textr.Controller.FileController;
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.FileModel.FileService;
-import com.Textr.TerminalModel.TerminalService;
-import com.Textr.TerminalModel.ViewService;
-import io.github.btj.termios.Terminal;
+import com.Textr.File.FileService;
+import com.Textr.Terminal.ViewService;
 
 import java.io.IOException;
 

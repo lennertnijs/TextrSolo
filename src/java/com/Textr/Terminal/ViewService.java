@@ -1,4 +1,4 @@
-package com.Textr.TerminalModel;
+package com.Textr.Terminal;
 
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;

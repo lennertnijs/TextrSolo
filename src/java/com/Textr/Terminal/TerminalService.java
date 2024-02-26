@@ -1,4 +1,4 @@
-package com.Textr.TerminalModel;
+package com.Textr.Terminal;
 
 import io.github.btj.termios.Terminal;
 

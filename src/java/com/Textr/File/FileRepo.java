@@ -1,4 +1,4 @@
-package com.Textr.FileModel;
+package com.Textr.File;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

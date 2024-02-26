@@ -1,5 +1,5 @@
-import com.Textr.FileModel.File;
-import com.Textr.FileModel.FileRepo;
+import com.Textr.File.File;
+import com.Textr.File.FileRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

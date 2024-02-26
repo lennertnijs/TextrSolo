@@ -1,10 +1,10 @@
 package com.Textr.Controller;
 
-import com.Textr.FileModel.File;
+import com.Textr.File.File;
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.FileModel.FileService;
-import com.Textr.TerminalModel.TerminalService;
-import com.Textr.TerminalModel.ViewService;
+import com.Textr.File.FileService;
+import com.Textr.Terminal.TerminalService;
+import com.Textr.Terminal.ViewService;
 
 import java.util.Objects;
 

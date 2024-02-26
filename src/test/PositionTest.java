@@ -1,4 +1,4 @@
-import com.Textr.TerminalModel.Position;
+import com.Textr.Terminal.Position;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

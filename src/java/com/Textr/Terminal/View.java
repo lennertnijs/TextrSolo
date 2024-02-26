@@ -1,4 +1,4 @@
-package com.Textr.TerminalModel;
+package com.Textr.Terminal;
 
 import java.util.Objects;
 

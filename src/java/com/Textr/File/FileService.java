@@ -1,4 +1,4 @@
-package com.Textr.FileModel;
+package com.Textr.File;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
