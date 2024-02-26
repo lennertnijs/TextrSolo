@@ -1,11 +1,12 @@
 package com.Textr.File;
 
+import com.Textr.Terminal.TerminalService;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class FileService {
@@ -32,9 +33,8 @@ public class FileService {
      *
      * @return Optional.of(File) if successful, Optional.empty() if not.
      */
-    public Optional<File> createFile(String url){
+    public File createFile(String url){
         Objects.requireNonNull(url, "Cannot create a File object with a null URL.");
-        Optional<File> optionalFile;
         try(BufferedReader bufferedReader = new BufferedReader(new FileReader(url))){
             StringBuilder stringBuilder = new StringBuilder();
             String line;
@@ -42,12 +42,12 @@ public class FileService {
                 stringBuilder.append(line);
                 //stringBuilder.append(System.lineSeparator());
             }
-            File file = File.builder().id(atomicInteger.getAndIncrement()).path(url).text(stringBuilder.toString()).build();
-            optionalFile = Optional.of(file);
+            return File.builder().id(atomicInteger.getAndIncrement()).path(url).text(stringBuilder.toString()).build();
         }catch(IOException e){
-            optionalFile = Optional.empty();
+            TerminalService.enterRawInputMode();
+            TerminalService.clearScreen();
+            throw new IllegalArgumentException("An error occurred during the reading of a File");
         }
-        return optionalFile;
     }
 
 
@@ -59,11 +59,8 @@ public class FileService {
 
     public void initialiseFile(String url){
         Objects.requireNonNull(url, "Cannot initialise a File with a null URL.");
-        Optional<File> optionalFile = createFile(url);
-        if(optionalFile.isEmpty()){
-            return;
-        }
-        storeFile(optionalFile.get());
+        File file = createFile(url);
+        storeFile(file);
     }
 
     /**

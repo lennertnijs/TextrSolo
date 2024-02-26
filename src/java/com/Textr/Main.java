@@ -15,15 +15,9 @@ public class Main {
         final FileBufferService fileBufferService = new FileBufferService();
         final ViewService viewService = new ViewService(fileBufferService);
         final FileController fileController = new FileController(fileService, fileBufferService, viewService);
-        //fileController.loadFiles(args);
-        Terminal.clearScreen();
-        Terminal.enterRawInputMode();
+        fileController.loadFiles(args);
         while(true){
-            int b = Terminal.readByte();
-            if(b != -1){
-                System.out.println(b);
-            }
+            //
         }
-
     }
 }

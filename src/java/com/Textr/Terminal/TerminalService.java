@@ -62,5 +62,5 @@ public class TerminalService {
 
     public static void printText(Position position, String text){
         Terminal.printText(position.getY(), position.getX(), text);
-    };
+    }
 }

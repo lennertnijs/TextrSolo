@@ -38,7 +38,7 @@ public class FileController {
         // Create TerminalViews
         viewService.initialiseTerminalViewsVertical();
         viewService.drawAllViews();
-        // TerminalService.leaveRawInputMode();
+        TerminalService.leaveRawInputMode();
     }
 
 
