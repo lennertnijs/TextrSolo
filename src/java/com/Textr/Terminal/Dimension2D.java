@@ -7,6 +7,7 @@ public final class Dimension2D {
     private final int width;
     private final int height;
 
+
     /**
      * Constructor for a {@link Dimension2D} object.
      * Uses a static {@link Dimension2D.Builder} to create valid {@link Dimension2D}.
