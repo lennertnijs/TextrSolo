@@ -24,12 +24,12 @@ public class FileService {
     }
 
     /**
-     * Creates a {@link File}. Uses a {@link BufferedReader} to read from the given URL.
-     *  DOES NOT YET CHECK NON ASCII CHARACTERS
+     * Creates a {@link File} for the given URL. Uses a {@link BufferedReader}.
      * @param url The file's url
      *
      * @return The {@link File}
-     * @throws IllegalArgumentException When an error occurs during the reading of the file.
+     * @throws IllegalArgumentException When an error occurs during the reading of the file, or when the file contains
+     *                                  non-ASCII characters.
      */
     public File createFile(String url){
         Objects.requireNonNull(url, "Cannot create a File object with a null URL.");
@@ -43,15 +43,14 @@ public class FileService {
             }
             return File.builder().id(atomicInteger.getAndIncrement()).path(url).text(stringBuilder.toString()).build();
         }catch(IOException e){
-            TerminalService.enterRawInputMode();
-            TerminalService.clearScreen();
             throw new IllegalArgumentException("An error occurred during the reading of a File");
         }
     }
 
     private void checkForNonAscii(String text){
         for(char c : text.toCharArray()){
-            if((c < 32 && c != 10 && c != 13) || 127 <= c){
+            boolean isNonASCII = (c < 32 && c != 10 && c != 13) || 127 <= c;
+            if(isNonASCII){
                 throw new IllegalArgumentException("A non-ASCII character was present in the File.");
             }
         }
