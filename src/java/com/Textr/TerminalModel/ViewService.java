@@ -10,12 +10,10 @@ public class ViewService {
 
     private final ViewRepo viewRepo;
     private final FileBufferService fileBufferService;
-    private final TerminalService terminalService;
 
-    public ViewService(FileBufferService fileBufferService, TerminalService terminalService){
+    public ViewService(FileBufferService fileBufferService){
         this.viewRepo = new ViewRepo();
         this.fileBufferService = fileBufferService;
-        this.terminalService = terminalService;
     }
 
     public View createTerminalView(int fileBufferId, Position position, Dimension2D dimensions){
@@ -33,7 +31,7 @@ public class ViewService {
     }
 
     public void initialiseTerminalViewsVertical(){
-        Dimension2D dimensions = terminalService.getTerminalArea().get();
+        Dimension2D dimensions = TerminalService.getTerminalArea().get();
         int amountOfFileBuffers = fileBufferService.getAllFileBuffers().size();
         int heightPerView = dimensions.getHeight() / amountOfFileBuffers;
         int x = 1;
@@ -55,7 +53,7 @@ public class ViewService {
     public void drawAllViews(){
         for(View view: viewRepo.getAll()){
             String text = fileBufferService.getFileBuffer(view.getFileBufferId()).get().getBufferText();
-            terminalService.printText(view.getPosition(), text);
+            TerminalService.printText(view.getPosition(), text);
         }
     }
 

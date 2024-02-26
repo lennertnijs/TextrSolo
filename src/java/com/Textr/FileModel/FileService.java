@@ -60,6 +60,11 @@ public class FileService {
         if(optionalFile.isEmpty()){
             return;
         }
-        fileRepo.add(optionalFile.get());
+        storeFile(optionalFile.get());
     }
+
+    /**
+     * Method to write text changes to the File
+     * Method to write the text changes to the .txt file
+     */
 }

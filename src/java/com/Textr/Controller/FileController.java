@@ -3,6 +3,7 @@ package com.Textr.Controller;
 import com.Textr.FileModel.File;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.FileModel.FileService;
+import com.Textr.TerminalModel.TerminalService;
 import com.Textr.TerminalModel.ViewService;
 
 import java.util.Objects;
@@ -23,6 +24,8 @@ public class FileController {
     }
 
     public void loadFiles(String[] files){
+        TerminalService.enterRawInputMode();
+        TerminalService.clearScreen();
         // create behind the scene Files
         for(String filePath: files){
             Objects.requireNonNull(filePath, "Cannot create an internal file for a null file");
@@ -35,6 +38,7 @@ public class FileController {
         // Create TerminalViews
         viewService.initialiseTerminalViewsVertical();
         viewService.drawAllViews();
+        TerminalService.leaveRawInputMode();
     }
 
 

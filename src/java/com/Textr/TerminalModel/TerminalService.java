@@ -7,11 +7,10 @@ import java.util.Optional;
 
 public class TerminalService {
 
-    public TerminalService(){
-
+    private TerminalService(){
     }
 
-    public Optional<Dimension2D> getTerminalArea(){
+    public static Optional<Dimension2D> getTerminalArea(){
         Terminal.reportTextAreaSize();
         try{
             int b = Terminal.readByte();
@@ -43,15 +42,15 @@ public class TerminalService {
         return Optional.empty();
     }
 
-    public void enterRawInputMode(){
+    public static void enterRawInputMode(){
         Terminal.enterRawInputMode();
     }
 
-    public void leaveRawInputMode(){
+    public static void leaveRawInputMode(){
         Terminal.leaveRawInputMode();
     }
 
-    public void moveCursor(int row, int column, String idk){
+    public static void moveCursor(int row, int column, String idk){
         if(row <= 0 || column <= 0){
             throw new IllegalArgumentException("The system is 1-based. All indices must be strictly positive");
         }
@@ -59,11 +58,11 @@ public class TerminalService {
         Terminal.moveCursor(row, column, idk);
     }
 
-    public void clearScreen(){
+    public static void clearScreen(){
         Terminal.clearScreen();
     }
 
-    public void printText(Position position, String text){
+    public static void printText(Position position, String text){
         Terminal.printText(position.getX(), position.getY(), text);
     };
 }
