@@ -63,4 +63,12 @@ public class TerminalService {
     public static void printText(Position position, String text){
         Terminal.printText(position.getY(), position.getX(), text);
     }
+
+    public static int readByte(){
+        try{
+            return Terminal.readByte();
+        }catch(IOException e){
+            return -1;
+        }
+    }
 }

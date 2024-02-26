@@ -1,4 +1,4 @@
-package com.Textr.Controller;
+package com.Textr;
 
 public class Inputs {
 

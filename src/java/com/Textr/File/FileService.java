@@ -39,7 +39,7 @@ public class FileService {
             while((line = bufferedReader.readLine()) != null){
                 checkForNonAscii(line);
                 stringBuilder.append(line);
-                //stringBuilder.append(System.lineSeparator());
+                stringBuilder.append(System.lineSeparator());
             }
             return File.builder().id(atomicInteger.getAndIncrement()).path(url).text(stringBuilder.toString()).build();
         }catch(IOException e){

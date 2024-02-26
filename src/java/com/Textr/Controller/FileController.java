@@ -8,6 +8,8 @@ import com.Textr.Terminal.ViewService;
 
 import java.util.Objects;
 
+import static com.Textr.Inputs.*;
+
 /**
  * Neemt input (args, keypresses) en callt de correcte methodes
  */
@@ -41,12 +43,13 @@ public class FileController {
         TerminalService.leaveRawInputMode();
     }
 
-
-    /**
-     * Process all the inputs. Probably usefull to use STATIC to name the important keys:
-     * E.g. static int S = (ascii code of S)
-     * Needs a way to remember a CTRL press. Havent thought about this.
-     *
-     * While it is important to handle all inputs here, it might be a good idea to split it up into move functions?
-     */
+    public void handleInput(){
+        int b = TerminalService.readByte();
+        switch(b){
+            case CTRL_S:
+                // do something
+            case CTRL_P:
+                // do something
+        }
+    }
 }
