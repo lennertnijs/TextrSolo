@@ -37,9 +37,8 @@ public class TerminalService {
             }
             return Optional.of(Dimension2D.builder().width(width).height(height).build());
         }catch(IOException e){
-            System.out.println("Reading the window dimensions went wrong.");
+            throw new IllegalStateException("Something went wrong while reading the terminal dimensions.");
         }
-        return Optional.empty();
     }
 
     public static void enterRawInputMode(){
@@ -50,12 +49,11 @@ public class TerminalService {
         Terminal.leaveRawInputMode();
     }
 
-    public static void moveCursor(int row, int column, String idk){
+    public static void moveCursor(int row, int column){
         if(row <= 0 || column <= 0){
             throw new IllegalArgumentException("The system is 1-based. All indices must be strictly positive");
         }
-        // idk wa die string doet
-        Terminal.moveCursor(row, column, idk);
+        Terminal.moveCursor(row, column, "empty");
     }
 
     public static void clearScreen(){
