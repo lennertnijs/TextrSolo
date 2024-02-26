@@ -6,11 +6,11 @@ import java.util.Objects;
 
 // Should store all files.
 // Should support addition, removal, retrieval
-public class FileRepository {
+public class FileRepo {
 
     private final List<File> files;
 
-    protected FileRepository(){
+    protected FileRepo(){
         this.files = new ArrayList<>();
     }
 

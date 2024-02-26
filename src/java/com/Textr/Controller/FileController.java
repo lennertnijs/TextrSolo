@@ -4,8 +4,8 @@ import com.Textr.FileModel.File;
 import com.Textr.FileModel.FileBufferService;
 import com.Textr.FileModel.FileService;
 import com.Textr.TerminalModel.TerminalService;
-import com.Textr.TerminalModel.TerminalView;
-import com.Textr.TerminalModel.TerminalViewService;
+import com.Textr.TerminalModel.View;
+import com.Textr.TerminalModel.ViewService;
 
 import java.util.Objects;
 
@@ -16,29 +16,31 @@ public class FileController {
 
     private final FileService fileService;
     private final FileBufferService fileBufferService;
-    private final TerminalViewService terminalViewService;
+    private final ViewService viewService;
     private final TerminalService terminalService;
 
-    public FileController(FileService fileService, FileBufferService fileBufferService,TerminalViewService terminalViewService, TerminalService terminalService){
+    public FileController(FileService fileService, FileBufferService fileBufferService, ViewService viewService, TerminalService terminalService){
         this.fileService = fileService;
         this.fileBufferService = fileBufferService;
-        this.terminalViewService = terminalViewService;
+        this.viewService = viewService;
         this.terminalService = terminalService;
     }
 
     public void loadFiles(String[] files){
+        // create behind the scene Files
         for(String filePath: files){
             Objects.requireNonNull(filePath, "Cannot create an internal file for a null file");
             fileService.initialiseFile(filePath);
         }
+        // create a FileBuffer for each File
         for(File file: fileService.getAllFiles()){
             fileBufferService.initialiseFileBuffer(file);
         }
-        terminalViewService.initialiseTerminalViewsVertical(terminalService.getTerminalArea().get());
-        int i = 0;
-        for(TerminalView terminalView : terminalViewService.getAllTerminalViews()){
-            terminalService.printText(terminalView.getPosition(), fileService.getAllFiles().get(i).getText());
-            i++;
+        // Create TerminalViews
+        viewService.initialiseTerminalViewsVertical(terminalService.getTerminalArea().get());
+        for(int i = 0; i < viewService.getAllTerminalViews().size(); i++){
+            View view = viewService.getAllTerminalViews().get(i);
+            terminalService.printText(view.getPosition(), fileBufferService.getAllFileBuffers().get(i).getBufferText());
         }
     }
 

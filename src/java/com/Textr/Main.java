@@ -1,16 +1,13 @@
 package com.Textr;
 
 import com.Textr.Controller.FileController;
-import com.Textr.FileModel.File;
 import com.Textr.FileModel.FileBufferService;
 import com.Textr.FileModel.FileService;
-import com.Textr.TerminalModel.Dimension2D;
 import com.Textr.TerminalModel.TerminalService;
-import com.Textr.TerminalModel.TerminalViewService;
+import com.Textr.TerminalModel.ViewService;
 import io.github.btj.termios.Terminal;
 
 import java.io.IOException;
-import java.util.List;
 
 public class Main {
 
@@ -18,8 +15,8 @@ public class Main {
         final FileService fileService = new FileService();
         final FileBufferService fileBufferService = new FileBufferService();
         final TerminalService terminalService = new TerminalService();
-        final TerminalViewService terminalViewService = new TerminalViewService(fileBufferService, terminalService);
-        final FileController fileController = new FileController(fileService, fileBufferService, terminalViewService, terminalService);
+        final ViewService viewService = new ViewService(fileBufferService, terminalService);
+        final FileController fileController = new FileController(fileService, fileBufferService, viewService, terminalService);
 
         terminalService.enterRawInputMode();
         terminalService.clearScreen();

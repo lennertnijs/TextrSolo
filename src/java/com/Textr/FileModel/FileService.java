@@ -3,18 +3,16 @@ package com.Textr.FileModel;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 public class FileService {
 
-    private final FileRepository fileRepository;
+    private final FileRepo fileRepo;
     private BufferedReader bufferedReader;
     public FileService(){
-        this.fileRepository = new FileRepository();
+        this.fileRepo = new FileRepo();
     }
 
     /**
@@ -29,11 +27,11 @@ public class FileService {
 
 
     public List<File> getAllFiles(){
-        return fileRepository.getFiles();
+        return fileRepo.getFiles();
     }
 
     public void addFileToRepo(File file){
-        fileRepository.addFile(Objects.requireNonNull(file, "Cannot add a null file"));
+        fileRepo.addFile(Objects.requireNonNull(file, "Cannot add a null file"));
     }
 
     /**
@@ -67,7 +65,7 @@ public class FileService {
 
     public void storeFile(File file){
         Objects.requireNonNull(file, "Cannot store a null file.");
-        fileRepository.addFile(file);
+        fileRepo.addFile(file);
     }
 
 
@@ -77,7 +75,7 @@ public class FileService {
         if(optionalFile.isEmpty()){
             return;
         }
-        fileRepository.addFile(optionalFile.get());
+        fileRepo.addFile(optionalFile.get());
     }
 
 

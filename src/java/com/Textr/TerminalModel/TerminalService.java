@@ -40,7 +40,7 @@ public class TerminalService {
         }catch(IOException e){
             System.out.println("Reading the window dimensions went wrong.");
         }
-        return null;
+        return Optional.empty();
     }
 
     public void enterRawInputMode(){

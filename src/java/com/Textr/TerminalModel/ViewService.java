@@ -6,30 +6,30 @@ import com.Textr.FileModel.FileBufferService;
 import java.util.List;
 import java.util.Objects;
 
-public class TerminalViewService {
+public class ViewService {
 
-    private final TerminalViewRepository terminalViewRepository;
+    private final ViewRepo viewRepo;
     private final FileBufferService fileBufferService;
     private final TerminalService terminalService;
 
-    public TerminalViewService(FileBufferService fileBufferService, TerminalService terminalService){
-        this.terminalViewRepository = new TerminalViewRepository();
+    public ViewService(FileBufferService fileBufferService, TerminalService terminalService){
+        this.viewRepo = new ViewRepo();
         this.fileBufferService = fileBufferService;
         this.terminalService = terminalService;
     }
 
-    public TerminalView createTerminalView(int fileBufferId, Position position, Dimension2D dimensions){
+    public View createTerminalView(int fileBufferId, Position position, Dimension2D dimensions){
         if(fileBufferId < 0){
             throw new IllegalArgumentException("Cannot create a TerminalView with a negative FileBuffer id.");
         }
         Objects.requireNonNull(position, "Cannot create a TerminalView with a null Position.");
         Objects.requireNonNull(dimensions, "Cannot create a TerminalView with null dimensions");
-        return TerminalView.builder().fileBufferId(fileBufferId).point(position).dimensions(dimensions).build();
+        return View.builder().fileBufferId(fileBufferId).point(position).dimensions(dimensions).build();
     }
 
-    public void storeTerminalView(TerminalView terminalView){
-        Objects.requireNonNull(terminalView, "Cannot store a null TerminalView");
-        terminalViewRepository.addBufferView(terminalView);
+    public void storeTerminalView(View view){
+        Objects.requireNonNull(view, "Cannot store a null TerminalView");
+        viewRepo.addBufferView(view);
     }
 
     public void initialiseTerminalViewsVertical(Dimension2D dimensions){
@@ -40,14 +40,14 @@ public class TerminalViewService {
         for(FileBuffer fileBuffer : fileBufferService.getAllFileBuffers()){
             Position position = Position.builder().x(x).y(y).build();
             Dimension2D viewDimensions = Dimension2D.builder().width(dimensions.getWidth()).height(heightPerView).build();
-            TerminalView terminalView = createTerminalView(fileBuffer.getFileId(), position, viewDimensions);
-            terminalViewRepository.addBufferView(terminalView);
+            View view = createTerminalView(fileBuffer.getFileId(), position, viewDimensions);
+            viewRepo.addBufferView(view);
             y += heightPerView;
         }
     }
 
-    public List<TerminalView> getAllTerminalViews(){
-        return terminalViewRepository.getBufferViews();
+    public List<View> getAllTerminalViews(){
+        return viewRepo.getBufferViews();
     }
 
 
