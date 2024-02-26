@@ -71,7 +71,10 @@ public final class View {
      */
     @Override
     public int hashCode(){
-        return Objects.hash(fileBufferId, position, dimensions);
+        int result = fileBufferId;
+        result = 31 * result + position.hashCode();
+        result = 31 * result + dimensions.hashCode();
+        return result;
     }
 
 

@@ -9,6 +9,7 @@ public class FileBufferTest {
     public void testConstructorAndGetters(){
         FileBuffer buffer = FileBuffer.builder().id(0).fileId(0).bufferText("text").insertionIndex(0).state(State.CLEAN).build();
         Assertions.assertAll(
+                () -> Assertions.assertEquals(buffer.getId(), 0),
                 () -> Assertions.assertEquals(buffer.getFileId(), 0),
                 () -> Assertions.assertEquals(buffer.getBufferText(), "text"),
                 () -> Assertions.assertEquals(buffer.getInsertionIndex(), 0),
@@ -18,6 +19,8 @@ public class FileBufferTest {
 
     @Test
     public void testConstructorInvalid(){
+        FileBuffer.Builder invalidId = FileBuffer.builder().id(-1).fileId(0).bufferText("text")
+                .insertionIndex(0).state(State.CLEAN);
         FileBuffer.Builder invalidActiveFileId = FileBuffer.builder().id(0).fileId(-1).bufferText("text")
                 .insertionIndex(0).state(State.CLEAN);
         FileBuffer.Builder invalidBufferText = FileBuffer.builder().id(0).fileId(0).bufferText(null)
@@ -27,6 +30,7 @@ public class FileBufferTest {
         FileBuffer.Builder invalidState = FileBuffer.builder().id(0).fileId(0).bufferText("text")
                 .insertionIndex(0).state(null);
         Assertions.assertAll(
+                () -> Assertions.assertThrows(IllegalArgumentException.class, invalidId::build),
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidActiveFileId::build),
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidBufferText::build),
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidInsertionIndex::build),
@@ -53,7 +57,7 @@ public class FileBufferTest {
     @Test
     public void testToString(){
         FileBuffer buffer = FileBuffer.builder().id(0).fileId(0).bufferText("text").insertionIndex(0).state(State.CLEAN).build();
-        String expected = "FileBuffer[activeFileId = 0, bufferText = text, insertionIndex = 0, state = CLEAN]";
+        String expected = "FileBuffer[id = 0, activeFileId = 0, bufferText = text, insertionIndex = 0, state = CLEAN]";
         Assertions.assertAll(
                 () -> Assertions.assertEquals(buffer.toString(), expected)
         );
