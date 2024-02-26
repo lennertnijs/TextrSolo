@@ -3,8 +3,8 @@ package com.Textr.FileBuffer;
 import com.Textr.File.File;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class FileBufferService {
@@ -27,7 +27,7 @@ public class FileBufferService {
 
     private void storeFileBuffer(FileBuffer fileBuffer){
         Objects.requireNonNull(fileBuffer, "Cannot store a null FileBuffer.");
-        fileBufferRepo.addFileBuffer(fileBuffer);
+        fileBufferRepo.add(fileBuffer);
     }
 
     public void initialiseFileBuffer(File file){
@@ -37,11 +37,14 @@ public class FileBufferService {
     }
 
     public List<FileBuffer> getAllFileBuffers(){
-        return fileBufferRepo.getAllFileBuffers();
+        return fileBufferRepo.getAll();
     }
 
-    public Optional<FileBuffer> getFileBuffer(int id){
-        return fileBufferRepo.get(id);
+    public FileBuffer getFileBuffer(int id){
+        if(fileBufferRepo.get(id).isPresent()){
+            return fileBufferRepo.get(id).get();
+        }
+        throw new NoSuchElementException("No FileBuffer was found for the given id.");
     }
 
     /**

@@ -52,7 +52,7 @@ public class ViewService {
 
     public void drawAllViews(){
         for(View view: viewRepo.getAll()){
-            String text = fileBufferService.getFileBuffer(view.getFileBufferId()).get().getBufferText();
+            String text = fileBufferService.getFileBuffer(view.getFileBufferId()).getBufferText();
             String[] lines = text.split(System.lineSeparator());
             Dimension2D dimensions = view.getDimensions();
             Position position = view.getPosition();
@@ -62,7 +62,7 @@ public class ViewService {
             for(String s: lines){
                 Position position1 = Position.builder().x(x).y(y).build();
                 if(y == maxY){
-                    TerminalService.printText(position1, String.valueOf(fileBufferService.getFileBuffer(view.getFileBufferId()).get().getState()));
+                    TerminalService.printText(position1, String.valueOf(fileBufferService.getFileBuffer(view.getFileBufferId()).getState()));
                 }
                 if(y <= maxY-1){
                     TerminalService.printText(position1, s);
