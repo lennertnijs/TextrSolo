@@ -4,6 +4,9 @@ import com.Textr.FileModel.FileService;
 
 import java.util.Objects;
 
+/**
+ * Neemt input (args, keypresses) en callt de correcte methodes
+ */
 public class FileController {
 
     private final FileService fileService;

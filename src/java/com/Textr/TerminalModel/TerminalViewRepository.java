@@ -1,5 +1,6 @@
 package com.Textr.TerminalModel;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,5 +20,9 @@ public class TerminalViewRepository {
 
     protected List<TerminalView> getBufferViews(){
         return this.terminalViews;
+    }
+
+    protected void removeTerminalView(TerminalView view){
+        this.terminalViews.remove(view);
     }
 }

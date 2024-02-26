@@ -15,11 +15,9 @@ public class Main {
     public static void main(String[] args) throws IOException {
         final FileService fileService = new FileService();
         final FileController fileController = new FileController(fileService);
-
         final TerminalService terminalService = new TerminalService();
 
         fileController.loadFiles(args);
-        System.out.println(fileService.getAllFiles().get(0).getText());
         terminalService.enterRawInputMode();
         terminalService.clearScreen();
         Dimension2D rect = terminalService.getTerminalArea().get();
