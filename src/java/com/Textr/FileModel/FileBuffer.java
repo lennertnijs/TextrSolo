@@ -4,7 +4,8 @@ import java.util.Objects;
 
 public final class FileBuffer {
 
-    private final int activeFileId;
+    private final int id;
+    private final int fileId;
     private final String  bufferText;
     private final int insertionIndex;
     private final State state;
@@ -17,7 +18,8 @@ public final class FileBuffer {
      */
     private FileBuffer(Builder builder){
         Objects.requireNonNull(builder, "Cannot build a FileBuffer because the Builder is null.");
-        this.activeFileId = builder.activeFileId;
+        this.id = builder.id;
+        this.fileId = builder.fileId;
         this.bufferText = builder.bufferText;
         this.insertionIndex = builder.insertionIndex;
         this.state = builder.state;
@@ -27,8 +29,8 @@ public final class FileBuffer {
      * Returns the id of the active {@link File} of this {@link FileBuffer}.
      * @return This {@link FileBuffer}'s active {@link File} id.
      */
-    public int getActiveFileId(){
-        return this.activeFileId;
+    public int getFileId(){
+        return this.fileId;
     }
 
     /**
@@ -70,7 +72,7 @@ public final class FileBuffer {
         if(!(o instanceof FileBuffer fileBuffer)){
             return false;
         }
-        return this.activeFileId == fileBuffer.activeFileId &&
+        return this.fileId == fileBuffer.fileId &&
                 this.bufferText.equals(fileBuffer.bufferText) &&
                 this.insertionIndex == fileBuffer.insertionIndex &&
                 this.state == fileBuffer.state;
@@ -83,7 +85,7 @@ public final class FileBuffer {
      */
     @Override
     public int hashCode(){
-        return Objects.hash(activeFileId, bufferText, insertionIndex, state);
+        return Objects.hash(fileId, bufferText, insertionIndex, state);
     }
 
     /**
@@ -94,7 +96,7 @@ public final class FileBuffer {
     @Override
     public String toString(){
         return String.format("FileBuffer[activeFileId = %d, bufferText = %s, insertionIndex = %d, state = %s]",
-                activeFileId, bufferText, insertionIndex, state);
+                fileId, bufferText, insertionIndex, state);
     }
 
     /**
@@ -111,7 +113,8 @@ public final class FileBuffer {
      */
     public static class Builder{
 
-        private int activeFileId;
+        private int id;
+        private int fileId;
         private String bufferText;
         private int insertionIndex;
         private State state;
@@ -122,14 +125,18 @@ public final class FileBuffer {
         private Builder(){
         }
 
+        public Builder id(int id){
+            this.id = id;
+            return this;
+        }
         /**
          * Sets the active file id of this {@link FileBuffer.Builder} to the given id.
          * @param id The id
          *
          * @return This {@link FileBuffer.Builder}
          */
-        public Builder activeFileId(int id){
-            this.activeFileId = id;
+        public Builder fileId(int id){
+            this.fileId = id;
             return this;
         }
 
@@ -179,7 +186,7 @@ public final class FileBuffer {
          * @return a newly created valid & immutable {@link FileBuffer}
          */
         public FileBuffer build(){
-            if(activeFileId < 0){
+            if(id < 0 || fileId < 0){
                 throw new IllegalArgumentException("The id the active File in the FileBuffer cannot be negative.");
             }
             try{

@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public final class TerminalView {
 
-    private final int fileId;
+    private final int fileBufferId;
     private final Position position;
     private final Dimension2D dimensions;
 
@@ -15,7 +15,7 @@ public final class TerminalView {
      */
     private TerminalView(Builder builder){
         Objects.requireNonNull(builder, "Cannot build a BufferView with a null Builder.");
-        this.fileId = builder.fileId;
+        this.fileBufferId = builder.fileBufferId;
         this.position = builder.position;
         this.dimensions = builder.dimensions;
     }
@@ -24,8 +24,8 @@ public final class TerminalView {
      * Returns the file id of this {@link TerminalView}.
      * @return the {@link TerminalView}'s file id
      */
-    public int getFileId(){
-        return this.fileId;
+    public int getFileBufferId(){
+        return this.fileBufferId;
     }
 
     /**
@@ -59,7 +59,7 @@ public final class TerminalView {
         if(!(o instanceof TerminalView view)){
             return false;
         }
-        return this.fileId == view.fileId &&
+        return this.fileBufferId == view.fileBufferId &&
                 this.position.equals(view.position) &&
                 this.dimensions.equals(view.dimensions);
     }
@@ -71,7 +71,7 @@ public final class TerminalView {
      */
     @Override
     public int hashCode(){
-        return Objects.hash(fileId, position, dimensions);
+        return Objects.hash(fileBufferId, position, dimensions);
     }
 
 
@@ -83,7 +83,7 @@ public final class TerminalView {
     @Override
     public String toString(){
         return String.format("BufferView[fileId = %d, point = %s, dimensions = %s]",
-                fileId, position.toString(), dimensions);
+                fileBufferId, position.toString(), dimensions);
     }
 
     /**
@@ -100,7 +100,7 @@ public final class TerminalView {
      */
     public static class Builder{
 
-        private int fileId;
+        private int fileBufferId;
         private Position position;
         private Dimension2D dimensions;
 
@@ -111,13 +111,13 @@ public final class TerminalView {
         }
 
         /**
-         * Sets the file id of this {@link TerminalView.Builder} to the given id.
+         * Sets the file buffer id of this {@link TerminalView.Builder} to the given id.
          * @param id the id
          *
          * @return This {@link TerminalView.Builder}
          */
-        public Builder fileId(int id){
-            this.fileId = id;
+        public Builder fileBufferId(int id){
+            this.fileBufferId = id;
             return this;
         }
 
@@ -156,7 +156,7 @@ public final class TerminalView {
          * @return a newly created valid & immutable {@link TerminalView}.
          */
         public TerminalView build(){
-            if(fileId < 0){
+            if(fileBufferId < 0){
                 throw new IllegalArgumentException("The file id of a BufferView cannot be negative.");
             }
             try{

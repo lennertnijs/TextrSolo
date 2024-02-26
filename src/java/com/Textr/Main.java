@@ -18,16 +18,16 @@ public class Main {
         final FileService fileService = new FileService();
         final FileBufferService fileBufferService = new FileBufferService();
         final TerminalService terminalService = new TerminalService();
-        final TerminalViewService terminalViewService = new TerminalViewService(fileBufferService);
+        final TerminalViewService terminalViewService = new TerminalViewService(fileBufferService, terminalService);
         final FileController fileController = new FileController(fileService, fileBufferService, terminalViewService, terminalService);
 
-        fileController.loadFiles(args);
         terminalService.enterRawInputMode();
         terminalService.clearScreen();
-        Dimension2D rect = terminalService.getTerminalArea().get();
-        List<File> files = fileService.getAllFiles();
-        Terminal.printText(5, 5, String.format("%s x %s", rect.getWidth(), rect.getHeight()));
-        Terminal.printText(15, 15,String.valueOf(files.get(0).getText()));
+        fileController.loadFiles(args);
+//        Dimension2D rect = terminalService.getTerminalArea().get();
+//        List<File> files = fileService.getAllFiles();
+//        Terminal.printText(5, 5, String.format("%s x %s", rect.getWidth(), rect.getHeight()));
+//        Terminal.printText(15, 15,String.valueOf(files.get(0).getText()));
         Terminal.leaveRawInputMode();
         while(true){
 

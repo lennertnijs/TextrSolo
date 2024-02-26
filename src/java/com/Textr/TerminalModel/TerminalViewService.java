@@ -9,11 +9,13 @@ import java.util.Objects;
 public class TerminalViewService {
 
     private final TerminalViewRepository terminalViewRepository;
-
     private final FileBufferService fileBufferService;
-    public TerminalViewService(FileBufferService fileBufferService){
+    private final TerminalService terminalService;
+
+    public TerminalViewService(FileBufferService fileBufferService, TerminalService terminalService){
         this.terminalViewRepository = new TerminalViewRepository();
         this.fileBufferService = fileBufferService;
+        this.terminalService = terminalService;
     }
 
     public TerminalView createTerminalView(int fileBufferId, Position position, Dimension2D dimensions){
@@ -22,7 +24,7 @@ public class TerminalViewService {
         }
         Objects.requireNonNull(position, "Cannot create a TerminalView with a null Position.");
         Objects.requireNonNull(dimensions, "Cannot create a TerminalView with null dimensions");
-        return TerminalView.builder().fileId(fileBufferId).point(position).dimensions(dimensions).build();
+        return TerminalView.builder().fileBufferId(fileBufferId).point(position).dimensions(dimensions).build();
     }
 
     public void storeTerminalView(TerminalView terminalView){
@@ -38,8 +40,7 @@ public class TerminalViewService {
         for(FileBuffer fileBuffer : fileBufferService.getAllFileBuffers()){
             Position position = Position.builder().x(x).y(y).build();
             Dimension2D viewDimensions = Dimension2D.builder().width(dimensions.getWidth()).height(heightPerView).build();
-            TerminalView terminalView = TerminalView.builder().fileId(fileBuffer.getActiveFileId())
-                    .point(position).dimensions(viewDimensions).build();
+            TerminalView terminalView = createTerminalView(fileBuffer.getFileId(), position, viewDimensions);
             terminalViewRepository.addBufferView(terminalView);
             y += heightPerView;
         }

@@ -10,9 +10,9 @@ public class TerminalViewTest {
     public void testConstructorAndGetters(){
         Position point = Position.builder().x(5).y(5).build();
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
-        TerminalView view = TerminalView.builder().fileId(0).point(point).dimensions(dimensions).build();
+        TerminalView view = TerminalView.builder().fileBufferId(0).point(point).dimensions(dimensions).build();
         Assertions.assertAll(
-                () -> Assertions.assertEquals(view.getFileId(), 0),
+                () -> Assertions.assertEquals(view.getFileBufferId(), 0),
                 () -> Assertions.assertEquals(view.getPosition(), point),
                 () -> Assertions.assertEquals(view.getDimensions(), dimensions)
         );
@@ -22,11 +22,11 @@ public class TerminalViewTest {
     public void testInvalidConstructor(){
         Position point = Position.builder().x(5).y(5).build();
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
-        TerminalView.Builder invalidId = TerminalView.builder().fileId(-1).point(point)
+        TerminalView.Builder invalidId = TerminalView.builder().fileBufferId(-1).point(point)
                 .dimensions(dimensions);
-        TerminalView.Builder invalidPoint = TerminalView.builder().fileId(0).point(null)
+        TerminalView.Builder invalidPoint = TerminalView.builder().fileBufferId(0).point(null)
                 .dimensions(dimensions);
-        TerminalView.Builder invalidDimension = TerminalView.builder().fileId(0).point(point)
+        TerminalView.Builder invalidDimension = TerminalView.builder().fileBufferId(0).point(point)
                 .dimensions(null);
         Assertions.assertAll(
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidId::build),
@@ -39,11 +39,11 @@ public class TerminalViewTest {
     public void testEqualsAndHashCode(){
         Position point = Position.builder().x(5).y(5).build();
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
-        TerminalView view1 = TerminalView.builder().fileId(1).point(point)
+        TerminalView view1 = TerminalView.builder().fileBufferId(1).point(point)
                 .dimensions(dimensions).build();
-        TerminalView view2 = TerminalView.builder().fileId(2).point(point)
+        TerminalView view2 = TerminalView.builder().fileBufferId(2).point(point)
                 .dimensions(dimensions).build();
-        TerminalView view3 = TerminalView.builder().fileId(1).point(point)
+        TerminalView view3 = TerminalView.builder().fileBufferId(1).point(point)
                 .dimensions(dimensions).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(view1, view1),
@@ -60,7 +60,7 @@ public class TerminalViewTest {
     public void testToString(){
         Position point = Position.builder().x(5).y(5).build();
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
-        TerminalView view = TerminalView.builder().fileId(1).point(point)
+        TerminalView view = TerminalView.builder().fileBufferId(1).point(point)
                 .dimensions(dimensions).build();
         String expected = "BufferView[fileId = 1, point = Position[x = 5, y = 5], dimensions = Dimension2D[width = 15, height = 15]]";
         Assertions.assertAll(

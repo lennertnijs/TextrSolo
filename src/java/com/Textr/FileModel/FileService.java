@@ -53,8 +53,8 @@ public class FileService {
             StringBuilder stringBuilder = new StringBuilder();
             String line;
             while((line = bufferedReader.readLine()) != null){
-                stringBuilder.append(line);
-                stringBuilder.append(System.lineSeparator());
+                stringBuilder.append(removeNonAscii(line));
+                //stringBuilder.append(System.lineSeparator());
             }
             File file = File.builder().id(0).path(url).text(stringBuilder.toString()).build();
             optionalFile = Optional.of(file);

@@ -43,14 +43,6 @@ public class FileController {
     }
 
 
-
-    private int getAsciiFromString(String str){
-        if(str.length() != 1){
-            throw new IllegalArgumentException("Cannot happen dawg");
-        }
-        return str.charAt(0);
-    }
-
     /**
      * Process all the inputs. Probably usefull to use STATIC to name the important keys:
      * E.g. static int S = (ascii code of S)
