@@ -10,28 +10,13 @@ import java.util.Optional;
 public class FileService {
 
     private final FileRepo fileRepo;
-    private BufferedReader bufferedReader;
+
     public FileService(){
         this.fileRepo = new FileRepo();
     }
 
-    /**
-     * Methods necessary:
-     * 1) create a File
-     * 2) Store a File
-     * 3) remove a File
-     * 4) get all Files()
-     * 5) ???
-     */
-
-
-
     public List<File> getAllFiles(){
         return fileRepo.getAll();
-    }
-
-    public void addFileToRepo(File file){
-        fileRepo.add(Objects.requireNonNull(file, "Cannot add a null file"));
     }
 
     /**
@@ -51,8 +36,8 @@ public class FileService {
             StringBuilder stringBuilder = new StringBuilder();
             String line;
             while((line = bufferedReader.readLine()) != null){
-                stringBuilder.append(removeNonAscii(line));
-                //stringBuilder.append(System.lineSeparator());
+                stringBuilder.append(line);
+                stringBuilder.append(System.lineSeparator());
             }
             File file = File.builder().id(0).path(url).text(stringBuilder.toString()).build();
             optionalFile = Optional.of(file);
@@ -76,17 +61,5 @@ public class FileService {
             return;
         }
         fileRepo.add(optionalFile.get());
-    }
-
-
-    private String removeNonAscii(String line){
-        StringBuilder builder = new StringBuilder();
-        for(int i =0; i < line.length(); i++){
-            char c = line.charAt(i);
-            if(c >= 32 && c <= 126 || c == 10 || c == 13){
-                builder.append(c);
-            }
-        }
-        return String.valueOf(builder);
     }
 }
