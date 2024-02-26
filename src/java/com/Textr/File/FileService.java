@@ -6,10 +6,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FileService {
 
     private final FileRepo fileRepo;
+
+    private final AtomicInteger atomicInteger = new AtomicInteger();
 
     public FileService(){
         this.fileRepo = new FileRepo();
@@ -37,9 +40,9 @@ public class FileService {
             String line;
             while((line = bufferedReader.readLine()) != null){
                 stringBuilder.append(line);
-                stringBuilder.append(System.lineSeparator());
+                //stringBuilder.append(System.lineSeparator());
             }
-            File file = File.builder().id(0).path(url).text(stringBuilder.toString()).build();
+            File file = File.builder().id(atomicInteger.getAndIncrement()).path(url).text(stringBuilder.toString()).build();
             optionalFile = Optional.of(file);
         }catch(IOException e){
             optionalFile = Optional.empty();

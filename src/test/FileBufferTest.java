@@ -7,7 +7,7 @@ public class FileBufferTest {
 
     @Test
     public void testConstructorAndGetters(){
-        FileBuffer buffer = FileBuffer.builder().fileId(0).bufferText("text").insertionIndex(0).state(State.CLEAN).build();
+        FileBuffer buffer = FileBuffer.builder().id(0).fileId(0).bufferText("text").insertionIndex(0).state(State.CLEAN).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(buffer.getFileId(), 0),
                 () -> Assertions.assertEquals(buffer.getBufferText(), "text"),
@@ -18,13 +18,13 @@ public class FileBufferTest {
 
     @Test
     public void testConstructorInvalid(){
-        FileBuffer.Builder invalidActiveFileId = FileBuffer.builder().fileId(-1).bufferText("text")
+        FileBuffer.Builder invalidActiveFileId = FileBuffer.builder().id(0).fileId(-1).bufferText("text")
                 .insertionIndex(0).state(State.CLEAN);
-        FileBuffer.Builder invalidBufferText = FileBuffer.builder().fileId(0).bufferText(null)
+        FileBuffer.Builder invalidBufferText = FileBuffer.builder().id(0).fileId(0).bufferText(null)
                 .insertionIndex(0).state(State.CLEAN);
-        FileBuffer.Builder invalidInsertionIndex = FileBuffer.builder().fileId(0).bufferText("text")
+        FileBuffer.Builder invalidInsertionIndex = FileBuffer.builder().id(0).fileId(0).bufferText("text")
                 .insertionIndex(5).state(State.CLEAN);
-        FileBuffer.Builder invalidState = FileBuffer.builder().fileId(0).bufferText("text")
+        FileBuffer.Builder invalidState = FileBuffer.builder().id(0).fileId(0).bufferText("text")
                 .insertionIndex(0).state(null);
         Assertions.assertAll(
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidActiveFileId::build),
@@ -36,9 +36,9 @@ public class FileBufferTest {
 
     @Test
     public void testEqualsAndHashCode(){
-        FileBuffer buffer1 = FileBuffer.builder().fileId(0).bufferText("text").insertionIndex(0).state(State.CLEAN).build();
-        FileBuffer buffer2 = FileBuffer.builder().fileId(0).bufferText("text").insertionIndex(4).state(State.CLEAN).build();
-        FileBuffer buffer3 = FileBuffer.builder().fileId(0).bufferText("text").insertionIndex(0).state(State.CLEAN).build();
+        FileBuffer buffer1 = FileBuffer.builder().id(0).fileId(0).bufferText("text").insertionIndex(0).state(State.CLEAN).build();
+        FileBuffer buffer2 = FileBuffer.builder().id(1).fileId(0).bufferText("text").insertionIndex(4).state(State.CLEAN).build();
+        FileBuffer buffer3 = FileBuffer.builder().id(0).fileId(0).bufferText("text").insertionIndex(0).state(State.CLEAN).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(buffer1, buffer1),
                 () -> Assertions.assertEquals(buffer1, buffer3),
@@ -52,7 +52,7 @@ public class FileBufferTest {
 
     @Test
     public void testToString(){
-        FileBuffer buffer = FileBuffer.builder().fileId(0).bufferText("text").insertionIndex(0).state(State.CLEAN).build();
+        FileBuffer buffer = FileBuffer.builder().id(0).fileId(0).bufferText("text").insertionIndex(0).state(State.CLEAN).build();
         String expected = "FileBuffer[activeFileId = 0, bufferText = text, insertionIndex = 0, state = CLEAN]";
         Assertions.assertAll(
                 () -> Assertions.assertEquals(buffer.toString(), expected)

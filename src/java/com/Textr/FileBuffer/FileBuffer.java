@@ -119,7 +119,7 @@ public final class FileBuffer {
      */
     public static class Builder{
 
-        private int id;
+        private int id = -1;
         private int fileId;
         private String bufferText;
         private int insertionIndex;
