@@ -5,10 +5,12 @@ import com.Textr.FileModel.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FileBufferService {
 
     private final FileBufferRepo fileBufferRepo;
+    private final AtomicInteger atomicInteger = new AtomicInteger();
 
     public FileBufferService(){
         this.fileBufferRepo = new FileBufferRepo();
@@ -19,7 +21,8 @@ public class FileBufferService {
             throw new IllegalArgumentException("Cannot create a FileBuffer with a negative fileId.");
         }
         Objects.requireNonNull(text, "Cannot create a FileBuffer because the File's text is null.");
-        return FileBuffer.builder().fileId(fileId).bufferText(text).insertionIndex(0).state(State.CLEAN).build();
+        int uniqueId = atomicInteger.getAndIncrement();
+        return FileBuffer.builder().id(uniqueId).fileId(fileId).bufferText(text).insertionIndex(0).state(State.CLEAN).build();
     }
 
     private void storeFileBuffer(FileBuffer fileBuffer){

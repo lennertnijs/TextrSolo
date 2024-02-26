@@ -42,7 +42,6 @@ public class ViewService {
             View view = createTerminalView(fileBuffer.getFileId(), position, viewDimensions);
             viewRepo.add(view);
             y += heightPerView;
-            x+= heightPerView;
         }
     }
 
@@ -53,8 +52,18 @@ public class ViewService {
     public void drawAllViews(){
         for(View view: viewRepo.getAll()){
             String text = fileBufferService.getFileBuffer(view.getFileBufferId()).get().getBufferText();
-            TerminalService.printText(view.getPosition(), text);
+            TerminalService.printText(view.getPosition(), removeAllNonAscii(text));
         }
+    }
+
+    private String removeAllNonAscii(String text){
+        StringBuilder builder = new StringBuilder();
+        for(char c : text.toCharArray()){
+            if(c >= 32 && c <= 126 || c == 10 || c == 13){
+                builder.append(c);
+            }
+        }
+        return builder.toString();
     }
 
 
