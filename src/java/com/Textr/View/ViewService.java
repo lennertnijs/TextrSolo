@@ -1,7 +1,8 @@
-package com.Textr.Terminal;
+package com.Textr.View;
 
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
+import com.Textr.Terminal.TerminalService;
 
 import java.util.List;
 import java.util.Objects;

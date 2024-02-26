@@ -1,7 +1,5 @@
 package com.Textr.File;
 
-import com.Textr.Terminal.TerminalService;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,8 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class FileService {
 
     private final FileRepo fileRepo;
-
     private final AtomicInteger atomicInteger = new AtomicInteger();
+
 
     public FileService(){
         this.fileRepo = new FileRepo();
@@ -21,6 +19,12 @@ public class FileService {
 
     public List<File> getAllFiles(){
         return fileRepo.getAll();
+    }
+
+    public void initialiseFile(String url){
+        Objects.requireNonNull(url, "Cannot initialise a File with a null URL.");
+        File file = createFile(url);
+        storeFile(file);
     }
 
     /**
@@ -56,18 +60,13 @@ public class FileService {
         }
     }
 
-
     public void storeFile(File file){
         Objects.requireNonNull(file, "Cannot store a null file.");
         fileRepo.add(file);
     }
 
 
-    public void initialiseFile(String url){
-        Objects.requireNonNull(url, "Cannot initialise a File with a null URL.");
-        File file = createFile(url);
-        storeFile(file);
-    }
+
 
     /**
      * Method to write text changes to the File

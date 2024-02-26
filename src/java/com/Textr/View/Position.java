@@ -1,4 +1,4 @@
-package com.Textr.Terminal;
+package com.Textr.View;
 
 import java.util.Objects;
 
@@ -59,7 +59,9 @@ public final class Position {
      */
     @Override
     public int hashCode(){
-        return Objects.hash(x, y);
+        int result = x;
+        result = 31 * result + y;
+        return result;
     }
 
     /**
@@ -69,7 +71,7 @@ public final class Position {
      */
     @Override
     public String toString(){
-        return String.format("Position[x = %d, y = %d]", this.x, this.y);
+        return String.format("Position[x = %d, y = %d]", x, y);
     }
 
     /**
@@ -86,8 +88,8 @@ public final class Position {
      */
     public static class Builder{
 
-        private int x;
-        private int y;
+        private int x = 0;
+        private int y = 0;
 
         /**
          * Constructor for the {@link Position.Builder}

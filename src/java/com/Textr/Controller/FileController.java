@@ -4,7 +4,7 @@ import com.Textr.File.File;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.File.FileService;
 import com.Textr.Terminal.TerminalService;
-import com.Textr.Terminal.ViewService;
+import com.Textr.View.ViewService;
 
 import java.util.Objects;
 

@@ -1,4 +1,4 @@
-package com.Textr.Terminal;
+package com.Textr.View;
 
 import java.util.Objects;
 

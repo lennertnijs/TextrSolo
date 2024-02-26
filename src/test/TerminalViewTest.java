@@ -1,6 +1,6 @@
-import com.Textr.Terminal.Position;
-import com.Textr.Terminal.View;
-import com.Textr.Terminal.Dimension2D;
+import com.Textr.View.Position;
+import com.Textr.View.View;
+import com.Textr.View.Dimension2D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

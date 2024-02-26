@@ -1,4 +1,4 @@
-package com.Textr.Terminal;
+package com.Textr.View;
 
 import java.util.Objects;
 
@@ -60,7 +60,9 @@ public final class Dimension2D {
      */
     @Override
     public int hashCode(){
-        return Objects.hash(this.width, this.height);
+        int result = width;
+        result = 31 * result + width;
+        return result;
     }
 
     /**
@@ -87,8 +89,8 @@ public final class Dimension2D {
      */
     public static class Builder{
 
-        private int width;
-        private int height;
+        private int width = 0;
+        private int height = 0;
 
         /**
          * Constructor for the {@link Dimension2D.Builder}
@@ -129,7 +131,7 @@ public final class Dimension2D {
          * @return a newly created valid & immutable {@link Dimension2D}.
          */
         public Dimension2D build(){
-            if(width < 0 || height < 0){
+            if(width <= 0 || height <= 0){
                 throw new IllegalArgumentException("The width and height of a Dimension2D cannot be negative.");
             }
             return new Dimension2D(this);
