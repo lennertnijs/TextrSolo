@@ -78,10 +78,7 @@ public final class FileBuffer {
         if(!(o instanceof FileBuffer fileBuffer)){
             return false;
         }
-        return this.fileId == fileBuffer.fileId &&
-                this.bufferText.equals(fileBuffer.bufferText) &&
-                this.insertionIndex == fileBuffer.insertionIndex &&
-                this.state == fileBuffer.state;
+        return this.id == fileBuffer.id;
     }
 
     /**
@@ -91,7 +88,7 @@ public final class FileBuffer {
      */
     @Override
     public int hashCode(){
-        return Objects.hash(fileId, bufferText, insertionIndex, state);
+        return this.id;
     }
 
     /**
@@ -101,8 +98,8 @@ public final class FileBuffer {
      */
     @Override
     public String toString(){
-        return String.format("FileBuffer[activeFileId = %d, bufferText = %s, insertionIndex = %d, state = %s]",
-                fileId, bufferText, insertionIndex, state);
+        return String.format("FileBuffer[id = %d, activeFileId = %d, bufferText = %s, insertionIndex = %d, state = %s]",
+                id, fileId, bufferText, insertionIndex, state);
     }
 
     /**
@@ -120,10 +117,10 @@ public final class FileBuffer {
     public static class Builder{
 
         private int id = -1;
-        private int fileId;
-        private String bufferText;
-        private int insertionIndex;
-        private State state;
+        private int fileId = -1;
+        private String bufferText = null;
+        private int insertionIndex = 0;
+        private State state = null;
 
         /**
          * Constructor for the {@link FileBuffer.Builder}

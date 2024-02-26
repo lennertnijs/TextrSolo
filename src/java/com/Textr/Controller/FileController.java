@@ -10,9 +10,6 @@ import java.util.Objects;
 
 import static com.Textr.Inputs.*;
 
-/**
- * Neemt input (args, keypresses) en callt de correcte methodes
- */
 public class FileController {
 
     private final FileService fileService;
@@ -46,6 +43,8 @@ public class FileController {
     public void handleInput(){
         int b = TerminalService.readByte();
         switch(b){
+            case ARROW_RIGHT:
+                // move arrow right
             case CTRL_S:
                 // do something
             case CTRL_P:
