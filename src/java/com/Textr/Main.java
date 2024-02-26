@@ -16,7 +16,7 @@ public class Main {
         final FileBufferService fileBufferService = new FileBufferService();
         final TerminalService terminalService = new TerminalService();
         final ViewService viewService = new ViewService(fileBufferService, terminalService);
-        final FileController fileController = new FileController(fileService, fileBufferService, viewService, terminalService);
+        final FileController fileController = new FileController(fileService, fileBufferService, viewService);
 
         terminalService.enterRawInputMode();
         terminalService.clearScreen();

@@ -29,10 +29,11 @@ public class ViewService {
 
     public void storeTerminalView(View view){
         Objects.requireNonNull(view, "Cannot store a null TerminalView");
-        viewRepo.addBufferView(view);
+        viewRepo.add(view);
     }
 
-    public void initialiseTerminalViewsVertical(Dimension2D dimensions){
+    public void initialiseTerminalViewsVertical(){
+        Dimension2D dimensions = terminalService.getTerminalArea().get();
         int amountOfFileBuffers = fileBufferService.getAllFileBuffers().size();
         int heightPerView = dimensions.getHeight() / amountOfFileBuffers;
         int x = 1;
@@ -41,15 +42,21 @@ public class ViewService {
             Position position = Position.builder().x(x).y(y).build();
             Dimension2D viewDimensions = Dimension2D.builder().width(dimensions.getWidth()).height(heightPerView).build();
             View view = createTerminalView(fileBuffer.getFileId(), position, viewDimensions);
-            viewRepo.addBufferView(view);
+            viewRepo.add(view);
             y += heightPerView;
         }
     }
 
     public List<View> getAllTerminalViews(){
-        return viewRepo.getBufferViews();
+        return viewRepo.getAll();
     }
 
+    public void drawAllViews(){
+        for(View view: viewRepo.getAll()){
+            String text = fileBufferService.getFileBuffer(view.getFileBufferId()).get().getBufferText();
+            terminalService.printText(view.getPosition(), text);
+        }
+    }
 
 
 

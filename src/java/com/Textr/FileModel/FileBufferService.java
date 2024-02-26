@@ -2,6 +2,7 @@ package com.Textr.FileModel;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class FileBufferService {
 
@@ -32,6 +33,10 @@ public class FileBufferService {
 
     public List<FileBuffer> getAllFileBuffers(){
         return fileBufferRepo.getAllFileBuffers();
+    }
+
+    public Optional<FileBuffer> getFileBuffer(int id){
+        return fileBufferRepo.get(id);
     }
 
     /**

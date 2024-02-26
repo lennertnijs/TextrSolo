@@ -25,6 +25,10 @@ public final class FileBuffer {
         this.state = builder.state;
     }
 
+
+    public int getId(){
+        return this.id;
+    }
     /**
      * Returns the id of the active {@link File} of this {@link FileBuffer}.
      * @return This {@link FileBuffer}'s active {@link File} id.

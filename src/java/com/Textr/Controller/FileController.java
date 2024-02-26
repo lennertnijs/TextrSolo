@@ -17,13 +17,11 @@ public class FileController {
     private final FileService fileService;
     private final FileBufferService fileBufferService;
     private final ViewService viewService;
-    private final TerminalService terminalService;
 
-    public FileController(FileService fileService, FileBufferService fileBufferService, ViewService viewService, TerminalService terminalService){
+    public FileController(FileService fileService, FileBufferService fileBufferService, ViewService viewService){
         this.fileService = fileService;
         this.fileBufferService = fileBufferService;
         this.viewService = viewService;
-        this.terminalService = terminalService;
     }
 
     public void loadFiles(String[] files){
@@ -37,11 +35,8 @@ public class FileController {
             fileBufferService.initialiseFileBuffer(file);
         }
         // Create TerminalViews
-        viewService.initialiseTerminalViewsVertical(terminalService.getTerminalArea().get());
-        for(int i = 0; i < viewService.getAllTerminalViews().size(); i++){
-            View view = viewService.getAllTerminalViews().get(i);
-            terminalService.printText(view.getPosition(), fileBufferService.getAllFileBuffers().get(i).getBufferText());
-        }
+        viewService.initialiseTerminalViewsVertical();
+        viewService.drawAllViews();
     }
 
 
