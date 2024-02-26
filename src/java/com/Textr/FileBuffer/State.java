@@ -1,4 +1,4 @@
-package com.Textr.FileModel;
+package com.Textr.FileBuffer;
 
 public enum State {
     CLEAN,

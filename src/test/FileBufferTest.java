@@ -1,5 +1,5 @@
-import com.Textr.FileModel.FileBuffer;
-import com.Textr.FileModel.State;
+import com.Textr.FileBuffer.FileBuffer;
+import com.Textr.FileBuffer.State;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

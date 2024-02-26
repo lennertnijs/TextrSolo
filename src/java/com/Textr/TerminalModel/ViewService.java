@@ -1,7 +1,7 @@
 package com.Textr.TerminalModel;
 
-import com.Textr.FileModel.FileBuffer;
-import com.Textr.FileModel.FileBufferService;
+import com.Textr.FileBuffer.FileBuffer;
+import com.Textr.FileBuffer.FileBufferService;
 
 import java.util.List;
 import java.util.Objects;

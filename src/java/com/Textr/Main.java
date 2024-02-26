@@ -1,7 +1,7 @@
 package com.Textr;
 
 import com.Textr.Controller.FileController;
-import com.Textr.FileModel.FileBufferService;
+import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.FileModel.FileService;
 import com.Textr.TerminalModel.TerminalService;
 import com.Textr.TerminalModel.ViewService;

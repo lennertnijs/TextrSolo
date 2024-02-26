@@ -1,4 +1,6 @@
-package com.Textr.FileModel;
+package com.Textr.FileBuffer;
+
+import com.Textr.FileModel.File;
 
 import java.util.Objects;
 
