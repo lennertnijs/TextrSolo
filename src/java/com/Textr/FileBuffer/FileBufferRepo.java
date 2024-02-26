@@ -1,8 +1,11 @@
-package com.Textr.FileModel;
+package com.Textr.FileBuffer;
+
+import com.Textr.FileBuffer.FileBuffer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class FileBufferRepo {
 
@@ -18,5 +21,9 @@ public class FileBufferRepo {
 
     protected List<FileBuffer> getAllFileBuffers(){
         return this.fileBufferList;
+    }
+
+    protected Optional<FileBuffer> get(int id){
+        return fileBufferList.stream().filter(e -> e.getId() == id).findFirst();
     }
 }
