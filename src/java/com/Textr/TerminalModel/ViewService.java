@@ -44,6 +44,7 @@ public class ViewService {
             View view = createTerminalView(fileBuffer.getFileId(), position, viewDimensions);
             viewRepo.add(view);
             y += heightPerView;
+            x+= heightPerView;
         }
     }
 

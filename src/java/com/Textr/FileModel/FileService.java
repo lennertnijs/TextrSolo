@@ -27,11 +27,11 @@ public class FileService {
 
 
     public List<File> getAllFiles(){
-        return fileRepo.getFiles();
+        return fileRepo.getAll();
     }
 
     public void addFileToRepo(File file){
-        fileRepo.addFile(Objects.requireNonNull(file, "Cannot add a null file"));
+        fileRepo.add(Objects.requireNonNull(file, "Cannot add a null file"));
     }
 
     /**
@@ -65,7 +65,7 @@ public class FileService {
 
     public void storeFile(File file){
         Objects.requireNonNull(file, "Cannot store a null file.");
-        fileRepo.addFile(file);
+        fileRepo.add(file);
     }
 
 
@@ -75,7 +75,7 @@ public class FileService {
         if(optionalFile.isEmpty()){
             return;
         }
-        fileRepo.addFile(optionalFile.get());
+        fileRepo.add(optionalFile.get());
     }
 
 

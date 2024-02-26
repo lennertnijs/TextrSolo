@@ -3,8 +3,6 @@ package com.Textr.Controller;
 import com.Textr.FileModel.File;
 import com.Textr.FileModel.FileBufferService;
 import com.Textr.FileModel.FileService;
-import com.Textr.TerminalModel.TerminalService;
-import com.Textr.TerminalModel.View;
 import com.Textr.TerminalModel.ViewService;
 
 import java.util.Objects;
