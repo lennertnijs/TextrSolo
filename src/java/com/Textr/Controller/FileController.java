@@ -53,6 +53,7 @@ public class FileController {
             case CTRL_S:
                 break;
             case CTRL_P:
+                fileBufferService.setPrevBufferActive();
                 break;
             case CTRL_N:
                 fileBufferService.setNextBufferActive();

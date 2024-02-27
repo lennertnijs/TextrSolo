@@ -89,6 +89,16 @@ public class FileBufferRepo {
         throw new IllegalArgumentException();
     }
 
+    public FileBuffer prev(int id){
+        for(int i = 0; i < fileBuffers.size(); i++){
+            if(fileBuffers.get(i).getId() == id){
+                int nextIndex = (i - 1) >= 0 ? (i - 1) : fileBuffers.size()-1;
+                return fileBuffers.get(nextIndex);
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
     public FileBuffer getActiveFileBuffer(){
         return fileBuffers.stream().filter(FileBuffer::isActive).findFirst().get();
     }

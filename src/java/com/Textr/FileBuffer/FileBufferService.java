@@ -62,6 +62,15 @@ public class FileBufferService {
         fileBufferRepo.replaceFileBuffer(nextBuffer.getId(), newBuffer2);
     }
 
+    public void setPrevBufferActive(){
+        FileBuffer buffer = fileBufferRepo.getActiveFileBuffer();
+        FileBuffer newBuffer = FileBuffer.builder().id(buffer.getId()).fileId(buffer.getFileId()).bufferText(buffer.getBufferText()).insertionPosition(buffer.getInsertionPosition()).state(buffer.getState()).isActive(false).build();
+        fileBufferRepo.replaceFileBuffer(buffer.getId(), newBuffer);
+        FileBuffer nextBuffer = fileBufferRepo.prev(buffer.getId());
+        FileBuffer newBuffer2 = FileBuffer.builder().id(nextBuffer.getId()).fileId(nextBuffer.getFileId()).bufferText(nextBuffer.getBufferText()).insertionPosition(nextBuffer.getInsertionPosition()).state(nextBuffer.getState()).isActive(true).build();
+        fileBufferRepo.replaceFileBuffer(nextBuffer.getId(), newBuffer2);
+    }
+
     /**
      * Needs methods to do the following:
      * 1) create a FileBuffer for a given File
