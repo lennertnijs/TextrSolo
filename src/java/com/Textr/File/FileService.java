@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -64,6 +65,14 @@ public class FileService {
         Objects.requireNonNull(file, "Cannot store a null file.");
         fileRepo.add(file);
     }
+
+    public File getFile(int id){
+        if(fileRepo.get(id).isPresent()){
+            return fileRepo.get(id).get();
+        }
+        throw new NoSuchElementException("no element found");
+    }
+
 
 
 

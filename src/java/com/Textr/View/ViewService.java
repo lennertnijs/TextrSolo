@@ -1,5 +1,7 @@
 package com.Textr.View;
 
+import com.Textr.File.File;
+import com.Textr.File.FileService;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.FileBuffer.State;
@@ -12,10 +14,12 @@ public class ViewService {
 
     private final ViewRepo viewRepo;
     private final FileBufferService fileBufferService;
+    private final FileService fileService;
 
-    public ViewService(FileBufferService fileBufferService){
+    public ViewService(FileBufferService fileBufferService, FileService fileService){
         this.viewRepo = new ViewRepo();
         this.fileBufferService = fileBufferService;
+        this.fileService = fileService;
     }
 
     public View createView(int fileBufferId, Position position, Dimension2D dimensions){
@@ -32,6 +36,11 @@ public class ViewService {
         viewRepo.add(view);
     }
 
+    public void createAndStoreView(int fileBufferId, Position position, Dimension2D dimensions){
+        View view = createView(fileBufferId, position, dimensions);
+        store(view);
+    }
+
     /**
      * Generates a collection of {@link View}'s in a vertical layout.
      * Might be worth swapping to a List in the FileBuffer repo? To maintain order?
@@ -44,7 +53,7 @@ public class ViewService {
         for(FileBuffer fileBuffer : fileBufferService.getAllFileBuffers()){
             Position viewPosition = Position.builder().x(1).y(y).build();
             Dimension2D viewDimensions = Dimension2D.builder().width(terminalWidth).height(heightPerView).build();
-            store(createView(fileBuffer.getId(), viewPosition, viewDimensions));
+            createAndStoreView(fileBuffer.getId(), viewPosition, viewDimensions);
             y += heightPerView;
         }
     }
@@ -55,37 +64,31 @@ public class ViewService {
 
     public void drawAllViewsVertical(){
         for(View view: viewRepo.getAll()){
-            String text = fileBufferService.getFileBuffer(view.getFileBufferId()).getBufferText();
+            FileBuffer fileBuffer = fileBufferService.getFileBuffer(view.getFileBufferId());
+            File file = fileService.getFile(fileBuffer.getFileId());
+            String text = fileBuffer.getBufferText();
             String[] lines = text.split(System.lineSeparator());
             int x = view.getPosition().getX();
             int y = view.getPosition().getY();
             int maxY = y + view.getDimensions().getHeight() - 1;
-            State viewState = fileBufferService.getFileBuffer(view.getFileBufferId()).getState();
-            for(String line: lines){
+            State viewState = fileBuffer.getState();
+            String url = file.getPath();
+            for(int i = 0; i < view.getDimensions().getHeight(); i++){
+                String line = lines.length <= i ? "" : lines[i];
                 Position linePosition = Position.builder().x(x).y(y).build();
                 boolean lastLine = y == maxY;
                 if(lastLine){
-                    TerminalService.printText(linePosition, String.valueOf(viewState));
+                    TerminalService.printText(linePosition,
+                            String.format("path: %s --- lines: %d --- characters: %d -- state: %s",
+                            url, lines.length, text.toCharArray().length, viewState));
                 }
                 if(y < maxY){
                     TerminalService.printText(linePosition, line);
-                    y++;
                 }
+                y++;
             }
         }
     }
-
-    private String removeAllNonAscii(String text){
-        StringBuilder builder = new StringBuilder();
-        for(char c : text.toCharArray()){
-            if(c >= 32 && c <= 126 || c == 10 || c == 13){
-                builder.append(c);
-            }
-        }
-        return builder.toString();
-    }
-
-
 
 
     /**
