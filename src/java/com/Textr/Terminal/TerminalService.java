@@ -12,7 +12,7 @@ public class TerminalService {
     private TerminalService(){
     }
 
-    public static Optional<Dimension2D> getTerminalArea(){
+    public static Dimension2D getTerminalArea(){
         Terminal.reportTextAreaSize();
         try{
             int b = Terminal.readByte();
@@ -37,7 +37,7 @@ public class TerminalService {
                     width += b - '0';
                 }
             }
-            return Optional.of(Dimension2D.builder().width(width).height(height).build());
+            return Dimension2D.builder().width(width).height(height).build();
         }catch(IOException e){
             throw new IllegalStateException("Something went wrong while reading the terminal dimensions.");
         }

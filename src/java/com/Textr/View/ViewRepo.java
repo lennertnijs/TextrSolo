@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public class ViewRepo {
 
+    // should still add some methods here
     private final List<View> views = new ArrayList<>();
     protected ViewRepo(){
     }
@@ -19,7 +20,7 @@ public class ViewRepo {
         return this.views;
     }
 
-    protected void removeTerminalView(View view){
+    protected void remove(View view){
         this.views.remove(view);
     }
 }

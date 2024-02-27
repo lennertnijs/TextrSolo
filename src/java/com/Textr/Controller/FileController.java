@@ -35,8 +35,8 @@ public class FileController {
             fileBufferService.initialiseFileBuffer(file);
         }
         // Create TerminalViews
-        viewService.initialiseTerminalViewsVertical();
-        viewService.drawAllViews();
+        viewService.initialiseViewsVertical();
+        viewService.drawAllViewsVertical();
         TerminalService.leaveRawInputMode();
     }
 

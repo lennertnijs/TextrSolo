@@ -2,6 +2,7 @@ package com.Textr.View;
 
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
+import com.Textr.FileBuffer.State;
 import com.Textr.Terminal.TerminalService;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class ViewService {
         this.fileBufferService = fileBufferService;
     }
 
-    public View createTerminalView(int fileBufferId, Position position, Dimension2D dimensions){
+    public View createView(int fileBufferId, Position position, Dimension2D dimensions){
         if(fileBufferId < 0){
             throw new IllegalArgumentException("Cannot create a TerminalView with a negative FileBuffer id.");
         }
@@ -26,46 +27,48 @@ public class ViewService {
         return View.builder().fileBufferId(fileBufferId).point(position).dimensions(dimensions).build();
     }
 
-    public void storeTerminalView(View view){
+    public void store(View view){
         Objects.requireNonNull(view, "Cannot store a null TerminalView");
         viewRepo.add(view);
     }
 
-    public void initialiseTerminalViewsVertical(){
-        Dimension2D dimensions = TerminalService.getTerminalArea().get();
-        int amountOfFileBuffers = fileBufferService.getAllFileBuffers().size();
-        int heightPerView = dimensions.getHeight() / amountOfFileBuffers;
-        int x = 1;
+    /**
+     * Generates a collection of {@link View}'s in a vertical layout.
+     * Might be worth swapping to a List in the FileBuffer repo? To maintain order?
+     */
+    public void initialiseViewsVertical(){
+        int terminalWidth = TerminalService.getTerminalArea().getWidth();
+        int terminalHeight = TerminalService.getTerminalArea().getHeight();
+        int heightPerView = (terminalHeight / fileBufferService.getAmountOfFileBuffers());
         int y = 1;
         for(FileBuffer fileBuffer : fileBufferService.getAllFileBuffers()){
-            Position position = Position.builder().x(x).y(y).build();
-            Dimension2D viewDimensions = Dimension2D.builder().width(dimensions.getWidth()).height(heightPerView).build();
-            View view = createTerminalView(fileBuffer.getFileId(), position, viewDimensions);
-            viewRepo.add(view);
+            Position viewPosition = Position.builder().x(1).y(y).build();
+            Dimension2D viewDimensions = Dimension2D.builder().width(terminalWidth).height(heightPerView).build();
+            store(createView(fileBuffer.getId(), viewPosition, viewDimensions));
             y += heightPerView;
         }
     }
 
-    public List<View> getAllTerminalViews(){
+    public List<View> getAllViews(){
         return viewRepo.getAll();
     }
 
-    public void drawAllViews(){
+    public void drawAllViewsVertical(){
         for(View view: viewRepo.getAll()){
             String text = fileBufferService.getFileBuffer(view.getFileBufferId()).getBufferText();
             String[] lines = text.split(System.lineSeparator());
-            Dimension2D dimensions = view.getDimensions();
-            Position position = view.getPosition();
-            int x = position.getX();
-            int y = position.getY();
-            int maxY = y + dimensions.getHeight() - 1;
-            for(String s: lines){
-                Position position1 = Position.builder().x(x).y(y).build();
-                if(y == maxY){
-                    TerminalService.printText(position1, String.valueOf(fileBufferService.getFileBuffer(view.getFileBufferId()).getState()));
+            int x = view.getPosition().getX();
+            int y = view.getPosition().getY();
+            int maxY = y + view.getDimensions().getHeight() - 1;
+            State viewState = fileBufferService.getFileBuffer(view.getFileBufferId()).getState();
+            for(String line: lines){
+                Position linePosition = Position.builder().x(x).y(y).build();
+                boolean lastLine = y == maxY;
+                if(lastLine){
+                    TerminalService.printText(linePosition, String.valueOf(viewState));
                 }
-                if(y <= maxY-1){
-                    TerminalService.printText(position1, s);
+                if(y < maxY){
+                    TerminalService.printText(linePosition, line);
                     y++;
                 }
             }
@@ -92,7 +95,7 @@ public class ViewService {
      * 3) remove terminalView
      * 4) getAllTerminalViews
      * 5) draw the terminal view ??
-     * 6) generate horizontal TerminalViews(List Filebuffers)
+     * 6) generate horizontal TerminalViews(List FileBuffers)
      * 7) generate vertical Terminal Views (List FileBuffers)
      * 8) ???
      */

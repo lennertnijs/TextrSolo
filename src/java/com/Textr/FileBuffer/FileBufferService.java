@@ -16,6 +16,12 @@ public class FileBufferService {
         this.fileBufferRepo = new FileBufferRepo();
     }
 
+    public void initialiseFileBuffer(File file){
+        Objects.requireNonNull(file, "Cannot initialise a fileBuffer because the File is null.");
+        FileBuffer fileBuffer = createFileBuffer(file.getId(), file.getText());
+        storeFileBuffer(fileBuffer);
+    }
+
     private FileBuffer createFileBuffer(int fileId, String text){
         if(fileId < 0){
             throw new IllegalArgumentException("Cannot create a FileBuffer with a negative fileId.");
@@ -30,14 +36,12 @@ public class FileBufferService {
         fileBufferRepo.add(fileBuffer);
     }
 
-    public void initialiseFileBuffer(File file){
-        Objects.requireNonNull(file, "Cannot initialise a fileBuffer because the File is null.");
-        FileBuffer fileBuffer = createFileBuffer(file.getId(), file.getText());
-        storeFileBuffer(fileBuffer);
-    }
-
     public List<FileBuffer> getAllFileBuffers(){
         return fileBufferRepo.getAll();
+    }
+
+    public int getAmountOfFileBuffers(){
+        return fileBufferRepo.getSize();
     }
 
     public FileBuffer getFileBuffer(int id){

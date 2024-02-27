@@ -47,7 +47,9 @@ public class FileBufferRepoTest {
                 () -> repo.add(buffer3),
                 () -> Assertions.assertEquals(repo.getSize(), 2),
                 () -> repo.removeAll(),
-                () -> Assertions.assertEquals(repo.getSize(), 0)
+                () -> Assertions.assertEquals(repo.getSize(), 0),
+
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> repo.add(null))
         );
     }
 }
