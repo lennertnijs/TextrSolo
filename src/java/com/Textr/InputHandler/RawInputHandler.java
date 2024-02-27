@@ -1,13 +1,10 @@
 package com.Textr.InputHandler;
 
-import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.Terminal.TerminalService;
-import com.Textr.View.Position;
 import com.Textr.View.ViewService;
 
 import static com.Textr.Inputs.*;
-import static com.Textr.Inputs.CTRL_N;
 
 public class RawInputHandler implements InputHandler{
     private final ViewService viewService;
@@ -25,9 +22,14 @@ public class RawInputHandler implements InputHandler{
         }
         TerminalService.clearScreen();
         switch(input){
-            case ARROW_RIGHT:
-                break;
-            case CTRL_S:
+            case ESCAPE:
+                int b = TerminalService.readByte();
+                switch(b){
+                    case ARROW_RIGHT:
+                        fileBufferService.moveInsertionPointRight();
+                        TerminalService.clearScreen();
+                        break;
+                }
                 break;
             case CTRL_P:
                 fileBufferService.moveActiveBufferToPrev();
@@ -37,7 +39,5 @@ public class RawInputHandler implements InputHandler{
                 break;
         }
         viewService.drawAllViewsVertical();
-        Position position = Position.builder().x(5).y(5).build();
-        TerminalService.printText(position, input + "");
     }
 }
