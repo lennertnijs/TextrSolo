@@ -5,7 +5,6 @@ import com.Textr.View.Position;
 import io.github.btj.termios.Terminal;
 
 import java.io.IOException;
-import java.util.Optional;
 
 public class TerminalService {
 
