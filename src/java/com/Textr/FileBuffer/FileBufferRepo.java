@@ -3,17 +3,16 @@ package com.Textr.FileBuffer;
 import com.Textr.File.File;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class FileBufferRepo {
 
-    private final Map<Integer, FileBuffer> fileBuffers;
+    private final List<FileBuffer> fileBuffers;
 
     /**
      * The constructor for a repository where all the {@link FileBuffer}'s are stored and managed.
      */
     public FileBufferRepo(){
-        this.fileBuffers = new ConcurrentHashMap<>();
+        this.fileBuffers = new ArrayList<>();
     }
 
 
@@ -43,9 +42,7 @@ public class FileBufferRepo {
      * @return The {@link FileBuffer}s
      */
     public List<FileBuffer> getAll(){
-        List<FileBuffer> fileBufferList = new ArrayList<>(fileBuffers.size());
-        fileBufferList.addAll(fileBuffers.values());
-        return fileBufferList;
+        return fileBuffers;
     }
 
     /**
@@ -53,8 +50,9 @@ public class FileBufferRepo {
      * USE WITH CARE
      */
     public void removeAll(){
-        for(Integer i : fileBuffers.keySet()){
-            fileBuffers.remove(i);
+        for(Iterator<FileBuffer> it = fileBuffers.iterator(); it.hasNext(); ){
+            it.next();
+            it.remove();
         }
     }
 
@@ -70,7 +68,7 @@ public class FileBufferRepo {
         }catch(NullPointerException e){
             throw new IllegalArgumentException("Cannot store a null FileBuffer in the repository.");
         }
-        fileBuffers.put(fileBuffer.getId(), fileBuffer);
+        fileBuffers.add(fileBuffer);
     }
 
     /**
@@ -78,6 +76,25 @@ public class FileBufferRepo {
      * @param id The id
      */
     public void remove(int id){
-        fileBuffers.remove(id);
+        fileBuffers.removeIf(fileBuffer -> fileBuffer.getId() == id);
+    }
+
+    public FileBuffer next(int id){
+        for(int i = 0; i < fileBuffers.size(); i++){
+            if(fileBuffers.get(i).getId() == id){
+                int nextIndex = (i + 1)% fileBuffers.size();
+                return fileBuffers.get(nextIndex);
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
+    public FileBuffer getActiveFileBuffer(){
+        return fileBuffers.stream().filter(FileBuffer::isActive).findFirst().get();
+    }
+
+    public void replaceFileBuffer(int id, FileBuffer file){
+        int index = fileBuffers.stream().filter( e -> e.getId() == id).findFirst().get().getId();
+        fileBuffers.set(index, file);
     }
 }

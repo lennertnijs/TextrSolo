@@ -4,7 +4,7 @@ import com.Textr.File.File;
 import com.Textr.File.FileService;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.FileBuffer.State;
+import com.Textr.FileBuffer.BufferState;
 import com.Textr.Terminal.TerminalService;
 
 import java.util.List;
@@ -48,7 +48,11 @@ public class ViewService {
     public void initialiseViewsVertical(){
         int terminalWidth = TerminalService.getTerminalArea().getWidth();
         int terminalHeight = TerminalService.getTerminalArea().getHeight();
-        int heightPerView = (terminalHeight / fileBufferService.getAmountOfFileBuffers());
+        int amountOfBuffers = fileBufferService.getAmountOfFileBuffers();
+        if(amountOfBuffers == 0){
+            return;
+        }
+        int heightPerView = (terminalHeight / amountOfBuffers);
         int y = 1;
         for(FileBuffer fileBuffer : fileBufferService.getAllFileBuffers()){
             Position viewPosition = Position.builder().x(1).y(y).build();
@@ -71,35 +75,38 @@ public class ViewService {
             int x = view.getPosition().getX();
             int y = view.getPosition().getY();
             int maxY = y + view.getDimensions().getHeight() - 1;
-            State viewState = fileBuffer.getState();
+            BufferState viewBufferState = fileBuffer.getState();
             String url = file.getPath();
             for(int i = 0; i < view.getDimensions().getHeight(); i++){
                 String line = lines.length <= i ? "" : lines[i];
                 Position linePosition = Position.builder().x(x).y(y).build();
                 boolean lastLine = y == maxY;
-                if(lastLine){
-                    TerminalService.printText(linePosition,
-                            String.format("path: %s --- lines: %d --- characters: %d --- insertion point: %s -- state: %s",
-                            url, lines.length, text.toCharArray().length,fileBuffer.getInsertionPosition(), viewState));
+                if(fileBuffer.isActive()){
+                    if(lastLine){
+                        TerminalService.printText(linePosition,
+                                String.format("| path: %s --- lines: %d --- characters: %d --- insertion point: %s -- state: %s |",
+                                        url, lines.length, text.toCharArray().length,fileBuffer.getInsertionPosition(), viewBufferState));
+                    }
+                    if(y < maxY){
+                        TerminalService.printText(linePosition, line);
+                        Position position = Position.builder().x(view.getDimensions().getWidth()).y(y).build();
+                        TerminalService.printText(position, "|");
+                        TerminalService.printText(linePosition, "|");
+                    }
+                    y++;
+                }else{
+                    if(lastLine){
+                        TerminalService.printText(linePosition,
+                                String.format("path: %s --- lines: %d --- characters: %d --- insertion point: %s -- state: %s",
+                                        url, lines.length, text.toCharArray().length,fileBuffer.getInsertionPosition(), viewBufferState));
+                    }
+                    if(y < maxY){
+                        TerminalService.printText(linePosition, line);
+                    }
+                    y++;
                 }
-                if(y < maxY){
-                    TerminalService.printText(linePosition, line);
-                }
-                y++;
+
             }
         }
     }
-
-
-    /**
-     * Methods necessary:
-     * 1) create terminalView
-     * 2) store TerminalView
-     * 3) remove terminalView
-     * 4) getAllTerminalViews
-     * 5) draw the terminal view ??
-     * 6) generate horizontal TerminalViews(List FileBuffers)
-     * 7) generate vertical Terminal Views (List FileBuffers)
-     * 8) ???
-     */
 }

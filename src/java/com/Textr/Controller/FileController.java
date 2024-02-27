@@ -31,8 +31,10 @@ public class FileController {
             fileService.initialiseFile(filePath);
         }
         // create a FileBuffer for each File
-        for(File file: fileService.getAllFiles()){
-            fileBufferService.initialiseFileBuffer(file);
+        for(int i = 0 ; i < fileService.getAllFiles().size(); i++){
+            File file = fileService.getAllFiles().get(i);
+            fileBufferService.initialiseFileBuffer(file, i == 0);
+
         }
         // Create TerminalViews
         viewService.initialiseViewsVertical();
@@ -40,15 +42,22 @@ public class FileController {
         TerminalService.leaveRawInputMode();
     }
 
-    public void handleInput(){
-        int b = TerminalService.readByte();
-        switch(b){
-            case ARROW_RIGHT:
-                // move arrow right
-            case CTRL_S:
-                // do something
-            case CTRL_P:
-                // do something
+    public void handleInput(int input){
+        if(input == -1){
+            return;
         }
+        TerminalService.clearScreen();
+        switch(input){
+            case ARROW_RIGHT:
+                break;
+            case CTRL_S:
+                break;
+            case CTRL_P:
+                break;
+            case CTRL_N:
+                fileBufferService.setNextBufferActive();
+                break;
+        }
+        viewService.drawAllViewsVertical();
     }
 }

@@ -11,7 +11,8 @@ public final class FileBuffer {
     private final int fileId;
     private final String  bufferText;
     private final Position insertionPosition;
-    private final State state;
+    private final BufferState bufferState;
+    private final boolean isActive;
 
     /**
      * Constructor for a {@link FileBuffer}.
@@ -25,7 +26,8 @@ public final class FileBuffer {
         this.fileId = builder.fileId;
         this.bufferText = builder.bufferText;
         this.insertionPosition = builder.insertionPosition;
-        this.state = builder.state;
+        this.bufferState = builder.bufferState;
+        this.isActive = builder.isActive;
     }
 
 
@@ -57,11 +59,16 @@ public final class FileBuffer {
     }
 
     /**
-     * Returns the {@link State} of this {@link FileBuffer}.
-     * @return This {@link FileBuffer}'s state as a {@link State}
+     * Returns the {@link BufferState} of this {@link FileBuffer}.
+     * @return This {@link FileBuffer}'s state as a {@link BufferState}
      */
-    public State getState(){
-        return this.state;
+    public BufferState getState(){
+        return this.bufferState;
+    }
+
+
+    public boolean isActive(){
+        return isActive;
     }
 
     /**
@@ -100,7 +107,7 @@ public final class FileBuffer {
     @Override
     public String toString(){
         return String.format("FileBuffer[id = %d, activeFileId = %d, bufferText = %s, insertionPosition = %s, state = %s]",
-                id, fileId, bufferText, insertionPosition, state);
+                id, fileId, bufferText, insertionPosition, bufferState);
     }
 
     /**
@@ -121,7 +128,8 @@ public final class FileBuffer {
         private int fileId = -1;
         private String bufferText = null;
         private Position insertionPosition = null;
-        private State state = null;
+        private BufferState bufferState = null;
+        private boolean isActive = false;
 
         /**
          * Constructor for the {@link FileBuffer.Builder}
@@ -167,13 +175,18 @@ public final class FileBuffer {
         }
 
         /**
-         * Sets the {@link State} of this {@link FileBuffer.Builder} to the given state.
-         * @param state The state
+         * Sets the {@link BufferState} of this {@link FileBuffer.Builder} to the given state.
+         * @param bufferState The state
          *
          * @return This {@link FileBuffer.Builder}
          */
-        public Builder state(State state){
-            this.state = state;
+        public Builder state(BufferState bufferState){
+            this.bufferState = bufferState;
+            return this;
+        }
+
+        public Builder isActive(boolean bool){
+            this.isActive = bool;
             return this;
         }
 
@@ -200,7 +213,7 @@ public final class FileBuffer {
             }
             try{
                 Objects.requireNonNull(insertionPosition);
-                Objects.requireNonNull(state);
+                Objects.requireNonNull(bufferState);
             }catch(NullPointerException e){
                 throw new IllegalArgumentException("The state of the FileBuffer cannot be null.");
             }

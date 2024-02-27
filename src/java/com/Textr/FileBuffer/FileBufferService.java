@@ -17,20 +17,20 @@ public class FileBufferService {
         this.fileBufferRepo = new FileBufferRepo();
     }
 
-    public void initialiseFileBuffer(File file){
+    public void initialiseFileBuffer(File file, boolean bool){
         Objects.requireNonNull(file, "Cannot initialise a fileBuffer because the File is null.");
-        FileBuffer fileBuffer = createFileBuffer(file.getId(), file.getText());
+        FileBuffer fileBuffer = createFileBuffer(file.getId(), file.getText(), bool);
         storeFileBuffer(fileBuffer);
     }
 
-    private FileBuffer createFileBuffer(int fileId, String text){
+    private FileBuffer createFileBuffer(int fileId, String text, boolean b){
         if(fileId < 0){
             throw new IllegalArgumentException("Cannot create a FileBuffer with a negative fileId.");
         }
         Objects.requireNonNull(text, "Cannot create a FileBuffer because the File's text is null.");
         int uniqueId = atomicInteger.getAndIncrement();
         Position position = Position.builder().x(0).y(0).build();
-        return FileBuffer.builder().id(uniqueId).fileId(fileId).bufferText(text).insertionPosition(position).state(State.CLEAN).build();
+        return FileBuffer.builder().id(uniqueId).fileId(fileId).bufferText(text).insertionPosition(position).state(BufferState.CLEAN).isActive(b).build();
     }
 
     private void storeFileBuffer(FileBuffer fileBuffer){
@@ -51,6 +51,15 @@ public class FileBufferService {
             return fileBufferRepo.get(id).get();
         }
         throw new NoSuchElementException("No FileBuffer was found for the given id.");
+    }
+
+    public void setNextBufferActive(){
+        FileBuffer buffer = fileBufferRepo.getActiveFileBuffer();
+        FileBuffer newBuffer = FileBuffer.builder().id(buffer.getId()).fileId(buffer.getFileId()).bufferText(buffer.getBufferText()).insertionPosition(buffer.getInsertionPosition()).state(buffer.getState()).isActive(false).build();
+        fileBufferRepo.replaceFileBuffer(buffer.getId(), newBuffer);
+        FileBuffer nextBuffer = fileBufferRepo.next(buffer.getId());
+        FileBuffer newBuffer2 = FileBuffer.builder().id(nextBuffer.getId()).fileId(nextBuffer.getFileId()).bufferText(nextBuffer.getBufferText()).insertionPosition(nextBuffer.getInsertionPosition()).state(nextBuffer.getState()).isActive(true).build();
+        fileBufferRepo.replaceFileBuffer(nextBuffer.getId(), newBuffer2);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.Textr.FileBuffer;
 
-public enum State {
+public enum BufferState {
     CLEAN,
     DIRTY
 }
