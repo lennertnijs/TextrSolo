@@ -33,8 +33,11 @@ public class FileController {
         // create a FileBuffer for each File
         for(int i = 0 ; i < fileService.getAllFiles().size(); i++){
             File file = fileService.getAllFiles().get(i);
-            fileBufferService.initialiseFileBuffer(file, i == 0);
-
+            if(i == 0){
+                fileBufferService.initialiseActiveFileBuffer(file);
+            }else{
+                fileBufferService.initialisePassiveFileBuffer(file);
+            }
         }
         // Create TerminalViews
         viewService.initialiseViewsVertical();
@@ -53,10 +56,10 @@ public class FileController {
             case CTRL_S:
                 break;
             case CTRL_P:
-                fileBufferService.setPrevBufferActive();
+                fileBufferService.moveActiveBufferToPrev();
                 break;
             case CTRL_N:
-                fileBufferService.setNextBufferActive();
+                fileBufferService.moveActiveBufferToNext();
                 break;
         }
         viewService.drawAllViewsVertical();

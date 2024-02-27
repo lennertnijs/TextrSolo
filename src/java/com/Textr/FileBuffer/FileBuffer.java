@@ -12,7 +12,6 @@ public final class FileBuffer {
     private final String  bufferText;
     private final Position insertionPosition;
     private final BufferState bufferState;
-    private final boolean isActive;
 
     /**
      * Constructor for a {@link FileBuffer}.
@@ -27,7 +26,6 @@ public final class FileBuffer {
         this.bufferText = builder.bufferText;
         this.insertionPosition = builder.insertionPosition;
         this.bufferState = builder.bufferState;
-        this.isActive = builder.isActive;
     }
 
 
@@ -66,10 +64,6 @@ public final class FileBuffer {
         return this.bufferState;
     }
 
-
-    public boolean isActive(){
-        return isActive;
-    }
 
     /**
      * Compares this {@link FileBuffer} to the given {@link Objects} and returns True if they're equal.
@@ -129,7 +123,6 @@ public final class FileBuffer {
         private String bufferText = null;
         private Position insertionPosition = null;
         private BufferState bufferState = null;
-        private boolean isActive = false;
 
         /**
          * Constructor for the {@link FileBuffer.Builder}
@@ -185,10 +178,6 @@ public final class FileBuffer {
             return this;
         }
 
-        public Builder isActive(boolean bool){
-            this.isActive = bool;
-            return this;
-        }
 
         /**
          * Validates all the fields of this {@link FileBuffer.Builder}.

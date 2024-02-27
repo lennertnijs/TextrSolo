@@ -69,6 +69,7 @@ public class ViewService {
     public void drawAllViewsVertical(){
         for(View view: viewRepo.getAll()){
             FileBuffer fileBuffer = fileBufferService.getFileBuffer(view.getFileBufferId());
+            boolean activeBuffer = fileBufferService.isActive(fileBuffer.getId());
             File file = fileService.getFile(fileBuffer.getFileId());
             String text = fileBuffer.getBufferText();
             String[] lines = text.split(System.lineSeparator());
@@ -81,7 +82,7 @@ public class ViewService {
                 String line = lines.length <= i ? "" : lines[i];
                 Position linePosition = Position.builder().x(x).y(y).build();
                 boolean lastLine = y == maxY;
-                if(fileBuffer.isActive()){
+                if(activeBuffer){
                     if(lastLine){
                         TerminalService.printText(linePosition,
                                 String.format("| path: %s --- lines: %d --- characters: %d --- insertion point: %s -- state: %s |",
@@ -93,7 +94,6 @@ public class ViewService {
                         TerminalService.printText(position, "|");
                         TerminalService.printText(linePosition, "|");
                     }
-                    y++;
                 }else{
                     if(lastLine){
                         TerminalService.printText(linePosition,
@@ -103,8 +103,8 @@ public class ViewService {
                     if(y < maxY){
                         TerminalService.printText(linePosition, line);
                     }
-                    y++;
                 }
+                y++;
 
             }
         }

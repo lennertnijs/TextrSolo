@@ -6,13 +6,16 @@ import java.util.*;
 
 public class FileBufferRepo {
 
-    private final List<FileBuffer> fileBuffers;
+
+    private final List<FileBuffer> buffers;
+    private final List<FileBuffer> activeBuffers;
 
     /**
      * The constructor for a repository where all the {@link FileBuffer}'s are stored and managed.
      */
     public FileBufferRepo(){
-        this.fileBuffers = new ArrayList<>();
+        this.buffers = new ArrayList<>();
+        this.activeBuffers = new ArrayList<>();
     }
 
 
@@ -22,7 +25,7 @@ public class FileBufferRepo {
      * @return The size of the {@link FileBuffer} repository
      */
     public int getSize(){
-        return fileBuffers.size();
+        return buffers.size();
     }
 
     /**
@@ -33,7 +36,7 @@ public class FileBufferRepo {
      * @return An {@link Optional} of the {@link File} if a match was found. Returns an empty {@link Optional} otherwise.
      */
     public Optional<FileBuffer> get(int id){
-        return fileBuffers.get(id) != null ? Optional.of(fileBuffers.get(id)) : Optional.empty();
+        return buffers.get(id) != null ? Optional.of(buffers.get(id)) : Optional.empty();
     }
 
     /**
@@ -42,7 +45,7 @@ public class FileBufferRepo {
      * @return The {@link FileBuffer}s
      */
     public List<FileBuffer> getAll(){
-        return fileBuffers;
+        return buffers;
     }
 
     /**
@@ -50,7 +53,7 @@ public class FileBufferRepo {
      * USE WITH CARE
      */
     public void removeAll(){
-        for(Iterator<FileBuffer> it = fileBuffers.iterator(); it.hasNext(); ){
+        for(Iterator<FileBuffer> it = buffers.iterator(); it.hasNext(); ){
             it.next();
             it.remove();
         }
@@ -68,7 +71,7 @@ public class FileBufferRepo {
         }catch(NullPointerException e){
             throw new IllegalArgumentException("Cannot store a null FileBuffer in the repository.");
         }
-        fileBuffers.add(fileBuffer);
+        buffers.add(fileBuffer);
     }
 
     /**
@@ -76,35 +79,54 @@ public class FileBufferRepo {
      * @param id The id
      */
     public void remove(int id){
-        fileBuffers.removeIf(fileBuffer -> fileBuffer.getId() == id);
+        buffers.removeIf(fileBuffer -> fileBuffer.getId() == id);
     }
 
     public FileBuffer next(int id){
-        for(int i = 0; i < fileBuffers.size(); i++){
-            if(fileBuffers.get(i).getId() == id){
-                int nextIndex = (i + 1)% fileBuffers.size();
-                return fileBuffers.get(nextIndex);
+        for(int i = 0; i < buffers.size(); i++){
+            if(buffers.get(i).getId() == id){
+                int nextIndex = (i + 1)% buffers.size();
+                return buffers.get(nextIndex);
             }
         }
         throw new IllegalArgumentException();
     }
 
     public FileBuffer prev(int id){
-        for(int i = 0; i < fileBuffers.size(); i++){
-            if(fileBuffers.get(i).getId() == id){
-                int nextIndex = (i - 1) >= 0 ? (i - 1) : fileBuffers.size()-1;
-                return fileBuffers.get(nextIndex);
+        for(int i = 0; i < buffers.size(); i++){
+            if(buffers.get(i).getId() == id){
+                int nextIndex = (i - 1) >= 0 ? (i - 1) : buffers.size()-1;
+                return buffers.get(nextIndex);
             }
         }
         throw new IllegalArgumentException();
     }
 
-    public FileBuffer getActiveFileBuffer(){
-        return fileBuffers.stream().filter(FileBuffer::isActive).findFirst().get();
+    public void removeActive(int id){
+        for(Iterator<FileBuffer> it = activeBuffers.iterator(); it.hasNext(); ){
+            if(it.next().getId() == id){
+                it.remove();
+            }
+        }
     }
 
-    public void replaceFileBuffer(int id, FileBuffer file){
-        int index = fileBuffers.stream().filter( e -> e.getId() == id).findFirst().get().getId();
-        fileBuffers.set(index, file);
+    public void removeAllActive(){
+        for(Iterator<FileBuffer> it = activeBuffers.iterator(); it.hasNext(); ){
+            it.next();
+            it.remove();
+        }
+    }
+
+
+    public boolean isActive(int id){
+        return activeBuffers.stream().anyMatch(e -> e.getId() == id);
+    }
+
+    public void setActive(FileBuffer fileBuffer){
+        activeBuffers.add(fileBuffer);
+    }
+
+    public List<FileBuffer> getAllActives(){
+        return activeBuffers;
     }
 }
