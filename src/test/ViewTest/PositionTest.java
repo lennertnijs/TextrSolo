@@ -17,8 +17,8 @@ public class PositionTest {
 
     @Test
     public void testConstructorInvalid(){
-        Position.Builder invalidX = Position.builder().x(0).y(2);
-        Position.Builder invalidY = Position.builder().x(1).y(0);
+        Position.Builder invalidX = Position.builder().x(-1).y(2);
+        Position.Builder invalidY = Position.builder().x(1).y(-1);
         Assertions.assertAll(
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidX::build),
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidY::build)

@@ -1,6 +1,7 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
+import com.Textr.View.Position;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,7 +29,8 @@ public class FileBufferService {
         }
         Objects.requireNonNull(text, "Cannot create a FileBuffer because the File's text is null.");
         int uniqueId = atomicInteger.getAndIncrement();
-        return FileBuffer.builder().id(uniqueId).fileId(fileId).bufferText(text).insertionIndex(0).state(State.CLEAN).build();
+        Position position = Position.builder().x(0).y(0).build();
+        return FileBuffer.builder().id(uniqueId).fileId(fileId).bufferText(text).insertionPosition(position).state(State.CLEAN).build();
     }
 
     private void storeFileBuffer(FileBuffer fileBuffer){

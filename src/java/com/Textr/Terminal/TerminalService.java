@@ -54,7 +54,7 @@ public class TerminalService {
         if(row <= 0 || column <= 0){
             throw new IllegalArgumentException("The system is 1-based. All indices must be strictly positive");
         }
-        Terminal.moveCursor(row, column, "empty");
+        Terminal.moveCursor(column, row, "empty");
     }
 
     public static void clearScreen(){

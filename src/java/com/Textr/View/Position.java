@@ -130,7 +130,7 @@ public final class Position {
          * @return a newly created valid & immutable {@link Position}.
          */
         public Position build(){
-            if(x <= 0 || y <= 0){
+            if(x < 0 || y < 0){
                 throw new IllegalArgumentException("The coordinates of the point cannot be negative or 0.");
             }
             return new Position(this);

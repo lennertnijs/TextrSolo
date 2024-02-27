@@ -79,8 +79,8 @@ public class ViewService {
                 boolean lastLine = y == maxY;
                 if(lastLine){
                     TerminalService.printText(linePosition,
-                            String.format("path: %s --- lines: %d --- characters: %d --- insertion point: %d -- state: %s",
-                            url, lines.length, text.toCharArray().length,fileBuffer.getInsertionIndex(), viewState));
+                            String.format("path: %s --- lines: %d --- characters: %d --- insertion point: %s -- state: %s",
+                            url, lines.length, text.toCharArray().length,fileBuffer.getInsertionPosition(), viewState));
                 }
                 if(y < maxY){
                     TerminalService.printText(linePosition, line);

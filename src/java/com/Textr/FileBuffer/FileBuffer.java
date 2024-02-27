@@ -1,6 +1,7 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
+import com.Textr.View.Position;
 
 import java.util.Objects;
 
@@ -9,7 +10,7 @@ public final class FileBuffer {
     private final int id;
     private final int fileId;
     private final String  bufferText;
-    private final int insertionIndex;
+    private final Position insertionPosition;
     private final State state;
 
     /**
@@ -23,7 +24,7 @@ public final class FileBuffer {
         this.id = builder.id;
         this.fileId = builder.fileId;
         this.bufferText = builder.bufferText;
-        this.insertionIndex = builder.insertionIndex;
+        this.insertionPosition = builder.insertionPosition;
         this.state = builder.state;
     }
 
@@ -51,8 +52,8 @@ public final class FileBuffer {
      * Returns the insertion point index of this {@link FileBuffer}.
      * @return This {@link FileBuffer}'s insertion point index.
      */
-    public int getInsertionIndex(){
-        return this.insertionIndex;
+    public Position getInsertionPosition(){
+        return this.insertionPosition;
     }
 
     /**
@@ -98,8 +99,8 @@ public final class FileBuffer {
      */
     @Override
     public String toString(){
-        return String.format("FileBuffer[id = %d, activeFileId = %d, bufferText = %s, insertionIndex = %d, state = %s]",
-                id, fileId, bufferText, insertionIndex, state);
+        return String.format("FileBuffer[id = %d, activeFileId = %d, bufferText = %s, insertionPosition = %s, state = %s]",
+                id, fileId, bufferText, insertionPosition, state);
     }
 
     /**
@@ -119,7 +120,7 @@ public final class FileBuffer {
         private int id = -1;
         private int fileId = -1;
         private String bufferText = null;
-        private int insertionIndex = 0;
+        private Position insertionPosition = null;
         private State state = null;
 
         /**
@@ -156,12 +157,12 @@ public final class FileBuffer {
 
         /**
          * Sets the insertion point index of this {@link FileBuffer.Builder} to the given index.
-         * @param index The index
+         * @param position The position
          *
          * @return This {@link FileBuffer.Builder}
          */
-        public Builder insertionIndex(int index){
-            this.insertionIndex = index;
+        public Builder insertionPosition(Position position){
+            this.insertionPosition = position;
             return this;
         }
 
@@ -197,10 +198,8 @@ public final class FileBuffer {
             }catch(NullPointerException e){
                 throw new IllegalArgumentException("The buffer text in the FileBuffer cannot be null.");
             }
-            if(insertionIndex < 0 || insertionIndex > bufferText.length()){
-                throw new IllegalArgumentException("The insertion index of the FileBuffer cannot be outside the text's range.");
-            }
             try{
+                Objects.requireNonNull(insertionPosition);
                 Objects.requireNonNull(state);
             }catch(NullPointerException e){
                 throw new IllegalArgumentException("The state of the FileBuffer cannot be null.");
