@@ -1,6 +1,5 @@
 package com.Textr.View;
 
-import com.Textr.File.File;
 import com.Textr.File.FileService;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
@@ -43,7 +42,6 @@ public class ViewService {
 
     /**
      * Generates a collection of {@link View}'s in a vertical layout.
-     * Might be worth swapping to a List in the FileBuffer repo? To maintain order?
      */
     public void initialiseViewsVertical(){
         int terminalWidth = TerminalService.getTerminalArea().getWidth();
@@ -52,13 +50,15 @@ public class ViewService {
         if(amountOfBuffers == 0){
             return;
         }
-        int heightPerView = (terminalHeight / amountOfBuffers);
+        int heightPerView = ((terminalHeight) / amountOfBuffers);
+        int remainder = ((terminalHeight) % amountOfBuffers);
         int y = 1;
         for(FileBuffer fileBuffer : fileBufferService.getAllFileBuffers()){
-            Position viewPosition = Position.builder().x(1).y(y).build();
-            Dimension2D viewDimensions = Dimension2D.builder().width(terminalWidth).height(heightPerView).build();
-            createAndStoreView(fileBuffer.getId(), viewPosition, viewDimensions);
-            y += heightPerView;
+            Position position = Position.builder().x(1).y(y).build();
+            int viewHeight = remainder-- > 0 ? heightPerView + 1 : heightPerView;
+            Dimension2D dimensions = Dimension2D.builder().width(terminalWidth).height(viewHeight).build();
+            createAndStoreView(fileBuffer.getId(), position, dimensions);
+            y += viewHeight;
         }
     }
 
@@ -70,43 +70,83 @@ public class ViewService {
         for(View view: viewRepo.getAll()){
             FileBuffer fileBuffer = fileBufferService.getFileBuffer(view.getFileBufferId());
             boolean activeBuffer = fileBufferService.isActive(fileBuffer.getId());
-            File file = fileService.getFile(fileBuffer.getFileId());
-            String text = fileBuffer.getBufferText();
-            String[] lines = text.split(System.lineSeparator());
-            int x = view.getPosition().getX();
-            int y = view.getPosition().getY();
-            int maxY = y + view.getDimensions().getHeight() - 1;
-            BufferState viewBufferState = fileBuffer.getState();
-            String url = file.getPath();
-            for(int i = 0; i < view.getDimensions().getHeight(); i++){
-                String line = lines.length <= i ? "" : lines[i];
-                Position linePosition = Position.builder().x(x).y(y).build();
-                boolean lastLine = y == maxY;
-                if(activeBuffer){
-                    if(lastLine){
-                        TerminalService.printText(linePosition,
-                                String.format("| path: %s --- lines: %d --- characters: %d --- insertion point: %s -- state: %s |",
-                                        url, lines.length, text.toCharArray().length,fileBuffer.getInsertionPosition(), viewBufferState));
-                    }
-                    if(y < maxY){
-                        TerminalService.printText(linePosition, line);
-                        Position position = Position.builder().x(view.getDimensions().getWidth()).y(y).build();
-                        TerminalService.printText(position, "|");
-                        TerminalService.printText(linePosition, "|");
-                    }
-                }else{
-                    if(lastLine){
-                        TerminalService.printText(linePosition,
-                                String.format("path: %s --- lines: %d --- characters: %d --- insertion point: %s -- state: %s",
-                                        url, lines.length, text.toCharArray().length,fileBuffer.getInsertionPosition(), viewBufferState));
-                    }
-                    if(y < maxY){
-                        TerminalService.printText(linePosition, line);
-                    }
-                }
-                y++;
-
+            if(activeBuffer){
+                drawActiveView(view, fileBuffer);
+            }else{
+                drawPassiveView(view, fileBuffer);
             }
         }
+    }
+
+    private void drawPassiveView(View view, FileBuffer fileBuffer){
+        String[] textLines = fileBuffer.getBufferText().split(System.lineSeparator());
+        int viewHeight = view.getDimensions().getHeight();
+        int row = view.getPosition().getY();
+        int lastRow = row + viewHeight - 1;
+        for(int i = 0; i < viewHeight; i++){
+            String line = textLines.length <= i ? "" : textLines[i];
+            Position linePosition = Position.builder().x(1).y(row + i).build();
+            if(row + i == lastRow){
+                drawStatusBar(fileBuffer, linePosition);
+            }else{
+                TerminalService.printText(linePosition, line);
+            }
+        }
+    }
+
+    private void drawActiveView(View view, FileBuffer fileBuffer){
+        String[] textLines = fileBuffer.getBufferText().split(System.lineSeparator());
+        int viewHeight = view.getDimensions().getHeight() - 2; // -2 for the two lines for the box around it
+        int row = view.getPosition().getY() + 1;
+        int lastRow = row + viewHeight - 1;
+        for(int i = 0; i < viewHeight; i++){
+            String line = textLines.length <= i ? "" : textLines[i];
+            Position linePosition = Position.builder().x(2).y(row + i).build();
+            if(row + i == lastRow){
+                drawStatusBar(fileBuffer, linePosition);
+            }else{
+                TerminalService.printText(linePosition, line);
+            }
+        }
+        drawRectangle(view.getPosition(), view.getDimensions());
+    }
+
+    private void drawStatusBar(FileBuffer buffer, Position position){
+        try{
+            Objects.requireNonNull(buffer);
+            Objects.requireNonNull(position);
+        }catch(IllegalArgumentException e){
+            throw new IllegalArgumentException("Cannot draw a status bar because the passed values are invalid.");
+        }
+        String url = fileService.getFile(buffer.getFileId()).getPath();
+        int amountOfLines = buffer.getBufferText().split(System.lineSeparator()).length;
+        int amountOfChars = buffer.getBufferText().length();
+        Position insertionPoint = buffer.getInsertionPosition();
+        BufferState state = buffer.getState();
+        String statusBar = String.format("Url: %s --- Lines: %d --- Characters: %d --- Insertion Point: %s --- State: %s",
+                                         url, amountOfLines, amountOfChars, insertionPoint, state);
+        TerminalService.printText(position, statusBar);
+    }
+
+    private void drawRectangle(Position position, Dimension2D dimensions){
+        int x = position.getX();
+        int y = position.getY();
+        for(int i = 2; i < dimensions.getWidth(); i++){
+            TerminalService.printText(i, y, "-");
+            TerminalService.printText(i, y + dimensions.getHeight() - 1, "-");
+        }
+        for(int j = 2; j < dimensions.getHeight(); j++){
+            TerminalService.printText(x, j + y - 1, "|");
+            TerminalService.printText(x + dimensions.getWidth() - 1, j + y - 1, "|");
+        }
+        TerminalService.printText(x, y, "+");
+        TerminalService.printText(x + dimensions.getWidth() - 1, y, "+");
+        TerminalService.printText(x, y + dimensions.getHeight() - 1, "+");
+        TerminalService.printText(x + dimensions.getWidth() - 1, y + dimensions.getHeight() - 1, "+");
+    }
+
+    public void drawCursor(){
+        Position cursorPosition = fileBufferService.getActiveBuffer().getInsertionPosition();
+        TerminalService.moveCursor(cursorPosition.getX()+1, cursorPosition.getY()+1);
     }
 }
