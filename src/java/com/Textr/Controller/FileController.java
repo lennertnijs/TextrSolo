@@ -3,23 +3,25 @@ package com.Textr.Controller;
 import com.Textr.File.File;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.File.FileService;
+import com.Textr.InputHandler.InputHandler;
+import com.Textr.InputHandler.RawInputHandler;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.ViewService;
 
 import java.util.Objects;
-
-import static com.Textr.Inputs.*;
 
 public class FileController {
 
     private final FileService fileService;
     private final FileBufferService fileBufferService;
     private final ViewService viewService;
+    private InputHandler inputHandler;
 
     public FileController(FileService fileService, FileBufferService fileBufferService, ViewService viewService){
         this.fileService = fileService;
         this.fileBufferService = fileBufferService;
         this.viewService = viewService;
+        this.inputHandler = new RawInputHandler(viewService, fileBufferService);
     }
 
     public void loadFiles(String[] files){
@@ -45,23 +47,7 @@ public class FileController {
         TerminalService.leaveRawInputMode();
     }
 
-    public void handleInput(int input){
-        if(input == -1){
-            return;
-        }
-        TerminalService.clearScreen();
-        switch(input){
-            case ARROW_RIGHT:
-                break;
-            case CTRL_S:
-                break;
-            case CTRL_P:
-                fileBufferService.moveActiveBufferToPrev();
-                break;
-            case CTRL_N:
-                fileBufferService.moveActiveBufferToNext();
-                break;
-        }
-        viewService.drawAllViewsVertical();
+    public void handleInput(int b){
+        inputHandler.handleInput(b);
     }
 }
