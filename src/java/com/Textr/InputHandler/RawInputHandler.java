@@ -23,11 +23,12 @@ public class RawInputHandler implements InputHandler{
         TerminalService.clearScreen();
         switch(input){
             case ESCAPE:
+                TerminalService.printText(5, 5, "TEXT");
                 int b = TerminalService.readByte();
                 switch(b){
                     case ARROW_RIGHT:
+                        TerminalService.printText(7, 7, "TET");
                         fileBufferService.moveInsertionPointRight();
-                        TerminalService.clearScreen();
                         break;
                 }
                 break;
@@ -39,5 +40,6 @@ public class RawInputHandler implements InputHandler{
                 break;
         }
         viewService.drawAllViewsVertical();
+        viewService.drawCursor();
     }
 }

@@ -10,7 +10,7 @@ public final class FileBuffer {
     private final int id;
     private final int fileId;
     private final String  bufferText;
-    private final Position insertionPosition;
+    private Position insertionPosition;
     private final BufferState bufferState;
 
     /**
@@ -54,6 +54,11 @@ public final class FileBuffer {
      */
     public Position getInsertionPosition(){
         return this.insertionPosition;
+    }
+
+    public void setInsertionPosition(Position position){
+        Objects.requireNonNull(position);
+        this.insertionPosition = position;
     }
 
     /**
