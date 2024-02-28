@@ -35,6 +35,9 @@ public class RawInputHandler implements InputHandler{
             fileBufferService.getActiveBuffer().addCharacterToBufferText((char) input);
             fileBufferService.moveInsertionPointRight();
             // temporary to type lmao
+            // letters are between 65 (A) and z (122)
+            // space is 32
+            // backspace is een combinatie according to google
         }
         f = true;
         viewService.drawAllViewsVertical();
