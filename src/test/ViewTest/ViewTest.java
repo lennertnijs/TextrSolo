@@ -64,7 +64,7 @@ public class ViewTest {
         Dimension2D dimensions = Dimension2D.create(15, 15);
         View view = View.builder().fileBufferId(1).point(point)
                 .dimensions(dimensions).build();
-        String expected = "BufferView[fileId = 1, point = Position[x = 5, y = 5], dimensions = Dimension2D[width = 15, height = 15]]";
+        String expected = "BufferView[fileId = 1, point = Point[x = 5, y = 5], dimensions = Dimension2D[width = 15, height = 15]]";
         Assertions.assertAll(
                 () -> Assertions.assertEquals(view.toString(), expected)
         );

@@ -64,7 +64,7 @@ public class FileBufferTest {
     public void testToString(){
         Point point = Point.create(1,1);
         FileBuffer buffer = FileBuffer.builder().id(0).fileId(0).bufferText("text").insertionPosition(point).state(BufferState.CLEAN).build();
-        String expected = "FileBuffer[id = 0, activeFileId = 0, bufferText = text, insertionPosition = Position[x = 1, y = 1], state = CLEAN]";
+        String expected = "FileBuffer[id = 0, activeFileId = 0, bufferText = text, insertionPosition = Point[x = 1, y = 1], state = CLEAN]";
         Assertions.assertAll(
                 () -> Assertions.assertEquals(buffer.toString(), expected)
         );

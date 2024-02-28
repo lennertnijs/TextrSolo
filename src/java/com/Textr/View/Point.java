@@ -81,6 +81,6 @@ public final class Point {
      */
     @Override
     public String toString(){
-        return String.format("Position[x = %d, y = %d]", x, y);
+        return String.format("Point[x = %d, y = %d]", x, y);
     }
 }

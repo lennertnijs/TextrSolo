@@ -42,7 +42,7 @@ public class PointTest {
     @Test
     public void testToString(){
         Point point = Point.create(1, 2);
-        String expectedString = "Position[x = 1, y = 2]";
+        String expectedString = "Point[x = 1, y = 2]";
         Assertions.assertAll(
                 () -> Assertions.assertEquals(point.toString(), expectedString)
         );
