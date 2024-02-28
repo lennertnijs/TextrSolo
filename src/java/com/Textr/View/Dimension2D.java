@@ -6,21 +6,28 @@ public final class Dimension2D {
     private final int width;
     private final int height;
 
-
     /**
-     * Constructor for a {@link Dimension2D} object.
+     * Constructor for a {@link Dimension2D}.
      */
     private Dimension2D(int width, int height){
         this.width = width;
         this.height = height;
     }
 
+    /**
+     * Static factory method to create a {@link Dimension2D} with.
+     * @param width The width. Must be strictly positive
+     * @param height The height. Must be strictly positive
+     *
+     * @return The {@link Dimension2D}
+     */
     public static Dimension2D create(int width, int height){
         if(width <= 0 || height <= 0){
             throw new IllegalArgumentException("Cannot create a Dimension2D with a negative or 0 width/height.");
         }
         return new Dimension2D(width, height);
     }
+
     /**
      * Returns the width of this {@link Dimension2D}.
      * @return this {@link Dimension2D}'s width
