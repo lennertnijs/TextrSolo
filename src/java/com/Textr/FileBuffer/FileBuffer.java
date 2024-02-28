@@ -43,8 +43,20 @@ public final class FileBuffer {
      * Returns the buffered text of this {@link FileBuffer}.
      * @return This {@link FileBuffer}'s buffered text.
      */
-    public String[] getBufferText(){
+    public String[] getBufferTextLines(){
         return this.bufferText;
+    }
+
+    public String getBufferText(){
+        return String.join("", bufferText);
+    }
+
+    public int getAmountOfBufferTextLines(){
+        return bufferText.length;
+    }
+
+    public int getAmountOfCharacters(){
+        return String.join("", bufferText).length();
     }
 
 

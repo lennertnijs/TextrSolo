@@ -80,7 +80,7 @@ public class ViewService {
     }
 
     private void drawPassiveView(View view, FileBuffer fileBuffer){
-        String[] textLines = fileBuffer.getBufferText();
+        String[] textLines = fileBuffer.getBufferTextLines();
         int viewHeight = view.getDimensions().getHeight();
         int row = view.getPosition().getY();
         int lastRow = row + viewHeight - 1;
@@ -96,7 +96,7 @@ public class ViewService {
     }
 
     private void drawActiveView(View view, FileBuffer fileBuffer){
-        String[] textLines = fileBuffer.getBufferText();
+        String[] textLines = fileBuffer.getBufferTextLines();
         int viewHeight = view.getDimensions().getHeight() - 2; // -2 for the two lines for the box around it
         int row = view.getPosition().getY() + 1;
         int lastRow = row + viewHeight - 1;
@@ -120,7 +120,7 @@ public class ViewService {
             throw new IllegalArgumentException("Cannot draw a status bar because the passed values are invalid.");
         }
         String url = fileService.getFile(buffer.getFileId()).getPath();
-        int amountOfLines = buffer.getBufferText().length;
+        int amountOfLines = buffer.getBufferText().length();
         int amountOfChars = String.join("\n", buffer.getBufferText()).length();
         InsertionPoint insertionPoint = buffer.getInsertionPosition();
         BufferState state = buffer.getState();
@@ -148,6 +148,6 @@ public class ViewService {
 
     public void drawCursor(){
         InsertionPoint cursorPoint = fileBufferService.getActiveBuffer().getInsertionPosition();
-        TerminalService.moveCursor(cursorPoint.getX()+1, cursorPoint.getY()+1);
+        TerminalService.moveCursor(cursorPoint.getX(), cursorPoint.getY());
     }
 }
