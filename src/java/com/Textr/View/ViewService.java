@@ -120,8 +120,8 @@ public class ViewService {
             throw new IllegalArgumentException("Cannot draw a status bar because the passed values are invalid.");
         }
         String url = fileService.getFile(buffer.getFileId()).getPath();
-        int amountOfLines = buffer.getBufferText().length();
-        int amountOfChars = String.join("\n", buffer.getBufferText()).length();
+        int amountOfLines = buffer.getAmountOfBufferTextLines();
+        int amountOfChars = buffer.getAmountOfCharacters();
         InsertionPoint insertionPoint = buffer.getInsertionPosition();
         BufferState state = buffer.getState();
         String statusBar = String.format("Url: %s --- Lines: %d --- Characters: %d --- Insertion Point: %s --- State: %s",
