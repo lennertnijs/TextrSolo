@@ -59,6 +59,23 @@ public final class FileBuffer {
         return String.join("", bufferText).length();
     }
 
+    public void addCharacterToBufferText(char character){
+        int row = insertionPoint.getY();
+        int col = insertionPoint.getX();
+        String line = bufferText[row];
+        StringBuilder builder = new StringBuilder();
+        for(int i = 0; i < line.length(); i++){
+            if(i < col){
+                builder.append(line.charAt(i));
+            }else if(i == col){
+                builder.append(character);
+            }else{
+                builder.append(line.charAt(i-1));
+            }
+        }
+        bufferText[row] = builder.toString();
+    }
+
 
     /**
      * Returns the insertion point index of this {@link FileBuffer}.
