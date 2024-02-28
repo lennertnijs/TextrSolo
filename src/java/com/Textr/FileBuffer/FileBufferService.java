@@ -74,6 +74,21 @@ public class FileBufferService {
     }
 
     public void moveInsertionPointRight(){
-        fileBufferRepository.getActiveBuffer().getInsertionPosition().incrementX();
+        int row = fileBufferRepository.getActiveBuffer().getInsertionPosition().getY() + 1;
+        int max = fileBufferRepository.getActiveBuffer().getBufferTextLines()[row].length();
+        fileBufferRepository.getActiveBuffer().getInsertionPosition().incrementX(max);
+    }
+
+    public void moveInsertionPointLeft(){
+        fileBufferRepository.getActiveBuffer().getInsertionPosition().decrementX();
+    }
+
+    public void moveInsertionPointDown(){
+        int max = fileBufferRepository.getActiveBuffer().getAmountOfBufferTextLines() - 1;
+        fileBufferRepository.getActiveBuffer().getInsertionPosition().incrementY(max);
+    }
+
+    public void moveInsertionPointUp(){
+        fileBufferRepository.getActiveBuffer().getInsertionPosition().decrementY();
     }
 }

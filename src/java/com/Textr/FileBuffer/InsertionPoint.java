@@ -48,8 +48,8 @@ public class InsertionPoint {
     /**
      * Increments the x coordinate of this {@link InsertionPoint} by 1.
      */
-    protected void incrementX(){
-        x += 1;
+    protected void incrementX(int max){
+        x  = Math.min(max, x + 1);
     }
 
     /**
@@ -62,8 +62,8 @@ public class InsertionPoint {
     /**
      * Increments the y coordinate of this {@link InsertionPoint} by 1.
      */
-    protected void incrementY(){
-        y += 1;
+    protected void incrementY(int max){
+        y = Math.min(max, y + 1);
     }
 
     /**
