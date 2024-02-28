@@ -1,6 +1,7 @@
 package com.Textr.View;
 
-import com.Textr.FileBuffer.FileBuffer;
+import com.Textr.FileBuffer.Text;
+import com.Textr.Terminal.TerminalService;
 
 import java.util.Objects;
 
@@ -11,15 +12,17 @@ public class ViewDrawer implements IViewDrawer{
     }
 
     @Override
-    public void drawView(View view, FileBuffer fileBuffer) {
+    public void drawView(View view, Text text) {
         Objects.requireNonNull(view);
-        Objects.requireNonNull(fileBuffer);
+        Objects.requireNonNull(text);
+        int height = view.getDimensions().getHeight();
+        int x = view.getPosition().getX();
         int startY = view.getPosition().getY();
-        int maxY = startY + view.getDimensions().getHeight() - 1;
-        String[] textLines = fileBuffer.getBufferText().getLines();
-        for(int i = startY; i <= maxY; i++){
-            String line = i == maxY ? "statusBar" : (i - startY) >= textLines.length ? "" : textLines[i - startY];
-
+        int maxY = startY + height - 1;
+        String[] lines = text.getLines();
+        for(int i = 0; i < Math.min(lines.length, height - 1); i++){
+            TerminalService.printText(x, startY++, lines[i]);
         }
+        TerminalService.printText(x, maxY, "Status bar");
     }
 }

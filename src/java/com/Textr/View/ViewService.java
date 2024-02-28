@@ -3,7 +3,6 @@ package com.Textr.View;
 import com.Textr.File.FileService;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.InsertionPoint;
 import com.Textr.Terminal.TerminalService;
 
@@ -15,11 +14,13 @@ public class ViewService {
     private final ViewRepo viewRepo;
     private final FileBufferService fileBufferService;
     private final FileService fileService;
+    private final IViewDrawer viewDrawer;
 
     public ViewService(FileBufferService fileBufferService, FileService fileService){
         this.viewRepo = new ViewRepo();
         this.fileBufferService = fileBufferService;
         this.fileService = fileService;
+        this.viewDrawer = new ViewDrawer();
     }
 
     public View createView(int fileBufferId, Point point, Dimension2D dimensions){
@@ -74,23 +75,7 @@ public class ViewService {
             if(activeBuffer){
                 drawActiveView(view, fileBuffer);
             }else{
-                drawPassiveView(view, fileBuffer);
-            }
-        }
-    }
-
-    private void drawPassiveView(View view, FileBuffer fileBuffer){
-        String[] textLines = fileBuffer.getBufferText().getLines();
-        int viewHeight = view.getDimensions().getHeight();
-        int row = view.getPosition().getY();
-        int lastRow = row + viewHeight - 1;
-        for(int i = 0; i < viewHeight; i++){
-            String line = textLines.length <= i ? "" : textLines[i];
-            Point linePoint = Point.create(1, row + i);
-            if(row + i == lastRow){
-                drawStatusBar(fileBuffer, linePoint);
-            }else{
-                TerminalService.printText(linePoint, line);
+                viewDrawer.drawView(view, fileBuffer.getBufferText());
             }
         }
     }

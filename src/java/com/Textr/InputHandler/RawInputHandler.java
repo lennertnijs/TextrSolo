@@ -21,6 +21,7 @@ public final class RawInputHandler implements InputHandler{
         boolean isRegularInput = input >= 65 && input <= 122 || input == SPACE || input == BACKSPACE;
         if(isRegularInput){
             saveInputToBuffer(input);
+            drawAll();
             return;
         }
         switch (input) {
