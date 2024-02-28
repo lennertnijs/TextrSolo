@@ -17,10 +17,6 @@ public class RawInputHandler implements InputHandler{
     }
     @Override
     public void handleInput(int input){
-        if(input == -1){
-            // exception occurred during reading of the byte
-            return;
-        }
         switch (input) {
             case ESCAPE -> {
                 f = false;
@@ -38,6 +34,7 @@ public class RawInputHandler implements InputHandler{
         if(f){
             fileBufferService.getActiveBuffer().addCharacterToBufferText((char) input);
             fileBufferService.moveInsertionPointRight();
+            // temporary to type lmao
         }
         f = true;
         viewService.drawAllViewsVertical();
