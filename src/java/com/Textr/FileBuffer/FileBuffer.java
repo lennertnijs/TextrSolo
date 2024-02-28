@@ -10,7 +10,7 @@ public final class FileBuffer {
     private final int id;
     private final int fileId;
     private final String  bufferText;
-    private Point insertionPoint;
+    private InsertionPoint insertionPoint;
     private final BufferState bufferState;
 
     /**
@@ -52,11 +52,11 @@ public final class FileBuffer {
      * Returns the insertion point index of this {@link FileBuffer}.
      * @return This {@link FileBuffer}'s insertion point index.
      */
-    public Point getInsertionPosition(){
+    public InsertionPoint getInsertionPosition(){
         return this.insertionPoint;
     }
 
-    public void setInsertionPosition(Point point){
+    public void setInsertionPosition(InsertionPoint point){
         Objects.requireNonNull(point);
         this.insertionPoint = point;
     }
@@ -126,7 +126,7 @@ public final class FileBuffer {
         private int id = -1;
         private int fileId = -1;
         private String bufferText = null;
-        private Point insertionPoint = null;
+        private InsertionPoint insertionPoint = null;
         private BufferState bufferState = null;
 
         /**
@@ -167,7 +167,7 @@ public final class FileBuffer {
          *
          * @return This {@link FileBuffer.Builder}
          */
-        public Builder insertionPosition(Point point){
+        public Builder insertionPosition(InsertionPoint point){
             this.insertionPoint = point;
             return this;
         }

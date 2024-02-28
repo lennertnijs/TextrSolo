@@ -4,6 +4,7 @@ import com.Textr.File.FileService;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.FileBuffer.BufferState;
+import com.Textr.FileBuffer.InsertionPoint;
 import com.Textr.Terminal.TerminalService;
 
 import java.util.List;
@@ -121,7 +122,7 @@ public class ViewService {
         String url = fileService.getFile(buffer.getFileId()).getPath();
         int amountOfLines = buffer.getBufferText().split(System.lineSeparator()).length;
         int amountOfChars = buffer.getBufferText().length();
-        Point insertionPoint = buffer.getInsertionPosition();
+        InsertionPoint insertionPoint = buffer.getInsertionPosition();
         BufferState state = buffer.getState();
         String statusBar = String.format("Url: %s --- Lines: %d --- Characters: %d --- Insertion Point: %s --- State: %s",
                                          url, amountOfLines, amountOfChars, insertionPoint, state);
@@ -146,7 +147,7 @@ public class ViewService {
     }
 
     public void drawCursor(){
-        Point cursorPoint = fileBufferService.getActiveBuffer().getInsertionPosition();
+        InsertionPoint cursorPoint = fileBufferService.getActiveBuffer().getInsertionPosition();
         TerminalService.moveCursor(cursorPoint.getX()+1, cursorPoint.getY()+1);
     }
 }
