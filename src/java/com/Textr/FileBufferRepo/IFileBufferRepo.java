@@ -5,7 +5,7 @@ import com.Textr.FileBuffer.FileBuffer;
 import java.util.List;
 import java.util.Optional;
 
-public interface IFileBufferRepository {
+public interface IFileBufferRepo {
 
     int getSize();
     Optional<FileBuffer> getBuffer(int id);

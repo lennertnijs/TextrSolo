@@ -5,7 +5,7 @@ import com.Textr.FileBuffer.FileBuffer;
 
 import java.util.*;
 
-public class AllFileBufferRepo implements IAllFileBufferRepo {
+public class FileBuffersRepo implements IFileBuffersRepo {
 
 
     private final List<FileBuffer> buffers;
@@ -13,7 +13,7 @@ public class AllFileBufferRepo implements IAllFileBufferRepo {
     /**
      * The constructor for a repository where all the {@link FileBuffer}'s are stored.
      */
-    public AllFileBufferRepo(){
+    public FileBuffersRepo(){
         this.buffers = new ArrayList<>();
     }
 

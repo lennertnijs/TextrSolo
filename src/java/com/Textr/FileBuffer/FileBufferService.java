@@ -1,8 +1,8 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
-import com.Textr.FileBufferRepo.FileBufferRepository;
-import com.Textr.FileBufferRepo.IFileBufferRepository;
+import com.Textr.FileBufferRepo.FileBufferRepo;
+import com.Textr.FileBufferRepo.IFileBufferRepo;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -12,10 +12,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class FileBufferService {
 
     private final AtomicInteger atomicInteger = new AtomicInteger();
-    private final IFileBufferRepository fileBufferRepository;
+    private final IFileBufferRepo fileBufferRepository;
 
     public FileBufferService(){
-        this.fileBufferRepository = new FileBufferRepository();
+        this.fileBufferRepository = new FileBufferRepo();
     }
 
     public void initialisePassiveFileBuffer(File file){

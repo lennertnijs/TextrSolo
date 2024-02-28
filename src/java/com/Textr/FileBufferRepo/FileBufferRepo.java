@@ -5,14 +5,14 @@ import com.Textr.FileBuffer.FileBuffer;
 import java.util.List;
 import java.util.Optional;
 
-public class FileBufferRepository implements IFileBufferRepository{
+public class FileBufferRepo implements IFileBufferRepo {
 
     private final IActiveFileBufferRepo activeFileBufferRepo;
-    private final IAllFileBufferRepo allFileBufferRepo;
+    private final IFileBuffersRepo allFileBufferRepo;
 
-    public FileBufferRepository(){
+    public FileBufferRepo(){
         this.activeFileBufferRepo = new ActiveFileBufferRepo();
-        this.allFileBufferRepo = new AllFileBufferRepo();
+        this.allFileBufferRepo = new FileBuffersRepo();
     }
 
 

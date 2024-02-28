@@ -1,12 +1,11 @@
 package com.Textr.FileBufferRepo;
 
 import com.Textr.FileBuffer.FileBuffer;
-import com.Textr.FileBuffer.FileBufferService;
 
 import java.util.List;
 import java.util.Optional;
 
-interface IAllFileBufferRepo {
+interface IFileBuffersRepo {
 
     int getSize();
 
