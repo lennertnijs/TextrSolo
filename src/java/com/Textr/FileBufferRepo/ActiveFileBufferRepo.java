@@ -9,7 +9,7 @@ public final class ActiveFileBufferRepo implements IActiveFileBufferRepo {
 
     private static FileBuffer activeFileBuffer = null;
 
-    ActiveFileBufferRepo(){
+    public ActiveFileBufferRepo(){
     }
 
     /**
@@ -26,11 +26,9 @@ public final class ActiveFileBufferRepo implements IActiveFileBufferRepo {
      * @return An {@link Optional} of the active {@link FileBuffer}, if one exists. An empty {@link Optional} otherwise.
      */
     @Override
-    public Optional<FileBuffer> getBuffer(){
-        if(activeFileBuffer == null){
-            return Optional.empty();
-        }
-        return Optional.of(activeFileBuffer);
+    public FileBuffer getBuffer(){
+        Objects.requireNonNull(activeFileBuffer, "Cannot retrieve the active FileBuffer because it is null.");
+        return activeFileBuffer;
     }
 
     /**

@@ -38,11 +38,7 @@ public class FileBufferRepo implements IFileBufferRepo {
 
     @Override
     public FileBuffer getActiveBuffer(){
-        Optional<FileBuffer> optional = activeFileBufferRepo.getBuffer();
-        if(optional.isEmpty()){
-            throw new NoSuchElementException("No active FileBuffer was found.");
-        }
-        return optional.get();
+        return activeFileBufferRepo.getBuffer();
     }
 
     @Override

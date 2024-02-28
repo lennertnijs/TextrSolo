@@ -8,13 +8,9 @@ import java.util.*;
 public class AllFileBuffersRepo implements IAllFileBuffersRepo {
 
 
-    private final List<FileBuffer> buffers;
+    private final List<FileBuffer> buffers = new ArrayList<>();
 
-    /**
-     * The constructor for a repository where all the {@link FileBuffer}'s are stored.
-     */
     public AllFileBuffersRepo(){
-        this.buffers = new ArrayList<>();
     }
 
 
