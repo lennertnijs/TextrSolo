@@ -48,7 +48,7 @@ public class FileController {
         TerminalService.leaveRawInputMode();
     }
 
-    public void handleInput(int b){
-        inputHandler.handleInput(b);
+    public void handleInput(){
+        inputHandler.handleInput();
     }
 }

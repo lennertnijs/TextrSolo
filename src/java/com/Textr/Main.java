@@ -16,7 +16,7 @@ public class Main {
         fileController.loadFiles(args);
         TerminalService.enterRawInputMode();
         while(true){
-            fileController.handleInput(TerminalService.readByte());
+            fileController.handleInput();
         }
     }
 }

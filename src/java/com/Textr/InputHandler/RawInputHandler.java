@@ -16,30 +16,19 @@ public class RawInputHandler implements InputHandler{
         this.fileBufferService = fileBufferService;
     }
     @Override
-    public void handleInput(int input){
-        switch (input) {
-            case ESCAPE -> {
-                f = false;
-                handleEscapeInput();
-            }
-            case CTRL_P -> {
-                fileBufferService.moveActiveBufferToPrev();
-                f = false;
-            }
-            case CTRL_N -> {
-                fileBufferService.moveActiveBufferToNext();
-                f = false;
-            }
-        }
-        if(f){
+    public void handleInput(){
+        int input = TerminalService.readByte();
+        boolean isRegularInput = input >= 65 && input <= 122 || input == SPACE || input == BACKSPACE;
+        if(isRegularInput){
             fileBufferService.getActiveBuffer().addCharacterToBufferText((char) input);
             fileBufferService.moveInsertionPointRight();
-            // temporary to type lmao
-            // letters are between 65 (A) and z (122)
-            // space is 32
-            // backspace is een combinatie according to google
+            return;
         }
-        f = true;
+        switch (input) {
+            case ESCAPE -> handleEscapeInput();
+            case CTRL_P -> fileBufferService.moveActiveBufferToPrev();
+            case CTRL_N -> fileBufferService.moveActiveBufferToNext();
+        }
         viewService.drawAllViewsVertical();
         viewService.drawCursor();
     }
