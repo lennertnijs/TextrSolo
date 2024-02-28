@@ -13,6 +13,7 @@ public interface IFileBufferRepo {
     FileBuffer getActiveBuffer();
     void setActiveBuffer(FileBuffer fileBuffer);
     void removeBuffer(int id);
+    void removeActiveBuffer();
     List<FileBuffer> getAllBuffers();
     void setActiveToNext();
     void setActiveToPrevious();

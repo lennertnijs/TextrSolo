@@ -5,6 +5,8 @@ import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.FileBuffer.InsertionPoint;
 import com.Textr.Terminal.TerminalService;
+import com.Textr.ViewDrawer.IViewDrawer;
+import com.Textr.ViewDrawer.ViewDrawer;
 
 import java.util.List;
 import java.util.Objects;
@@ -68,67 +70,21 @@ public class ViewService {
         return viewRepo.getAll();
     }
 
-    public void drawAllViewsVertical(){
+    public void drawAllViews(){
         for(View view: viewRepo.getAll()){
             FileBuffer fileBuffer = fileBufferService.getFileBuffer(view.getFileBufferId());
-            boolean activeBuffer = fileBufferService.isActive(fileBuffer.getId());
-            if(activeBuffer){
-                drawActiveView(view, fileBuffer);
-            }else{
-                viewDrawer.drawView(view, fileBuffer.getBufferText());
-            }
+            viewDrawer.drawView(view, fileBuffer.getBufferText(), generateStatusBar(fileBuffer));
         }
     }
 
-    private void drawActiveView(View view, FileBuffer fileBuffer){
-        String[] textLines = fileBuffer.getBufferText().getLines();
-        int viewHeight = view.getDimensions().getHeight() - 2; // -2 for the two lines for the box around it
-        int row = view.getPosition().getY() + 1;
-        int lastRow = row + viewHeight - 1;
-        for(int i = 0; i < viewHeight; i++){
-            String line = textLines.length <= i ? "" : textLines[i];
-            Point linePoint = Point.create(2, row + i);
-            if(row + i == lastRow){
-                drawStatusBar(fileBuffer, linePoint);
-            }else{
-                TerminalService.printText(linePoint, line);
-            }
-        }
-        drawRectangle(view.getPosition(), view.getDimensions());
-    }
-
-    private void drawStatusBar(FileBuffer buffer, Point point){
-        try{
-            Objects.requireNonNull(buffer);
-            Objects.requireNonNull(point);
-        }catch(IllegalArgumentException e){
-            throw new IllegalArgumentException("Cannot draw a status bar because the passed values are invalid.");
-        }
-        String statusBar = String.format("Url: %s --- Lines: %d --- Characters: %d --- Insertion Point: %s --- State: %s",
-                        fileService.getFile(buffer.getFileId()).getPath(), buffer.getBufferText().getAmountOfLines(),
-                        buffer.getBufferText().getAmountOfChars(), buffer.getInsertionPosition(), buffer.getState());
-        TerminalService.printText(point, statusBar);
-    }
-
-    private void drawRectangle(Point point, Dimension2D dimensions){
-        int x = point.getX();
-        int y = point.getY();
-        for(int i = 2; i < dimensions.getWidth(); i++){
-            TerminalService.printText(i, y, "-");
-            TerminalService.printText(i, y + dimensions.getHeight() - 1, "-");
-        }
-        for(int j = 2; j < dimensions.getHeight(); j++){
-            TerminalService.printText(x, j + y - 1, "|");
-            TerminalService.printText(x + dimensions.getWidth() - 1, j + y - 1, "|");
-        }
-        TerminalService.printText(x, y, "+");
-        TerminalService.printText(x + dimensions.getWidth() - 1, y, "+");
-        TerminalService.printText(x, y + dimensions.getHeight() - 1, "+");
-        TerminalService.printText(x + dimensions.getWidth() - 1, y + dimensions.getHeight() - 1, "+");
+    private String generateStatusBar(FileBuffer fileBuffer){
+        return String.format("File path: %s - Lines: %d - Characters: %d - InsertionPoint: %s - State: %s",
+               fileService.getFile(fileBuffer.getFileId()).getPath(), fileBuffer.getBufferText().getAmountOfLines(),
+                fileBuffer.getBufferText().getAmountOfChars(), fileBuffer.getInsertionPosition(), fileBuffer.getState());
     }
 
     public void drawCursor(){
         InsertionPoint cursorPoint = fileBufferService.getActiveBuffer().getInsertionPosition();
-        TerminalService.moveCursor(cursorPoint.getX() + 1, cursorPoint.getY() + 2);
+        TerminalService.moveCursor(cursorPoint.getX() + 1, cursorPoint.getY() + 1);
     }
 }

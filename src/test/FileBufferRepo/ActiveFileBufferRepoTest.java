@@ -9,23 +9,24 @@ import org.junit.jupiter.api.Test;
 public class ActiveFileBufferRepoTest {
 
     private FileBuffer buffer;
-    private ActiveFileBufferRepo repo;
+    private final ActiveFileBufferRepo repo = new ActiveFileBufferRepo();
     @BeforeEach
     public void initialise(){
+        FileBufferIdGenerator.resetGenerator();
         InsertionPoint insertionPoint = InsertionPoint.create(5,5);
         buffer = FileBuffer.builder().fileId(1).bufferText(Text.create("text"))
                 .insertionPosition(insertionPoint).state(BufferState.CLEAN).build();
-        repo = new ActiveFileBufferRepo();
-        FileBufferIdGenerator.resetGenerator();
+        repo.deleteBuffer();
     }
 
     @Test
     public void testSetAndGetBuffer(){
         Assertions.assertAll(
+                () -> Assertions.assertTrue(repo.isEmpty()),
                 () -> repo.setBuffer(buffer),
                 () -> Assertions.assertEquals(repo.getBufferId(), 0),
-                () -> Assertions.assertEquals(repo.getBuffer(), buffer)
-
+                () -> Assertions.assertEquals(repo.getBuffer(), buffer),
+                () -> Assertions.assertFalse(repo.isEmpty())
         );
     }
 

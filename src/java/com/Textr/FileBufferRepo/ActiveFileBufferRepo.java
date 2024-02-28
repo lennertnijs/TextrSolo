@@ -3,27 +3,43 @@ package com.Textr.FileBufferRepo;
 import com.Textr.FileBuffer.FileBuffer;
 
 import java.util.Objects;
-import java.util.Optional;
 
 public final class ActiveFileBufferRepo implements IActiveFileBufferRepo {
 
-    private static FileBuffer activeFileBuffer = null;
+    private FileBuffer activeFileBuffer = null;
 
     public ActiveFileBufferRepo(){
     }
 
+
     /**
-     * @return The id of the active {@link FileBuffer}
+     * Checks whether there is an active {@link FileBuffer}. Returns True if so, False otherwise.
+     * @return True if there's an active {@link FileBuffer}, False otherwise.
+     */
+    @Override
+    public boolean isEmpty(){
+        return activeFileBuffer == null;
+    }
+
+
+    /**
+     * Returns the id of the active {@link FileBuffer}.
+     *
+     * @return The id
      * @throws NullPointerException If the active {@link FileBuffer} is null.
      */
     @Override
     public int getBufferId(){
-        Objects.requireNonNull(activeFileBuffer, "Cannot retrieve the id of the active FileBuffer because it is null.");
+        Objects.requireNonNull(activeFileBuffer, "Cannot retrieve the id of the active FileBuffer because it's null.");
         return activeFileBuffer.getId();
     }
 
+
     /**
-     * @return An {@link Optional} of the active {@link FileBuffer}, if one exists. An empty {@link Optional} otherwise.
+     * Returns the active {@link FileBuffer}, if one is set. Throws an Exception otherwise.
+     *
+     * @return The active {@link FileBuffer}.
+     * @throws NullPointerException If the active {@link FileBuffer} is null.
      */
     @Override
     public FileBuffer getBuffer(){
@@ -31,8 +47,9 @@ public final class ActiveFileBufferRepo implements IActiveFileBufferRepo {
         return activeFileBuffer;
     }
 
+
     /**
-     * Sets the active {@link FileBuffer} to the given {@link FileBuffer}.
+     * Overwrite the active {@link FileBuffer} with the given {@link FileBuffer}.
      * @param fileBuffer The new active {@link FileBuffer}. Cannot be null.
      *
      * @throws IllegalArgumentException If the passed {@link FileBuffer} is null.
@@ -42,8 +59,18 @@ public final class ActiveFileBufferRepo implements IActiveFileBufferRepo {
         try{
             Objects.requireNonNull(fileBuffer);
         }catch(NullPointerException e){
-            throw new IllegalArgumentException("Cannot set the active FileBuffer to null.");
+            throw new IllegalArgumentException("Cannot set the active FileBuffer to null. (use deleteBuffer() to do so)");
         }
         activeFileBuffer = fileBuffer;
+    }
+
+
+    /**
+     * Overwrites the active {@link FileBuffer} with null.
+     * USE WITH CARE
+     */
+    @Override
+    public void deleteBuffer(){
+        activeFileBuffer = null;
     }
 }

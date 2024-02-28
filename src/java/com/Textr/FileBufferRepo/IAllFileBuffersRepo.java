@@ -8,6 +8,7 @@ interface IAllFileBuffersRepo {
 
     int getSize();
     FileBuffer get(int id);
+    boolean contains(int id);
     List<FileBuffer> getAll();
     void add(FileBuffer fileBuffer);
     void remove(int id);

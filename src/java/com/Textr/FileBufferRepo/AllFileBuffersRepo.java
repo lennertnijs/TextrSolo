@@ -7,9 +7,10 @@ import java.util.*;
 public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
 
 
-    private final List<FileBuffer> buffers = new ArrayList<>();
+    private final List<FileBuffer> buffers;
 
     public AllFileBuffersRepo(){
+        buffers = new ArrayList<>();
     }
 
 
@@ -23,6 +24,20 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
         return buffers.size();
     }
 
+    /**
+     * Returns true if a buffer with this id was found. Returns false otherwise.
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean contains(int id){
+        for(FileBuffer buffer : buffers){
+            if(id == buffer.getId()){
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * Finds and returns the {@link FileBuffer} with the given id.
      * @param id The id

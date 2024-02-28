@@ -71,6 +71,10 @@ public final class FileBufferRepo implements IFileBufferRepo {
      */
     @Override
     public void setActiveBuffer(FileBuffer fileBuffer) {
+        boolean existsInAllRepo = allFileBufferRepo.contains(fileBuffer.getId());
+        if(!existsInAllRepo){
+            throw new IllegalStateException("Cannot set the active FileBuffer to a buffer that does not exist.");
+        }
         activeFileBufferRepo.setBuffer(fileBuffer);
     }
 
@@ -81,10 +85,22 @@ public final class FileBufferRepo implements IFileBufferRepo {
      */
     @Override
     public void removeBuffer(int id) {
-        if(id == activeFileBufferRepo.getBufferId()){
-            throw new IllegalStateException("Cannot remove the active FileBuffer.");
+        if(activeFileBufferRepo.isEmpty()){
+            allFileBufferRepo.remove(id);
+        }else{
+            if(id == activeFileBufferRepo.getBufferId()){
+                throw new IllegalStateException("Cannot remove the active FileBuffer.");
+            }
+            allFileBufferRepo.remove(id);
         }
-        allFileBufferRepo.remove(id);
+    }
+
+    /**
+     * Removes the active file buffer.
+     */
+    @Override
+    public void removeActiveBuffer(){
+        activeFileBufferRepo.deleteBuffer();
     }
 
     /**

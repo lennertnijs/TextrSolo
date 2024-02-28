@@ -39,7 +39,7 @@ public final class RawInputHandler implements InputHandler{
     }
 
     private void drawAll(){
-        viewService.drawAllViewsVertical();
+        viewService.drawAllViews();
         viewService.drawCursor();
     }
 

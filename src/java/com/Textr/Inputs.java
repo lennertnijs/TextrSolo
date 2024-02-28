@@ -17,7 +17,7 @@ public final class Inputs {
     public static final int ARROW_RIGHT = 67; // C
     public static final int ARROW_LEFT = 68; // D
     public static final int N_UPPER = 78;
-    public static final int F4 = 83;
+    public static final int F4 = 83; // incorrect, also escape key
     public static final int Y_UPPER = 89;
     public static final int N_LOWER = 110;
     public static final int Y_LOWER = 121;
