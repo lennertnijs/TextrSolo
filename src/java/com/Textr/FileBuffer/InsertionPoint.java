@@ -73,6 +73,12 @@ public class InsertionPoint {
         y = Math.max(y - 1, 0);
     }
 
+    /**
+     * Compares this {@link InsertionPoint} to the given {@link Object}. Returns True if equal, False otherwise.
+     * @param o The {@link Object}
+     *
+     * @return True if equal, false otherwise.
+     */
     @Override
     public boolean equals(Object o){
         if(this == o){
@@ -84,6 +90,11 @@ public class InsertionPoint {
         return x == point.x && y == point.y;
     }
 
+    /**
+     * Generates and returns a hash code for this {@link InsertionPoint}.
+     *
+     * @return The hash code
+     */
     @Override
     public int hashCode(){
         int result = x;
@@ -91,6 +102,11 @@ public class InsertionPoint {
         return result;
     }
 
+    /**
+     * Creates and returns a {@link String} representation of this {@link InsertionPoint}.
+     *
+     * @return The {@link String} representation
+     */
     @Override
     public String toString(){
         return String.format("InsertionPoint[x = %d, y = %d]", x, y);

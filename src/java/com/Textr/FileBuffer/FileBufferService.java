@@ -82,8 +82,7 @@ public class FileBufferService {
 
     public void moveInsertionPointRight(){
         FileBuffer active = fileBufferRepo.getAllActives().get(0);
-        InsertionPoint point = InsertionPoint.create(active.getInsertionPosition().getX() + 1, active.getInsertionPosition().getY());
-        active.setInsertionPosition(point);
+        active.getInsertionPosition().incrementX();
     }
 
     /**
