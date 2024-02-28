@@ -3,6 +3,7 @@ package com.Textr.FileBufferRepo;
 import com.Textr.FileBuffer.FileBuffer;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class FileBufferRepo implements IFileBufferRepo {
@@ -37,7 +38,11 @@ public class FileBufferRepo implements IFileBufferRepo {
 
     @Override
     public FileBuffer getActiveBuffer(){
-        return activeFileBufferRepo.getBuffer();
+        Optional<FileBuffer> optional = activeFileBufferRepo.getBuffer();
+        if(optional.isEmpty()){
+            throw new NoSuchElementException("No active FileBuffer was found.");
+        }
+        return optional.get();
     }
 
     @Override
