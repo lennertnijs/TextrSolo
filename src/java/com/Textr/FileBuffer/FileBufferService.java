@@ -1,7 +1,6 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
-import com.Textr.View.Point;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -27,7 +26,7 @@ public class FileBufferService {
         Objects.requireNonNull(file, "Cannot initialise a fileBuffer because the File is null.");
         FileBuffer fileBuffer = createFileBuffer(file.getId(), file.getText());
         storeFileBuffer(fileBuffer);
-        fileBufferRepo.setActive(fileBuffer);
+        ActiveFileBufferRepo.setBuffer(fileBuffer);
     }
 
     private FileBuffer createFileBuffer(int fileId, String text){
@@ -61,38 +60,24 @@ public class FileBufferService {
     }
 
     public boolean isActive(int id){
-        return fileBufferRepo.isActive(id);
+        return ActiveFileBufferRepo.getBufferId() == id;
     }
 
     public void moveActiveBufferToNext(){
-        int id = fileBufferRepo.getAllActives().get(0).getId();
-        fileBufferRepo.removeActive(id);
-        fileBufferRepo.setActive(fileBufferRepo.next(id));
+        int id = ActiveFileBufferRepo.getBufferId();
+        ActiveFileBufferRepo.setBuffer(fileBufferRepo.next(id));
     }
 
     public void moveActiveBufferToPrev(){
-        int id = fileBufferRepo.getAllActives().get(0).getId();
-        fileBufferRepo.removeActive(id);
-        fileBufferRepo.setActive(fileBufferRepo.prev(id));
+        int id = ActiveFileBufferRepo.getBufferId();
+        ActiveFileBufferRepo.setBuffer(fileBufferRepo.prev(id));
     }
 
     public FileBuffer getActiveBuffer(){
-        return fileBufferRepo.getAllActives().get(0);
+        return ActiveFileBufferRepo.getBuffer();
     }
 
     public void moveInsertionPointRight(){
-        FileBuffer active = fileBufferRepo.getAllActives().get(0);
-        active.getInsertionPosition().incrementX();
+        ActiveFileBufferRepo.getBuffer().getInsertionPosition().incrementX();
     }
-
-    /**
-     * Needs methods to do the following:
-     * 1) create a FileBuffer for a given File
-     * 2) store a FileBuffer for a given File
-     * 3) change a FileBuffer's buffer text (add input) -> should only allow ASCII
-     * 4) change a FileBuffer's insertion point index
-     * 5) change a FileBuffer's State
-     * 6) save the FileBuffer to the File & (or?) store in the external .txt File
-     * 7)
-     */
 }

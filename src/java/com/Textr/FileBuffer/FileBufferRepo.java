@@ -8,14 +8,12 @@ public class FileBufferRepo {
 
 
     private final List<FileBuffer> buffers;
-    private final List<FileBuffer> activeBuffers;
 
     /**
      * The constructor for a repository where all the {@link FileBuffer}'s are stored and managed.
      */
     public FileBufferRepo(){
         this.buffers = new ArrayList<>();
-        this.activeBuffers = new ArrayList<>();
     }
 
 
@@ -100,33 +98,5 @@ public class FileBufferRepo {
             }
         }
         throw new IllegalArgumentException();
-    }
-
-    public void removeActive(int id){
-        for(Iterator<FileBuffer> it = activeBuffers.iterator(); it.hasNext(); ){
-            if(it.next().getId() == id){
-                it.remove();
-            }
-        }
-    }
-
-    public void removeAllActive(){
-        for(Iterator<FileBuffer> it = activeBuffers.iterator(); it.hasNext(); ){
-            it.next();
-            it.remove();
-        }
-    }
-
-
-    public boolean isActive(int id){
-        return activeBuffers.stream().anyMatch(e -> e.getId() == id);
-    }
-
-    public void setActive(FileBuffer fileBuffer){
-        activeBuffers.add(fileBuffer);
-    }
-
-    public List<FileBuffer> getAllActives(){
-        return activeBuffers;
     }
 }
