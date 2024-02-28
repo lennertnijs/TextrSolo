@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface IFileBufferRepo {
 
     int getSize();
-    Optional<FileBuffer> getBuffer(int id);
+    FileBuffer getBuffer(int id);
     void addBuffer(FileBuffer fileBuffer);
     int getActiveBufferId();
     FileBuffer getActiveBuffer();

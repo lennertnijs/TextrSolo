@@ -55,10 +55,7 @@ public class FileBufferService {
     }
 
     public FileBuffer getFileBuffer(int id){
-        if(fileBufferRepository.getBuffer(id).isPresent()){
-            return fileBufferRepository.getBuffer(id).get();
-        }
-        throw new NoSuchElementException("No FileBuffer was found for the given id.");
+        return fileBufferRepository.getBuffer(id);
     }
 
     public boolean isActive(int id){

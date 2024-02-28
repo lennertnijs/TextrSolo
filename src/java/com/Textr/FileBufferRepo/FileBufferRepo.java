@@ -23,7 +23,7 @@ public class FileBufferRepo implements IFileBufferRepo {
     }
 
     @Override
-    public Optional<FileBuffer> getBuffer(int id){
+    public FileBuffer getBuffer(int id){
         return allFileBufferRepo.get(id);
     }
     @Override
@@ -58,11 +58,11 @@ public class FileBufferRepo implements IFileBufferRepo {
 
     @Override
     public FileBuffer nextBuffer(int id){
-        return allFileBufferRepo.next(id);
+        return allFileBufferRepo.getNext(id);
     }
 
     @Override
     public FileBuffer prevBuffer(int id){
-        return allFileBufferRepo.prev(id);
+        return allFileBufferRepo.getPrevious(id);
     }
 }
