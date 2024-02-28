@@ -1,6 +1,6 @@
 package com.Textr;
 
-public class Inputs {
+public final class Inputs {
 
     public static final int BACKSPACE = 8;
     public static final int RETURN = 13;
