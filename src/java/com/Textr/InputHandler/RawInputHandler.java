@@ -20,24 +20,30 @@ public class RawInputHandler implements InputHandler{
             // exception occurred during reading of the byte
             return;
         }
-        TerminalService.clearScreen();
-        switch(input){
-            case ESCAPE:
-                TerminalService.printText(5, 5, "TEXT");
+        switch (input) {
+            case ESCAPE -> {
                 int b = TerminalService.readByte();
-                switch(b){
-                    case ARROW_RIGHT:
-                        TerminalService.printText(7, 7, "TET");
-                        fileBufferService.moveInsertionPointRight();
-                        break;
+                switch (b) {
+                    case '[':
+                        b = TerminalService.readByte();
+                        switch(b){
+                            case ARROW_RIGHT:
+                                fileBufferService.moveInsertionPointRight();
+                                break;
+                            case ARROW_LEFT:
+                                fileBufferService.moveInsertionPointLeft();
+                                break;
+                            case ARROW_DOWN:
+                                fileBufferService.moveInsertionPointDown();
+                                break;
+                            case ARROW_UP:
+                                fileBufferService.moveInsertionPointUp();
+                                break;
+                        }
                 }
-                break;
-            case CTRL_P:
-                fileBufferService.moveActiveBufferToPrev();
-                break;
-            case CTRL_N:
-                fileBufferService.moveActiveBufferToNext();
-                break;
+            }
+            case CTRL_P -> fileBufferService.moveActiveBufferToPrev();
+            case CTRL_N -> fileBufferService.moveActiveBufferToNext();
         }
         viewService.drawAllViewsVertical();
         viewService.drawCursor();

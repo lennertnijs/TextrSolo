@@ -70,7 +70,7 @@ public class FileBufferService {
     }
 
     public void moveInsertionPointRight(){
-        int row = fileBufferRepository.getActiveBuffer().getInsertionPosition().getY() + 1;
+        int row = fileBufferRepository.getActiveBuffer().getInsertionPosition().getY();
         int max = fileBufferRepository.getActiveBuffer().getBufferTextLines()[row].length();
         fileBufferRepository.getActiveBuffer().getInsertionPosition().incrementX(max);
     }

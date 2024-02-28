@@ -8,7 +8,7 @@ public final class FileBuffer {
 
     private final int id;
     private final int fileId;
-    private String[] bufferText;
+    private final String[] bufferText;
     private final InsertionPoint insertionPoint;
     private BufferState bufferState;
 
