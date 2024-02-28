@@ -1,7 +1,7 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
-import com.Textr.View.Position;
+import com.Textr.View.Point;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -36,8 +36,8 @@ public class FileBufferService {
         }
         Objects.requireNonNull(text, "Cannot create a FileBuffer because the File's text is null.");
         int uniqueId = atomicInteger.getAndIncrement();
-        Position position = Position.create(0,0);
-        return FileBuffer.builder().id(uniqueId).fileId(fileId).bufferText(text).insertionPosition(position).state(BufferState.CLEAN).build();
+        Point point = Point.create(0,0);
+        return FileBuffer.builder().id(uniqueId).fileId(fileId).bufferText(text).insertionPosition(point).state(BufferState.CLEAN).build();
     }
 
     private void storeFileBuffer(FileBuffer fileBuffer){
@@ -82,8 +82,8 @@ public class FileBufferService {
 
     public void moveInsertionPointRight(){
         FileBuffer active = fileBufferRepo.getAllActives().get(0);
-        Position position = Position.create(active.getInsertionPosition().getX() + 1, active.getInsertionPosition().getY());
-        active.setInsertionPosition(position);
+        Point point = Point.create(active.getInsertionPosition().getX() + 1, active.getInsertionPosition().getY());
+        active.setInsertionPosition(point);
     }
 
     /**

@@ -3,7 +3,7 @@ package FileBuffer;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferRepo;
 import com.Textr.FileBuffer.BufferState;
-import com.Textr.View.Position;
+import com.Textr.View.Point;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,10 +12,10 @@ public class FileBufferRepoTest {
     @Test
     public void testFileBufferRepo(){
         FileBufferRepo repo = new FileBufferRepo();
-        Position position = Position.create(1,1);
-        FileBuffer buffer1 = FileBuffer.builder().id(0).fileId(1).bufferText("text").insertionPosition(position).state(BufferState.CLEAN).build();
-        FileBuffer buffer2 = FileBuffer.builder().id(1).fileId(1).bufferText("text").insertionPosition(position).state(BufferState.CLEAN).build();
-        FileBuffer buffer3 = FileBuffer.builder().id(2).fileId(1).bufferText("text").insertionPosition(position).state(BufferState.CLEAN).build();
+        Point point = Point.create(1,1);
+        FileBuffer buffer1 = FileBuffer.builder().id(0).fileId(1).bufferText("text").insertionPosition(point).state(BufferState.CLEAN).build();
+        FileBuffer buffer2 = FileBuffer.builder().id(1).fileId(1).bufferText("text").insertionPosition(point).state(BufferState.CLEAN).build();
+        FileBuffer buffer3 = FileBuffer.builder().id(2).fileId(1).bufferText("text").insertionPosition(point).state(BufferState.CLEAN).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(repo.getSize(), 0),
 

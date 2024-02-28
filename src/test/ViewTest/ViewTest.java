@@ -1,6 +1,6 @@
 package ViewTest;
 
-import com.Textr.View.Position;
+import com.Textr.View.Point;
 import com.Textr.View.View;
 import com.Textr.View.Dimension2D;
 import org.junit.jupiter.api.Assertions;
@@ -10,8 +10,8 @@ public class ViewTest {
 
     @Test
     public void testConstructorAndGetters(){
-        Position point = Position.create(5,5);
-        Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
+        Point point = Point.create(5,5);
+        Dimension2D dimensions = Dimension2D.create(15, 15);
         View view = View.builder().fileBufferId(0).point(point).dimensions(dimensions).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(view.getFileBufferId(), 0),
@@ -22,8 +22,8 @@ public class ViewTest {
 
     @Test
     public void testInvalidConstructor(){
-        Position point = Position.create(5,5);
-        Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
+        Point point = Point.create(5,5);
+        Dimension2D dimensions = Dimension2D.create(15, 15);
         View.Builder invalidId = View.builder().fileBufferId(-1).point(point)
                 .dimensions(dimensions);
         View.Builder invalidPoint = View.builder().fileBufferId(0).point(null)
@@ -39,8 +39,8 @@ public class ViewTest {
 
     @Test
     public void testEqualsAndHashCode(){
-        Position point = Position.create(5,5);
-        Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
+        Point point = Point.create(5,5);
+        Dimension2D dimensions = Dimension2D.create(15, 15);
         View view1 = View.builder().fileBufferId(1).point(point)
                 .dimensions(dimensions).build();
         View view2 = View.builder().fileBufferId(2).point(point)
@@ -60,8 +60,8 @@ public class ViewTest {
 
     @Test
     public void testToString(){
-        Position point = Position.create(5,5);
-        Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
+        Point point = Point.create(5,5);
+        Dimension2D dimensions = Dimension2D.create(15, 15);
         View view = View.builder().fileBufferId(1).point(point)
                 .dimensions(dimensions).build();
         String expected = "BufferView[fileId = 1, point = Position[x = 5, y = 5], dimensions = Dimension2D[width = 15, height = 15]]";

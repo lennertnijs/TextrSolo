@@ -1,7 +1,7 @@
 package com.Textr.Terminal;
 
 import com.Textr.View.Dimension2D;
-import com.Textr.View.Position;
+import com.Textr.View.Point;
 import io.github.btj.termios.Terminal;
 
 import java.io.IOException;
@@ -36,7 +36,7 @@ public class TerminalService {
                     width += b - '0';
                 }
             }
-            return Dimension2D.builder().width(width).height(height).build();
+            return Dimension2D.create(width, height);
         }catch(IOException e){
             throw new IllegalStateException("Something went wrong while reading the terminal dimensions.");
         }
@@ -61,8 +61,8 @@ public class TerminalService {
         Terminal.clearScreen();
     }
 
-    public static void printText(Position position, String text){
-        Terminal.printText(position.getY(), position.getX(), text);
+    public static void printText(Point point, String text){
+        Terminal.printText(point.getY(), point.getX(), text);
     }
 
     public static void printText(int x, int y, String text){

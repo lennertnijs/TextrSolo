@@ -21,13 +21,13 @@ public class ViewService {
         this.fileService = fileService;
     }
 
-    public View createView(int fileBufferId, Position position, Dimension2D dimensions){
+    public View createView(int fileBufferId, Point point, Dimension2D dimensions){
         if(fileBufferId < 0){
             throw new IllegalArgumentException("Cannot create a TerminalView with a negative FileBuffer id.");
         }
-        Objects.requireNonNull(position, "Cannot create a TerminalView with a null Position.");
+        Objects.requireNonNull(point, "Cannot create a TerminalView with a null Position.");
         Objects.requireNonNull(dimensions, "Cannot create a TerminalView with null dimensions");
-        return View.builder().fileBufferId(fileBufferId).point(position).dimensions(dimensions).build();
+        return View.builder().fileBufferId(fileBufferId).point(point).dimensions(dimensions).build();
     }
 
     public void store(View view){
@@ -35,8 +35,8 @@ public class ViewService {
         viewRepo.add(view);
     }
 
-    public void createAndStoreView(int fileBufferId, Position position, Dimension2D dimensions){
-        View view = createView(fileBufferId, position, dimensions);
+    public void createAndStoreView(int fileBufferId, Point point, Dimension2D dimensions){
+        View view = createView(fileBufferId, point, dimensions);
         store(view);
     }
 
@@ -54,10 +54,10 @@ public class ViewService {
         int remainder = ((terminalHeight) % amountOfBuffers);
         int y = 1;
         for(FileBuffer fileBuffer : fileBufferService.getAllFileBuffers()){
-            Position position = Position.create(1, y);
+            Point point = Point.create(1, y);
             int viewHeight = remainder-- > 0 ? heightPerView + 1 : heightPerView;
-            Dimension2D dimensions = Dimension2D.builder().width(terminalWidth).height(viewHeight).build();
-            createAndStoreView(fileBuffer.getId(), position, dimensions);
+            Dimension2D dimensions = Dimension2D.create(terminalWidth, viewHeight);
+            createAndStoreView(fileBuffer.getId(), point, dimensions);
             y += viewHeight;
         }
     }
@@ -85,11 +85,11 @@ public class ViewService {
         int lastRow = row + viewHeight - 1;
         for(int i = 0; i < viewHeight; i++){
             String line = textLines.length <= i ? "" : textLines[i];
-            Position linePosition = Position.create(1, row + i);
+            Point linePoint = Point.create(1, row + i);
             if(row + i == lastRow){
-                drawStatusBar(fileBuffer, linePosition);
+                drawStatusBar(fileBuffer, linePoint);
             }else{
-                TerminalService.printText(linePosition, line);
+                TerminalService.printText(linePoint, line);
             }
         }
     }
@@ -101,36 +101,36 @@ public class ViewService {
         int lastRow = row + viewHeight - 1;
         for(int i = 0; i < viewHeight; i++){
             String line = textLines.length <= i ? "" : textLines[i];
-            Position linePosition = Position.create(2, row + i);
+            Point linePoint = Point.create(2, row + i);
             if(row + i == lastRow){
-                drawStatusBar(fileBuffer, linePosition);
+                drawStatusBar(fileBuffer, linePoint);
             }else{
-                TerminalService.printText(linePosition, line);
+                TerminalService.printText(linePoint, line);
             }
         }
         drawRectangle(view.getPosition(), view.getDimensions());
     }
 
-    private void drawStatusBar(FileBuffer buffer, Position position){
+    private void drawStatusBar(FileBuffer buffer, Point point){
         try{
             Objects.requireNonNull(buffer);
-            Objects.requireNonNull(position);
+            Objects.requireNonNull(point);
         }catch(IllegalArgumentException e){
             throw new IllegalArgumentException("Cannot draw a status bar because the passed values are invalid.");
         }
         String url = fileService.getFile(buffer.getFileId()).getPath();
         int amountOfLines = buffer.getBufferText().split(System.lineSeparator()).length;
         int amountOfChars = buffer.getBufferText().length();
-        Position insertionPoint = buffer.getInsertionPosition();
+        Point insertionPoint = buffer.getInsertionPosition();
         BufferState state = buffer.getState();
         String statusBar = String.format("Url: %s --- Lines: %d --- Characters: %d --- Insertion Point: %s --- State: %s",
                                          url, amountOfLines, amountOfChars, insertionPoint, state);
-        TerminalService.printText(position, statusBar);
+        TerminalService.printText(point, statusBar);
     }
 
-    private void drawRectangle(Position position, Dimension2D dimensions){
-        int x = position.getX();
-        int y = position.getY();
+    private void drawRectangle(Point point, Dimension2D dimensions){
+        int x = point.getX();
+        int y = point.getY();
         for(int i = 2; i < dimensions.getWidth(); i++){
             TerminalService.printText(i, y, "-");
             TerminalService.printText(i, y + dimensions.getHeight() - 1, "-");
@@ -146,7 +146,7 @@ public class ViewService {
     }
 
     public void drawCursor(){
-        Position cursorPosition = fileBufferService.getActiveBuffer().getInsertionPosition();
-        TerminalService.moveCursor(cursorPosition.getX()+1, cursorPosition.getY()+1);
+        Point cursorPoint = fileBufferService.getActiveBuffer().getInsertionPosition();
+        TerminalService.moveCursor(cursorPoint.getX()+1, cursorPoint.getY()+1);
     }
 }

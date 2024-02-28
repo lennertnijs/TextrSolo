@@ -1,6 +1,5 @@
 package com.Textr.View;
 
-import java.util.Objects;
 
 public final class Dimension2D {
 
@@ -10,15 +9,18 @@ public final class Dimension2D {
 
     /**
      * Constructor for a {@link Dimension2D} object.
-     * Uses a static {@link Dimension2D.Builder} to create valid {@link Dimension2D}.
-     * @param builder The {@link Dimension2D.Builder}. Cannot be null.
      */
-    private Dimension2D(Builder builder){
-        Objects.requireNonNull(builder, "Cannot create a Dimension2D because the Builder is null");
-        this.width = builder.width;
-        this.height = builder.height;
+    private Dimension2D(int width, int height){
+        this.width = width;
+        this.height = height;
     }
 
+    public static Dimension2D create(int width, int height){
+        if(width <= 0 || height <= 0){
+            throw new IllegalArgumentException("Cannot create a Dimension2D with a negative or 0 width/height.");
+        }
+        return new Dimension2D(width, height);
+    }
     /**
      * Returns the width of this {@link Dimension2D}.
      * @return this {@link Dimension2D}'s width
@@ -73,68 +75,5 @@ public final class Dimension2D {
     @Override
     public String toString(){
         return String.format("Dimension2D[width = %d, height = %d]", width, height);
-    }
-
-    /**
-     * Creates and returns a new {@link Dimension2D.Builder} to build a {@link Dimension2D} object with.
-     * @return the {@link Dimension2D.Builder}
-     */
-    public static Builder builder(){
-        return new Builder();
-    }
-
-    /**
-     * A package-private subclass {@link Dimension2D.Builder} used to build valid {@link Dimension2D} instances with.
-     * To obtain a {@link Dimension2D.Builder}, use Dimension2D.builder();
-     */
-    public static class Builder{
-
-        private int width = 0;
-        private int height = 0;
-
-        /**
-         * Constructor for the {@link Dimension2D.Builder}
-         */
-        private Builder(){
-        }
-
-        /**
-         * Sets the width of this {@link Dimension2D.Builder} to the given width.
-         * @param width The width
-         *
-         * @return This {@link Dimension2D.Builder}
-         */
-        public Builder width(int width){
-            this.width = width;
-            return this;
-        }
-
-        /**
-         * Sets the height of this {@link Dimension2D.Builder} to the given height.
-         * @param height The height
-         *
-         * @return This {@link Dimension2D.Builder}
-         */
-        public Builder height(int height){
-            this.height = height;
-            return this;
-        }
-
-        /**
-         * Validates all the fields of this {@link Dimension2D.Builder}.
-         * If all the fields are valid, creates and returns a new immutable {@link Dimension2D} with these fields.
-         * More precisely, the following conditions must hold on the fields:
-         * - width >= 0
-         * - height >= 0
-         * @throws IllegalArgumentException If any of the fields are invalid.
-         *
-         * @return a newly created valid & immutable {@link Dimension2D}.
-         */
-        public Dimension2D build(){
-            if(width <= 0 || height <= 0){
-                throw new IllegalArgumentException("The width and height of a Dimension2D cannot be negative.");
-            }
-            return new Dimension2D(this);
-        }
     }
 }

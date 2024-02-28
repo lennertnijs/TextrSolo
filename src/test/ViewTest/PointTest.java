@@ -1,14 +1,14 @@
 package ViewTest;
 
-import com.Textr.View.Position;
+import com.Textr.View.Point;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class PositionTest {
+public class PointTest {
 
     @Test
     public void testConstructorAndGetters(){
-        Position point = Position.create(1,2);
+        Point point = Point.create(1,2);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(point.getX(), 1),
                 () -> Assertions.assertEquals(point.getY(), 2)
@@ -18,16 +18,16 @@ public class PositionTest {
     @Test
     public void testConstructorInvalid(){
         Assertions.assertAll(
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Position.create(-1, 1)),
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Position.create(1, -1))
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Point.create(-1, 1)),
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Point.create(1, -1))
         );
     }
 
     @Test
     public void testEqualsAndHashCode(){
-        Position point1 = Position.create(1, 2);
-        Position point2 = Position.create(10, 2);
-        Position point3 = Position.create(1, 2);
+        Point point1 = Point.create(1, 2);
+        Point point2 = Point.create(10, 2);
+        Point point3 = Point.create(1, 2);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(point1, point1),
                 () -> Assertions.assertEquals(point1, point3),
@@ -41,7 +41,7 @@ public class PositionTest {
 
     @Test
     public void testToString(){
-        Position point = Position.create(1, 2);
+        Point point = Point.create(1, 2);
         String expectedString = "Position[x = 1, y = 2]";
         Assertions.assertAll(
                 () -> Assertions.assertEquals(point.toString(), expectedString)
