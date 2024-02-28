@@ -6,7 +6,6 @@ import com.Textr.FileBufferRepo.IFileBufferRepo;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class FileBufferService {
 
@@ -34,8 +33,7 @@ public class FileBufferService {
             throw new IllegalArgumentException("Cannot create a FileBuffer with a negative fileId.");
         }
         Objects.requireNonNull(text, "Cannot create a FileBuffer because the File's text is null.");
-        InsertionPoint point = InsertionPoint.create(0,0);
-        return FileBuffer.builder().fileId(fileId).bufferText(text.split(System.lineSeparator())).insertionPosition(point).state(BufferState.CLEAN).build();
+        return FileBuffer.builder().fileId(fileId).bufferText(text.split(System.lineSeparator())).insertionPosition(InsertionPoint.create(0,0)).state(BufferState.CLEAN).build();
     }
 
     private void storeFileBuffer(FileBuffer fileBuffer){
