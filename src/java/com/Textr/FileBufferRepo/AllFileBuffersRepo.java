@@ -4,7 +4,7 @@ import com.Textr.FileBuffer.FileBuffer;
 
 import java.util.*;
 
-public class AllFileBuffersRepo implements IAllFileBuffersRepo {
+public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
 
 
     private final List<FileBuffer> buffers = new ArrayList<>();
@@ -18,6 +18,7 @@ public class AllFileBuffersRepo implements IAllFileBuffersRepo {
      *
      * @return The size
      */
+    @Override
     public int getSize(){
         return buffers.size();
     }
@@ -29,6 +30,7 @@ public class AllFileBuffersRepo implements IAllFileBuffersRepo {
      * @return The {@link FileBuffer}
      * @throws NoSuchElementException If no {@link FileBuffer} with the id was found.
      */
+    @Override
     public FileBuffer get(int id){
         for(FileBuffer buffer : buffers){
             if(buffer.getId() == id){
@@ -43,6 +45,7 @@ public class AllFileBuffersRepo implements IAllFileBuffersRepo {
      *
      * @return The {@link FileBuffer}s
      */
+    @Override
     public List<FileBuffer> getAll(){
         return buffers;
     }
@@ -53,6 +56,7 @@ public class AllFileBuffersRepo implements IAllFileBuffersRepo {
      *
      * @throws IllegalArgumentException If the passed {@link FileBuffer} is null.
      */
+    @Override
     public void add(FileBuffer fileBuffer){
         try{
             Objects.requireNonNull(fileBuffer);
@@ -66,6 +70,7 @@ public class AllFileBuffersRepo implements IAllFileBuffersRepo {
      * Removes the {@link FileBuffer} with the given id from the repository.
      * @param id The id
      */
+    @Override
     public void remove(int id){
         buffers.removeIf(fileBuffer -> fileBuffer.getId() == id);
     }
@@ -78,6 +83,7 @@ public class AllFileBuffersRepo implements IAllFileBuffersRepo {
      * @return The {@link FileBuffer}
      * @throws IllegalStateException If no next {@link FileBuffer} was found.
      */
+    @Override
     public FileBuffer getNext(int id){
         for(int i = 0; i < buffers.size(); i++){
             if(buffers.get(i).getId() == id){
@@ -96,6 +102,7 @@ public class AllFileBuffersRepo implements IAllFileBuffersRepo {
      * @return The {@link FileBuffer}
      * @throws IllegalStateException If no previous {@link FileBuffer} was found.
      */
+    @Override
     public FileBuffer getPrevious(int id){
         for(int i = 0; i < buffers.size(); i++){
             if(buffers.get(i).getId() == id){

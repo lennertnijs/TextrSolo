@@ -11,23 +11,31 @@ import org.junit.jupiter.api.Test;
 public class ActiveFileBufferRepoTest {
 
     private FileBuffer buffer;
+    private ActiveFileBufferRepo repo;
     @BeforeEach
     public void initialise(){
         InsertionPoint insertionPoint = InsertionPoint.create(5,5);
         buffer = FileBuffer.builder().id(1).fileId(1).bufferText("text".split(""))
                 .insertionPosition(insertionPoint).state(BufferState.CLEAN).build();
+        repo = new ActiveFileBufferRepo();
     }
 
     @Test
     public void testSetAndGetBuffer(){
-        ActiveFileBufferRepo repo = new ActiveFileBufferRepo();
         Assertions.assertAll(
-                () -> Assertions.assertThrows(NullPointerException.class, repo::getBufferId),
-                () -> Assertions.assertThrows(NullPointerException.class, repo::getBuffer),
                 () -> repo.setBuffer(buffer),
                 () -> Assertions.assertEquals(repo.getBufferId(), 1),
                 () -> Assertions.assertEquals(repo.getBuffer(), buffer)
 
+        );
+    }
+
+    @Test
+    public void testIllegalGetAndSet(){
+        Assertions.assertAll(
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> repo.setBuffer(null)),
+                () -> Assertions.assertThrows(NullPointerException.class, repo::getBufferId),
+                () -> Assertions.assertThrows(NullPointerException.class, repo::getBuffer)
         );
     }
 }
