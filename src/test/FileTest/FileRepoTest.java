@@ -44,7 +44,7 @@ public class FileRepoTest {
                 () -> repo.add(file1),
                 () -> repo.add(file2),
                 () -> Assertions.assertEquals(repo.getSize(), 2),
-                () -> repo.removeAll(),
+                repo::removeAll,
                 () -> Assertions.assertEquals(repo.getSize(), 0),
 
                 () -> Assertions.assertThrows(IllegalArgumentException.class, () -> repo.add(null))
