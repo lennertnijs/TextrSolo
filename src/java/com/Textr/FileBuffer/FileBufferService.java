@@ -5,7 +5,6 @@ import com.Textr.FileBufferRepo.FileBufferRepo;
 import com.Textr.FileBufferRepo.IFileBufferRepo;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -63,13 +62,11 @@ public class FileBufferService {
     }
 
     public void moveActiveBufferToNext(){
-        int id = fileBufferRepository.getActiveBufferId();
-        fileBufferRepository.setActiveBuffer(fileBufferRepository.nextBuffer(id));
+        fileBufferRepository.setActiveToNext();
     }
 
     public void moveActiveBufferToPrev(){
-        int id = fileBufferRepository.getActiveBufferId();
-        fileBufferRepository.setActiveBuffer(fileBufferRepository.prevBuffer(id));
+        fileBufferRepository.setActiveToPrevious();
     }
 
     public FileBuffer getActiveBuffer(){

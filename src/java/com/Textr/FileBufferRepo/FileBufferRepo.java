@@ -55,12 +55,14 @@ public final class FileBufferRepo implements IFileBufferRepo {
     }
 
     @Override
-    public FileBuffer nextBuffer(int id){
-        return allFileBufferRepo.getNext(id);
+    public void setActiveToNext(){
+        int id = activeFileBufferRepo.getBufferId();
+        activeFileBufferRepo.setBuffer(allFileBufferRepo.getNext(id));
     }
 
     @Override
-    public FileBuffer prevBuffer(int id){
-        return allFileBufferRepo.getPrevious(id);
+    public void setActiveToPrevious(){
+        int id = activeFileBufferRepo.getBufferId();
+        activeFileBufferRepo.setBuffer(allFileBufferRepo.getPrevious(id));
     }
 }
