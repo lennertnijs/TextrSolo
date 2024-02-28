@@ -1,15 +1,15 @@
 package com.Textr.InputHandler;
 
 import com.Textr.FileBuffer.FileBufferService;
+import com.Textr.FileBuffer.InsertionPoint;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.ViewService;
 
 import static com.Textr.Inputs.*;
 
-public class RawInputHandler implements InputHandler{
+public final class RawInputHandler implements InputHandler{
     private final ViewService viewService;
     private final FileBufferService fileBufferService;
-    boolean f = true;
 
     public RawInputHandler(ViewService viewService, FileBufferService fileBufferService){
         this.viewService = viewService;
@@ -20,8 +20,7 @@ public class RawInputHandler implements InputHandler{
         int input = TerminalService.readByte();
         boolean isRegularInput = input >= 65 && input <= 122 || input == SPACE || input == BACKSPACE;
         if(isRegularInput){
-            fileBufferService.getActiveBuffer().addCharacterToBufferText((char) input);
-            fileBufferService.moveInsertionPointRight();
+            saveInputToBuffer(input);
             return;
         }
         switch (input) {
@@ -29,6 +28,16 @@ public class RawInputHandler implements InputHandler{
             case CTRL_P -> fileBufferService.moveActiveBufferToPrev();
             case CTRL_N -> fileBufferService.moveActiveBufferToNext();
         }
+        drawAll();
+    }
+
+    private void saveInputToBuffer(int input){
+        InsertionPoint point = fileBufferService.getActiveBuffer().getInsertionPosition();
+        fileBufferService.getActiveBuffer().getBufferText().addCharacter((char) input, point.getY(), point.getX());
+        fileBufferService.moveInsertionPointRight();
+    }
+
+    private void drawAll(){
         viewService.drawAllViewsVertical();
         viewService.drawCursor();
     }

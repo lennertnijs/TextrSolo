@@ -8,7 +8,7 @@ public final class FileBuffer {
 
     private final int id;
     private final int fileId;
-    private final String[] bufferText;
+    private final Text bufferText;
     private final InsertionPoint insertionPoint;
     private BufferState bufferState;
 
@@ -39,43 +39,9 @@ public final class FileBuffer {
         return this.fileId;
     }
 
-    /**
-     * Returns the buffered text of this {@link FileBuffer}.
-     * @return This {@link FileBuffer}'s buffered text.
-     */
-    public String[] getBufferTextLines(){
+    public Text getBufferText(){
         return this.bufferText;
     }
-
-    public String getBufferText(){
-        return String.join("", bufferText);
-    }
-
-    public int getAmountOfBufferTextLines(){
-        return bufferText.length;
-    }
-
-    public int getAmountOfCharacters(){
-        return String.join("", bufferText).length();
-    }
-
-    public void addCharacterToBufferText(char character){
-        int row = insertionPoint.getY();
-        int col = insertionPoint.getX();
-        String line = bufferText[row];
-        StringBuilder builder = new StringBuilder();
-        for(int i = 0; i < line.length() + 1; i++){
-            if(i < col){
-                builder.append(line.charAt(i));
-            }else if(i == col){
-                builder.append(character);
-            }else{
-                builder.append(line.charAt(i-1));
-            }
-        }
-        bufferText[row] = builder.toString();
-    }
-
 
     /**
      * Returns the insertion point index of this {@link FileBuffer}.
@@ -138,7 +104,7 @@ public final class FileBuffer {
     @Override
     public String toString(){
         return String.format("FileBuffer[id = %d, activeFileId = %d, bufferText = %s, insertionPosition = %s, state = %s]",
-                id, fileId, String.join("", bufferText), insertionPoint, bufferState);
+                id, fileId, bufferText, insertionPoint, bufferState);
     }
 
     /**
@@ -156,7 +122,7 @@ public final class FileBuffer {
     public static class Builder{
 
         private int fileId = -1;
-        private String[] bufferText = null;
+        private Text bufferText = null;
         private InsertionPoint insertionPoint = null;
         private BufferState bufferState = null;
 
@@ -183,7 +149,7 @@ public final class FileBuffer {
          *
          * @return This {@link FileBuffer.Builder}
          */
-        public Builder bufferText(String[] text){
+        public Builder bufferText(Text text){
             this.bufferText = text;
             return this;
         }

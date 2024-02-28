@@ -27,12 +27,10 @@ public class FileController {
     public void loadFiles(String[] files){
         TerminalService.enterRawInputMode();
         TerminalService.clearScreen();
-        // create behind the scene Files
         for(String filePath: files){
             Objects.requireNonNull(filePath, "Cannot create an internal file for a null file");
             fileService.initialiseFile(filePath);
         }
-        // create a FileBuffer for each File
         for(int i = 0 ; i < fileService.getAllFiles().size(); i++){
             File file = fileService.getAllFiles().get(i);
             if(i == 0){

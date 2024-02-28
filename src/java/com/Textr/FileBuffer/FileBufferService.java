@@ -33,7 +33,7 @@ public class FileBufferService {
             throw new IllegalArgumentException("Cannot create a FileBuffer with a negative fileId.");
         }
         Objects.requireNonNull(text, "Cannot create a FileBuffer because the File's text is null.");
-        return FileBuffer.builder().fileId(fileId).bufferText(text.split(System.lineSeparator())).insertionPosition(InsertionPoint.create(0,0)).state(BufferState.CLEAN).build();
+        return FileBuffer.builder().fileId(fileId).bufferText(Text.create(text)).insertionPosition(InsertionPoint.create(0,0)).state(BufferState.CLEAN).build();
     }
 
     private void storeFileBuffer(FileBuffer fileBuffer){
@@ -71,7 +71,7 @@ public class FileBufferService {
 
     public void moveInsertionPointRight(){
         int row = fileBufferRepository.getActiveBuffer().getInsertionPosition().getY();
-        int max = fileBufferRepository.getActiveBuffer().getBufferTextLines()[row].length();
+        int max = fileBufferRepository.getActiveBuffer().getBufferText().getLines()[row].length();
         fileBufferRepository.getActiveBuffer().getInsertionPosition().incrementX(max);
     }
 
@@ -80,7 +80,7 @@ public class FileBufferService {
     }
 
     public void moveInsertionPointDown(){
-        int max = fileBufferRepository.getActiveBuffer().getAmountOfBufferTextLines() - 1;
+        int max = fileBufferRepository.getActiveBuffer().getBufferText().getAmountOfLines() - 1;
         fileBufferRepository.getActiveBuffer().getInsertionPosition().incrementY(max);
     }
 

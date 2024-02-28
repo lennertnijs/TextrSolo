@@ -80,7 +80,7 @@ public class ViewService {
     }
 
     private void drawPassiveView(View view, FileBuffer fileBuffer){
-        String[] textLines = fileBuffer.getBufferTextLines();
+        String[] textLines = fileBuffer.getBufferText().getLines();
         int viewHeight = view.getDimensions().getHeight();
         int row = view.getPosition().getY();
         int lastRow = row + viewHeight - 1;
@@ -96,7 +96,7 @@ public class ViewService {
     }
 
     private void drawActiveView(View view, FileBuffer fileBuffer){
-        String[] textLines = fileBuffer.getBufferTextLines();
+        String[] textLines = fileBuffer.getBufferText().getLines();
         int viewHeight = view.getDimensions().getHeight() - 2; // -2 for the two lines for the box around it
         int row = view.getPosition().getY() + 1;
         int lastRow = row + viewHeight - 1;
@@ -119,13 +119,9 @@ public class ViewService {
         }catch(IllegalArgumentException e){
             throw new IllegalArgumentException("Cannot draw a status bar because the passed values are invalid.");
         }
-        String url = fileService.getFile(buffer.getFileId()).getPath();
-        int amountOfLines = buffer.getAmountOfBufferTextLines();
-        int amountOfChars = buffer.getAmountOfCharacters();
-        InsertionPoint insertionPoint = buffer.getInsertionPosition();
-        BufferState state = buffer.getState();
         String statusBar = String.format("Url: %s --- Lines: %d --- Characters: %d --- Insertion Point: %s --- State: %s",
-                                         url, amountOfLines, amountOfChars, insertionPoint, state);
+                        fileService.getFile(buffer.getFileId()).getPath(), buffer.getBufferText().getAmountOfLines(),
+                        buffer.getBufferText().getAmountOfChars(), buffer.getInsertionPosition(), buffer.getState());
         TerminalService.printText(point, statusBar);
     }
 
