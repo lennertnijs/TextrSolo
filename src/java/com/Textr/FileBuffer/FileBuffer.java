@@ -20,7 +20,7 @@ public final class FileBuffer {
      */
     private FileBuffer(Builder builder){
         Objects.requireNonNull(builder, "Cannot build a FileBuffer because the Builder is null.");
-        this.id = builder.id;
+        this.id = FileBufferIdGenerator.getId();
         this.fileId = builder.fileId;
         this.bufferText = builder.bufferText;
         this.insertionPoint = builder.insertionPoint;
@@ -155,7 +155,6 @@ public final class FileBuffer {
      */
     public static class Builder{
 
-        private int id = -1;
         private int fileId = -1;
         private String[] bufferText = null;
         private InsertionPoint insertionPoint = null;
@@ -167,10 +166,6 @@ public final class FileBuffer {
         private Builder(){
         }
 
-        public Builder id(int id){
-            this.id = id;
-            return this;
-        }
         /**
          * Sets the active file id of this {@link FileBuffer.Builder} to the given id.
          * @param id The id
@@ -229,7 +224,7 @@ public final class FileBuffer {
          * @return a newly created valid & immutable {@link FileBuffer}
          */
         public FileBuffer build(){
-            if(id < 0 || fileId < 0){
+            if(fileId < 0){
                 throw new IllegalArgumentException("The id the active File in the FileBuffer cannot be negative.");
             }
             try{

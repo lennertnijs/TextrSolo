@@ -2,6 +2,7 @@ package FileBufferRepo;
 
 import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBuffer;
+import com.Textr.FileBuffer.FileBufferIdGenerator;
 import com.Textr.FileBuffer.InsertionPoint;
 import com.Textr.FileBufferRepo.ActiveFileBufferRepo;
 import org.junit.jupiter.api.Assertions;
@@ -15,16 +16,17 @@ public class ActiveFileBufferRepoTest {
     @BeforeEach
     public void initialise(){
         InsertionPoint insertionPoint = InsertionPoint.create(5,5);
-        buffer = FileBuffer.builder().id(1).fileId(1).bufferText("text".split(""))
+        buffer = FileBuffer.builder().fileId(1).bufferText("text".split(""))
                 .insertionPosition(insertionPoint).state(BufferState.CLEAN).build();
         repo = new ActiveFileBufferRepo();
+        FileBufferIdGenerator.resetGenerator();
     }
 
     @Test
     public void testSetAndGetBuffer(){
         Assertions.assertAll(
                 () -> repo.setBuffer(buffer),
-                () -> Assertions.assertEquals(repo.getBufferId(), 1),
+                () -> Assertions.assertEquals(repo.getBufferId(), 0),
                 () -> Assertions.assertEquals(repo.getBuffer(), buffer)
 
         );

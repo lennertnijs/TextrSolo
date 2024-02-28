@@ -2,6 +2,7 @@ package FileBufferRepo;
 
 import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBuffer;
+import com.Textr.FileBuffer.FileBufferIdGenerator;
 import com.Textr.FileBuffer.InsertionPoint;
 import com.Textr.FileBufferRepo.AllFileBuffersRepo;
 import org.junit.jupiter.api.Assertions;
@@ -17,10 +18,11 @@ public class AllFileBuffersRepoTest {
     private AllFileBuffersRepo repo;
     @BeforeEach
     public void initialise(){
+        FileBufferIdGenerator.resetGenerator();
         InsertionPoint insertionPoint = InsertionPoint.create(5,5);
-        buffer1 = FileBuffer.builder().id(1).fileId(1).bufferText("text".split(""))
+        buffer1 = FileBuffer.builder().fileId(1).bufferText("text".split(""))
                 .insertionPosition(insertionPoint).state(BufferState.CLEAN).build();
-        buffer2 = FileBuffer.builder().id(2).fileId(2).bufferText("text".split(""))
+        buffer2 = FileBuffer.builder().fileId(2).bufferText("text".split(""))
                 .insertionPosition(insertionPoint).state(BufferState.CLEAN).build();
         repo = new AllFileBuffersRepo();
     }
@@ -32,22 +34,22 @@ public class AllFileBuffersRepoTest {
 
                 () -> repo.add(buffer1),
                 () -> Assertions.assertEquals(repo.getSize(), 1),
-                () -> Assertions.assertEquals(repo.get(1), buffer1),
+                () -> Assertions.assertEquals(repo.get(0), buffer1),
                 () -> Assertions.assertEquals(repo.getAll().get(0),buffer1),
 
                 () -> repo.add(buffer2),
                 () -> Assertions.assertEquals(repo.getSize(), 2),
-                () -> Assertions.assertEquals(repo.get(1), buffer1),
-                () -> Assertions.assertEquals(repo.get(2), buffer2),
+                () -> Assertions.assertEquals(repo.get(0), buffer1),
+                () -> Assertions.assertEquals(repo.get(1), buffer2),
                 () -> Assertions.assertEquals(repo.getAll().get(0),buffer1),
                 () -> Assertions.assertEquals(repo.getAll().get(1),buffer2),
 
-                () -> repo.remove(1),
+                () -> repo.remove(0),
                 () -> Assertions.assertEquals(repo.getSize(), 1),
-                () -> Assertions.assertEquals(repo.get(2), buffer2),
+                () -> Assertions.assertEquals(repo.get(1), buffer2),
                 () -> Assertions.assertEquals(repo.getAll().get(0),buffer2),
 
-                () -> repo.remove(2),
+                () -> repo.remove(1),
                 () -> Assertions.assertEquals(repo.getSize(), 0)
         );
     }
@@ -66,10 +68,10 @@ public class AllFileBuffersRepoTest {
         repo.add(buffer1);
         repo.add(buffer2);
         Assertions.assertAll(
-                () -> Assertions.assertEquals(repo.getNext(1), buffer2),
-                () -> Assertions.assertEquals(repo.getNext(2), buffer1),
-                () -> repo.remove(2),
+                () -> Assertions.assertEquals(repo.getNext(0), buffer2),
                 () -> Assertions.assertEquals(repo.getNext(1), buffer1),
+                () -> repo.remove(0),
+                () -> Assertions.assertEquals(repo.getNext(1), buffer2),
                 () -> Assertions.assertThrows(IllegalStateException.class, () -> repo.getNext(2))
 
         );
@@ -81,10 +83,10 @@ public class AllFileBuffersRepoTest {
         repo.add(buffer1);
         repo.add(buffer2);
         Assertions.assertAll(
-                () -> Assertions.assertEquals(repo.getPrevious(1), buffer2),
-                () -> Assertions.assertEquals(repo.getPrevious(2), buffer1),
-                () -> repo.remove(2),
+                () -> Assertions.assertEquals(repo.getPrevious(0), buffer2),
                 () -> Assertions.assertEquals(repo.getPrevious(1), buffer1),
+                () -> repo.remove(0),
+                () -> Assertions.assertEquals(repo.getPrevious(1), buffer2),
                 () -> Assertions.assertThrows(IllegalStateException.class, () -> repo.getPrevious(2))
 
         );

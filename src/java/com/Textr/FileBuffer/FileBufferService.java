@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FileBufferService {
 
-    private final AtomicInteger atomicInteger = new AtomicInteger();
     private final IFileBufferRepo fileBufferRepository;
 
     public FileBufferService(){
@@ -35,9 +34,8 @@ public class FileBufferService {
             throw new IllegalArgumentException("Cannot create a FileBuffer with a negative fileId.");
         }
         Objects.requireNonNull(text, "Cannot create a FileBuffer because the File's text is null.");
-        int uniqueId = atomicInteger.getAndIncrement();
         InsertionPoint point = InsertionPoint.create(0,0);
-        return FileBuffer.builder().id(uniqueId).fileId(fileId).bufferText(text.split(System.lineSeparator())).insertionPosition(point).state(BufferState.CLEAN).build();
+        return FileBuffer.builder().fileId(fileId).bufferText(text.split(System.lineSeparator())).insertionPosition(point).state(BufferState.CLEAN).build();
     }
 
     private void storeFileBuffer(FileBuffer fileBuffer){
