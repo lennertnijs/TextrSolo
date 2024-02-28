@@ -6,13 +6,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class FileService {
 
     private final FileRepo fileRepo;
-    private final AtomicInteger atomicInteger = new AtomicInteger();
-
 
     public FileService(){
         this.fileRepo = new FileRepo();
@@ -46,7 +43,7 @@ public class FileService {
                 stringBuilder.append(line);
                 stringBuilder.append(System.lineSeparator());
             }
-            return File.builder().id(atomicInteger.getAndIncrement()).path(url).text(stringBuilder.toString()).build();
+            return File.builder().path(url).text(stringBuilder.toString()).build();
         }catch(IOException e){
             throw new IllegalArgumentException("An error occurred during the reading of a File");
         }
@@ -72,13 +69,4 @@ public class FileService {
         }
         throw new NoSuchElementException("no element found");
     }
-
-
-
-
-
-    /**
-     * Method to write text changes to the File
-     * Method to write the text changes to the .txt file
-     */
 }

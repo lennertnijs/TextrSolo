@@ -1,14 +1,24 @@
 package FileTest;
 
 import com.Textr.File.File;
+import com.Textr.File.FileIdGenerator;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class FileTest {
 
+
+    @BeforeEach
+    public void initialise(){
+        FileIdGenerator.resetGenerator();
+    }
+
+
+
     @Test
     public void testConstructorAndGetters(){
-        File file1 = File.builder().id(0).path("/filePath1").text("testText1").build();
+        File file1 = File.builder().path("/filePath1").text("testText1").build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(file1.getId(), 0),
                 () -> Assertions.assertEquals(file1.getPath(), "/filePath1"),
@@ -18,11 +28,9 @@ public class FileTest {
 
     @Test
     public void testConstructorIllegal(){
-        File.Builder illegalIdFileBuilder = File.builder().id(-1).path("path").text("text");
-        File.Builder illegalPathFileBuilder = File.builder().id(0).path(null).text("text");
-        File.Builder illegalTextFileBuilder = File.builder().id(0).path("path").text(null);
+        File.Builder illegalPathFileBuilder = File.builder().path(null).text("text");
+        File.Builder illegalTextFileBuilder = File.builder().path("path").text(null);
         Assertions.assertAll(
-                () -> Assertions.assertThrows(IllegalArgumentException.class, illegalIdFileBuilder::build),
                 () -> Assertions.assertThrows(IllegalArgumentException.class, illegalPathFileBuilder::build),
                 () -> Assertions.assertThrows(IllegalArgumentException.class, illegalTextFileBuilder::build)
         );
@@ -30,8 +38,8 @@ public class FileTest {
 
     @Test
     public void testEqualsAndHashCode(){
-        File file1 = File.builder().id(0).path("path").text("text").build();
-        File file2 = File.builder().id(1).path("path").text("text").build();
+        File file1 = File.builder().path("path").text("text").build();
+        File file2 = File.builder().path("pad").text("text").build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(file1, file1),
                 () -> Assertions.assertNotEquals(file1, file2),
@@ -43,7 +51,7 @@ public class FileTest {
 
     @Test
     public void testToString(){
-        File file = File.builder().id(0).path("path").text("text").build();
+        File file = File.builder().path("path").text("text").build();
         Assertions.assertEquals(file.toString(), "File[id = 0, path = path, text = text]");
     }
 }
