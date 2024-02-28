@@ -10,7 +10,7 @@ public class ViewTest {
 
     @Test
     public void testConstructorAndGetters(){
-        Position point = Position.builder().x(5).y(5).build();
+        Position point = Position.create(5,5);
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
         View view = View.builder().fileBufferId(0).point(point).dimensions(dimensions).build();
         Assertions.assertAll(
@@ -22,7 +22,7 @@ public class ViewTest {
 
     @Test
     public void testInvalidConstructor(){
-        Position point = Position.builder().x(5).y(5).build();
+        Position point = Position.create(5,5);
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
         View.Builder invalidId = View.builder().fileBufferId(-1).point(point)
                 .dimensions(dimensions);
@@ -39,7 +39,7 @@ public class ViewTest {
 
     @Test
     public void testEqualsAndHashCode(){
-        Position point = Position.builder().x(5).y(5).build();
+        Position point = Position.create(5,5);
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
         View view1 = View.builder().fileBufferId(1).point(point)
                 .dimensions(dimensions).build();
@@ -60,7 +60,7 @@ public class ViewTest {
 
     @Test
     public void testToString(){
-        Position point = Position.builder().x(5).y(5).build();
+        Position point = Position.create(5,5);
         Dimension2D dimensions = Dimension2D.builder().width(15).height(15).build();
         View view = View.builder().fileBufferId(1).point(point)
                 .dimensions(dimensions).build();

@@ -8,7 +8,7 @@ public class PositionTest {
 
     @Test
     public void testConstructorAndGetters(){
-        Position point = Position.builder().x(1).y(2).build();
+        Position point = Position.create(1,2);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(point.getX(), 1),
                 () -> Assertions.assertEquals(point.getY(), 2)
@@ -17,19 +17,17 @@ public class PositionTest {
 
     @Test
     public void testConstructorInvalid(){
-        Position.Builder invalidX = Position.builder().x(-1).y(2);
-        Position.Builder invalidY = Position.builder().x(1).y(-1);
         Assertions.assertAll(
-                () -> Assertions.assertThrows(IllegalArgumentException.class, invalidX::build),
-                () -> Assertions.assertThrows(IllegalArgumentException.class, invalidY::build)
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Position.create(-1, 1)),
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Position.create(1, -1))
         );
     }
 
     @Test
     public void testEqualsAndHashCode(){
-        Position point1 = Position.builder().x(1).y(2).build();
-        Position point2 = Position.builder().x(10).y(2).build();
-        Position point3 = Position.builder().x(1).y(2).build();
+        Position point1 = Position.create(1, 2);
+        Position point2 = Position.create(10, 2);
+        Position point3 = Position.create(1, 2);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(point1, point1),
                 () -> Assertions.assertEquals(point1, point3),
@@ -43,7 +41,7 @@ public class PositionTest {
 
     @Test
     public void testToString(){
-        Position point = Position.builder().x(1).y(2).build();
+        Position point = Position.create(1, 2);
         String expectedString = "Position[x = 1, y = 2]";
         Assertions.assertAll(
                 () -> Assertions.assertEquals(point.toString(), expectedString)

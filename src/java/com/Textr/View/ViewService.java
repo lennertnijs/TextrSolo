@@ -54,7 +54,7 @@ public class ViewService {
         int remainder = ((terminalHeight) % amountOfBuffers);
         int y = 1;
         for(FileBuffer fileBuffer : fileBufferService.getAllFileBuffers()){
-            Position position = Position.builder().x(1).y(y).build();
+            Position position = Position.create(1, y);
             int viewHeight = remainder-- > 0 ? heightPerView + 1 : heightPerView;
             Dimension2D dimensions = Dimension2D.builder().width(terminalWidth).height(viewHeight).build();
             createAndStoreView(fileBuffer.getId(), position, dimensions);
@@ -85,7 +85,7 @@ public class ViewService {
         int lastRow = row + viewHeight - 1;
         for(int i = 0; i < viewHeight; i++){
             String line = textLines.length <= i ? "" : textLines[i];
-            Position linePosition = Position.builder().x(1).y(row + i).build();
+            Position linePosition = Position.create(1, row + i);
             if(row + i == lastRow){
                 drawStatusBar(fileBuffer, linePosition);
             }else{
@@ -101,7 +101,7 @@ public class ViewService {
         int lastRow = row + viewHeight - 1;
         for(int i = 0; i < viewHeight; i++){
             String line = textLines.length <= i ? "" : textLines[i];
-            Position linePosition = Position.builder().x(2).y(row + i).build();
+            Position linePosition = Position.create(2, row + i);
             if(row + i == lastRow){
                 drawStatusBar(fileBuffer, linePosition);
             }else{

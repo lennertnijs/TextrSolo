@@ -1,7 +1,5 @@
 package com.Textr.View;
 
-import java.util.Objects;
-
 public final class Position {
 
     private final int x;
@@ -9,13 +7,17 @@ public final class Position {
 
     /**
      * Constructor for a {@link Position}.
-     * Uses a static {@link Position.Builder} to create a valid {@link Position}.
-     * @param builder The {@link Position.Builder}. Cannot be null.
      */
-    private Position(Builder builder){
-        Objects.requireNonNull(builder, "Cannot build a BufferPoint with a null Builder.");
-        this.x = builder.x;
-        this.y = builder.y;
+    private Position(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
+    public static Position create(int x, int y){
+        if(x <= 0 || y <= 0){
+            throw new IllegalArgumentException("Cannot");
+        }
+        return new Position(x,y);
     }
 
     /**
@@ -72,68 +74,5 @@ public final class Position {
     @Override
     public String toString(){
         return String.format("Position[x = %d, y = %d]", x, y);
-    }
-
-    /**
-     * Creates and returns a new {@link Position.Builder} to build a {@link Position} object with.
-     * @return the {@link Position.Builder}
-     */
-    public static Builder builder(){
-        return new Builder();
-    }
-
-    /**
-     * A package-private subclass {@link Position.Builder} used to build valid {@link Position} instances with.
-     * To obtain a {@link Position.Builder}, use BufferPoint.builder();
-     */
-    public static class Builder{
-
-        private int x = 0;
-        private int y = 0;
-
-        /**
-         * Constructor for the {@link Position.Builder}
-         */
-        private Builder(){
-        }
-
-        /**
-         * Sets the x coordinate of this {@link Position.Builder} to the given x.
-         * @param x The x coordinate
-         *
-         * @return This {@link Position.Builder}
-         */
-        public Builder x(int x){
-            this.x = x;
-            return this;
-        }
-
-        /**
-         * Sets the y coordinate of this {@link Position.Builder} to the given y.
-         * @param y The y coordinate
-         *
-         * @return This {@link Position.Builder}
-         */
-        public Builder y(int y){
-            this.y = y;
-            return this;
-        }
-
-        /**
-         * Validates all the fields of this {@link Position.Builder}.
-         * If all the fields are valid, creates and returns a new immutable {@link Position} with these fields.
-         * More precisely, the following conditions must hold on the fields:
-         * - x >= 1
-         * - y >= 1
-         * @throws IllegalArgumentException If any of the fields are invalid.
-         *
-         * @return a newly created valid & immutable {@link Position}.
-         */
-        public Position build(){
-            if(x < 0 || y < 0){
-                throw new IllegalArgumentException("The coordinates of the point cannot be negative or 0.");
-            }
-            return new Position(this);
-        }
     }
 }

@@ -36,7 +36,7 @@ public class FileBufferService {
         }
         Objects.requireNonNull(text, "Cannot create a FileBuffer because the File's text is null.");
         int uniqueId = atomicInteger.getAndIncrement();
-        Position position = Position.builder().x(0).y(0).build();
+        Position position = Position.create(0,0);
         return FileBuffer.builder().id(uniqueId).fileId(fileId).bufferText(text).insertionPosition(position).state(BufferState.CLEAN).build();
     }
 
@@ -82,7 +82,7 @@ public class FileBufferService {
 
     public void moveInsertionPointRight(){
         FileBuffer active = fileBufferRepo.getAllActives().get(0);
-        Position position = Position.builder().x(active.getInsertionPosition().getX() + 1).y(active.getInsertionPosition().getY()).build();
+        Position position = Position.create(active.getInsertionPosition().getX() + 1, active.getInsertionPosition().getY());
         active.setInsertionPosition(position);
     }
 

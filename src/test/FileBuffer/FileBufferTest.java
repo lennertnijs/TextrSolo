@@ -10,7 +10,7 @@ public class FileBufferTest {
 
     @Test
     public void testConstructorAndGetters(){
-        Position position = Position.builder().x(1).y(1).build();
+        Position position = Position.create(1,1);
         FileBuffer buffer = FileBuffer.builder().id(0).fileId(0).bufferText("text").insertionPosition(position).state(BufferState.CLEAN).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(buffer.getId(), 0),
@@ -23,7 +23,7 @@ public class FileBufferTest {
 
     @Test
     public void testConstructorInvalid(){
-        Position position = Position.builder().x(1).y(1).build();
+        Position position = Position.create(1,1);
         FileBuffer.Builder invalidId = FileBuffer.builder().id(-1).fileId(0).bufferText("text")
                 .insertionPosition(position).state(BufferState.CLEAN);
         FileBuffer.Builder invalidActiveFileId = FileBuffer.builder().id(0).fileId(-1).bufferText("text")
@@ -45,7 +45,7 @@ public class FileBufferTest {
 
     @Test
     public void testEqualsAndHashCode(){
-        Position position = Position.builder().x(1).y(1).build();
+        Position position = Position.create(1,1);
         FileBuffer buffer1 = FileBuffer.builder().id(0).fileId(0).bufferText("text").insertionPosition(position).state(BufferState.CLEAN).build();
         FileBuffer buffer2 = FileBuffer.builder().id(1).fileId(0).bufferText("text").insertionPosition(position).state(BufferState.CLEAN).build();
         FileBuffer buffer3 = FileBuffer.builder().id(0).fileId(0).bufferText("text").insertionPosition(position).state(BufferState.CLEAN).build();
@@ -62,7 +62,7 @@ public class FileBufferTest {
 
     @Test
     public void testToString(){
-        Position position = Position.builder().x(1).y(1).build();
+        Position position = Position.create(1,1);
         FileBuffer buffer = FileBuffer.builder().id(0).fileId(0).bufferText("text").insertionPosition(position).state(BufferState.CLEAN).build();
         String expected = "FileBuffer[id = 0, activeFileId = 0, bufferText = text, insertionPosition = Position[x = 1, y = 1], state = CLEAN]";
         Assertions.assertAll(
