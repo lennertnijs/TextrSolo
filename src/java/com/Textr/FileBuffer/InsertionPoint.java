@@ -2,14 +2,26 @@ package com.Textr.FileBuffer;
 
 public class InsertionPoint {
 
-    private final int x;
-    private final int y;
+    private int x;
+    private int y;
 
+    /**
+     * Private constructor for an {@link InsertionPoint}.
+     * @param x The x coordinate
+     * @param y The y coordinate
+     */
     private InsertionPoint(int x, int y){
         this.x = x;
         this.y = y;
     }
 
+    /**
+     * Static factory method to create a valid {@link InsertionPoint} with.
+     * @param x The x coordinate. Cannot be negative
+     * @param y The y coordinate. Cannot be negative
+     *
+     * @return The {@link InsertionPoint}
+     */
     public static InsertionPoint create(int x, int y){
         if(x < 0 || y < 0){
             throw  new IllegalArgumentException("Cannot create an InsertionPoint with a negative coordinate.");
@@ -17,12 +29,48 @@ public class InsertionPoint {
         return new InsertionPoint(x, y);
     }
 
+    /**
+     * Returns the x coordinate of this {@link InsertionPoint}.
+     * @return The x coordinate
+     */
     public int getX(){
         return x;
     }
 
+    /**
+     * Returns the y coordinate of this {@link InsertionPoint}.
+     * @return The y coordinate
+     */
     public int getY(){
         return y;
+    }
+
+    /**
+     * Increments the x coordinate of this {@link InsertionPoint} by 1.
+     */
+    protected void incrementX(){
+        x += 1;
+    }
+
+    /**
+     * Decrements the x coordinate of this {@link InsertionPoint} by 1, if it is not already at 0.
+     */
+    protected void decrementX(){
+        x = Math.max(x - 1, 0);
+    }
+
+    /**
+     * Increments the y coordinate of this {@link InsertionPoint} by 1.
+     */
+    protected void incrementY(){
+        y += 1;
+    }
+
+    /**
+     * Decrements the y coordinate of this {@link InsertionPoint} by 1, if it is not already at 0.
+     */
+    protected void decrementY(){
+        y = Math.max(y - 1, 0);
     }
 
     @Override
