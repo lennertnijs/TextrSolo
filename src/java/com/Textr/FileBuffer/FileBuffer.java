@@ -1,7 +1,6 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
-import com.Textr.View.Point;
 
 import java.util.Objects;
 
@@ -9,9 +8,9 @@ public final class FileBuffer {
 
     private final int id;
     private final int fileId;
-    private final String  bufferText;
-    private InsertionPoint insertionPoint;
-    private final BufferState bufferState;
+    private String[] bufferText;
+    private final InsertionPoint insertionPoint;
+    private BufferState bufferState;
 
     /**
      * Constructor for a {@link FileBuffer}.
@@ -44,9 +43,10 @@ public final class FileBuffer {
      * Returns the buffered text of this {@link FileBuffer}.
      * @return This {@link FileBuffer}'s buffered text.
      */
-    public String getBufferText(){
+    public String[] getBufferText(){
         return this.bufferText;
     }
+
 
     /**
      * Returns the insertion point index of this {@link FileBuffer}.
@@ -56,17 +56,20 @@ public final class FileBuffer {
         return this.insertionPoint;
     }
 
-    public void setInsertionPosition(InsertionPoint point){
-        Objects.requireNonNull(point);
-        this.insertionPoint = point;
-    }
-
     /**
      * Returns the {@link BufferState} of this {@link FileBuffer}.
      * @return This {@link FileBuffer}'s state as a {@link BufferState}
      */
     public BufferState getState(){
         return this.bufferState;
+    }
+
+    public void setDirty(){
+        bufferState = BufferState.DIRTY;
+    }
+
+    public void setClean(){
+        bufferState = BufferState.CLEAN;
     }
 
 
@@ -106,7 +109,7 @@ public final class FileBuffer {
     @Override
     public String toString(){
         return String.format("FileBuffer[id = %d, activeFileId = %d, bufferText = %s, insertionPosition = %s, state = %s]",
-                id, fileId, bufferText, insertionPoint, bufferState);
+                id, fileId, String.join("", bufferText), insertionPoint, bufferState);
     }
 
     /**
@@ -125,7 +128,7 @@ public final class FileBuffer {
 
         private int id = -1;
         private int fileId = -1;
-        private String bufferText = null;
+        private String[] bufferText = null;
         private InsertionPoint insertionPoint = null;
         private BufferState bufferState = null;
 
@@ -156,7 +159,7 @@ public final class FileBuffer {
          *
          * @return This {@link FileBuffer.Builder}
          */
-        public Builder bufferText(String text){
+        public Builder bufferText(String[] text){
             this.bufferText = text;
             return this;
         }

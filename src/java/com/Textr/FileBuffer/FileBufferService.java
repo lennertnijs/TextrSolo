@@ -37,7 +37,7 @@ public class FileBufferService {
         Objects.requireNonNull(text, "Cannot create a FileBuffer because the File's text is null.");
         int uniqueId = atomicInteger.getAndIncrement();
         InsertionPoint point = InsertionPoint.create(0,0);
-        return FileBuffer.builder().id(uniqueId).fileId(fileId).bufferText(text).insertionPosition(point).state(BufferState.CLEAN).build();
+        return FileBuffer.builder().id(uniqueId).fileId(fileId).bufferText(text.split(System.lineSeparator())).insertionPosition(point).state(BufferState.CLEAN).build();
     }
 
     private void storeFileBuffer(FileBuffer fileBuffer){
