@@ -1,28 +1,30 @@
-package com.Textr.FileBuffer;
+package com.Textr.FileBufferRepo;
+
+import com.Textr.FileBuffer.FileBuffer;
 
 import java.util.Objects;
 
-public class ActiveFileBufferRepo {
+public class ActiveFileBufferRepo implements IActiveFileBufferRepo {
 
     private static FileBuffer activeFileBuffer;
 
     /**
      * Unreachable constructor. This class should only be used statically.
      */
-    private ActiveFileBufferRepo(){
+    public ActiveFileBufferRepo(){
     }
 
     /**
      * @return The id of the active {@link FileBuffer}
      */
-    protected static int getBufferId(){
+    public int getBufferId(){
         return activeFileBuffer.getId();
     }
 
     /**
      * @return The active {@link FileBuffer}
      */
-    protected static FileBuffer getBuffer(){
+    public FileBuffer getBuffer(){
         return activeFileBuffer;
     }
 
@@ -32,7 +34,7 @@ public class ActiveFileBufferRepo {
      *
      * @throws IllegalArgumentException If the passed {@link FileBuffer} is null.
      */
-    protected static void setBuffer(FileBuffer fileBuffer){
+    public void setBuffer(FileBuffer fileBuffer){
         try{
             Objects.requireNonNull(fileBuffer);
         }catch(NullPointerException e){

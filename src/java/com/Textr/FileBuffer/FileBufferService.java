@@ -1,6 +1,8 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
+import com.Textr.FileBufferRepo.FileBufferRepository;
+import com.Textr.FileBufferRepo.IFileBufferRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -9,11 +11,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FileBufferService {
 
-    private final FileBufferRepo fileBufferRepo;
     private final AtomicInteger atomicInteger = new AtomicInteger();
+    private final IFileBufferRepository fileBufferRepository;
 
     public FileBufferService(){
-        this.fileBufferRepo = new FileBufferRepo();
+        this.fileBufferRepository = new FileBufferRepository();
     }
 
     public void initialisePassiveFileBuffer(File file){
@@ -26,7 +28,7 @@ public class FileBufferService {
         Objects.requireNonNull(file, "Cannot initialise a fileBuffer because the File is null.");
         FileBuffer fileBuffer = createFileBuffer(file.getId(), file.getText());
         storeFileBuffer(fileBuffer);
-        ActiveFileBufferRepo.setBuffer(fileBuffer);
+        fileBufferRepository.setActiveBuffer(fileBuffer);
     }
 
     private FileBuffer createFileBuffer(int fileId, String text){
@@ -41,43 +43,43 @@ public class FileBufferService {
 
     private void storeFileBuffer(FileBuffer fileBuffer){
         Objects.requireNonNull(fileBuffer, "Cannot store a null FileBuffer.");
-        fileBufferRepo.add(fileBuffer);
+        fileBufferRepository.addBuffer(fileBuffer);
     }
 
     public List<FileBuffer> getAllFileBuffers(){
-        return fileBufferRepo.getAll();
+        return fileBufferRepository.getAllBuffers();
     }
 
     public int getAmountOfFileBuffers(){
-        return fileBufferRepo.getSize();
+        return fileBufferRepository.getSize();
     }
 
     public FileBuffer getFileBuffer(int id){
-        if(fileBufferRepo.get(id).isPresent()){
-            return fileBufferRepo.get(id).get();
+        if(fileBufferRepository.getBuffer(id).isPresent()){
+            return fileBufferRepository.getBuffer(id).get();
         }
         throw new NoSuchElementException("No FileBuffer was found for the given id.");
     }
 
     public boolean isActive(int id){
-        return ActiveFileBufferRepo.getBufferId() == id;
+        return fileBufferRepository.getActiveBufferId() == id;
     }
 
     public void moveActiveBufferToNext(){
-        int id = ActiveFileBufferRepo.getBufferId();
-        ActiveFileBufferRepo.setBuffer(fileBufferRepo.next(id));
+        int id = fileBufferRepository.getActiveBufferId();
+        fileBufferRepository.setActiveBuffer(fileBufferRepository.nextBuffer(id));
     }
 
     public void moveActiveBufferToPrev(){
-        int id = ActiveFileBufferRepo.getBufferId();
-        ActiveFileBufferRepo.setBuffer(fileBufferRepo.prev(id));
+        int id = fileBufferRepository.getActiveBufferId();
+        fileBufferRepository.setActiveBuffer(fileBufferRepository.prevBuffer(id));
     }
 
     public FileBuffer getActiveBuffer(){
-        return ActiveFileBufferRepo.getBuffer();
+        return fileBufferRepository.getActiveBuffer();
     }
 
     public void moveInsertionPointRight(){
-        ActiveFileBufferRepo.getBuffer().getInsertionPosition().incrementX();
+        fileBufferRepository.getActiveBuffer().getInsertionPosition().incrementX();
     }
 }

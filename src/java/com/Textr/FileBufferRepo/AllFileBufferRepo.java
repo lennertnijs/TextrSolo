@@ -1,18 +1,19 @@
-package com.Textr.FileBuffer;
+package com.Textr.FileBufferRepo;
 
 import com.Textr.File.File;
+import com.Textr.FileBuffer.FileBuffer;
 
 import java.util.*;
 
-public class FileBufferRepo {
+public class AllFileBufferRepo implements IAllFileBufferRepo {
 
 
     private final List<FileBuffer> buffers;
 
     /**
-     * The constructor for a repository where all the {@link FileBuffer}'s are stored and managed.
+     * The constructor for a repository where all the {@link FileBuffer}'s are stored.
      */
-    public FileBufferRepo(){
+    public AllFileBufferRepo(){
         this.buffers = new ArrayList<>();
     }
 
