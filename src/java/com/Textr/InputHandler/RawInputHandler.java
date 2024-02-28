@@ -24,16 +24,7 @@ public class RawInputHandler implements InputHandler{
         switch (input) {
             case ESCAPE -> {
                 f = false;
-                int b = TerminalService.readByte();
-                if (b == '[') {
-                    b = TerminalService.readByte();
-                    switch (b) {
-                        case ARROW_RIGHT -> fileBufferService.moveInsertionPointRight();
-                        case ARROW_LEFT -> fileBufferService.moveInsertionPointLeft();
-                        case ARROW_DOWN -> fileBufferService.moveInsertionPointDown();
-                        case ARROW_UP -> fileBufferService.moveInsertionPointUp();
-                    }
-                }
+                handleEscapeInput();
             }
             case CTRL_P -> {
                 fileBufferService.moveActiveBufferToPrev();
@@ -51,5 +42,18 @@ public class RawInputHandler implements InputHandler{
         f = true;
         viewService.drawAllViewsVertical();
         viewService.drawCursor();
+    }
+
+    private void handleEscapeInput(){
+        int b = TerminalService.readByte();
+        if (b == '[') {
+            b = TerminalService.readByte();
+            switch (b) {
+                case ARROW_RIGHT -> fileBufferService.moveInsertionPointRight();
+                case ARROW_LEFT -> fileBufferService.moveInsertionPointLeft();
+                case ARROW_DOWN -> fileBufferService.moveInsertionPointDown();
+                case ARROW_UP -> fileBufferService.moveInsertionPointUp();
+            }
+        }
     }
 }

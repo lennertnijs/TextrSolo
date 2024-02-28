@@ -9,7 +9,7 @@ public class Inputs {
     public static final int CTRL_S = 19;
     public static final int CTRL_T = 20;
     public static final int ESCAPE = 27;
-    // THE ARROW KEYS ARE NOT CORRECT. THEY ARE AN ESCAPE KEY COMBINATION, AKA ESCAPE + THE CODE HERE.
+    // THE ARROW KEYS ARE AN ESCAPE KEY COMBINATION, AKA ESCAPE + [ + THE CODE HERE.
     public static final int ARROW_UP = 65;
     public static final int ARROW_DOWN = 66;
     public static final int ARROW_RIGHT = 67;

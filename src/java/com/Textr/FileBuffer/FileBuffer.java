@@ -64,7 +64,7 @@ public final class FileBuffer {
         int col = insertionPoint.getX();
         String line = bufferText[row];
         StringBuilder builder = new StringBuilder();
-        for(int i = 0; i < line.length(); i++){
+        for(int i = 0; i < line.length() + 1; i++){
             if(i < col){
                 builder.append(line.charAt(i));
             }else if(i == col){

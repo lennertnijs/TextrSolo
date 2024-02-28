@@ -14,12 +14,21 @@ public final class FileBufferRepo implements IFileBufferRepo {
         this.allFileBufferRepo = new AllFileBuffersRepo();
     }
 
-
+    /**
+     * Fetches and returns the amount of {@link FileBuffer}s.
+     *
+     * @return The amount of {@link FileBuffer}s.
+     */
     @Override
     public int getSize(){
         return allFileBufferRepo.getSize();
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     @Override
     public FileBuffer getBuffer(int id){
         return allFileBufferRepo.get(id);
