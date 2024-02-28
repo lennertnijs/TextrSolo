@@ -81,6 +81,9 @@ public final class FileBufferRepo implements IFileBufferRepo {
      */
     @Override
     public void removeBuffer(int id) {
+        if(id == activeFileBufferRepo.getBufferId()){
+            throw new IllegalStateException("Cannot remove the active FileBuffer.");
+        }
         allFileBufferRepo.remove(id);
     }
 
