@@ -1,6 +1,7 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
+import com.Textr.FileBufferRepo.ActiveFileBufferRepo;
 import com.Textr.FileBufferRepo.FileBufferRepo;
 import com.Textr.FileBufferRepo.IFileBufferRepo;
 
@@ -13,6 +14,7 @@ public class FileBufferService {
 
     private final AtomicInteger atomicInteger = new AtomicInteger();
     private final IFileBufferRepo fileBufferRepository;
+    private final ActiveFileBufferRepo activeFileBufferRepo = null;
 
     public FileBufferService(){
         this.fileBufferRepository = new FileBufferRepo();

@@ -6,12 +6,9 @@ import java.util.Objects;
 
 public class ActiveFileBufferRepo implements IActiveFileBufferRepo {
 
-    private static FileBuffer activeFileBuffer;
+    private static FileBuffer activeFileBuffer = null;
 
-    /**
-     * Unreachable constructor. This class should only be used statically.
-     */
-    public ActiveFileBufferRepo(){
+    protected ActiveFileBufferRepo(){
     }
 
     /**
