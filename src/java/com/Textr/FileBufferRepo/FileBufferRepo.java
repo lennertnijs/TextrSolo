@@ -9,11 +9,11 @@ import java.util.Optional;
 public class FileBufferRepo implements IFileBufferRepo {
 
     private final IActiveFileBufferRepo activeFileBufferRepo;
-    private final IFileBuffersRepo allFileBufferRepo;
+    private final IAllFileBuffersRepo allFileBufferRepo;
 
     public FileBufferRepo(){
         this.activeFileBufferRepo = new ActiveFileBufferRepo();
-        this.allFileBufferRepo = new FileBuffersRepo();
+        this.allFileBufferRepo = new AllFileBuffersRepo();
     }
 
 

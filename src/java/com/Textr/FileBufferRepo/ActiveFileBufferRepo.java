@@ -5,17 +5,18 @@ import com.Textr.FileBuffer.FileBuffer;
 import java.util.Objects;
 import java.util.Optional;
 
-public class ActiveFileBufferRepo implements IActiveFileBufferRepo {
+public final class ActiveFileBufferRepo implements IActiveFileBufferRepo {
 
     private static FileBuffer activeFileBuffer = null;
 
-    protected ActiveFileBufferRepo(){
+    ActiveFileBufferRepo(){
     }
 
     /**
      * @return The id of the active {@link FileBuffer}
      * @throws NullPointerException If the active {@link FileBuffer} is null.
      */
+    @Override
     public int getBufferId(){
         Objects.requireNonNull(activeFileBuffer, "Cannot retrieve the id of the active FileBuffer because it is null.");
         return activeFileBuffer.getId();
@@ -24,6 +25,7 @@ public class ActiveFileBufferRepo implements IActiveFileBufferRepo {
     /**
      * @return An {@link Optional} of the active {@link FileBuffer}, if one exists. An empty {@link Optional} otherwise.
      */
+    @Override
     public Optional<FileBuffer> getBuffer(){
         if(activeFileBuffer == null){
             return Optional.empty();
@@ -37,6 +39,7 @@ public class ActiveFileBufferRepo implements IActiveFileBufferRepo {
      *
      * @throws IllegalArgumentException If the passed {@link FileBuffer} is null.
      */
+    @Override
     public void setBuffer(FileBuffer fileBuffer){
         try{
             Objects.requireNonNull(fileBuffer);
