@@ -1,7 +1,10 @@
 package com.Textr.View;
 
+import com.Textr.Validator.Validator;
+
 /**
- * Class to represent 2D dimensions, aka width of height.
+ * Class to represent 2D dimensions.
+ * 2D dimensions means a width and a height.
  */
 public final class Dimension2D {
 
@@ -24,34 +27,31 @@ public final class Dimension2D {
      * @return The {@link Dimension2D}
      */
     public static Dimension2D create(int width, int height){
-        if(width <= 0 || height <= 0){
-            throw new IllegalArgumentException("Cannot create a Dimension2D with a negative or 0 width/height.");
-        }
+        Validator.notNegativeOrZero(width, "Cannot create a Dimension2D with a negative or zero width.");
+        Validator.notNegativeOrZero(height, "Cannot create a Dimension2D with a negative or zero height.");
         return new Dimension2D(width, height);
     }
 
     /**
-     * Returns the width of this {@link Dimension2D}.
-     * @return this {@link Dimension2D}'s width
+     * @return This {@link Dimension2D}'s width
      */
     public int getWidth(){
         return this.width;
     }
 
     /**
-     * Returns the height of this {@link Dimension2D}.
-     * @return this {@link Dimension2D}'s height
+     * @return This {@link Dimension2D}'s height
      */
     public int getHeight(){
         return this.height;
     }
 
     /**
-     * Compares this {@link Dimension2D} to the given {@link Object} and returns True if they're equal.
+     * Compares this {@link Dimension2D} to the given {@link Object} and returns True if they're equal, False otherwise.
      * Equality means they have the same width & height.
-     * @param o the other {@link Object} to be compared to this {@link Dimension2D}
+     * @param o The other {@link Object} to be compared to this {@link Dimension2D}
      *
-     * @return True if equal, false otherwise.
+     * @return True if equal, False otherwise.
      */
     @Override
     public boolean equals(Object o){
@@ -67,7 +67,7 @@ public final class Dimension2D {
     /**
      * Generates and returns a hash code for this {@link Dimension2D}.
      *
-     * @return the hash code
+     * @return The hash code
      */
     @Override
     public int hashCode(){
