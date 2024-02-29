@@ -6,9 +6,10 @@ import java.util.Objects;
 
 public final class ActiveFileBufferRepo implements IActiveFileBufferRepo {
 
-    private FileBuffer activeFileBuffer = null;
+    private FileBuffer activeFileBuffer;
 
     public ActiveFileBufferRepo(){
+        activeFileBuffer = null;
     }
 
 

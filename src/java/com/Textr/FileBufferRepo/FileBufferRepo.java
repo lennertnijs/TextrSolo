@@ -80,7 +80,6 @@ public final class FileBufferRepo implements IFileBufferRepo {
 
     /**
      * Removes the {@link FileBuffer} with the given id. If no match is found, does nothing.
-     * DOES NOT ACCOUNT FOR ACTIVE VIEW REMOVAL YET
      * @param id The id
      */
     @Override

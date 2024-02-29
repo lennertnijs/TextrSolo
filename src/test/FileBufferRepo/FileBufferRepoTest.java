@@ -1,7 +1,6 @@
 package FileBufferRepo;
 
 import com.Textr.FileBuffer.*;
-import com.Textr.FileBufferRepo.AllFileBuffersRepo;
 import com.Textr.FileBufferRepo.FileBufferRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +37,7 @@ public class FileBufferRepoTest {
                 () -> Assertions.assertEquals(repo.getAllBuffers().get(0), buffer1),
 
                 () -> repo.setActiveBuffer(buffer1),
+                () -> Assertions.assertEquals(repo.getActiveBufferId(), 0),
                 () -> Assertions.assertEquals(repo.getActiveBuffer(), buffer1),
 
                 () -> repo.addBuffer(buffer2),
@@ -48,6 +48,7 @@ public class FileBufferRepoTest {
                 () -> Assertions.assertEquals(repo.getAllBuffers().get(1), buffer2),
 
                 () -> repo.setActiveBuffer(buffer2),
+                () -> Assertions.assertEquals(repo.getActiveBufferId(), 1),
                 () -> Assertions.assertEquals(repo.getActiveBuffer(), buffer2),
 
                 () -> repo.removeBuffer(0),
@@ -83,7 +84,16 @@ public class FileBufferRepoTest {
                 () -> Assertions.assertEquals(repo.getActiveBuffer(), buffer2),
                 () -> repo.setActiveToPrevious(),
                 () -> Assertions.assertEquals(repo.getActiveBuffer(), buffer1)
+        );
+    }
 
+    @Test
+    public void testInvalid(){
+        Assertions.assertAll(
+                () -> Assertions.assertThrows(IllegalStateException.class, () -> repo.setActiveBuffer(buffer1)),
+                () -> repo.addBuffer(buffer1),
+                () -> repo.setActiveBuffer(buffer1),
+                () -> Assertions.assertThrows(IllegalStateException.class, () -> repo.removeBuffer(buffer1.getId()))
         );
     }
 }
