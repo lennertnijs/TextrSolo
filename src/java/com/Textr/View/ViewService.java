@@ -3,7 +3,7 @@ package com.Textr.View;
 import com.Textr.File.FileService;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.FileBuffer.InsertionPoint;
+import com.Textr.FileBuffer.Point;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.ViewDrawer.IViewDrawer;
 import com.Textr.ViewDrawer.ViewDrawer;
@@ -25,13 +25,13 @@ public class ViewService {
         this.viewDrawer = new ViewDrawer();
     }
 
-    public View createView(int fileBufferId, Point point, Dimension2D dimensions){
+    public View createView(int fileBufferId, Point1B point1B, Dimension2D dimensions){
         if(fileBufferId < 0){
             throw new IllegalArgumentException("Cannot create a TerminalView with a negative FileBuffer id.");
         }
-        Objects.requireNonNull(point, "Cannot create a TerminalView with a null Position.");
+        Objects.requireNonNull(point1B, "Cannot create a TerminalView with a null Position.");
         Objects.requireNonNull(dimensions, "Cannot create a TerminalView with null dimensions");
-        return View.builder().fileBufferId(fileBufferId).point(point).dimensions(dimensions).build();
+        return View.builder().fileBufferId(fileBufferId).point(point1B).dimensions(dimensions).build();
     }
 
     public void store(View view){
@@ -39,8 +39,8 @@ public class ViewService {
         viewRepo.add(view);
     }
 
-    public void createAndStoreView(int fileBufferId, Point point, Dimension2D dimensions){
-        View view = createView(fileBufferId, point, dimensions);
+    public void createAndStoreView(int fileBufferId, Point1B point1B, Dimension2D dimensions){
+        View view = createView(fileBufferId, point1B, dimensions);
         store(view);
     }
 
@@ -58,10 +58,10 @@ public class ViewService {
         int remainder = ((terminalHeight) % amountOfBuffers);
         int y = 1;
         for(FileBuffer fileBuffer : fileBufferService.getAllFileBuffers()){
-            Point point = Point.create(1, y);
+            Point1B point1B = Point1B.create(1, y);
             int viewHeight = remainder-- > 0 ? heightPerView + 1 : heightPerView;
             Dimension2D dimensions = Dimension2D.create(terminalWidth, viewHeight);
-            createAndStoreView(fileBuffer.getId(), point, dimensions);
+            createAndStoreView(fileBuffer.getId(), point1B, dimensions);
             y += viewHeight;
         }
     }
@@ -84,7 +84,7 @@ public class ViewService {
     }
 
     public void drawCursor(){
-        InsertionPoint cursorPoint = fileBufferService.getActiveBuffer().getInsertionPosition();
+        Point cursorPoint = fileBufferService.getActiveBuffer().getInsertionPosition();
         View view = viewRepo.getView(fileBufferService.getActiveBuffer().getId());
         TerminalService.moveCursor(view.getPosition().getX() + cursorPoint.getX(), view.getPosition().getY() + cursorPoint.getY());
     }

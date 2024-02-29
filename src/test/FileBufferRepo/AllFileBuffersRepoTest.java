@@ -16,11 +16,11 @@ public class AllFileBuffersRepoTest {
     @BeforeEach
     public void initialise(){
         FileBufferIdGenerator.resetGenerator();
-        InsertionPoint insertionPoint = InsertionPoint.create(5,5);
+        Point point = Point.create(5,5);
         buffer1 = FileBuffer.builder().fileId(1).bufferText(Text.create("text"))
-                .insertionPosition(insertionPoint).state(BufferState.CLEAN).build();
+                .insertionPosition(point).state(BufferState.CLEAN).build();
         buffer2 = FileBuffer.builder().fileId(2).bufferText(Text.create("text"))
-                .insertionPosition(insertionPoint).state(BufferState.CLEAN).build();
+                .insertionPosition(point).state(BufferState.CLEAN).build();
         repo = new AllFileBuffersRepo();
     }
 

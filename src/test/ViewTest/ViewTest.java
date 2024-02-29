@@ -1,6 +1,6 @@
 package ViewTest;
 
-import com.Textr.View.Point;
+import com.Textr.View.Point1B;
 import com.Textr.View.View;
 import com.Textr.View.Dimension2D;
 import org.junit.jupiter.api.Assertions;
@@ -10,25 +10,25 @@ public class ViewTest {
 
     @Test
     public void testConstructorAndGetters(){
-        Point point = Point.create(5,5);
+        Point1B point1B = Point1B.create(5,5);
         Dimension2D dimensions = Dimension2D.create(15, 15);
-        View view = View.builder().fileBufferId(0).point(point).dimensions(dimensions).build();
+        View view = View.builder().fileBufferId(0).point(point1B).dimensions(dimensions).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(view.getFileBufferId(), 0),
-                () -> Assertions.assertEquals(view.getPosition(), point),
+                () -> Assertions.assertEquals(view.getPosition(), point1B),
                 () -> Assertions.assertEquals(view.getDimensions(), dimensions)
         );
     }
 
     @Test
     public void testInvalidConstructor(){
-        Point point = Point.create(5,5);
+        Point1B point1B = Point1B.create(5,5);
         Dimension2D dimensions = Dimension2D.create(15, 15);
-        View.Builder invalidId = View.builder().fileBufferId(-1).point(point)
+        View.Builder invalidId = View.builder().fileBufferId(-1).point(point1B)
                 .dimensions(dimensions);
         View.Builder invalidPoint = View.builder().fileBufferId(0).point(null)
                 .dimensions(dimensions);
-        View.Builder invalidDimension = View.builder().fileBufferId(0).point(point)
+        View.Builder invalidDimension = View.builder().fileBufferId(0).point(point1B)
                 .dimensions(null);
         Assertions.assertAll(
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidId::build),
@@ -39,13 +39,13 @@ public class ViewTest {
 
     @Test
     public void testEqualsAndHashCode(){
-        Point point = Point.create(5,5);
+        Point1B point1B = Point1B.create(5,5);
         Dimension2D dimensions = Dimension2D.create(15, 15);
-        View view1 = View.builder().fileBufferId(1).point(point)
+        View view1 = View.builder().fileBufferId(1).point(point1B)
                 .dimensions(dimensions).build();
-        View view2 = View.builder().fileBufferId(2).point(point)
+        View view2 = View.builder().fileBufferId(2).point(point1B)
                 .dimensions(dimensions).build();
-        View view3 = View.builder().fileBufferId(1).point(point)
+        View view3 = View.builder().fileBufferId(1).point(point1B)
                 .dimensions(dimensions).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(view1, view1),
@@ -60,9 +60,9 @@ public class ViewTest {
 
     @Test
     public void testToString(){
-        Point point = Point.create(5,5);
+        Point1B point1B = Point1B.create(5,5);
         Dimension2D dimensions = Dimension2D.create(15, 15);
-        View view = View.builder().fileBufferId(1).point(point)
+        View view = View.builder().fileBufferId(1).point(point1B)
                 .dimensions(dimensions).build();
         String expected = "BufferView[fileId = 1, point = Point[x = 5, y = 5], dimensions = Dimension2D[width = 15, height = 15]]";
         Assertions.assertAll(

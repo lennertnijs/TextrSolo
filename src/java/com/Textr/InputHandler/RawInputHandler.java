@@ -1,7 +1,7 @@
 package com.Textr.InputHandler;
 
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.FileBuffer.InsertionPoint;
+import com.Textr.FileBuffer.Point;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.ViewService;
 
@@ -33,7 +33,7 @@ public final class RawInputHandler implements InputHandler{
     }
 
     private void saveInputToBuffer(int input){
-        InsertionPoint point = fileBufferService.getActiveBuffer().getInsertionPosition();
+        Point point = fileBufferService.getActiveBuffer().getInsertionPosition();
         fileBufferService.getActiveBuffer().getBufferText().addCharacter((char) input, point.getY(), point.getX());
         fileBufferService.moveInsertionPointRight();
     }

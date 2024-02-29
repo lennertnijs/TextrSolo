@@ -9,7 +9,7 @@ public final class FileBuffer {
     private final int id;
     private final int fileId;
     private final Text bufferText;
-    private final InsertionPoint insertionPoint;
+    private final Point point;
     private BufferState bufferState;
 
     /**
@@ -23,7 +23,7 @@ public final class FileBuffer {
         this.id = FileBufferIdGenerator.getId();
         this.fileId = builder.fileId;
         this.bufferText = builder.bufferText;
-        this.insertionPoint = builder.insertionPoint;
+        this.point = builder.point;
         this.bufferState = builder.bufferState;
     }
 
@@ -47,37 +47,37 @@ public final class FileBuffer {
      * Returns the insertion point index of this {@link FileBuffer}.
      * @return This {@link FileBuffer}'s insertion point index.
      */
-    public InsertionPoint getInsertionPosition(){
-        return this.insertionPoint;
+    public Point getInsertionPosition(){
+        return this.point;
     }
 
     public void moveInsertionPointDown(){
-        boolean canMoveDown = insertionPoint.getY() + 1 < bufferText.getAmountOfLines();
+        boolean canMoveDown = point.getY() + 1 < bufferText.getAmountOfLines();
         if(canMoveDown){
-            insertionPoint.incrementY();
-            boolean validX =  insertionPoint.getX() < bufferText.getLines()[insertionPoint.getY()].length();
+            point.incrementY();
+            boolean validX =  point.getX() < bufferText.getLines()[point.getY()].length();
             if(!validX){
-                insertionPoint.setX(bufferText.getLines()[insertionPoint.getY()].length());
+                point.setX(bufferText.getLines()[point.getY()].length());
             }
         }
     }
 
     public void moveInsertionPointUp(){
-        insertionPoint.decrementY();
-        boolean validX = insertionPoint.getX() < bufferText.getLines()[insertionPoint.getY()].length();
+        point.decrementY();
+        boolean validX = point.getX() < bufferText.getLines()[point.getY()].length();
         if(!validX){
-            insertionPoint.setX(bufferText.getLines()[insertionPoint.getY()].length());
+            point.setX(bufferText.getLines()[point.getY()].length());
         }
     }
 
     public void moveInsertionPointLeft(){
-        insertionPoint.decrementX();
+        point.decrementX();
     }
 
     public void moveInsertionPointRight(){
-        boolean canMoveRight = insertionPoint.getX() < bufferText.getLines()[insertionPoint.getY()].length();
+        boolean canMoveRight = point.getX() < bufferText.getLines()[point.getY()].length();
         if(canMoveRight){
-            insertionPoint.incrementX();
+            point.incrementX();
         }
     }
 
@@ -134,7 +134,7 @@ public final class FileBuffer {
     @Override
     public String toString(){
         return String.format("FileBuffer[id = %d, activeFileId = %d, bufferText = %s, insertionPosition = %s, state = %s]",
-                id, fileId, bufferText, insertionPoint, bufferState);
+                id, fileId, bufferText, point, bufferState);
     }
 
     /**
@@ -153,7 +153,7 @@ public final class FileBuffer {
 
         private int fileId = -1;
         private Text bufferText = null;
-        private InsertionPoint insertionPoint = null;
+        private Point point = null;
         private BufferState bufferState = null;
 
         /**
@@ -190,8 +190,8 @@ public final class FileBuffer {
          *
          * @return This {@link FileBuffer.Builder}
          */
-        public Builder insertionPosition(InsertionPoint point){
-            this.insertionPoint = point;
+        public Builder insertionPosition(Point point){
+            this.point = point;
             return this;
         }
 
@@ -229,7 +229,7 @@ public final class FileBuffer {
                 throw new IllegalArgumentException("The buffer text in the FileBuffer cannot be null.");
             }
             try{
-                Objects.requireNonNull(insertionPoint);
+                Objects.requireNonNull(point);
                 Objects.requireNonNull(bufferState);
             }catch(NullPointerException e){
                 throw new IllegalArgumentException("The state of the FileBuffer cannot be null.");

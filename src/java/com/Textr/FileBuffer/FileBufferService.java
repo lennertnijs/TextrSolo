@@ -33,7 +33,7 @@ public class FileBufferService {
             throw new IllegalArgumentException("Cannot create a FileBuffer with a negative fileId.");
         }
         Objects.requireNonNull(text, "Cannot create a FileBuffer because the File's text is null.");
-        return FileBuffer.builder().fileId(fileId).bufferText(Text.create(text)).insertionPosition(InsertionPoint.create(0,0)).state(BufferState.CLEAN).build();
+        return FileBuffer.builder().fileId(fileId).bufferText(Text.create(text)).insertionPosition(Point.create(0,0)).state(BufferState.CLEAN).build();
     }
 
     private void storeFileBuffer(FileBuffer fileBuffer){

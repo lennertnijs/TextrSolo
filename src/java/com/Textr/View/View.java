@@ -5,7 +5,7 @@ import java.util.Objects;
 public final class View {
 
     private final int fileBufferId;
-    private final Point point;
+    private final Point1B point1B;
     private final Dimension2D dimensions;
 
     /**
@@ -16,7 +16,7 @@ public final class View {
     private View(Builder builder){
         Objects.requireNonNull(builder, "Cannot build a BufferView with a null Builder.");
         this.fileBufferId = builder.fileBufferId;
-        this.point = builder.point;
+        this.point1B = builder.point1B;
         this.dimensions = builder.dimensions;
     }
 
@@ -30,10 +30,10 @@ public final class View {
 
     /**
      * Returns the position of this {@link View}.
-     * @return the {@link View}'s position as a {@link Point}
+     * @return the {@link View}'s position as a {@link Point1B}
      */
-    public Point getPosition(){
-        return this.point;
+    public Point1B getPosition(){
+        return this.point1B;
     }
 
     /**
@@ -60,7 +60,7 @@ public final class View {
             return false;
         }
         return this.fileBufferId == view.fileBufferId &&
-                this.point.equals(view.point) &&
+                this.point1B.equals(view.point1B) &&
                 this.dimensions.equals(view.dimensions);
     }
 
@@ -72,7 +72,7 @@ public final class View {
     @Override
     public int hashCode(){
         int result = fileBufferId;
-        result = 31 * result + point.hashCode();
+        result = 31 * result + point1B.hashCode();
         result = 31 * result + dimensions.hashCode();
         return result;
     }
@@ -86,7 +86,7 @@ public final class View {
     @Override
     public String toString(){
         return String.format("BufferView[fileId = %d, point = %s, dimensions = %s]",
-                fileBufferId, point.toString(), dimensions);
+                fileBufferId, point1B.toString(), dimensions);
     }
 
     /**
@@ -104,7 +104,7 @@ public final class View {
     public static class Builder{
 
         private int fileBufferId;
-        private Point point;
+        private Point1B point1B;
         private Dimension2D dimensions;
 
         /**
@@ -125,13 +125,13 @@ public final class View {
         }
 
         /**
-         * Sets the position of this {@link View.Builder} to the given {@link Point}
-         * @param point the position as a {@link Point}
+         * Sets the position of this {@link View.Builder} to the given {@link Point1B}
+         * @param point1B the position as a {@link Point1B}
          *
          * @return This {@link View.Builder}
          */
-        public Builder point(Point point){
-            this.point = point;
+        public Builder point(Point1B point1B){
+            this.point1B = point1B;
             return this;
         }
 
@@ -163,7 +163,7 @@ public final class View {
                 throw new IllegalArgumentException("The file id of a BufferView cannot be negative.");
             }
             try{
-                Objects.requireNonNull(point, "The buffer point of a bufferView cannot be null");
+                Objects.requireNonNull(point1B, "The buffer point of a bufferView cannot be null");
                 Objects.requireNonNull(dimensions, "The dimensions of a bufferView cannot be null");
             }catch(NullPointerException e){
                 throw new IllegalArgumentException("Cannot build a bufferView with a null parameter");

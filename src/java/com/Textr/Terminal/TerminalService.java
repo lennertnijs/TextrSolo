@@ -1,7 +1,7 @@
 package com.Textr.Terminal;
 
 import com.Textr.View.Dimension2D;
-import com.Textr.View.Point;
+import com.Textr.View.Point1B;
 import io.github.btj.termios.Terminal;
 
 import java.io.IOException;
@@ -61,8 +61,8 @@ public class TerminalService {
         Terminal.clearScreen();
     }
 
-    public static void printText(Point point, String text){
-        Terminal.printText(point.getY(), point.getX(), text);
+    public static void printText(Point1B point1B, String text){
+        Terminal.printText(point1B.getY(), point1B.getX(), text);
     }
 
     public static void printText(int x, int y, String text){
