@@ -2,9 +2,8 @@ package com.Textr.ViewDrawer;
 
 import com.Textr.FileBuffer.Text;
 import com.Textr.Terminal.TerminalService;
+import com.Textr.Validator.Validator;
 import com.Textr.View.View;
-
-import java.util.Objects;
 
 public class ViewDrawer implements IViewDrawer {
 
@@ -20,7 +19,9 @@ public class ViewDrawer implements IViewDrawer {
      */
     @Override
     public void drawView(View view, Text text, String statusBar) {
-        validateParameters(view, text, statusBar);
+        Validator.notNull(view, "Cannot draw a null View.");
+        Validator.notNull(text, "Cannot draw the View because the given Text is null.");
+        Validator.notNull(statusBar, "Cannot draw the View because the status bar is null.");
         int height = view.getDimensions().getHeight();
         int x = view.getPosition().getX();
         int startY = view.getPosition().getY();
@@ -30,15 +31,5 @@ public class ViewDrawer implements IViewDrawer {
             TerminalService.printText(x, startY++, lines[i].substring(0, Math.min(view.getDimensions().getWidth(), lines[i].length())));
         }
         TerminalService.printText(x, maxY, statusBar.substring(0, Math.min(view.getDimensions().getWidth(), statusBar.length())));
-    }
-
-    private void validateParameters(View view, Text text, String string){
-        try{
-            Objects.requireNonNull(view);
-            Objects.requireNonNull(text);
-            Objects.requireNonNull(string);
-        }catch(NullPointerException e){
-            throw new IllegalArgumentException("Cannot draw a view. One of the parameters is null.");
-        }
     }
 }

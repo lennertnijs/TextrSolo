@@ -1,6 +1,8 @@
 package com.Textr.View;
 
-
+/**
+ * Class to represent 2D dimensions, aka width of height.
+ */
 public final class Dimension2D {
 
     private final int width;

@@ -1,5 +1,11 @@
 package com.Textr.FileBuffer;
 
+import com.Textr.Validator.Validator;
+
+/**
+ * Class to represent a 2D point (0-based).
+ * This means that the point can have any non-negative values.
+ */
 public final class Point {
 
     private int x;
@@ -21,16 +27,15 @@ public final class Point {
      * @param y The y coordinate. Cannot be negative
      *
      * @return The {@link Point}
+     * @throws IllegalArgumentException If the passed x or y value is negative.
      */
     public static Point create(int x, int y){
-        if(x < 0 || y < 0){
-            throw  new IllegalArgumentException("Cannot create an InsertionPoint with a negative coordinate.");
-        }
+        Validator.notNegative(x, "Cannot create a Point with a negative x value.");
+        Validator.notNegative(y, "Cannot create a Point with a negative y value.");
         return new Point(x, y);
     }
 
     /**
-     * Returns the x coordinate of this {@link Point}.
      * @return The x coordinate
      */
     public int getX(){
@@ -38,18 +43,20 @@ public final class Point {
     }
 
     /**
-     * Returns the y coordinate of this {@link Point}.
      * @return The y coordinate
      */
     public int getY(){
         return y;
     }
 
-
+    /**
+     * Sets the x coordinate of this {@link Point} to the given x.
+     * @param x The new x coordinate.
+     *
+     * @throws IllegalArgumentException If the given x is negative.
+     */
     public void setX(int x){
-        if(x < 0){
-            throw new IllegalArgumentException();
-        }
+        Validator.notNegative(x, "Cannot set this Point's x coordinate to a negative value.");
         this.x = x;
     }
 
