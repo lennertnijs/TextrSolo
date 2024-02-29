@@ -2,7 +2,7 @@ package com.Textr.FileBuffer;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class FileBufferIdGenerator {
+public final class FileBufferIdGenerator {
 
     private static AtomicInteger id = new AtomicInteger();
 

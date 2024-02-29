@@ -3,7 +3,7 @@ package com.Textr.FileBuffer;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Text {
+public final class Text {
 
     private final String[] lines;
 

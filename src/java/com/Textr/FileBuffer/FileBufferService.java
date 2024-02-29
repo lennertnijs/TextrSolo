@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Class used to present a bunch of FileBuffer methods to the outside world. (probably create an interface for this)
  */
-public class FileBufferService {
+public final class FileBufferService {
 
     private final IFileBufferRepo fileBufferRepo;
 

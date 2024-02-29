@@ -6,7 +6,7 @@ import com.Textr.Validator.Validator;
 /**
  * This class is responsible for the creation of {@link FileBuffer} instances.
  */
-public class FileBufferCreator {
+public final class FileBufferCreator {
 
     /**
      * Private constructor. No use.

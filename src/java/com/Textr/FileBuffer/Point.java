@@ -1,6 +1,6 @@
 package com.Textr.FileBuffer;
 
-public class Point {
+public final class Point {
 
     private int x;
     private int y;

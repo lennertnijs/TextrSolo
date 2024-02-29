@@ -11,5 +11,4 @@ public interface IFileRepo {
     List<File> getAll();
     void add(File file);
     void remove(int id);
-
 }
