@@ -25,6 +25,17 @@ public class AllFileBuffersRepoTest {
     }
 
     @Test
+    public void testContains(){
+        Assertions.assertAll(
+                () -> Assertions.assertFalse(repo.contains(1)),
+
+                () -> repo.add(buffer1),
+                () -> Assertions.assertTrue(repo.contains(0)),
+                () -> Assertions.assertFalse(repo.contains(1))
+        );
+    }
+
+    @Test
     public void testAddRemoveAndGet(){
         Assertions.assertAll(
                 () -> Assertions.assertEquals(repo.getSize(), 0),
@@ -70,7 +81,6 @@ public class AllFileBuffersRepoTest {
                 () -> repo.remove(0),
                 () -> Assertions.assertEquals(repo.getNext(1), buffer2),
                 () -> Assertions.assertThrows(IllegalStateException.class, () -> repo.getNext(2))
-
         );
     }
 
@@ -85,7 +95,6 @@ public class AllFileBuffersRepoTest {
                 () -> repo.remove(0),
                 () -> Assertions.assertEquals(repo.getPrevious(1), buffer2),
                 () -> Assertions.assertThrows(IllegalStateException.class, () -> repo.getPrevious(2))
-
         );
     }
 }

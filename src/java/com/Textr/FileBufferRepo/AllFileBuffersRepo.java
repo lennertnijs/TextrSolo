@@ -7,15 +7,14 @@ import java.util.*;
 public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
 
 
-    private final List<FileBuffer> buffers;
+    private final List<FileBuffer> buffers = new ArrayList<>();
 
     public AllFileBuffersRepo(){
-        buffers = new ArrayList<>();
     }
 
 
     /**
-     * Returns the amount of {@link FileBuffer}s in the repository. This includes the active buffer.
+     * Returns the amount of {@link FileBuffer}s in the repository.
      *
      * @return The size
      */
@@ -25,9 +24,10 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
     }
 
     /**
-     * Returns true if a buffer with this id was found. Returns false otherwise.
-     * @param id
-     * @return
+     * Returns True if a {@link FileBuffer} with the given id exists in the repository. Returns False otherwise.
+     * @param id The id
+     *
+     * @return True if a match was found, False otherwise.
      */
     @Override
     public boolean contains(int id){
@@ -38,12 +38,13 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
         }
         return false;
     }
+
     /**
-     * Finds and returns the {@link FileBuffer} with the given id.
+     * Fetches and returns the {@link FileBuffer} with the given id. Throws an Exception if no element was found.
      * @param id The id
      *
      * @return The {@link FileBuffer}
-     * @throws NoSuchElementException If no {@link FileBuffer} with the id was found.
+     * @throws NoSuchElementException If no {@link FileBuffer} with that id was found.
      */
     @Override
     public FileBuffer get(int id){
@@ -56,7 +57,7 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
     }
 
     /**
-     * Returns all the existing {@link FileBuffer}s.
+     * Returns all the existing {@link FileBuffer}s. (Not copied)
      *
      * @return The {@link FileBuffer}s
      */
@@ -83,6 +84,7 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
 
     /**
      * Removes the {@link FileBuffer} with the given id from the repository.
+     * If no match was found, does nothing.
      * @param id The id
      */
     @Override
@@ -121,7 +123,7 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
     public FileBuffer getPrevious(int id){
         for(int i = 0; i < buffers.size(); i++){
             if(buffers.get(i).getId() == id){
-                int nextIndex = (i - 1) >= 0 ? (i - 1) : buffers.size()-1;
+                int nextIndex = (i - 1) >= 0 ? (i - 1) : buffers.size() - 1;
                 return buffers.get(nextIndex);
             }
         }
