@@ -1,12 +1,15 @@
 package com.Textr.View;
 
+import com.Textr.FileBuffer.Point;
+
 import java.util.Objects;
 
 public final class View {
 
     private final int fileBufferId;
-    private final Point1B point1B;
+    private final Point1B position;
     private final Dimension2D dimensions;
+    private final Point anchorPoint;
 
     /**
      * Constructor for a {@link View}.
@@ -16,8 +19,9 @@ public final class View {
     private View(Builder builder){
         Objects.requireNonNull(builder, "Cannot build a BufferView with a null Builder.");
         this.fileBufferId = builder.fileBufferId;
-        this.point1B = builder.point1B;
+        this.position = builder.position;
         this.dimensions = builder.dimensions;
+        this.anchorPoint = builder.anchorPoint;
     }
 
     /**
@@ -33,7 +37,7 @@ public final class View {
      * @return the {@link View}'s position as a {@link Point1B}
      */
     public Point1B getPosition(){
-        return this.point1B;
+        return this.position;
     }
 
     /**
@@ -44,6 +48,10 @@ public final class View {
         return this.dimensions;
     }
 
+
+    public Point getAnchorPoint(){
+        return anchorPoint;
+    }
     /**
      * Compares this {@link View} to the given {@link Object} and returns True if they're equal.
      * Equality means that all of their fields are equal.
@@ -60,7 +68,7 @@ public final class View {
             return false;
         }
         return this.fileBufferId == view.fileBufferId &&
-                this.point1B.equals(view.point1B) &&
+                this.position.equals(view.position) &&
                 this.dimensions.equals(view.dimensions);
     }
 
@@ -72,7 +80,7 @@ public final class View {
     @Override
     public int hashCode(){
         int result = fileBufferId;
-        result = 31 * result + point1B.hashCode();
+        result = 31 * result + position.hashCode();
         result = 31 * result + dimensions.hashCode();
         return result;
     }
@@ -86,7 +94,7 @@ public final class View {
     @Override
     public String toString(){
         return String.format("BufferView[fileId = %d, point = %s, dimensions = %s]",
-                fileBufferId, point1B.toString(), dimensions);
+                fileBufferId, position.toString(), dimensions);
     }
 
     /**
@@ -104,8 +112,9 @@ public final class View {
     public static class Builder{
 
         private int fileBufferId;
-        private Point1B point1B;
+        private Point1B position;
         private Dimension2D dimensions;
+        private Point anchorPoint;
 
         /**
          * Constructor of the {@link View.Builder}
@@ -126,12 +135,12 @@ public final class View {
 
         /**
          * Sets the position of this {@link View.Builder} to the given {@link Point1B}
-         * @param point1B the position as a {@link Point1B}
+         * @param position the position as a {@link Point1B}
          *
          * @return This {@link View.Builder}
          */
-        public Builder point(Point1B point1B){
-            this.point1B = point1B;
+        public Builder position(Point1B position){
+            this.position = position;
             return this;
         }
 
@@ -143,6 +152,11 @@ public final class View {
          */
         public Builder dimensions(Dimension2D dimensions){
             this.dimensions = dimensions;
+            return this;
+        }
+
+        public Builder anchorPoint(Point anchorPoint){
+            this.anchorPoint = anchorPoint;
             return this;
         }
 
@@ -163,7 +177,8 @@ public final class View {
                 throw new IllegalArgumentException("The file id of a BufferView cannot be negative.");
             }
             try{
-                Objects.requireNonNull(point1B, "The buffer point of a bufferView cannot be null");
+                Objects.requireNonNull(position, "The buffer point of a bufferView cannot be null");
+                Objects.requireNonNull(anchorPoint);
                 Objects.requireNonNull(dimensions, "The dimensions of a bufferView cannot be null");
             }catch(NullPointerException e){
                 throw new IllegalArgumentException("Cannot build a bufferView with a null parameter");

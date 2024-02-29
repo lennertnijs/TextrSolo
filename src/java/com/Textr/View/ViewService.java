@@ -31,7 +31,7 @@ public class ViewService {
         }
         Objects.requireNonNull(point1B, "Cannot create a TerminalView with a null Position.");
         Objects.requireNonNull(dimensions, "Cannot create a TerminalView with null dimensions");
-        return View.builder().fileBufferId(fileBufferId).point(point1B).dimensions(dimensions).build();
+        return View.builder().fileBufferId(fileBufferId).position(point1B).dimensions(dimensions).anchorPoint(Point.create(0,0)).build();
     }
 
     public void store(View view){
