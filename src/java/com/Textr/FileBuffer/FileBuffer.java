@@ -1,6 +1,7 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
+import com.Textr.Validator.Validator;
 
 import java.util.Objects;
 
@@ -9,7 +10,7 @@ public final class FileBuffer {
     private final int id;
     private final int fileId;
     private final Text bufferText;
-    private final Point point;
+    private final Point insertionPoint;
     private BufferState bufferState;
 
     /**
@@ -23,7 +24,7 @@ public final class FileBuffer {
         this.id = FileBufferIdGenerator.getId();
         this.fileId = builder.fileId;
         this.bufferText = builder.bufferText;
-        this.point = builder.point;
+        this.insertionPoint = builder.insertionPoint;
         this.bufferState = builder.bufferState;
     }
 
@@ -48,36 +49,36 @@ public final class FileBuffer {
      * @return This {@link FileBuffer}'s insertion point index.
      */
     public Point getInsertionPosition(){
-        return this.point;
+        return this.insertionPoint;
     }
 
     public void moveInsertionPointDown(){
-        boolean canMoveDown = point.getY() + 1 < bufferText.getAmountOfLines();
+        boolean canMoveDown = insertionPoint.getY() + 1 < bufferText.getAmountOfLines();
         if(canMoveDown){
-            point.incrementY();
-            boolean validX =  point.getX() < bufferText.getLines()[point.getY()].length();
+            insertionPoint.incrementY();
+            boolean validX =  insertionPoint.getX() < bufferText.getLines()[insertionPoint.getY()].length();
             if(!validX){
-                point.setX(bufferText.getLines()[point.getY()].length());
+                insertionPoint.setX(bufferText.getLines()[insertionPoint.getY()].length());
             }
         }
     }
 
     public void moveInsertionPointUp(){
-        point.decrementY();
-        boolean validX = point.getX() < bufferText.getLines()[point.getY()].length();
+        insertionPoint.decrementY();
+        boolean validX = insertionPoint.getX() < bufferText.getLines()[insertionPoint.getY()].length();
         if(!validX){
-            point.setX(bufferText.getLines()[point.getY()].length());
+            insertionPoint.setX(bufferText.getLines()[insertionPoint.getY()].length());
         }
     }
 
     public void moveInsertionPointLeft(){
-        point.decrementX();
+        insertionPoint.decrementX();
     }
 
     public void moveInsertionPointRight(){
-        boolean canMoveRight = point.getX() < bufferText.getLines()[point.getY()].length();
+        boolean canMoveRight = insertionPoint.getX() < bufferText.getLines()[insertionPoint.getY()].length();
         if(canMoveRight){
-            point.incrementX();
+            insertionPoint.incrementX();
         }
     }
 
@@ -134,7 +135,7 @@ public final class FileBuffer {
     @Override
     public String toString(){
         return String.format("FileBuffer[id = %d, activeFileId = %d, bufferText = %s, insertionPosition = %s, state = %s]",
-                id, fileId, bufferText, point, bufferState);
+                id, fileId, bufferText, insertionPoint, bufferState);
     }
 
     /**
@@ -153,7 +154,7 @@ public final class FileBuffer {
 
         private int fileId = -1;
         private Text bufferText = null;
-        private Point point = null;
+        private Point insertionPoint = null;
         private BufferState bufferState = null;
 
         /**
@@ -186,12 +187,12 @@ public final class FileBuffer {
 
         /**
          * Sets the insertion point index of this {@link FileBuffer.Builder} to the given index.
-         * @param point The position
+         * @param insertionPoint The position
          *
          * @return This {@link FileBuffer.Builder}
          */
-        public Builder insertionPosition(Point point){
-            this.point = point;
+        public Builder insertionPosition(Point insertionPoint){
+            this.insertionPoint = insertionPoint;
             return this;
         }
 
@@ -220,20 +221,10 @@ public final class FileBuffer {
          * @return a newly created valid & immutable {@link FileBuffer}
          */
         public FileBuffer build(){
-            if(fileId < 0){
-                throw new IllegalArgumentException("The id the active File in the FileBuffer cannot be negative.");
-            }
-            try{
-                Objects.requireNonNull(bufferText);
-            }catch(NullPointerException e){
-                throw new IllegalArgumentException("The buffer text in the FileBuffer cannot be null.");
-            }
-            try{
-                Objects.requireNonNull(point);
-                Objects.requireNonNull(bufferState);
-            }catch(NullPointerException e){
-                throw new IllegalArgumentException("The state of the FileBuffer cannot be null.");
-            }
+            Validator.notNegative(fileId, "The id the File in the FileBuffer cannot be negative.");
+            Validator.notNull(bufferText, "The buffer text in the FileBuffer cannot be null.");
+            Validator.notNull(insertionPoint, "The insertion point of the FileBuffer cannot be null.");
+            Validator.notNull(bufferState,"The state of the FileBuffer cannot be null.");
             return new FileBuffer(this);
         }
     }

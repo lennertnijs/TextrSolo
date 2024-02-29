@@ -25,7 +25,7 @@ public class FileBufferCreator {
      * @throws IllegalArgumentException If the given {@link File} is null.
      */
     public static FileBuffer create(File file){
-        Validator.validateNotNull(file, "Cannot create a FileBuffer for a null File.");
+        Validator.notNull(file, "Cannot create a FileBuffer for a null File.");
         int id = file.getId();
         Text text = Text.create(file.getText());
         Point insertionPoint = Point.create(0,0);
