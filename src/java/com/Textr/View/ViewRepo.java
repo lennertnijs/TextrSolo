@@ -16,6 +16,15 @@ public class ViewRepo {
         views.add(view);
     }
 
+    protected View getView(int fileBufferId){
+        for(View view : views){
+            if(view.getFileBufferId() == fileBufferId){
+                return view;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
     protected List<View> getAll(){
         return this.views;
     }

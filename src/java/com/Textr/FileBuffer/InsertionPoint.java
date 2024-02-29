@@ -6,7 +6,7 @@ public class InsertionPoint {
     private int y;
 
     /**
-     * Private constructor for an {@link InsertionPoint}.
+     * Private constructor for an {@link InsertionPoint}. (0-based)
      * @param x The x coordinate
      * @param y The y coordinate
      */
@@ -45,11 +45,19 @@ public class InsertionPoint {
         return y;
     }
 
+
+    public void setX(int x){
+        if(x < 0){
+            throw new IllegalArgumentException();
+        }
+        this.x = x;
+    }
+
     /**
      * Increments the x coordinate of this {@link InsertionPoint} by 1.
      */
-    protected void incrementX(int max){
-        x  = Math.min(max, x + 1);
+    protected void incrementX(){
+        x += 1;
     }
 
     /**
@@ -62,8 +70,8 @@ public class InsertionPoint {
     /**
      * Increments the y coordinate of this {@link InsertionPoint} by 1.
      */
-    protected void incrementY(int max){
-        y = Math.min(max, y + 1);
+    protected void incrementY(){
+        y += 1;
     }
 
     /**

@@ -6,7 +6,7 @@ public final class Point {
     private final int y;
 
     /**
-     * Constructor for a {@link Point}.
+     * Constructor for a {@link Point}. (1-based)
      */
     private Point(int x, int y){
         this.x = x;

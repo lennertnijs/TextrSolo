@@ -51,6 +51,36 @@ public final class FileBuffer {
         return this.insertionPoint;
     }
 
+    public void moveInsertionPointDown(){
+        boolean canMoveDown = insertionPoint.getY() + 1 < bufferText.getAmountOfLines();
+        if(canMoveDown){
+            insertionPoint.incrementY();
+            boolean validX =  insertionPoint.getX() < bufferText.getLines()[insertionPoint.getY()].length();
+            if(!validX){
+                insertionPoint.setX(bufferText.getLines()[insertionPoint.getY()].length());
+            }
+        }
+    }
+
+    public void moveInsertionPointUp(){
+        insertionPoint.decrementY();
+        boolean validX = insertionPoint.getX() < bufferText.getLines()[insertionPoint.getY()].length();
+        if(!validX){
+            insertionPoint.setX(bufferText.getLines()[insertionPoint.getY()].length());
+        }
+    }
+
+    public void moveInsertionPointLeft(){
+        insertionPoint.decrementX();
+    }
+
+    public void moveInsertionPointRight(){
+        boolean canMoveRight = insertionPoint.getX() < bufferText.getLines()[insertionPoint.getY()].length();
+        if(canMoveRight){
+            insertionPoint.incrementX();
+        }
+    }
+
     /**
      * Returns the {@link BufferState} of this {@link FileBuffer}.
      * @return This {@link FileBuffer}'s state as a {@link BufferState}

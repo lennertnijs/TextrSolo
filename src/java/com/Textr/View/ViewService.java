@@ -85,6 +85,7 @@ public class ViewService {
 
     public void drawCursor(){
         InsertionPoint cursorPoint = fileBufferService.getActiveBuffer().getInsertionPosition();
-        TerminalService.moveCursor(cursorPoint.getX() + 1, cursorPoint.getY() + 1);
+        View view = viewRepo.getView(fileBufferService.getActiveBuffer().getId());
+        TerminalService.moveCursor(view.getPosition().getX() + cursorPoint.getX(), view.getPosition().getY() + cursorPoint.getY());
     }
 }
