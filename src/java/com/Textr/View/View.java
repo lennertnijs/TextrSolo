@@ -1,6 +1,6 @@
 package com.Textr.View;
 
-import com.Textr.FileBuffer.Point;
+import com.Textr.Point.Point;
 
 import java.util.Objects;
 

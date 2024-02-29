@@ -1,4 +1,4 @@
-package com.Textr.FileBuffer;
+package com.Textr.Point;
 
 import com.Textr.Validator.Validator;
 

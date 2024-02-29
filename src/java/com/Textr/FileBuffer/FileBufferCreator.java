@@ -1,6 +1,7 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
+import com.Textr.Point.Point;
 import com.Textr.Validator.Validator;
 
 /**

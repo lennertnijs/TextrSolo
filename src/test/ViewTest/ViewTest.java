@@ -1,6 +1,6 @@
 package ViewTest;
 
-import com.Textr.FileBuffer.Point;
+import com.Textr.Point.Point;
 import com.Textr.View.Point1B;
 import com.Textr.View.View;
 import com.Textr.View.Dimension2D;

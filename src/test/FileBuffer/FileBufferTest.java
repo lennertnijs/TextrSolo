@@ -1,6 +1,7 @@
 package FileBuffer;
 
 import com.Textr.FileBuffer.*;
+import com.Textr.Point.Point;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

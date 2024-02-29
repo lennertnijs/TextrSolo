@@ -1,7 +1,7 @@
 package com.Textr.InputHandler;
 
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.FileBuffer.Point;
+import com.Textr.Point.Point;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.ViewService;
 

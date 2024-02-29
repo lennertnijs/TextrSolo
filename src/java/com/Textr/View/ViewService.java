@@ -3,7 +3,7 @@ package com.Textr.View;
 import com.Textr.File.FileService;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.FileBuffer.Point;
+import com.Textr.Point.Point;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.ViewDrawer.IViewDrawer;
 import com.Textr.ViewDrawer.ViewDrawer;
