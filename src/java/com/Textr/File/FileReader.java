@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * A class for reading an actual .txt file's contents.
  */
-public class FileReader {
+public final class FileReader {
 
     /**
      * Private constructor. No use.

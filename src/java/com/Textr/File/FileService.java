@@ -5,7 +5,7 @@ import com.Textr.FileRepo.IFileRepo;
 
 import java.util.List;
 
-public class FileService {
+public final class FileService {
 
     private final IFileRepo fileRepo;
 
