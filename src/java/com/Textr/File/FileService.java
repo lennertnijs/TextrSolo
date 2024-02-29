@@ -4,12 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class FileService {
 
-    private final FileRepo fileRepo;
+    private final IFileRepo fileRepo;
 
     public FileService(){
         this.fileRepo = new FileRepo();
@@ -43,7 +42,7 @@ public class FileService {
                 stringBuilder.append(line);
                 stringBuilder.append(System.lineSeparator());
             }
-            return File.builder().path(url).text(stringBuilder.toString()).build();
+            return File.create(url, stringBuilder.toString());
         }catch(IOException e){
             throw new IllegalArgumentException("An error occurred during the reading of a File");
         }
@@ -64,9 +63,6 @@ public class FileService {
     }
 
     public File getFile(int id){
-        if(fileRepo.get(id).isPresent()){
-            return fileRepo.get(id).get();
-        }
-        throw new NoSuchElementException("no element found");
+        return fileRepo.get(id);
     }
 }

@@ -79,7 +79,7 @@ public class ViewService {
 
     private String generateStatusBar(FileBuffer fileBuffer){
         return String.format("File path: %s - Lines: %d - Characters: %d - InsertionPoint: %s - State: %s",
-               fileService.getFile(fileBuffer.getFileId()).getPath(), fileBuffer.getBufferText().getAmountOfLines(),
+               fileService.getFile(fileBuffer.getFileId()).getUrl(), fileBuffer.getBufferText().getAmountOfLines(),
                 fileBuffer.getBufferText().getAmountOfChars(), fileBuffer.getInsertionPosition(), fileBuffer.getState());
     }
 

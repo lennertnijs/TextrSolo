@@ -8,38 +8,35 @@ import org.junit.jupiter.api.Test;
 
 public class FileTest {
 
-
+    private File file1;
+    private File file2;
     @BeforeEach
     public void initialise(){
         FileIdGenerator.resetGenerator();
+        file1 = File.create("path1", "text1");
+        file2 = File.create("path2", "text2");
     }
 
 
-
     @Test
-    public void testConstructorAndGetters(){
-        File file1 = File.builder().path("/filePath1").text("testText1").build();
+    public void testCreationAndGetters(){
         Assertions.assertAll(
                 () -> Assertions.assertEquals(file1.getId(), 0),
-                () -> Assertions.assertEquals(file1.getPath(), "/filePath1"),
-                () -> Assertions.assertEquals(file1.getText(), "testText1")
+                () -> Assertions.assertEquals(file1.getUrl(), "path1"),
+                () -> Assertions.assertEquals(file1.getText(), "text1")
         );
     }
 
     @Test
-    public void testConstructorIllegal(){
-        File.Builder illegalPathFileBuilder = File.builder().path(null).text("text");
-        File.Builder illegalTextFileBuilder = File.builder().path("path").text(null);
+    public void testCreationIllegal(){
         Assertions.assertAll(
-                () -> Assertions.assertThrows(IllegalArgumentException.class, illegalPathFileBuilder::build),
-                () -> Assertions.assertThrows(IllegalArgumentException.class, illegalTextFileBuilder::build)
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> File.create(null, "Text")),
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> File.create("Url", null))
         );
     }
 
     @Test
     public void testEqualsAndHashCode(){
-        File file1 = File.builder().path("path").text("text").build();
-        File file2 = File.builder().path("pad").text("text").build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(file1, file1),
                 () -> Assertions.assertNotEquals(file1, file2),
@@ -48,10 +45,9 @@ public class FileTest {
                 () -> Assertions.assertNotEquals(file1.hashCode(), file2.hashCode())
         );
     }
-
     @Test
     public void testToString(){
-        File file = File.builder().path("path").text("text").build();
-        Assertions.assertEquals(file.toString(), "File[id = 0, path = path, text = text]");
+        String expected = "File[id = 0, url = path1, text = text1]";
+        Assertions.assertEquals(file1.toString(), expected);
     }
 }

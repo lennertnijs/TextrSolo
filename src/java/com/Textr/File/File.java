@@ -1,53 +1,66 @@
 package com.Textr.File;
 
+import com.Textr.Validator.Validator;
+
 import java.util.Objects;
 
+/**
+ * Class to represent a File object.
+ */
 public final class File {
 
     private final int id;
-    private final String path;
+    private final String url;
     private final String text;
 
     /**
-     * Constructor for a {@link File} object.
-     * Uses a static {@link File.Builder} to create valid {@link File}.
-     * @param builder The {@link File.Builder}. Cannot be null.
+     * Constructor for a {@link File}.
      */
-    private File(Builder builder){
-        Objects.requireNonNull(builder, "Cannot build a File with a null Builder.");
+    private File(String url, String text){
         this.id = FileIdGenerator.getId();
-        this.path = builder.path;
-        this.text = builder.text;
+        this.url = url;
+        this.text = text;
     }
 
     /**
-     * Returns this {@link File}'s UNIQUE id.
-     * @return the {@link File}'s unique id
+     * Static factory method to create {@link File}s with.
+     * @param url The uniform resource locator (URL) of the file.
+     * @param text The text content of the file.
+     *
+     * @return The newly created {@link File}.
+     * @throws IllegalArgumentException If url/text is null.
+     */
+    public static File create(String url, String text){
+        Validator.notNull(url, "Cannot create a File with a null url.");
+        Validator.notNull(text, "Cannot create a File with a null text.");
+        return new File(url, text);
+    }
+
+    /**
+     * @return The {@link File}'s id.
      */
     public int getId(){
         return this.id;
     }
 
     /**
-     * Returns this {@link File}'s file path.
-     * @return the {@link File}'s path
+     * @return The {@link File}'s url. (file path)
      */
-    public String getPath(){
-        return this.path;
+    public String getUrl(){
+        return this.url;
     }
 
     /**
-     * Returns this {@link File}'s text.
-     * @return the {@link File}'s text
+     * @return The {@link File}'s contents (as text).
      */
     public String getText(){
         return this.text;
     }
 
     /**
-     * Compares this {@link File} to the given {@link File} and returns True if they're equal.
-     * Equality means they have the same unique identifier.
-     * @param o the other {@link File}
+     * Compares this {@link File} to the given {@link Object} and returns True if they're equal. Returns false otherwise.
+     * Equality means they have the same id.
+     * @param o The {@link Object}
      *
      * @return True if equal, false otherwise.
      */
@@ -65,11 +78,11 @@ public final class File {
     /**
      * Creates a hash code for this {@link File}.
      *
-     * @return the hash code
+     * @return The hash code.
      */
     @Override
     public int hashCode(){
-        return Objects.hash(this.id);
+        return id;
     }
 
     /**
@@ -79,73 +92,6 @@ public final class File {
      */
     @Override
     public String toString(){
-        return String.format("File[id = %d, path = %s, text = %s]", this.id, this.path, this.text);
-    }
-
-
-    /**
-     * Creates and returns a new {@link File.Builder} to build a {@link File} object with.
-     * @return the {@link File.Builder}
-     */
-    public static Builder builder(){
-        return new Builder();
-    }
-
-    /**
-     * A package-private subclass {@link Builder} used to build valid {@link File} instances with.
-     * To obtain a {@link Builder}, use File.builder();
-     */
-    public static class Builder{
-        private String path = null;
-        private String  text = null;
-
-        /**
-         * Constructor for the {@link File.Builder}
-         */
-        private Builder(){
-        }
-
-        /**
-         * Sets the path of this {@link File.Builder} to the given file path.
-         * @param path The file path
-         *
-         * @return the {@link File.Builder}
-         */
-        public Builder path(String path){
-            this.path = path;
-            return this;
-        }
-
-        /**
-         * Sets the text of this {@link File.Builder} to the given text.
-         * @param text The file text
-         *
-         * @return the {@link File.Builder}
-         */
-        public Builder text(String text){
-            this.text = text;
-            return this;
-        }
-
-        /**
-         * Validates all the fields of this {@link File.Builder}.
-         * If all are valid, creates and returns a new immutable {@link File} with these fields.
-         * More precisely, the following conditions must hold on the fields:
-         * - The id cannot be negative.
-         * - The file path cannot be null.
-         * - The text cannot be null.
-         * @throws  IllegalArgumentException If any of the fields are invalid.
-         *
-         * @return a newly created valid & immutable {@link File}
-         */
-        public File build(){
-            try{
-                Objects.requireNonNull(path, "Cannot create a File object with a null file path.");
-                Objects.requireNonNull(text, "Cannot create a File object with a null text.");
-            }catch(NullPointerException n){
-                throw new IllegalArgumentException("Cannot create a File with a null path/text.");
-            }
-            return new File(this);
-        }
+        return String.format("File[id = %d, url = %s, text = %s]", this.id, this.url, this.text);
     }
 }

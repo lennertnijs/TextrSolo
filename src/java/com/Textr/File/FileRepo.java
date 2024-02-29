@@ -1,80 +1,84 @@
 package com.Textr.File;
 
+import com.Textr.Validator.Validator;
+
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class FileRepo {
+public final class FileRepo implements IFileRepo{
 
-    private final Map<Integer, File> files;
+    private final List<File> files;
 
-    /**
-     * The constructor for a repository where all the {@link File}'s are stored and managed.
-     */
     public FileRepo(){
-        this.files = new ConcurrentHashMap<>();
+        this.files = new ArrayList<>();
     }
 
+
     /**
-     * Returns the size of the {@link File} repository.
+     * Checks whether a {@link File} with the given id is stored.
+     * @param id The id
      *
-     * @return The size of the {@link File} repository
+     * @return True if a matching {@link File} was found. False otherwise.
      */
+    @Override
+    public boolean contains(int id) {
+        for(File file : files){
+            if(file.getId() == id){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * @return The amount of {@link File}s stored.
+     */
+    @Override
     public int getSize(){
         return files.size();
     }
 
     /**
      * Finds and returns the {@link File} with the given id.
-     * If no {@link File} was found, returns an empty {@link Optional}.
-     * @param id the id
+     * @param id The id
      *
-     * @return An {@link Optional} of the {@link File} if a match was found. Returns an empty {@link Optional} otherwise.
+     * @return The {@link File}
+     * @throws NoSuchElementException If no matching {@link File} was found.
      */
-    public Optional<File> get(int id){
-        return files.get(id) != null ? Optional.of(files.get(id)) : Optional.empty();
+    public File get(int id){
+        for(File file : files){
+            if(file.getId() == id){
+                return file;
+            }
+        }
+        throw new NoSuchElementException("No File with the given id was found.");
     }
 
     /**
-     * Returns all the existing {@link File}s.
-     *
-     * @return The {@link File}s
+     * @return All stored {@link File}s.
      */
     public List<File> getAll(){
-        List<File> filesList = new ArrayList<>(files.size());
-        filesList.addAll(files.values());
-        return filesList;
+        return files;
     }
 
-    /**
-     * Removes all the elements of this repository.
-     * USE WITH CARE
-     */
-    public void removeAll(){
-        for(Integer id : files.keySet()){
-            files.remove(id);
-        }
-    }
 
     /**
-     * Adds the given {@link File} to the repository.
-     * @param file The file. Cannot be null.
+     * Stores the given {@link File}.
+     * @param file The {@link File}. Cannot be null.
      *
-     * @throws IllegalArgumentException If the passed {@link File} is null.
+     * @throws IllegalArgumentException If the {@link File} is null.
      */
     public void add(File file){
-        try{
-            Objects.requireNonNull(file);
-        }catch(NullPointerException n){
-            throw new IllegalArgumentException("Cannot add a null file to the repository.");
-        }
-        files.put(file.getId(), file);
+        Validator.notNull(file, "Cannot store a null File.");
+        files.add(file);
     }
 
     /**
-     * Removes the {@link File} with the given id from the repository.
+     * Removes the {@link File} with the given id.
+     * If no match was found, does nothing.
      * @param id The id
      */
     public void remove(int id){
-        files.remove(id);
+        files.removeIf(e -> e.getId() == id);
     }
 }
