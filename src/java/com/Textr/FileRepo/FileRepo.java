@@ -1,10 +1,12 @@
-package com.Textr.File;
+package com.Textr.FileRepo;
 
+import com.Textr.File.File;
+import com.Textr.FileRepo.IFileRepo;
 import com.Textr.Validator.Validator;
 
 import java.util.*;
 
-public final class FileRepo implements IFileRepo{
+public final class FileRepo implements IFileRepo {
 
     private final List<File> files;
 

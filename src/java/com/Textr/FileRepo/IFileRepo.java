@@ -1,4 +1,6 @@
-package com.Textr.File;
+package com.Textr.FileRepo;
+
+import com.Textr.File.File;
 
 import java.util.List;
 
