@@ -56,28 +56,28 @@ public class Point {
     /**
      * Increments the x coordinate of this {@link Point} by 1.
      */
-    protected void incrementX(){
+    public void incrementX(){
         x += 1;
     }
 
     /**
      * Decrements the x coordinate of this {@link Point} by 1, if it is not already at 0.
      */
-    protected void decrementX(){
+    public void decrementX(){
         x = Math.max(x - 1, 0);
     }
 
     /**
      * Increments the y coordinate of this {@link Point} by 1.
      */
-    protected void incrementY(){
+    public void incrementY(){
         y += 1;
     }
 
     /**
      * Decrements the y coordinate of this {@link Point} by 1, if it is not already at 0.
      */
-    protected void decrementY(){
+    public void decrementY(){
         y = Math.max(y - 1, 0);
     }
 

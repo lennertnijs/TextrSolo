@@ -3,7 +3,6 @@ package com.Textr.ViewDrawer;
 import com.Textr.FileBuffer.Text;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.View;
-import com.Textr.ViewDrawer.IViewDrawer;
 
 import java.util.Objects;
 

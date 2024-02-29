@@ -88,4 +88,12 @@ public class ViewService {
         View view = viewRepo.getView(fileBufferService.getActiveBuffer().getId());
         TerminalService.moveCursor(view.getPosition().getX() + cursorPoint.getX(), view.getPosition().getY() + cursorPoint.getY());
     }
+
+    public void moveInsertionPointRight(){
+        fileBufferService.moveInsertionPointRight();
+        View view = viewRepo.getView(fileBufferService.getActiveBuffer().getId());
+        if(view.getAnchorPoint().getX() + view.getDimensions().getWidth() < fileBufferService.getActiveBuffer().getInsertionPosition().getX()){
+            view.getAnchorPoint().incrementX();
+        }
+    }
 }
