@@ -61,6 +61,17 @@ public final class Point {
     }
 
     /**
+     * Sets the y coordinate of this {@link Point} to the given y.
+     * @param y The new y coordinate.
+     *
+     * @throws IllegalArgumentException If the given y is negative.
+     */
+    public void setY(int y){
+        Validator.notNegative(y, "Cannot set this Point's y coordinate to a negative value.");
+        this.y = y;
+    }
+
+    /**
      * Increments the x coordinate of this {@link Point} by 1.
      */
     public void incrementX(){

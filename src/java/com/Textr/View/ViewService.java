@@ -25,13 +25,13 @@ public class ViewService {
         this.viewDrawer = new ViewDrawer();
     }
 
-    public View createView(int fileBufferId, Point1B point1B, Dimension2D dimensions){
+    public View createView(int fileBufferId, Point point, Dimension2D dimensions){
         if(fileBufferId < 0){
             throw new IllegalArgumentException("Cannot create a TerminalView with a negative FileBuffer id.");
         }
-        Objects.requireNonNull(point1B, "Cannot create a TerminalView with a null Position.");
+        Objects.requireNonNull(point, "Cannot create a TerminalView with a null Position.");
         Objects.requireNonNull(dimensions, "Cannot create a TerminalView with null dimensions");
-        return View.builder().fileBufferId(fileBufferId).position(point1B).dimensions(dimensions).anchorPoint(Point.create(0,0)).build();
+        return View.builder().fileBufferId(fileBufferId).position(point).dimensions(dimensions).anchorPoint(Point.create(0,0)).build();
     }
 
     public void store(View view){
@@ -39,8 +39,8 @@ public class ViewService {
         viewRepo.add(view);
     }
 
-    public void createAndStoreView(int fileBufferId, Point1B point1B, Dimension2D dimensions){
-        View view = createView(fileBufferId, point1B, dimensions);
+    public void createAndStoreView(int fileBufferId, Point point, Dimension2D dimensions){
+        View view = createView(fileBufferId, point, dimensions);
         store(view);
     }
 
@@ -58,10 +58,10 @@ public class ViewService {
         int remainder = ((terminalHeight) % amountOfBuffers);
         int y = 1;
         for(FileBuffer fileBuffer : fileBufferService.getAllFileBuffers()){
-            Point1B point1B = Point1B.create(1, y);
+            Point point = Point.create(1, y);
             int viewHeight = remainder-- > 0 ? heightPerView + 1 : heightPerView;
             Dimension2D dimensions = Dimension2D.create(terminalWidth, viewHeight);
-            createAndStoreView(fileBuffer.getId(), point1B, dimensions);
+            createAndStoreView(fileBuffer.getId(), point, dimensions);
             y += viewHeight;
         }
     }

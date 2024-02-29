@@ -7,7 +7,7 @@ import java.util.Objects;
 public final class View {
 
     private final int fileBufferId;
-    private final Point1B position;
+    private final Point position;
     private final Dimension2D dimensions;
     private final Point anchorPoint;
 
@@ -34,9 +34,9 @@ public final class View {
 
     /**
      * Returns the position of this {@link View}.
-     * @return the {@link View}'s position as a {@link Point1B}
+     * @return the {@link View}'s position as a {@link Point}
      */
-    public Point1B getPosition(){
+    public Point getPosition(){
         return this.position;
     }
 
@@ -112,7 +112,7 @@ public final class View {
     public static class Builder{
 
         private int fileBufferId;
-        private Point1B position;
+        private Point position;
         private Dimension2D dimensions;
         private Point anchorPoint;
 
@@ -134,12 +134,12 @@ public final class View {
         }
 
         /**
-         * Sets the position of this {@link View.Builder} to the given {@link Point1B}
-         * @param position the position as a {@link Point1B}
+         * Sets the position of this {@link View.Builder} to the given {@link Point}
+         * @param position the position as a {@link Point}
          *
          * @return This {@link View.Builder}
          */
-        public Builder position(Point1B position){
+        public Builder position(Point position){
             this.position = position;
             return this;
         }
