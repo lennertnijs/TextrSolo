@@ -1,6 +1,7 @@
 package com.Textr.FileBufferRepo;
 
 import com.Textr.FileBuffer.FileBuffer;
+import com.Textr.Validator.Validator;
 
 import java.util.Objects;
 
@@ -57,11 +58,7 @@ public final class ActiveFileBufferRepo implements IActiveFileBufferRepo {
      */
     @Override
     public void setBuffer(FileBuffer fileBuffer){
-        try{
-            Objects.requireNonNull(fileBuffer);
-        }catch(NullPointerException e){
-            throw new IllegalArgumentException("Cannot set the active FileBuffer to null. (use deleteBuffer() to do so)");
-        }
+        Validator.notNull(fileBuffer, "Cannot set the active FileBuffer to null. (use deleteBuffer() to do so)");
         activeFileBuffer = fileBuffer;
     }
 

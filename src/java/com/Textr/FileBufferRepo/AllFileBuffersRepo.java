@@ -1,6 +1,7 @@
 package com.Textr.FileBufferRepo;
 
 import com.Textr.FileBuffer.FileBuffer;
+import com.Textr.Validator.Validator;
 
 import java.util.*;
 
@@ -74,11 +75,7 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
      */
     @Override
     public void add(FileBuffer fileBuffer){
-        try{
-            Objects.requireNonNull(fileBuffer);
-        }catch(NullPointerException e){
-            throw new IllegalArgumentException("Cannot store a null FileBuffer in the repository.");
-        }
+        Validator.notNull(fileBuffer, "Cannot store a null FileBuffer in the repository.");
         buffers.add(fileBuffer);
     }
 

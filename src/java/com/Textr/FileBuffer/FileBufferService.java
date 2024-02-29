@@ -6,61 +6,64 @@ import com.Textr.FileBufferRepo.IFileBufferRepo;
 
 import java.util.List;
 
+/**
+ * Class used to present a bunch of FileBuffer methods to the outside world. (probably create an interface for this)
+ */
 public class FileBufferService {
 
-    private final IFileBufferRepo fileBufferRepository;
+    private final IFileBufferRepo fileBufferRepo;
 
     public FileBufferService(){
-        this.fileBufferRepository = new FileBufferRepo();
+        this.fileBufferRepo = new FileBufferRepo();
     }
 
     public void initialisePassiveFileBuffer(File file){
-        fileBufferRepository.addBuffer(FileBufferCreator.create(file));
+        fileBufferRepo.addBuffer(FileBufferCreator.create(file));
     }
 
     public void initialiseActiveFileBuffer(File file){
         FileBuffer fileBuffer = FileBufferCreator.create(file);
-        fileBufferRepository.addBuffer(fileBuffer);
-        fileBufferRepository.setActiveBuffer(fileBuffer);
+        fileBufferRepo.addBuffer(fileBuffer);
+        fileBufferRepo.setActiveBuffer(fileBuffer);
     }
 
     public List<FileBuffer> getAllFileBuffers(){
-        return fileBufferRepository.getAllBuffers();
+        return fileBufferRepo.getAllBuffers();
     }
 
     public int getAmountOfFileBuffers(){
-        return fileBufferRepository.getSize();
+        return fileBufferRepo.getSize();
     }
 
     public FileBuffer getFileBuffer(int id){
-        return fileBufferRepository.getBuffer(id);
+        return fileBufferRepo.getBuffer(id);
     }
 
     public void moveActiveBufferToNext(){
-        fileBufferRepository.setActiveToNext();
+        fileBufferRepo.setActiveToNext();
     }
 
     public void moveActiveBufferToPrev(){
-        fileBufferRepository.setActiveToPrevious();
+        fileBufferRepo.setActiveToPrevious();
     }
 
     public FileBuffer getActiveBuffer(){
-        return fileBufferRepository.getActiveBuffer();
+        return fileBufferRepo.getActiveBuffer();
     }
 
     public void moveInsertionPointRight(){
-        fileBufferRepository.getActiveBuffer().moveInsertionPointRight();
+        fileBufferRepo.getActiveBuffer().moveInsertionPointRight();
     }
 
     public void moveInsertionPointLeft(){
-        fileBufferRepository.getActiveBuffer().moveInsertionPointLeft();
+        fileBufferRepo.getActiveBuffer().moveInsertionPointLeft();
     }
 
     public void moveInsertionPointDown(){
-        fileBufferRepository.getActiveBuffer().moveInsertionPointDown();
+        fileBufferRepo.getActiveBuffer().moveInsertionPointDown();
     }
 
     public void moveInsertionPointUp(){
-        fileBufferRepository.getActiveBuffer().moveInsertionPointUp();
+        fileBufferRepo.getActiveBuffer().moveInsertionPointUp();
     }
 }
