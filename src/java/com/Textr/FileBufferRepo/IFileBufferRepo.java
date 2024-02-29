@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface IFileBufferRepo {
 
+    boolean hasActiveBuffer();
     int getSize();
     FileBuffer getBuffer(int id);
     void addBuffer(FileBuffer fileBuffer);

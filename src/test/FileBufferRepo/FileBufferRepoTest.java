@@ -36,7 +36,9 @@ public class FileBufferRepoTest {
                 () -> Assertions.assertEquals(repo.getBuffer(0), buffer1),
                 () -> Assertions.assertEquals(repo.getAllBuffers().get(0), buffer1),
 
+                () -> Assertions.assertFalse(repo.hasActiveBuffer()),
                 () -> repo.setActiveBuffer(buffer1),
+                () -> Assertions.assertTrue(repo.hasActiveBuffer()),
                 () -> Assertions.assertEquals(repo.getActiveBufferId(), 0),
                 () -> Assertions.assertEquals(repo.getActiveBuffer(), buffer1),
 

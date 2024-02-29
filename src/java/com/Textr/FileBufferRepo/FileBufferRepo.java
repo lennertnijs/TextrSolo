@@ -15,9 +15,14 @@ public final class FileBufferRepo implements IFileBufferRepo {
     }
 
     /**
-     * Fetches and returns the amount of {@link FileBuffer}s.
-     *
-     * @return The amount of {@link FileBuffer}s.
+     * @return True if an active {@link FileBuffer} is set. False otherwise.
+     */
+    public boolean hasActiveBuffer(){
+        return !activeFileBufferRepo.isEmpty();
+    }
+
+    /**
+     * @return The amount of existing {@link FileBuffer}s.
      */
     @Override
     public int getSize(){
@@ -25,7 +30,7 @@ public final class FileBufferRepo implements IFileBufferRepo {
     }
 
     /**
-     * Fetches and returns the {@link FileBuffer} with the given id.
+     * Returns the {@link FileBuffer} with the given id.
      * @param id The id
      *
      * @return The {@link FileBuffer}
@@ -46,7 +51,7 @@ public final class FileBufferRepo implements IFileBufferRepo {
     }
 
     /**
-     * Fetches and returns the id of the active {@link FileBuffer}.
+     * Returns the id of the active {@link FileBuffer}.
      *
      * @return The id
      */
@@ -56,8 +61,6 @@ public final class FileBufferRepo implements IFileBufferRepo {
     }
 
     /**
-     * Fetches and returns the active {@link FileBuffer}.
-     *
      * @return The active {@link FileBuffer}
      */
     @Override
@@ -79,8 +82,11 @@ public final class FileBufferRepo implements IFileBufferRepo {
     }
 
     /**
-     * Removes the {@link FileBuffer} with the given id. If no match is found, does nothing.
+     * Removes the {@link FileBuffer} with the given id.
+     * If no match is found, does nothing.
      * @param id The id
+     *
+     * @throws IllegalStateException If an attempt is made to remove the active {@link FileBuffer} indirectly.
      */
     @Override
     public void removeBuffer(int id) {
@@ -95,7 +101,7 @@ public final class FileBufferRepo implements IFileBufferRepo {
     }
 
     /**
-     * Removes the active file buffer.
+     * Deletes the active {@link FileBuffer}.
      */
     @Override
     public void removeActiveBuffer(){
@@ -103,8 +109,6 @@ public final class FileBufferRepo implements IFileBufferRepo {
     }
 
     /**
-     * Fetches and returns all the {@link FileBuffer}s.
-     *
      * @return All {@link FileBuffer}s
      */
     @Override
@@ -113,7 +117,7 @@ public final class FileBufferRepo implements IFileBufferRepo {
     }
 
     /**
-     * Moves the active {@link FileBuffer} to the next.
+     * Moves the active {@link FileBuffer} to the next {@link FileBuffer}.
      */
     @Override
     public void setActiveToNext(){
@@ -123,7 +127,7 @@ public final class FileBufferRepo implements IFileBufferRepo {
 
 
     /**
-     * Moves the active {@link FileBuffer} to the previous.
+     * Moves the active {@link FileBuffer} to the previous {@link FileBuffer}.
      */
     @Override
     public void setActiveToPrevious(){
