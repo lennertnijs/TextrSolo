@@ -48,12 +48,17 @@ public final class ViewService {
     }
 
     public void drawCursor(){
-        Point cursorPoint = fileBufferService.getActiveBuffer().getInsertionPosition();
-        View view = viewRepo.getByBufferId(fileBufferService.getActiveBuffer().getId());
-        Point anchor = view.getAnchor();
-        TerminalService.moveCursor(view.getPosition().getX() + cursorPoint.getX() - anchor.getX(), view.getPosition().getY() + cursorPoint.getY() - anchor.getY());
+        TerminalService.moveCursor(getActiveView().getPosition().getX() + getInsertionPoint().getX() - getAnchor().getX(),
+                getActiveView().getPosition().getY() + getInsertionPoint().getY() - getAnchor().getY());
     }
 
+    /**
+     * Moves the insertion {@link Point} of the active {@link FileBuffer} by 1 in the given {@link Direction}.
+     * After moving the insertion {@link Point}, also adjusts the anchor {@link Point} appropriately.
+     * @param direction The direction
+     *
+     * @throws IllegalArgumentException If the given {@link Direction} is null.
+     */
     public void moveInsertionPoint(Direction direction){
         Validator.notNull(direction, "Cannot move the insertion point in a null Direction.");
         switch(direction){
@@ -62,14 +67,14 @@ public final class ViewService {
             case DOWN -> fileBufferService.moveInsertionPointDown();
             case LEFT -> fileBufferService.moveInsertionPointLeft();
         }
-        AnchorUpdater.updateAnchor(getAnchor(), getInsertionPoint(), getActiveView().getDimensions());
+        AnchorUpdater.updateAnchor(getAnchor(), getInsertionPoint(), getActiveViewDimensions());
     }
 
     public void createNewline(){
         fileBufferService.getActiveBuffer().getBufferText().breakLine(getInsertionPoint().getY(), getInsertionPoint().getX());
         getInsertionPoint().setX(0);
         getInsertionPoint().incrementY();
-        AnchorUpdater.updateAnchor(getAnchor(), getInsertionPoint(), getActiveView().getDimensions());
+        AnchorUpdater.updateAnchor(getAnchor(), getInsertionPoint(), getActiveViewDimensions());
     }
 
     public void deleteChar(){
@@ -96,5 +101,9 @@ public final class ViewService {
 
     private Point getInsertionPoint(){
         return fileBufferService.getActiveBuffer().getInsertionPosition();
+    }
+
+    private Dimension2D getActiveViewDimensions(){
+        return getActiveView().getDimensions();
     }
 }
