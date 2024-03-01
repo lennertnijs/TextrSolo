@@ -35,45 +35,69 @@ public final class ViewService {
     }
 
     public void drawCursor(){
-        CursorDrawer.draw(getActiveView().getPosition(), getAnchor(), getInsertionPoint());
+        CursorDrawer.draw(getActiveView().getPosition(), getAnchor(), getActiveBuffer().getCursor());
     }
 
-
+    /**
+     *
+     * @param direction
+     */
     public void moveInsertionPoint(Direction direction){
         fileBufferService.moveInsertionPoint(direction);
         updateAnchor();
     }
 
+    /**
+     * Creates a new line (\r\n on Windows) at the insertion {@link Point} in the active {@link FileBuffer}.
+     * Then calls for a possible update of the active {@link View}'s anchor {@link Point}.
+     */
     public void createNewline(){
         getActiveBuffer().createNewLine();
         updateAnchor();
     }
 
+    /**
+     * Inserts the given character into the active {@link FileBuffer} at the insertion {@link Point}.
+     * @param character The input character
+     */
     public void insertCharacter(char character){
         getActiveBuffer().insertCharacter(character);
     }
 
+    /**
+     * Deletes the character just before the insertion {@link Point} in the active {@link FileBuffer}.
+     * Then calls for a possible update of the active {@link View}'s anchor {@link Point}.
+     */
     public void deleteChar(){
         getActiveBuffer().removeCharacter();
         updateAnchor();
     }
 
-    private void updateAnchor(){
-        AnchorUpdater.updateAnchor(getAnchor(), getInsertionPoint(), getActiveView().getDimensions());
-    }
-    private View getActiveView(){
-        return viewRepo.getByBufferId(fileBufferService.getActiveBuffer().getId());
+    /**
+     * @return The active {@link FileBuffer}.
+     */
+    private FileBuffer getActiveBuffer(){
+        return fileBufferService.getActiveBuffer();
     }
 
+    /**
+     * @return The active {@link View}
+     */
+    private View getActiveView(){
+        return viewRepo.getByBufferId(getActiveBuffer().getId());
+    }
+
+    /**
+     * @return The anchor {@link Point} of the active {@link FileBuffer}.
+     */
     private Point getAnchor(){
         return getActiveView().getAnchor();
     }
 
-    private Point getInsertionPoint(){
-        return fileBufferService.getActiveBuffer().getInsertionPosition();
-    }
-
-    private FileBuffer getActiveBuffer(){
-        return fileBufferService.getActiveBuffer();
+    /**
+     * Updates the anchor {@link Point} of the active {@link View} to adjust to a possibly new insertion {@link Point}.
+     */
+    private void updateAnchor(){
+        AnchorUpdater.updateAnchor(getAnchor(), getActiveBuffer().getCursor(), getActiveView().getDimensions());
     }
 }

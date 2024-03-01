@@ -18,12 +18,12 @@ public class FileBufferTest {
     @Test
     public void testConstructorAndGetters(){
         Point point = Point.create(1,1);
-        FileBuffer buffer = FileBuffer.builder().fileId(0).text(Text.create("text")).insertionPosition(point).state(BufferState.CLEAN).build();
+        FileBuffer buffer = FileBuffer.builder().fileId(0).text(Text.create("text")).cursor(point).state(BufferState.CLEAN).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(buffer.getId(), 0),
                 () -> Assertions.assertEquals(buffer.getFileId(), 0),
                 () -> Assertions.assertEquals(buffer.getText(), Text.create("text")),
-                () -> Assertions.assertEquals(buffer.getInsertionPosition(), point),
+                () -> Assertions.assertEquals(buffer.getCursor(), point),
                 () -> Assertions.assertEquals(buffer.getState(), BufferState.CLEAN)
         );
     }
@@ -32,13 +32,13 @@ public class FileBufferTest {
     public void testConstructorInvalid(){
         Point point = Point.create(1,1);
         FileBuffer.Builder invalidActiveFileId = FileBuffer.builder().fileId(-1).text(Text.create("text"))
-                .insertionPosition(point).state(BufferState.CLEAN);
+                .cursor(point).state(BufferState.CLEAN);
         FileBuffer.Builder invalidBufferText = FileBuffer.builder().fileId(0).text(null)
-                .insertionPosition(point).state(BufferState.CLEAN);
+                .cursor(point).state(BufferState.CLEAN);
         FileBuffer.Builder invalidInsertionIndex = FileBuffer.builder().fileId(0).text(Text.create("text"))
-                .insertionPosition(null).state(BufferState.CLEAN);
+                .cursor(null).state(BufferState.CLEAN);
         FileBuffer.Builder invalidState = FileBuffer.builder().fileId(0).text(Text.create("text"))
-                .insertionPosition(point).state(null);
+                .cursor(point).state(null);
         Assertions.assertAll(
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidActiveFileId::build),
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidBufferText::build),
@@ -50,8 +50,8 @@ public class FileBufferTest {
     @Test
     public void testEqualsAndHashCode(){
         Point point = Point.create(1,1);
-        FileBuffer buffer1 = FileBuffer.builder().fileId(0).text(Text.create("text")).insertionPosition(point).state(BufferState.CLEAN).build();
-        FileBuffer buffer2 = FileBuffer.builder().fileId(0).text(Text.create("text")).insertionPosition(point).state(BufferState.CLEAN).build();
+        FileBuffer buffer1 = FileBuffer.builder().fileId(0).text(Text.create("text")).cursor(point).state(BufferState.CLEAN).build();
+        FileBuffer buffer2 = FileBuffer.builder().fileId(0).text(Text.create("text")).cursor(point).state(BufferState.CLEAN).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(buffer1, buffer1),
                 () -> Assertions.assertNotEquals(buffer1, buffer2),
@@ -64,8 +64,8 @@ public class FileBufferTest {
     @Test
     public void testToString(){
         Point point = Point.create(1,1);
-        FileBuffer buffer = FileBuffer.builder().fileId(0).text(Text.create("text")).insertionPosition(point).state(BufferState.CLEAN).build();
-        String expected = "FileBuffer[id = 0, activeFileId = 0, bufferText = Text[Lines: text], insertionPosition = InsertionPoint[x = 1, y = 1], state = CLEAN]";
+        FileBuffer buffer = FileBuffer.builder().fileId(0).text(Text.create("text")).cursor(point).state(BufferState.CLEAN).build();
+        String expected = "FileBuffer[id = 0, fileId = 0, text = Text[Lines: text], cursor = InsertionPoint[x = 1, y = 1], state = CLEAN]";
         Assertions.assertAll(
                 () -> Assertions.assertEquals(buffer.toString(), expected)
         );

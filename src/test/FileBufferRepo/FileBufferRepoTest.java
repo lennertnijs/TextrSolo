@@ -20,9 +20,9 @@ public class FileBufferRepoTest {
         FileBufferIdGenerator.resetGenerator();
         Point point = Point.create(5,5);
         buffer1 = FileBuffer.builder().fileId(1).text(Text.create("text"))
-                .insertionPosition(point).state(BufferState.CLEAN).build();
+                .cursor(point).state(BufferState.CLEAN).build();
         buffer2 = FileBuffer.builder().fileId(2).text(Text.create("text"))
-                .insertionPosition(point).state(BufferState.CLEAN).build();
+                .cursor(point).state(BufferState.CLEAN).build();
         repo = new FileBufferRepo();
     }
 

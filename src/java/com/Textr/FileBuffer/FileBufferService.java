@@ -26,7 +26,7 @@ public final class FileBufferService {
         Validator.notNull(buffer, "Cannot generate a status bar for a null FileBuffer.");
         return String.format("File path: %s - Lines: %d - Characters: %d - InsertionPoint: %s - State: %s",
                 fileService.getFile(buffer.getId()).getUrl(), buffer.getText().getAmountOfLines(),
-                buffer.getText().getAmountOfChars(), buffer.getInsertionPosition(), buffer.getState());
+                buffer.getText().getAmountOfChars(), buffer.getCursor(), buffer.getState());
     }
 
     public void initialisePassiveFileBuffer(File file){
