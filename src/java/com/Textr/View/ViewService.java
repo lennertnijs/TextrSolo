@@ -10,6 +10,8 @@ import com.Textr.ViewDrawer.ViewDrawer;
 import com.Textr.ViewRepo.IViewRepo;
 import com.Textr.ViewRepo.ViewRepo;
 
+import java.util.List;
+
 public final class ViewService {
     private final FileBufferService fileBufferService;
     private final FileService fileService;
@@ -24,30 +26,10 @@ public final class ViewService {
     }
 
 
-    public void createAndStoreView(int fileBufferId, Point point, Dimension2D dimensions){
-        View view = ViewCreator.create(fileBufferId, point, dimensions);
-        viewRepo.add(view);
-    }
-
-    /**
-     * Generates a collection of {@link View}'s in a vertical layout.
-     */
     public void initialiseViewsVertical(){
-        int terminalWidth = TerminalService.getTerminalArea().getWidth();
-        int terminalHeight = TerminalService.getTerminalArea().getHeight();
-        int amountOfBuffers = fileBufferService.getAmountOfFileBuffers();
-        if(amountOfBuffers == 0){
-            return;
-        }
-        int heightPerView = ((terminalHeight) / amountOfBuffers);
-        int remainder = ((terminalHeight) % amountOfBuffers);
-        int y = 1;
-        for(FileBuffer fileBuffer : fileBufferService.getAllFileBuffers()){
-            Point point = Point.create(1, y);
-            int viewHeight = remainder-- > 0 ? heightPerView + 1 : heightPerView;
-            Dimension2D dimensions = Dimension2D.create(terminalWidth, viewHeight);
-            createAndStoreView(fileBuffer.getId(), point, dimensions);
-            y += viewHeight;
+        List<View> views = ViewLayoutInitializer.generateVerticallyStackedViews(fileBufferService.getAllFileBuffers());
+        for(View view : views){
+            viewRepo.add(view);
         }
     }
 

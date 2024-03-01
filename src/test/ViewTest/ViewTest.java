@@ -3,10 +3,17 @@ package ViewTest;
 import com.Textr.Point.Point;
 import com.Textr.View.View;
 import com.Textr.View.Dimension2D;
+import com.Textr.View.ViewIdGenerator;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ViewTest {
+
+    @BeforeEach
+    public void initialise(){
+        ViewIdGenerator.resetGenerator();
+    }
 
     @Test
     public void testConstructorAndGetters(){
@@ -15,6 +22,7 @@ public class ViewTest {
         Point anchor = Point.create(1,1);
         View view = View.builder().fileBufferId(0).position(point).dimensions(dimensions).anchor(anchor).build();
         Assertions.assertAll(
+                () -> Assertions.assertEquals(view.getId(), 0),
                 () -> Assertions.assertEquals(view.getFileBufferId(), 0),
                 () -> Assertions.assertEquals(view.getPosition(), point),
                 () -> Assertions.assertEquals(view.getDimensions(), dimensions),

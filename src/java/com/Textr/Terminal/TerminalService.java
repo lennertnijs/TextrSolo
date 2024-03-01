@@ -66,7 +66,7 @@ public final class TerminalService {
     }
 
     public static void printText(int x, int y, String text){
-        Terminal.printText(y, x , text);
+        Terminal.printText(y + 1, x + 1 , text);
     }
 
     public static int readByte(){
