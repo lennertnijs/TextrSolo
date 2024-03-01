@@ -12,10 +12,9 @@ public final class ViewCreator {
     }
 
     /**
-     * Creates and returns a new {@link View} with the given parameters.
-     * A new {@link View} means:
-     * * Anchor point is set at (0,0)
-     * @param fileBufferId The id of the {@link FileBuffer} of this view
+     * Creates and returns a new view with the given parameters.
+     * * Anchor point is set always initiated at (0,0)
+     * @param fileBufferId The id of the buffer of this view.
      * @param position The global Terminal position of this view
      * @param dimensions The dimensions of this view
      *
