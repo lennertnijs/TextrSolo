@@ -5,25 +5,36 @@ import com.Textr.Validator.Validator;
 
 public class AnchorUpdater {
 
+    /**
+     * Private constructor. Not for use.
+     */
     private AnchorUpdater(){
     }
 
-    public static void updateAnchor(Point anchor, Point point, Dimension2D dimensions){
+    /**
+     * Updates the anchor point based on the cursor point and the terminal dimensions.
+     * @param anchor The anchor point. Cannot be null.
+     * @param cursor The cursor point. Cannot be null.
+     * @param dimensions The dimensions of the terminal. Cannot be nul.
+     *
+     * @throws IllegalArgumentException If the anchor point, cursor point or dimensions are null.
+     */
+    public static void updateAnchor(Point anchor, Point cursor, Dimension2D dimensions){
         Validator.notNull(anchor, "cd");
-        Validator.notNull(point, "The insertion point cannot be null.");
+        Validator.notNull(cursor, "The insertion point cannot be null.");
         Validator.notNull(dimensions, "The dimensions cannot be null.");
-        if(point.getX() < anchor.getX()){
-            anchor.setX(point.getX());
+        if(cursor.getX() < anchor.getX()){
+            anchor.setX(cursor.getX());
         }
-        if(point.getY() < anchor.getY()){
-            anchor.setY(point.getY());
+        if(cursor.getY() < anchor.getY()){
+            anchor.setY(cursor.getY());
         }
-        if(point.getX() > anchor.getX() + dimensions.getWidth() - 1){
-            anchor.setX(point.getX() - dimensions.getWidth() + 1);
+        if(cursor.getX() > anchor.getX() + dimensions.getWidth() - 1){
+            anchor.setX(cursor.getX() - dimensions.getWidth() + 1);
         }
-        // -2 because the rows are have a status bar
-        if(point.getY() > anchor.getY() + dimensions.getHeight() - 2){
-            anchor.setY(point.getY() - dimensions.getHeight() + 2);
+        // -2 because the rows are have a status bar so -1
+        if(cursor.getY() > anchor.getY() + dimensions.getHeight() - 2){
+            anchor.setY(cursor.getY() - dimensions.getHeight() + 2);
         }
     }
 

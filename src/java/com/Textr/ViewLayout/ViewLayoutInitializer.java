@@ -1,9 +1,12 @@
-package com.Textr.View;
+package com.Textr.ViewLayout;
 
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.Point.Point;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.Validator.Validator;
+import com.Textr.View.Dimension2D;
+import com.Textr.View.View;
+import com.Textr.View.ViewCreator;
 
 import java.util.ArrayList;
 import java.util.List;

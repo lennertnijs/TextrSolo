@@ -6,6 +6,7 @@ import com.Textr.Point.Point;
 import com.Textr.Validator.Validator;
 import com.Textr.ViewDrawer.CursorDrawer;
 import com.Textr.ViewDrawer.ViewDrawer;
+import com.Textr.ViewLayout.ViewLayoutInitializer;
 import com.Textr.ViewRepo.IViewRepo;
 
 import java.util.List;
