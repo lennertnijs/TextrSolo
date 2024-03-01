@@ -57,18 +57,18 @@ public final class FileBuffer {
         boolean canMoveDown = insertionPoint.getY() + 1 < bufferText.getAmountOfLines();
         if(canMoveDown){
             insertionPoint.incrementY();
-            boolean validX =  insertionPoint.getX() < bufferText.getLines()[insertionPoint.getY()].length();
+            boolean validX =  insertionPoint.getX() < bufferText.getLineLength(insertionPoint.getY());
             if(!validX){
-                insertionPoint.setX(bufferText.getLines()[insertionPoint.getY()].length());
+                insertionPoint.setX(bufferText.getLineLength(insertionPoint.getY()));
             }
         }
     }
 
     public void moveInsertionPointUp(){
         insertionPoint.decrementY();
-        boolean validX = insertionPoint.getX() < bufferText.getLines()[insertionPoint.getY()].length();
+        boolean validX = insertionPoint.getX() < bufferText.getLine(insertionPoint.getY()).length();
         if(!validX){
-            insertionPoint.setX(bufferText.getLines()[insertionPoint.getY()].length());
+            insertionPoint.setX(bufferText.getLine(insertionPoint.getY()).length());
         }
     }
 
@@ -97,6 +97,43 @@ public final class FileBuffer {
 
     public void setClean(){
         bufferState = BufferState.CLEAN;
+    }
+
+    /**
+     * Inserts the given character into this {@link FileBuffer}'s buffer {@link Text} at the insertion {@link Point}.
+     * @param character The character
+     */
+    public void insertCharacter(char character){
+        bufferText.insertCharacter(character, insertionPoint.getY(), insertionPoint.getX());
+        insertionPoint.incrementX();
+    }
+
+    /**
+     * Removes the character before the insertion {@link Point} from this {@link FileBuffer}'s buffer {@link Text}.
+     * Used when backspace is pressed.
+     */
+    public void removeCharacter(){
+        int lineAboveLength = bufferText.getLineLength(Math.max(0, insertionPoint.getY() - 1));
+        int oldAmountOfLines = bufferText.getAmountOfLines();
+        bufferText.removeCharacter(insertionPoint.getY(), insertionPoint.getX());
+        int newAmountOfLines = bufferText.getAmountOfLines();
+        if(newAmountOfLines < oldAmountOfLines){
+            insertionPoint.decrementY();
+            insertionPoint.setX(lineAboveLength);
+        }else{
+            insertionPoint.decrementX();
+        }
+    }
+
+    /**
+     * Splits the text up into a new line at the insertion {@link Point}.
+     * Used when Enter is pressed.
+     * Also moves the insertion {@link Point} to the appropriate location.
+     */
+    public void createNewLine(){
+        bufferText.splitLineAtColumn(insertionPoint.getY(), insertionPoint.getX());
+        insertionPoint.setX(0);
+        insertionPoint.incrementY();
     }
 
 

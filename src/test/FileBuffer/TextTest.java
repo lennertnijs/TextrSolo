@@ -26,8 +26,8 @@ public class TextTest {
                 () -> Assertions.assertEquals(secText.getAmountOfLines(), 3),
                 () -> Assertions.assertEquals(firstText.getAmountOfChars(), 17),
                 () -> Assertions.assertEquals(secText.getAmountOfChars(), 17),
-                () -> Assertions.assertEquals(firstText.getLinesAsText(), text1),
-                () -> Assertions.assertEquals(secText.getLinesAsText(), String.join(System.lineSeparator(), text2)),
+                () -> Assertions.assertEquals(firstText.getText(), text1),
+                () -> Assertions.assertEquals(secText.getText(), String.join(System.lineSeparator(), text2)),
                 () -> Assertions.assertArrayEquals(firstText.getLines(), text1.split(System.lineSeparator())),
                 () -> Assertions.assertArrayEquals(secText.getLines(), text2)
         );
@@ -37,8 +37,8 @@ public class TextTest {
     public void testAddACharacter(){
         Text shouldBeText1 = Text.create("TEXT1\r\nTEXT 19\r\nText 1");
         Text shouldBeText2 = Text.create(new String[]{"9TEXT2", "TEXT 2", "Text 2"});
-        firstText.addCharacter('9', 1, 6);
-        secText.addCharacter('9', 0, 0);
+        firstText.insertCharacter('9', 1, 6);
+        secText.insertCharacter('9', 0, 0);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(shouldBeText1, firstText),
                 () -> Assertions.assertEquals(shouldBeText2, secText)

@@ -1,7 +1,6 @@
 package com.Textr.InputHandler;
 
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.Point.Point;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.Direction;
 import com.Textr.View.ViewService;
@@ -22,9 +21,7 @@ public final class RawInputHandler implements InputHandler{
         TerminalService.clearScreen();
         boolean isRegularInput = input >= 65 && input <= 122 || input == SPACE;
         if(isRegularInput){
-            saveInputToBuffer(input);
-            drawAll();
-            return;
+            viewService.insertCharacter((char) input);
         }
         switch (input) {
             case BACKSPACE -> viewService.deleteChar();
@@ -34,13 +31,6 @@ public final class RawInputHandler implements InputHandler{
             case CTRL_N -> fileBufferService.moveActiveBufferToNext();
         }
         drawAll();
-    }
-    //
-
-    private void saveInputToBuffer(int input){
-        Point point = fileBufferService.getActiveBuffer().getInsertionPosition();
-        fileBufferService.getActiveBuffer().getBufferText().addCharacter((char) input, point.getY(), point.getX());
-        viewService.moveInsertionPoint(Direction.RIGHT);
     }
 
     private void drawAll(){

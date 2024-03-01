@@ -53,4 +53,10 @@ public final class Validator {
             throw new IllegalArgumentException(message);
         }
     }
+
+    public static void withinRange(int num, int start, int end, String message){
+        if(num < start || num > end){
+            throw new IllegalArgumentException(message);
+        }
+    }
 }

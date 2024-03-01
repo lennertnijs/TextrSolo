@@ -4,8 +4,8 @@ import com.Textr.File.FileService;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.Point.Point;
-import com.Textr.Terminal.TerminalService;
 import com.Textr.Validator.Validator;
+import com.Textr.ViewDrawer.CursorDrawer;
 import com.Textr.ViewDrawer.IViewDrawer;
 import com.Textr.ViewDrawer.ViewDrawer;
 import com.Textr.ViewRepo.IViewRepo;
@@ -48,8 +48,7 @@ public final class ViewService {
     }
 
     public void drawCursor(){
-        TerminalService.moveCursor(getActiveView().getPosition().getX() + getInsertionPoint().getX() - getAnchor().getX(),
-                getActiveView().getPosition().getY() + getInsertionPoint().getY() - getAnchor().getY());
+        CursorDrawer.draw(getActiveView().getPosition(), getAnchor(), getInsertionPoint());
     }
 
     /**
@@ -71,24 +70,17 @@ public final class ViewService {
     }
 
     public void createNewline(){
-        fileBufferService.getActiveBuffer().getBufferText().breakLine(getInsertionPoint().getY(), getInsertionPoint().getX());
-        getInsertionPoint().setX(0);
-        getInsertionPoint().incrementY();
+        getActiveBuffer().createNewLine();
         AnchorUpdater.updateAnchor(getAnchor(), getInsertionPoint(), getActiveViewDimensions());
     }
 
+    public void insertCharacter(char character){
+        getActiveBuffer().insertCharacter(character);
+    }
+
     public void deleteChar(){
-        Point insertionPoint = fileBufferService.getActiveBuffer().getInsertionPosition();
-        int oldLength = fileBufferService.getActiveBuffer().getBufferText().getAmountOfLines();
-        int oldPreviousLineLength = fileBufferService.getActiveBuffer().getBufferText().getLines()[Math.max(0, insertionPoint.getY()-1)].length();
-        fileBufferService.getActiveBuffer().getBufferText().removeCharacter(insertionPoint.getY(), insertionPoint.getX());
-        if(oldLength != fileBufferService.getActiveBuffer().getBufferText().getAmountOfLines()){
-            fileBufferService.getActiveBuffer().getInsertionPosition().decrementY();
-            fileBufferService.getActiveBuffer().getInsertionPosition().setX(oldPreviousLineLength);
-            AnchorUpdater.updateAnchor(getAnchor(), getInsertionPoint(), getActiveView().getDimensions());
-        }else{
-            fileBufferService.getActiveBuffer().getInsertionPosition().decrementX();
-        }
+        fileBufferService.getActiveBuffer().removeCharacter();
+        AnchorUpdater.updateAnchor(getAnchor(), getInsertionPoint(), getActiveView().getDimensions());
     }
 
     private View getActiveView(){
@@ -105,5 +97,9 @@ public final class ViewService {
 
     private Dimension2D getActiveViewDimensions(){
         return getActiveView().getDimensions();
+    }
+
+    private FileBuffer getActiveBuffer(){
+        return fileBufferService.getActiveBuffer();
     }
 }
