@@ -7,11 +7,9 @@ import com.Textr.Point.Point;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.ViewDrawer.IViewDrawer;
 import com.Textr.ViewDrawer.ViewDrawer;
+import com.Textr.ViewRepo.ViewRepo;
 
-import java.util.List;
-import java.util.Objects;
-
-public class ViewService {
+public final class ViewService {
 
     private final ViewRepo viewRepo;
     private final FileBufferService fileBufferService;
@@ -25,14 +23,10 @@ public class ViewService {
         this.viewDrawer = new ViewDrawer();
     }
 
-    public void store(View view){
-        Objects.requireNonNull(view, "Cannot store a null TerminalView");
-        viewRepo.add(view);
-    }
 
     public void createAndStoreView(int fileBufferId, Point point, Dimension2D dimensions){
         View view = ViewCreator.create(fileBufferId, point, dimensions);
-        store(view);
+        viewRepo.add(view);
     }
 
     /**
@@ -57,10 +51,6 @@ public class ViewService {
         }
     }
 
-    public List<View> getAllViews(){
-        return viewRepo.getAll();
-    }
-
     public void drawAllViews(){
         for(View view: viewRepo.getAll()){
             FileBuffer fileBuffer = fileBufferService.getFileBuffer(view.getFileBufferId());
@@ -76,13 +66,13 @@ public class ViewService {
 
     public void drawCursor(){
         Point cursorPoint = fileBufferService.getActiveBuffer().getInsertionPosition();
-        View view = viewRepo.getView(fileBufferService.getActiveBuffer().getId());
+        View view = viewRepo.getByBufferId(fileBufferService.getActiveBuffer().getId());
         TerminalService.moveCursor(view.getPosition().getX() + cursorPoint.getX(), view.getPosition().getY() + cursorPoint.getY());
     }
 
     public void moveInsertionPointRight(){
         fileBufferService.moveInsertionPointRight();
-        View view = viewRepo.getView(fileBufferService.getActiveBuffer().getId());
+        View view = viewRepo.getByBufferId(fileBufferService.getActiveBuffer().getId());
         if(view.getAnchor().getX() + view.getDimensions().getWidth() < fileBufferService.getActiveBuffer().getInsertionPosition().getX()){
             view.getAnchor().incrementX();
         }

@@ -11,6 +11,7 @@ import java.util.Objects;
  */
 public final class View {
 
+    private final int id;
     private final int fileBufferId;
     private final Point position;
     private final Dimension2D dimensions;
@@ -23,12 +24,19 @@ public final class View {
      */
     private View(Builder builder){
         Objects.requireNonNull(builder, "Cannot build a BufferView with a null Builder.");
+        this.id = ViewIdGenerator.getId();
         this.fileBufferId = builder.fileBufferId;
         this.position = builder.position;
         this.dimensions = builder.dimensions;
         this.anchor = builder.anchor;
     }
 
+    /**
+     * @return This {@link View}'s id.
+     */
+    public int getId(){
+        return this.id;
+    }
     /**
      * @return This {@link View}'s {@link FileBuffer}'s id.
      */
