@@ -10,9 +10,9 @@ public final class FileBuffer {
 
     private final int id;
     private final int fileId;
-    private final Text bufferText;
+    private final Text text;
     private final Point insertionPoint;
-    private BufferState bufferState;
+    private BufferState state;
 
     /**
      * Constructor for a {@link FileBuffer}.
@@ -24,9 +24,9 @@ public final class FileBuffer {
         Objects.requireNonNull(builder, "Cannot build a FileBuffer because the Builder is null.");
         this.id = FileBufferIdGenerator.getId();
         this.fileId = builder.fileId;
-        this.bufferText = builder.bufferText;
+        this.text = builder.text;
         this.insertionPoint = builder.insertionPoint;
-        this.bufferState = builder.bufferState;
+        this.state = builder.state;
     }
 
 
@@ -41,8 +41,8 @@ public final class FileBuffer {
         return this.fileId;
     }
 
-    public Text getBufferText(){
-        return this.bufferText;
+    public Text getText(){
+        return this.text;
     }
 
     /**
@@ -54,21 +54,21 @@ public final class FileBuffer {
     }
 
     public void moveInsertionPointDown(){
-        boolean canMoveDown = insertionPoint.getY() + 1 < bufferText.getAmountOfLines();
+        boolean canMoveDown = insertionPoint.getY() + 1 < text.getAmountOfLines();
         if(canMoveDown){
             insertionPoint.incrementY();
-            boolean validX =  insertionPoint.getX() < bufferText.getLineLength(insertionPoint.getY());
+            boolean validX =  insertionPoint.getX() < text.getLineLength(insertionPoint.getY());
             if(!validX){
-                insertionPoint.setX(bufferText.getLineLength(insertionPoint.getY()));
+                insertionPoint.setX(text.getLineLength(insertionPoint.getY()));
             }
         }
     }
 
     public void moveInsertionPointUp(){
         insertionPoint.decrementY();
-        boolean validX = insertionPoint.getX() < bufferText.getLine(insertionPoint.getY()).length();
+        boolean validX = insertionPoint.getX() < text.getLine(insertionPoint.getY()).length();
         if(!validX){
-            insertionPoint.setX(bufferText.getLine(insertionPoint.getY()).length());
+            insertionPoint.setX(text.getLine(insertionPoint.getY()).length());
         }
     }
 
@@ -77,7 +77,7 @@ public final class FileBuffer {
     }
 
     public void moveInsertionPointRight(){
-        boolean canMoveRight = insertionPoint.getX() < bufferText.getLines()[insertionPoint.getY()].length();
+        boolean canMoveRight = insertionPoint.getX() < text.getLines()[insertionPoint.getY()].length();
         if(canMoveRight){
             insertionPoint.incrementX();
         }
@@ -88,15 +88,15 @@ public final class FileBuffer {
      * @return This {@link FileBuffer}'s state as a {@link BufferState}
      */
     public BufferState getState(){
-        return this.bufferState;
+        return this.state;
     }
 
     public void setDirty(){
-        bufferState = BufferState.DIRTY;
+        state = BufferState.DIRTY;
     }
 
     public void setClean(){
-        bufferState = BufferState.CLEAN;
+        state = BufferState.CLEAN;
     }
 
     /**
@@ -104,7 +104,7 @@ public final class FileBuffer {
      * @param character The character
      */
     public void insertCharacter(char character){
-        bufferText.insertCharacter(character, insertionPoint.getY(), insertionPoint.getX());
+        text.insertCharacter(character, insertionPoint.getY(), insertionPoint.getX());
         insertionPoint.incrementX();
     }
 
@@ -113,11 +113,12 @@ public final class FileBuffer {
      * Used when backspace is pressed.
      */
     public void removeCharacter(){
-        int lineAboveLength = bufferText.getLineLength(Math.max(0, insertionPoint.getY() - 1));
-        int oldAmountOfLines = bufferText.getAmountOfLines();
-        bufferText.removeCharacter(insertionPoint.getY(), insertionPoint.getX());
-        int newAmountOfLines = bufferText.getAmountOfLines();
-        if(newAmountOfLines < oldAmountOfLines){
+        int lineAboveLength = text.getLineLength(Math.max(0, insertionPoint.getY() - 1));
+        int oldAmountOfLines = text.getAmountOfLines();
+        text.removeCharacter(insertionPoint.getY(), insertionPoint.getX());
+        int newAmountOfLines = text.getAmountOfLines();
+        boolean deletedALine = newAmountOfLines < oldAmountOfLines;
+        if(deletedALine){
             insertionPoint.decrementY();
             insertionPoint.setX(lineAboveLength);
         }else{
@@ -131,7 +132,7 @@ public final class FileBuffer {
      * Also moves the insertion {@link Point} to the appropriate location.
      */
     public void createNewLine(){
-        bufferText.splitLineAtColumn(insertionPoint.getY(), insertionPoint.getX());
+        text.splitLineAtColumn(insertionPoint.getY(), insertionPoint.getX());
         insertionPoint.setX(0);
         insertionPoint.incrementY();
     }
@@ -173,7 +174,7 @@ public final class FileBuffer {
     @Override
     public String toString(){
         return String.format("FileBuffer[id = %d, activeFileId = %d, bufferText = %s, insertionPosition = %s, state = %s]",
-                id, fileId, bufferText, insertionPoint, bufferState);
+                id, fileId, text, insertionPoint, state);
     }
 
     /**
@@ -191,9 +192,9 @@ public final class FileBuffer {
     public static class Builder{
 
         private int fileId = -1;
-        private Text bufferText = null;
+        private Text text = null;
         private Point insertionPoint = null;
-        private BufferState bufferState = null;
+        private BufferState state = null;
 
         /**
          * Constructor for the {@link FileBuffer.Builder}
@@ -218,8 +219,8 @@ public final class FileBuffer {
          *
          * @return This {@link FileBuffer.Builder}
          */
-        public Builder bufferText(Text text){
-            this.bufferText = text;
+        public Builder text(Text text){
+            this.text = text;
             return this;
         }
 
@@ -236,12 +237,12 @@ public final class FileBuffer {
 
         /**
          * Sets the {@link BufferState} of this {@link FileBuffer.Builder} to the given state.
-         * @param bufferState The state
+         * @param state The state
          *
          * @return This {@link FileBuffer.Builder}
          */
-        public Builder state(BufferState bufferState){
-            this.bufferState = bufferState;
+        public Builder state(BufferState state){
+            this.state = state;
             return this;
         }
 
@@ -260,9 +261,9 @@ public final class FileBuffer {
          */
         public FileBuffer build(){
             Validator.notNegative(fileId, "The id the File in the FileBuffer cannot be negative.");
-            Validator.notNull(bufferText, "The buffer text in the FileBuffer cannot be null.");
+            Validator.notNull(text, "The buffer text in the FileBuffer cannot be null.");
             Validator.notNull(insertionPoint, "The insertion point of the FileBuffer cannot be null.");
-            Validator.notNull(bufferState,"The state of the FileBuffer cannot be null.");
+            Validator.notNull(state,"The state of the FileBuffer cannot be null.");
             return new FileBuffer(this);
         }
     }

@@ -10,8 +10,8 @@ public class Main {
 
     public static void main(String[] args){
         final FileService fileService = new FileService();
-        final FileBufferService fileBufferService = new FileBufferService();
-        final ViewService viewService = new ViewService(fileBufferService, fileService);
+        final FileBufferService fileBufferService = new FileBufferService(fileService);
+        final ViewService viewService = new ViewService(fileBufferService);
         final FileController fileController = new FileController(fileService, fileBufferService, viewService);
         fileController.loadFiles(args);
         TerminalService.enterRawInputMode();

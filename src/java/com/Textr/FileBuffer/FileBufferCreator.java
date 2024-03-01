@@ -31,6 +31,6 @@ public final class FileBufferCreator {
         Text text = Text.create(file.getText());
         Point insertionPoint = Point.create(0,0);
         BufferState state = BufferState.CLEAN;
-        return FileBuffer.builder().fileId(id).bufferText(text).insertionPosition(insertionPoint).state(state).build();
+        return FileBuffer.builder().fileId(id).text(text).insertionPosition(insertionPoint).state(state).build();
     }
 }

@@ -15,7 +15,7 @@ public class ActiveFileBufferRepoTest {
     public void initialise(){
         FileBufferIdGenerator.resetGenerator();
         Point point = Point.create(5,5);
-        buffer = FileBuffer.builder().fileId(1).bufferText(Text.create("text"))
+        buffer = FileBuffer.builder().fileId(1).text(Text.create("text"))
                 .insertionPosition(point).state(BufferState.CLEAN).build();
         repo.deleteBuffer();
     }

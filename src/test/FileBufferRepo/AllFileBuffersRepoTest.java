@@ -18,9 +18,9 @@ public class AllFileBuffersRepoTest {
     public void initialise(){
         FileBufferIdGenerator.resetGenerator();
         Point point = Point.create(5,5);
-        buffer1 = FileBuffer.builder().fileId(1).bufferText(Text.create("text"))
+        buffer1 = FileBuffer.builder().fileId(1).text(Text.create("text"))
                 .insertionPosition(point).state(BufferState.CLEAN).build();
-        buffer2 = FileBuffer.builder().fileId(2).bufferText(Text.create("text"))
+        buffer2 = FileBuffer.builder().fileId(2).text(Text.create("text"))
                 .insertionPosition(point).state(BufferState.CLEAN).build();
         repo = new AllFileBuffersRepo();
     }
