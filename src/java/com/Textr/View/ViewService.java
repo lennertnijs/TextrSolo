@@ -7,19 +7,19 @@ import com.Textr.Point.Point;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.ViewDrawer.IViewDrawer;
 import com.Textr.ViewDrawer.ViewDrawer;
+import com.Textr.ViewRepo.IViewRepo;
 import com.Textr.ViewRepo.ViewRepo;
 
 public final class ViewService {
-
-    private final ViewRepo viewRepo;
     private final FileBufferService fileBufferService;
     private final FileService fileService;
+    private final IViewRepo viewRepo;
     private final IViewDrawer viewDrawer;
 
     public ViewService(FileBufferService fileBufferService, FileService fileService){
-        this.viewRepo = new ViewRepo();
         this.fileBufferService = fileBufferService;
         this.fileService = fileService;
+        this.viewRepo = new ViewRepo();
         this.viewDrawer = new ViewDrawer();
     }
 
@@ -68,13 +68,5 @@ public final class ViewService {
         Point cursorPoint = fileBufferService.getActiveBuffer().getInsertionPosition();
         View view = viewRepo.getByBufferId(fileBufferService.getActiveBuffer().getId());
         TerminalService.moveCursor(view.getPosition().getX() + cursorPoint.getX(), view.getPosition().getY() + cursorPoint.getY());
-    }
-
-    public void moveInsertionPointRight(){
-        fileBufferService.moveInsertionPointRight();
-        View view = viewRepo.getByBufferId(fileBufferService.getActiveBuffer().getId());
-        if(view.getAnchor().getX() + view.getDimensions().getWidth() < fileBufferService.getActiveBuffer().getInsertionPosition().getX()){
-            view.getAnchor().incrementX();
-        }
     }
 }

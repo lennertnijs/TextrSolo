@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Class used to validate parameters.
  */
-public class Validator {
+public final class Validator {
 
     /**
      * Private constructor. No use.

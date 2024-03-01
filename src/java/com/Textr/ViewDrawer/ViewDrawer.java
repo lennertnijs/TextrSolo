@@ -5,7 +5,7 @@ import com.Textr.Terminal.TerminalService;
 import com.Textr.Validator.Validator;
 import com.Textr.View.View;
 
-public class ViewDrawer implements IViewDrawer {
+public final class ViewDrawer implements IViewDrawer {
 
     public ViewDrawer(){
     }

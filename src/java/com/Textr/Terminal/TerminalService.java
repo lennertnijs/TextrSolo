@@ -6,7 +6,7 @@ import io.github.btj.termios.Terminal;
 
 import java.io.IOException;
 
-public class TerminalService {
+public final class TerminalService {
 
     private TerminalService(){
     }

@@ -2,7 +2,7 @@ package com.Textr.View;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ViewIdGenerator {
+public final class ViewIdGenerator {
 
     private static AtomicInteger id = new AtomicInteger();
     private ViewIdGenerator(){

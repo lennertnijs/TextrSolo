@@ -8,9 +8,7 @@ import com.Textr.InputHandler.RawInputHandler;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.ViewService;
 
-import java.util.Objects;
-
-public class FileController {
+public final class FileController {
 
     private final FileService fileService;
     private final FileBufferService fileBufferService;
