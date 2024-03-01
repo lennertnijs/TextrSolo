@@ -27,7 +27,7 @@ public final class ViewService {
 
 
     public void initialiseViewsVertical(){
-        List<View> views = ViewLayoutInitializer.generateVerticallyStackedViews(fileBufferService.getAllFileBuffers());
+        List<View> views = ViewLayoutInitializer.generateHorizontallyStackedViews(fileBufferService.getAllFileBuffers());
         for(View view : views){
             viewRepo.add(view);
         }
