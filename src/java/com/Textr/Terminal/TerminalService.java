@@ -51,7 +51,7 @@ public final class TerminalService {
     }
 
     public static void moveCursor(int row, int column){
-        Terminal.moveCursor(column + 1, row+1, "empty");
+        Terminal.moveCursor(column + 1, row + 1, "empty");
     }
 
     public static void clearScreen(){

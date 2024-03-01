@@ -3,6 +3,7 @@ package com.Textr.InputHandler;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.Point.Point;
 import com.Textr.Terminal.TerminalService;
+import com.Textr.View.Direction;
 import com.Textr.View.ViewService;
 
 import static com.Textr.Inputs.*;
@@ -39,7 +40,7 @@ public final class RawInputHandler implements InputHandler{
     private void saveInputToBuffer(int input){
         Point point = fileBufferService.getActiveBuffer().getInsertionPosition();
         fileBufferService.getActiveBuffer().getBufferText().addCharacter((char) input, point.getY(), point.getX());
-        viewService.moveInsertionPointRight();
+        viewService.moveInsertionPoint(Direction.RIGHT);
     }
 
     private void drawAll(){
@@ -52,10 +53,10 @@ public final class RawInputHandler implements InputHandler{
         if (b == '[') {
             b = TerminalService.readByte();
             switch (b) {
-                case ARROW_RIGHT -> viewService.moveInsertionPointRight();
-                case ARROW_LEFT -> viewService.moveInsertionPointLeft();
-                case ARROW_DOWN -> viewService.moveInsertionPointDown();
-                case ARROW_UP -> viewService.moveInsertionPointUp();
+                case ARROW_RIGHT -> viewService.moveInsertionPoint(Direction.RIGHT);
+                case ARROW_LEFT -> viewService.moveInsertionPoint(Direction.LEFT);
+                case ARROW_DOWN -> viewService.moveInsertionPoint(Direction.DOWN);
+                case ARROW_UP -> viewService.moveInsertionPoint(Direction.UP);
             }
         }
     }
