@@ -18,24 +18,28 @@ public final class RawInputHandler implements InputHandler{
     @Override
     public void handleInput(){
         int input = TerminalService.readByte();
-        boolean isRegularInput = input >= 65 && input <= 122 || input == SPACE || input == BACKSPACE;
+        TerminalService.clearScreen();
+        boolean isRegularInput = input >= 65 && input <= 122 || input == SPACE;
         if(isRegularInput){
             saveInputToBuffer(input);
             drawAll();
             return;
         }
         switch (input) {
+            case BACKSPACE -> viewService.deleteChar();
+            case ENTER -> viewService.createNewline();
             case ESCAPE -> handleEscapeInput();
             case CTRL_P -> fileBufferService.moveActiveBufferToPrev();
             case CTRL_N -> fileBufferService.moveActiveBufferToNext();
         }
         drawAll();
     }
+    //
 
     private void saveInputToBuffer(int input){
         Point point = fileBufferService.getActiveBuffer().getInsertionPosition();
         fileBufferService.getActiveBuffer().getBufferText().addCharacter((char) input, point.getY(), point.getX());
-        fileBufferService.moveInsertionPointRight();
+        viewService.moveInsertionPointRight();
     }
 
     private void drawAll(){
@@ -48,10 +52,10 @@ public final class RawInputHandler implements InputHandler{
         if (b == '[') {
             b = TerminalService.readByte();
             switch (b) {
-                case ARROW_RIGHT -> fileBufferService.moveInsertionPointRight();
-                case ARROW_LEFT -> fileBufferService.moveInsertionPointLeft();
-                case ARROW_DOWN -> fileBufferService.moveInsertionPointDown();
-                case ARROW_UP -> fileBufferService.moveInsertionPointUp();
+                case ARROW_RIGHT -> viewService.moveInsertionPointRight();
+                case ARROW_LEFT -> viewService.moveInsertionPointLeft();
+                case ARROW_DOWN -> viewService.moveInsertionPointDown();
+                case ARROW_UP -> viewService.moveInsertionPointUp();
             }
         }
     }

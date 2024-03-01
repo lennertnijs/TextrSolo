@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public final class Text {
 
-    private final String[] lines;
+    private String[] lines;
 
     private Text(String[] lines){
         this.lines = lines;
@@ -57,6 +57,56 @@ public final class Text {
             }
         }
         lines[row] = builder.toString();
+    }
+
+    public void removeCharacter(int row, int col){
+        if(row == 0 && col == 0){
+            return;
+        }
+        if(col == 0){
+            removeCharacterFirstCol(row);
+            return;
+        }
+        removeCharacterNotFirstCol(row, col);
+    }
+
+    private void removeCharacterNotFirstCol(int row, int col){
+        for(int i = 0; i < lines.length; i++){
+            if(i == row){
+                StringBuilder builder = new StringBuilder(lines[i]);
+                lines[i] = builder.deleteCharAt(col - 1).toString();
+            }
+        }
+    }
+
+    private void removeCharacterFirstCol(int row){
+        String[] nwLines = new String[lines.length - 1];
+        for(int i = 0; i < nwLines.length; i++){
+            if(i < row - 1){
+                nwLines[i] = lines[i];
+            }else if(i == row - 1){
+                nwLines[i] = lines[i] + lines[i + 1];
+            }else{
+                nwLines[i] = lines[i + 1];
+            }
+        }
+        this.lines = nwLines;
+    }
+
+
+    public void breakLine(int row, int col){
+        String[] newLines = new String[lines.length + 1];
+        for(int i = 0; i < lines.length; i++){
+            if(i < row){
+                newLines[i] = lines[i];
+            }else if(i == row){
+                newLines[i] = lines[i].substring(0, Math.max(0, col));
+                newLines[i+1] = lines[i].substring(col);
+            }else{
+                newLines[i+1] = lines[i];
+            }
+        }
+        this.lines = newLines;
     }
 
     @Override

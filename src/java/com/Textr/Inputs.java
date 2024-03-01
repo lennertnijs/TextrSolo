@@ -2,8 +2,8 @@ package com.Textr;
 
 public final class Inputs {
 
-    public static final int BACKSPACE = 8;
-    public static final int RETURN = 13;
+    public static final int BACKSPACE = 127;
+    public static final int ENTER = 13;
     public static final int CTRL_N = 14;
     public static final int CTRL_P = 16;
     public static final int CTRL_R = 18;

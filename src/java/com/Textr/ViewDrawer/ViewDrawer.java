@@ -27,8 +27,11 @@ public final class ViewDrawer implements IViewDrawer {
         int startY = view.getPosition().getY();
         int maxY = startY + height - 1;
         String[] lines = text.getLines();
-        for(int i = 0; i < Math.min(lines.length, height - 1); i++){
-            TerminalService.printText(x, startY++, lines[i].substring(0, Math.min(view.getDimensions().getWidth(), lines[i].length())));
+        for(int i = view.getAnchor().getY(); i < Math.min(lines.length, view.getAnchor().getY() + height - 1); i++){
+            if(lines[i].length() > view.getAnchor().getX()){
+                TerminalService.printText(x, startY, lines[i].substring(view.getAnchor().getX(), Math.min(view.getAnchor().getX() + view.getDimensions().getWidth(), lines[i].length())));
+            }
+            startY++;
         }
         TerminalService.printText(x, maxY, statusBar.substring(0, Math.min(view.getDimensions().getWidth(), statusBar.length())));
     }
