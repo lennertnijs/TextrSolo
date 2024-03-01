@@ -46,6 +46,7 @@ public final class ViewRepo implements IViewRepo{
      * @return The {@link View}
      * @throws NoSuchElementException If no {@link View} was found.
      */
+
     @Override
     public View get(int id) {
         for(View view : views){
@@ -93,6 +94,18 @@ public final class ViewRepo implements IViewRepo{
         views.add(view);
     }
 
+    /**
+     * Stores all the views in the view repository.
+     * @param views The views
+     */
+    @Override
+    public void addAll(List<View> views){
+        Validator.notNull(views, "Cannot store a null List of views.");
+        for(View view : views){
+            Validator.notNull(view, "Cannot store a null View");
+            this.views.add(view);
+        }
+    }
     /**
      * Removes the {@link View} with the given id.
      * Does nothing if no match was found.

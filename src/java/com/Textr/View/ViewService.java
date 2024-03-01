@@ -3,10 +3,10 @@ package com.Textr.View;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.Point.Point;
+import com.Textr.Validator.Validator;
 import com.Textr.ViewDrawer.CursorDrawer;
 import com.Textr.ViewDrawer.ViewDrawer;
 import com.Textr.ViewRepo.IViewRepo;
-import com.Textr.ViewRepo.ViewRepo;
 
 import java.util.List;
 
@@ -14,42 +14,51 @@ public final class ViewService {
     private final FileBufferService fileBufferService;
     private final IViewRepo viewRepo;
 
-    public ViewService(FileBufferService fileBufferService){
+    public ViewService(FileBufferService fileBufferService, IViewRepo viewRepo){
         this.fileBufferService = fileBufferService;
-        this.viewRepo = new ViewRepo();
+        this.viewRepo = viewRepo;
     }
 
-
+    /**
+     * Generates a vertically stacked layout of views for the currently existing buffers and stores them.
+     */
     public void initialiseViewsVertical(){
         List<View> views = ViewLayoutInitializer.generateVerticallyStackedViews(fileBufferService.getAllFileBuffers());
-        for(View view : views){
-            viewRepo.add(view);
-        }
+        viewRepo.addAll(views);
     }
 
+    /**
+     * Draws all the currently existing views to the terminal screen.
+     */
     public void drawAllViews(){
         for(View view: viewRepo.getAll()){
             FileBuffer fileBuffer = fileBufferService.getFileBuffer(view.getFileBufferId());
-            ViewDrawer.drawView(view, fileBuffer.getText(), fileBufferService.generateStatusBar(fileBuffer));
+            String statusBar = fileBufferService.generateStatusBar(fileBuffer);
+            ViewDrawer.draw(view, fileBuffer.getText(), statusBar);
         }
     }
 
+    /**
+     * Draws the terminal's cursor at the active buffer's cursor point.
+     */
     public void drawCursor(){
         CursorDrawer.draw(getActiveView().getPosition(), getAnchor(), getActiveBuffer().getCursor());
     }
 
     /**
-     *
-     * @param direction
+     * Moves the cursor of the active buffer by 1 unit in the given direction.
+     * Then calls for a possible update on the anchor point of the active view.
+     * @param direction The direction. Cannot be null.
      */
-    public void moveInsertionPoint(Direction direction){
-        fileBufferService.moveInsertionPoint(direction);
+    public void moveCursor(Direction direction){
+        Validator.notNull(direction, "Cannot move the cursor in the null direction.");
+        fileBufferService.moveCursor(direction);
         updateAnchor();
     }
 
     /**
-     * Creates a new line (\r\n on Windows) at the insertion {@link Point} in the active {@link FileBuffer}.
-     * Then calls for a possible update of the active {@link View}'s anchor {@link Point}.
+     * Creates a new line (\r\n on Windows) at the insertion point in the active buffer.
+     * Then calls for a possible update on the anchor point of the active view.
      */
     public void createNewline(){
         getActiveBuffer().createNewLine();
@@ -57,7 +66,7 @@ public final class ViewService {
     }
 
     /**
-     * Inserts the given character into the active {@link FileBuffer} at the insertion {@link Point}.
+     * Inserts the given character at the cursor point of the active buffer.
      * @param character The input character
      */
     public void insertCharacter(char character){
@@ -65,8 +74,8 @@ public final class ViewService {
     }
 
     /**
-     * Deletes the character just before the insertion {@link Point} in the active {@link FileBuffer}.
-     * Then calls for a possible update of the active {@link View}'s anchor {@link Point}.
+     * Deletes the character just before the cursor of the active buffer.
+     * Then calls for a possible update on the anchor point of the active view.
      */
     public void deleteChar(){
         getActiveBuffer().removeCharacter();
@@ -74,28 +83,28 @@ public final class ViewService {
     }
 
     /**
-     * @return The active {@link FileBuffer}.
+     * @return The active buffer.
      */
     private FileBuffer getActiveBuffer(){
         return fileBufferService.getActiveBuffer();
     }
 
     /**
-     * @return The active {@link View}
+     * @return The active view.
      */
     private View getActiveView(){
         return viewRepo.getByBufferId(getActiveBuffer().getId());
     }
 
     /**
-     * @return The anchor {@link Point} of the active {@link FileBuffer}.
+     * @return The anchor point of the active view.
      */
     private Point getAnchor(){
         return getActiveView().getAnchor();
     }
 
     /**
-     * Updates the anchor {@link Point} of the active {@link View} to adjust to a possibly new insertion {@link Point}.
+     * Updates the anchor point of the active buffer to possible changes to the cursor point.
      */
     private void updateAnchor(){
         AnchorUpdater.updateAnchor(getAnchor(), getActiveBuffer().getCursor(), getActiveView().getDimensions());

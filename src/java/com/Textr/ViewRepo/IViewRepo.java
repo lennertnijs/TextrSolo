@@ -11,5 +11,6 @@ public interface IViewRepo {
     View getByBufferId(int fileBufferId);
     List<View> getAll();
     void add(View view);
+    void addAll(List<View> views);
     void remove(int id);
 }

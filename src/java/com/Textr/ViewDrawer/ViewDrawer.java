@@ -17,7 +17,7 @@ public final class ViewDrawer{
      * @param statusBar The status bar.
      * @throws IllegalArgumentException If any of them are null.
      */
-    public static void drawView(View view, Text text, String statusBar) {
+    public static void draw(View view, Text text, String statusBar) {
         Validator.notNull(view, "Cannot draw a null View.");
         Validator.notNull(text, "Cannot draw the View because the given Text is null.");
         Validator.notNull(statusBar, "Cannot draw the View because the status bar is null.");

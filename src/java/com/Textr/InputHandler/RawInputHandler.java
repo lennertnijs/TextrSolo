@@ -43,10 +43,10 @@ public final class RawInputHandler implements InputHandler{
         if (b == '[') {
             b = TerminalService.readByte();
             switch (b) {
-                case ARROW_RIGHT -> viewService.moveInsertionPoint(Direction.RIGHT);
-                case ARROW_LEFT -> viewService.moveInsertionPoint(Direction.LEFT);
-                case ARROW_DOWN -> viewService.moveInsertionPoint(Direction.DOWN);
-                case ARROW_UP -> viewService.moveInsertionPoint(Direction.UP);
+                case ARROW_RIGHT -> viewService.moveCursor(Direction.RIGHT);
+                case ARROW_LEFT -> viewService.moveCursor(Direction.LEFT);
+                case ARROW_DOWN -> viewService.moveCursor(Direction.DOWN);
+                case ARROW_UP -> viewService.moveCursor(Direction.UP);
             }
         }
     }
