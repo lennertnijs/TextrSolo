@@ -28,7 +28,6 @@ public class FileController {
         TerminalService.enterRawInputMode();
         TerminalService.clearScreen();
         for(String filePath: files){
-            Objects.requireNonNull(filePath, "Cannot create an internal file for a null file");
             fileService.initialiseFile(filePath);
         }
         for(int i = 0 ; i < fileService.getAllFiles().size(); i++){

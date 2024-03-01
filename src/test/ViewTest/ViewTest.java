@@ -13,11 +13,12 @@ public class ViewTest {
         Point point = Point.create(5,5);
         Dimension2D dimensions = Dimension2D.create(15, 15);
         Point anchor = Point.create(1,1);
-        View view = View.builder().fileBufferId(0).position(point).dimensions(dimensions).anchorPoint(anchor).build();
+        View view = View.builder().fileBufferId(0).position(point).dimensions(dimensions).anchor(anchor).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(view.getFileBufferId(), 0),
                 () -> Assertions.assertEquals(view.getPosition(), point),
-                () -> Assertions.assertEquals(view.getDimensions(), dimensions)
+                () -> Assertions.assertEquals(view.getDimensions(), dimensions),
+                () -> Assertions.assertEquals(view.getAnchor(), anchor)
         );
     }
 
@@ -27,11 +28,11 @@ public class ViewTest {
         Point anchor = Point.create(1,1);
         Dimension2D dimensions = Dimension2D.create(15, 15);
         View.Builder invalidId = View.builder().fileBufferId(-1).position(point)
-                .dimensions(dimensions).anchorPoint(anchor);
+                .dimensions(dimensions).anchor(anchor);
         View.Builder invalidPoint = View.builder().fileBufferId(0).position(null)
-                .dimensions(dimensions).anchorPoint(anchor);
+                .dimensions(dimensions).anchor(anchor);
         View.Builder invalidDimension = View.builder().fileBufferId(0).position(point)
-                .dimensions(null).anchorPoint(anchor);
+                .dimensions(null).anchor(anchor);
         Assertions.assertAll(
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidId::build),
                 () -> Assertions.assertThrows(IllegalArgumentException.class, invalidPoint::build),
@@ -45,11 +46,11 @@ public class ViewTest {
         Point anchor = Point.create(1,1);
         Dimension2D dimensions = Dimension2D.create(15, 15);
         View view1 = View.builder().fileBufferId(1).position(point)
-                .dimensions(dimensions).anchorPoint(anchor).build();
+                .dimensions(dimensions).anchor(anchor).build();
         View view2 = View.builder().fileBufferId(2).position(point)
-                .dimensions(dimensions).anchorPoint(anchor).build();
+                .dimensions(dimensions).anchor(anchor).build();
         View view3 = View.builder().fileBufferId(1).position(point)
-                .dimensions(dimensions).anchorPoint(anchor).build();
+                .dimensions(dimensions).anchor(anchor).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(view1, view1),
                 () -> Assertions.assertEquals(view1, view3),
@@ -67,8 +68,8 @@ public class ViewTest {
         Point anchor = Point.create(1,1);
         Dimension2D dimensions = Dimension2D.create(15, 15);
         View view = View.builder().fileBufferId(1).position(point)
-                .dimensions(dimensions).anchorPoint(anchor).build();
-        String expected = "BufferView[fileId = 1, point = InsertionPoint[x = 5, y = 5], dimensions = Dimension2D[width = 15, height = 15]]";
+                .dimensions(dimensions).anchor(anchor).build();
+        String expected = "View[fileBufferId = 1, position = InsertionPoint[x = 5, y = 5], dimensions = Dimension2D[width = 15, height = 15], anchor = InsertionPoint[x = 1, y = 1]]";
         Assertions.assertAll(
                 () -> Assertions.assertEquals(view.toString(), expected)
         );

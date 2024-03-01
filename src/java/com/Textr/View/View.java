@@ -1,19 +1,24 @@
 package com.Textr.View;
 
 import com.Textr.Point.Point;
+import com.Textr.Validator.Validator;
 
 import java.util.Objects;
 
+/**
+ * Class to represent a view.
+ * A view is a part of the Terminal, used to display something.
+ */
 public final class View {
 
     private final int fileBufferId;
     private final Point position;
     private final Dimension2D dimensions;
-    private final Point anchorPoint;
+    private final Point anchor;
 
     /**
      * Constructor for a {@link View}.
-     * Uses a static {@link View.Builder} to create a valid {@link View}.
+     * Uses a static {@link View.Builder} to create a {@link View}.
      * @param builder The {@link View.Builder}. Cannot be null.
      */
     private View(Builder builder){
@@ -21,41 +26,42 @@ public final class View {
         this.fileBufferId = builder.fileBufferId;
         this.position = builder.position;
         this.dimensions = builder.dimensions;
-        this.anchorPoint = builder.anchorPoint;
+        this.anchor = builder.anchor;
     }
 
     /**
-     * Returns the file id of this {@link View}.
-     * @return the {@link View}'s file id
+     * @return This {@link View}'s {@link FileBuffer}'s id.
      */
     public int getFileBufferId(){
         return this.fileBufferId;
     }
 
     /**
-     * Returns the position of this {@link View}.
-     * @return the {@link View}'s position as a {@link Point}
+     * @return This {@link View}'s position.
      */
     public Point getPosition(){
         return this.position;
     }
 
     /**
-     * Returns the dimensions of this {@link View}
-     * @return the {@link View}'s dimensions as a {@link Dimension2D}
+     * @return This {@link View}'s dimensions.
      */
     public Dimension2D getDimensions(){
         return this.dimensions;
     }
 
-
-    public Point getAnchorPoint(){
-        return anchorPoint;
-    }
     /**
-     * Compares this {@link View} to the given {@link Object} and returns True if they're equal.
+     * @return This {@link View}'s anchor point.
+     */
+    public Point getAnchor(){
+        return anchor;
+    }
+
+
+    /**
+     * Compares this {@link View} to the given {@link Object} and returns True if they're equal. Returns False otherwise.
      * Equality means that all of their fields are equal.
-     * @param o The other {@link Object} to be compared to this
+     * @param o The other {@link Object}
      *
      * @return True if they're equal, false otherwise.
      */
@@ -69,19 +75,21 @@ public final class View {
         }
         return this.fileBufferId == view.fileBufferId &&
                 this.position.equals(view.position) &&
-                this.dimensions.equals(view.dimensions);
+                this.dimensions.equals(view.dimensions) &&
+                this.anchor.equals(view.anchor);
     }
 
     /**
      * Generates and returns a hash code for this {@link View}.
      *
-     * @return the hash code
+     * @return The hash code.
      */
     @Override
     public int hashCode(){
         int result = fileBufferId;
         result = 31 * result + position.hashCode();
         result = 31 * result + dimensions.hashCode();
+        result = 31 * result + anchor.hashCode();
         return result;
     }
 
@@ -93,8 +101,8 @@ public final class View {
      */
     @Override
     public String toString(){
-        return String.format("BufferView[fileId = %d, point = %s, dimensions = %s]",
-                fileBufferId, position.toString(), dimensions);
+        return String.format("View[fileBufferId = %d, position = %s, dimensions = %s, anchor = %s]",
+                fileBufferId, position, dimensions, anchor);
     }
 
     /**
@@ -114,7 +122,7 @@ public final class View {
         private int fileBufferId;
         private Point position;
         private Dimension2D dimensions;
-        private Point anchorPoint;
+        private Point anchor;
 
         /**
          * Constructor of the {@link View.Builder}
@@ -155,8 +163,8 @@ public final class View {
             return this;
         }
 
-        public Builder anchorPoint(Point anchorPoint){
-            this.anchorPoint = anchorPoint;
+        public Builder anchor(Point anchor){
+            this.anchor = anchor;
             return this;
         }
 
@@ -173,16 +181,10 @@ public final class View {
          * @return a newly created valid & immutable {@link View}.
          */
         public View build(){
-            if(fileBufferId < 0){
-                throw new IllegalArgumentException("The file id of a BufferView cannot be negative.");
-            }
-            try{
-                Objects.requireNonNull(position, "The buffer point of a bufferView cannot be null");
-                Objects.requireNonNull(anchorPoint);
-                Objects.requireNonNull(dimensions, "The dimensions of a bufferView cannot be null");
-            }catch(NullPointerException e){
-                throw new IllegalArgumentException("Cannot build a bufferView with a null parameter");
-            }
+            Validator.notNegative(fileBufferId, "The id of the FileBuffer of the View cannot be negative.");
+            Validator.notNull(position, "The global position of the View in the Terminal cannot be null.");
+            Validator.notNull(dimensions, "The dimensions of the View cannot be null.");
+            Validator.notNull(anchor, "The anchor point of the View cannot be null");
             return new View(this);
         }
     }

@@ -28,8 +28,4 @@ public class ViewRepo {
     protected List<View> getAll(){
         return this.views;
     }
-
-    protected void remove(View view){
-        this.views.remove(view);
-    }
 }

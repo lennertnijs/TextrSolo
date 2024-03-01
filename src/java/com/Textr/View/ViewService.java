@@ -25,22 +25,13 @@ public class ViewService {
         this.viewDrawer = new ViewDrawer();
     }
 
-    public View createView(int fileBufferId, Point point, Dimension2D dimensions){
-        if(fileBufferId < 0){
-            throw new IllegalArgumentException("Cannot create a TerminalView with a negative FileBuffer id.");
-        }
-        Objects.requireNonNull(point, "Cannot create a TerminalView with a null Position.");
-        Objects.requireNonNull(dimensions, "Cannot create a TerminalView with null dimensions");
-        return View.builder().fileBufferId(fileBufferId).position(point).dimensions(dimensions).anchorPoint(Point.create(0,0)).build();
-    }
-
     public void store(View view){
         Objects.requireNonNull(view, "Cannot store a null TerminalView");
         viewRepo.add(view);
     }
 
     public void createAndStoreView(int fileBufferId, Point point, Dimension2D dimensions){
-        View view = createView(fileBufferId, point, dimensions);
+        View view = ViewCreator.create(fileBufferId, point, dimensions);
         store(view);
     }
 
@@ -92,8 +83,8 @@ public class ViewService {
     public void moveInsertionPointRight(){
         fileBufferService.moveInsertionPointRight();
         View view = viewRepo.getView(fileBufferService.getActiveBuffer().getId());
-        if(view.getAnchorPoint().getX() + view.getDimensions().getWidth() < fileBufferService.getActiveBuffer().getInsertionPosition().getX()){
-            view.getAnchorPoint().incrementX();
+        if(view.getAnchor().getX() + view.getDimensions().getWidth() < fileBufferService.getActiveBuffer().getInsertionPosition().getX()){
+            view.getAnchor().incrementX();
         }
     }
 }
