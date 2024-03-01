@@ -5,6 +5,7 @@ import com.Textr.File.FileService;
 import com.Textr.FileBufferRepo.FileBufferRepo;
 import com.Textr.FileBufferRepo.IFileBufferRepo;
 import com.Textr.Validator.Validator;
+import com.Textr.View.Direction;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public final class FileBufferService {
     public String generateStatusBar(FileBuffer buffer){
         Validator.notNull(buffer, "Cannot generate a status bar for a null FileBuffer.");
         return String.format("File path: %s - Lines: %d - Characters: %d - InsertionPoint: %s - State: %s",
-                fileService.getFile(buffer.getId()), buffer.getText().getAmountOfLines(),
+                fileService.getFile(buffer.getId()).getUrl(), buffer.getText().getAmountOfLines(),
                 buffer.getText().getAmountOfChars(), buffer.getInsertionPosition(), buffer.getState());
     }
 
@@ -58,18 +59,13 @@ public final class FileBufferService {
         return fileBufferRepo.getActiveBuffer();
     }
 
-    public void moveInsertionPointRight(){
-        getActiveBuffer().moveInsertionPointRight();
-    }
-
-    public void moveInsertionPointLeft(){
-        getActiveBuffer().moveInsertionPointLeft();
-    }
-
-    public void moveInsertionPointDown(){
-        getActiveBuffer().moveInsertionPointDown();
-    }
-    public void moveInsertionPointUp(){
-        getActiveBuffer().moveInsertionPointUp();
+    public void moveInsertionPoint(Direction direction){
+        Validator.notNull(direction, "Cannot move the insertion point in the null Direction.");
+        switch(direction){
+            case UP -> getActiveBuffer().moveInsertionPointUp();
+            case RIGHT -> getActiveBuffer().moveInsertionPointRight();
+            case DOWN -> getActiveBuffer().moveInsertionPointDown();
+            case LEFT -> getActiveBuffer().moveInsertionPointLeft();
+        }
     }
 }

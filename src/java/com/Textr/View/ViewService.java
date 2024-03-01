@@ -3,9 +3,7 @@ package com.Textr.View;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.Point.Point;
-import com.Textr.Validator.Validator;
 import com.Textr.ViewDrawer.CursorDrawer;
-import com.Textr.ViewDrawer.IViewDrawer;
 import com.Textr.ViewDrawer.ViewDrawer;
 import com.Textr.ViewRepo.IViewRepo;
 import com.Textr.ViewRepo.ViewRepo;
@@ -15,12 +13,10 @@ import java.util.List;
 public final class ViewService {
     private final FileBufferService fileBufferService;
     private final IViewRepo viewRepo;
-    private final IViewDrawer viewDrawer;
 
     public ViewService(FileBufferService fileBufferService){
         this.fileBufferService = fileBufferService;
         this.viewRepo = new ViewRepo();
-        this.viewDrawer = new ViewDrawer();
     }
 
 
@@ -34,7 +30,7 @@ public final class ViewService {
     public void drawAllViews(){
         for(View view: viewRepo.getAll()){
             FileBuffer fileBuffer = fileBufferService.getFileBuffer(view.getFileBufferId());
-            viewDrawer.drawView(view, fileBuffer.getText(), fileBufferService.generateStatusBar(fileBuffer));
+            ViewDrawer.drawView(view, fileBuffer.getText(), fileBufferService.generateStatusBar(fileBuffer));
         }
     }
 
@@ -42,27 +38,15 @@ public final class ViewService {
         CursorDrawer.draw(getActiveView().getPosition(), getAnchor(), getInsertionPoint());
     }
 
-    /**
-     * Moves the insertion {@link Point} of the active {@link FileBuffer} by 1 in the given {@link Direction}.
-     * After moving the insertion {@link Point}, also adjusts the anchor {@link Point} appropriately.
-     * @param direction The direction
-     *
-     * @throws IllegalArgumentException If the given {@link Direction} is null.
-     */
+
     public void moveInsertionPoint(Direction direction){
-        Validator.notNull(direction, "Cannot move the insertion point in a null Direction.");
-        switch(direction){
-            case UP -> fileBufferService.moveInsertionPointUp();
-            case RIGHT -> fileBufferService.moveInsertionPointRight();
-            case DOWN -> fileBufferService.moveInsertionPointDown();
-            case LEFT -> fileBufferService.moveInsertionPointLeft();
-        }
-        AnchorUpdater.updateAnchor(getAnchor(), getInsertionPoint(), getActiveViewDimensions());
+        fileBufferService.moveInsertionPoint(direction);
+        updateAnchor();
     }
 
     public void createNewline(){
         getActiveBuffer().createNewLine();
-        AnchorUpdater.updateAnchor(getAnchor(), getInsertionPoint(), getActiveViewDimensions());
+        updateAnchor();
     }
 
     public void insertCharacter(char character){
@@ -71,9 +55,12 @@ public final class ViewService {
 
     public void deleteChar(){
         getActiveBuffer().removeCharacter();
-        AnchorUpdater.updateAnchor(getAnchor(), getInsertionPoint(), getActiveView().getDimensions());
+        updateAnchor();
     }
 
+    private void updateAnchor(){
+        AnchorUpdater.updateAnchor(getAnchor(), getInsertionPoint(), getActiveView().getDimensions());
+    }
     private View getActiveView(){
         return viewRepo.getByBufferId(fileBufferService.getActiveBuffer().getId());
     }
@@ -84,10 +71,6 @@ public final class ViewService {
 
     private Point getInsertionPoint(){
         return fileBufferService.getActiveBuffer().getInsertionPosition();
-    }
-
-    private Dimension2D getActiveViewDimensions(){
-        return getActiveView().getDimensions();
     }
 
     private FileBuffer getActiveBuffer(){

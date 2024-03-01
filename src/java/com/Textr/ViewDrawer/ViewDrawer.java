@@ -5,9 +5,9 @@ import com.Textr.Terminal.TerminalService;
 import com.Textr.Validator.Validator;
 import com.Textr.View.View;
 
-public final class ViewDrawer implements IViewDrawer {
+public final class ViewDrawer{
 
-    public ViewDrawer(){
+    private ViewDrawer(){
     }
 
     /**
@@ -17,8 +17,7 @@ public final class ViewDrawer implements IViewDrawer {
      * @param statusBar The status bar.
      * @throws IllegalArgumentException If any of them are null.
      */
-    @Override
-    public void drawView(View view, Text text, String statusBar) {
+    public static void drawView(View view, Text text, String statusBar) {
         Validator.notNull(view, "Cannot draw a null View.");
         Validator.notNull(text, "Cannot draw the View because the given Text is null.");
         Validator.notNull(statusBar, "Cannot draw the View because the status bar is null.");
