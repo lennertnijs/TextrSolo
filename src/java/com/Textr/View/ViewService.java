@@ -14,6 +14,11 @@ public final class ViewService {
     private final FileBufferService fileBufferService;
     private final IViewRepo viewRepo;
 
+    /**
+     * Constructor for the {@link ViewService}.
+     * @param fileBufferService The service to be used to talk to the file buffers.
+     * @param viewRepo The repository to be used for storage and retrieval of views.
+     */
     public ViewService(FileBufferService fileBufferService, IViewRepo viewRepo){
         this.fileBufferService = fileBufferService;
         this.viewRepo = viewRepo;
