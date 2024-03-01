@@ -3,7 +3,7 @@ package com.Textr.ViewDrawer;
 import com.Textr.Point.Point;
 import com.Textr.Terminal.TerminalService;
 
-public class CursorDrawer {
+public final class CursorDrawer {
 
     private CursorDrawer(){
     }
