@@ -8,6 +8,12 @@ public final class CursorMover {
     private CursorMover(){
     }
 
+    /**
+     * Moves the cursor 1 unit in the given direction and updates the cursor's values appropriately.
+     * @param cursor The cursor. Cannot be null.
+     * @param direction
+     * @param text
+     */
     public static void move(Point cursor, Direction direction, Text text){
         switch(direction){
             case UP -> moveUp(cursor, text);
@@ -47,6 +53,12 @@ public final class CursorMover {
         updateXAfterYChange(cursor, text.getLineLength(cursor.getY()));
     }
 
+    /**
+     * Moves the cursor right one position, if appropriate.
+     * After moving right, it will update the cursor's Y value if necessary.
+     * @param cursor The cursor
+     * @param text The text
+     */
     private static void moveRight(Point cursor, Text text){
         boolean isAtEndOfLine = cursor.getX() == text.getLineLength(cursor.getY());
         if(!isAtEndOfLine){
@@ -60,6 +72,12 @@ public final class CursorMover {
         }
     }
 
+    /**
+     * Moves the cursor left one position, if appropriate.
+     * After moving left, it will update the cursor's Y value if necessary.
+     * @param cursor The cursor
+     * @param text The text
+     */
     private static void moveLeft(Point cursor, Text text){
         boolean isAtStartOfLine = cursor.getX() == 0;
         if(!isAtStartOfLine){
@@ -72,9 +90,6 @@ public final class CursorMover {
             cursor.setX(text.getLineLength(cursor.getY()));
         }
     }
-
-
-
 
     /**
      * Updates the X value of the cursor if necessary.

@@ -102,6 +102,7 @@ public final class FileBufferRepo implements IFileBufferRepo {
 
     /**
      * Deletes the active {@link FileBuffer}.
+     * DOES NOT DELETE IT FROM THE TOTAL REPOSITORY.
      */
     @Override
     public void removeActiveBuffer(){
