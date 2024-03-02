@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 
 public final class ViewRepo implements IViewRepo{
 
-    private final List<View> views;
+    private List<View> views;
 
     public ViewRepo(){
         views = new ArrayList<>();
@@ -114,5 +114,10 @@ public final class ViewRepo implements IViewRepo{
     @Override
     public void remove(int id) {
         views.removeIf(e -> e.getId() == id);
+    }
+
+    @Override
+    public void removeAll(){
+        views = new ArrayList<>();
     }
 }

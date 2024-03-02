@@ -12,6 +12,7 @@ interface IAllFileBuffersRepo {
     List<FileBuffer> getAll();
     void add(FileBuffer fileBuffer);
     void remove(int id);
+    void removeAll();
     FileBuffer getNext(int id);
     FileBuffer getPrevious(int id);
 }

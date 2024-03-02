@@ -92,6 +92,7 @@ public final class ViewService {
         getActiveBuffer().removeNextCharacter();
     }
 
+
     /**
      * @return The active buffer.
      */

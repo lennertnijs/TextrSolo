@@ -89,6 +89,14 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
         buffers.removeIf(fileBuffer -> fileBuffer.getId() == id);
     }
 
+    @Override
+    public void removeAll(){
+        for(Iterator<FileBuffer> it = buffers.listIterator(); it.hasNext(); ){
+            it.next();
+            it.remove();
+        }
+    }
+
     /**
      * Finds and returns the next {@link FileBuffer} of the {@link FileBuffer} with the given id.
      * (Works because insertion order is maintained)

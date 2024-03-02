@@ -15,6 +15,7 @@ public interface IFileBufferRepo {
     void setActiveBuffer(FileBuffer fileBuffer);
     void removeBuffer(int id);
     void removeActiveBuffer();
+    void removeAllBuffers();
     List<FileBuffer> getAllBuffers();
     void setActiveToNext();
     void setActiveToPrevious();

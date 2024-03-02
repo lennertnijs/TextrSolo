@@ -100,6 +100,12 @@ public final class FileBufferRepo implements IFileBufferRepo {
         }
     }
 
+
+    @Override
+    public void removeAllBuffers(){
+        activeFileBufferRepo.deleteBuffer();
+        allFileBufferRepo.removeAll();
+    }
     /**
      * Deletes the active {@link FileBuffer}.
      * DOES NOT DELETE IT FROM THE TOTAL REPOSITORY.

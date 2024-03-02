@@ -48,6 +48,13 @@ public final class RawInputHandler implements InputHandler{
                 case ARROW_LEFT -> viewService.moveCursor(Direction.LEFT);
                 case ARROW_DOWN -> viewService.moveCursor(Direction.DOWN);
                 case ARROW_UP -> viewService.moveCursor(Direction.UP);
+
+            }
+        }
+        if(b == 'O'){
+            b = TerminalService.readByte();
+            if(b == 'S'){
+                //
             }
         }
     }

@@ -13,4 +13,5 @@ public interface IViewRepo {
     void add(View view);
     void addAll(List<View> views);
     void remove(int id);
+    void removeAll();
 }
