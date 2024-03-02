@@ -122,15 +122,19 @@ public final class Text {
      */
     public void removeCharacter(int row, int col){
         Validator.withinRange(row, 0, lines.length - 1, "Cannot remove a character at an invalid row index.");
-        Validator.withinRange(col, 0, lines[row].length(), "Cannot remove a character at an invalid column index");
-        if(row == 0 && col == 0){
+        Validator.withinRange(col, -1, lines[row].length(), "Cannot remove a character at an invalid column index");
+        if(row == 0 && col == -1 || row == lines.length - 1 && col == lines[row].length()){
             return;
         }
-        if(col == 0){
-            removeCharacterColumnZero(row);
+        if(col == -1){
+            concatenateRowAndNext(row - 1);
             return;
         }
-        removeCharacterNotFirstCol(row, col - 1);
+        if(col == lines[row].length()){
+            concatenateRowAndNext(row);
+            return;
+        }
+        removeCharacterBase(row, col);
     }
 
     /**
@@ -138,7 +142,7 @@ public final class Text {
      * @param row The row
      * @param col The column
      */
-    private void removeCharacterNotFirstCol(int row, int col){
+    private void removeCharacterBase(int row, int col){
         StringBuilder builder = new StringBuilder(lines[row]);
         builder.deleteCharAt(col);
         lines[row] = builder.toString();
@@ -149,12 +153,12 @@ public final class Text {
      * This means concatenating the two adjacent lines into one line.
      * @param row The row
      */
-    private void removeCharacterColumnZero(int row){
+    private void concatenateRowAndNext(int row){
         String[] nwLines = new String[lines.length - 1];
         for(int i = 0; i < nwLines.length; i++){
-            if(i < row - 1){
+            if(i < row){
                 nwLines[i] = lines[i];
-            }else if(i == row - 1){
+            }else if(i == row){
                 nwLines[i] = lines[i] + lines[i + 1];
             }else{
                 nwLines[i] = lines[i + 1];

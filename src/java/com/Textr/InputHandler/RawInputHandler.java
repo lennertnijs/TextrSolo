@@ -25,6 +25,7 @@ public final class RawInputHandler implements InputHandler{
         }
         switch (input) {
             case BACKSPACE -> viewService.deleteChar();
+            case DELETE -> viewService.deleteNextChar();
             case ENTER -> viewService.createNewline();
             case ESCAPE -> handleEscapeInput();
             case CTRL_P -> fileBufferService.moveActiveBufferToPrev();

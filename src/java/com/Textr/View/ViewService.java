@@ -88,6 +88,10 @@ public final class ViewService {
         updateAnchor();
     }
 
+    public void deleteNextChar(){
+        getActiveBuffer().removeNextCharacter();
+    }
+
     /**
      * @return The active buffer.
      */

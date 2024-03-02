@@ -3,6 +3,7 @@ package com.Textr.FileBuffer;
 import com.Textr.File.File;
 import com.Textr.Util.Point;
 import com.Textr.Validator.Validator;
+import com.Textr.View.Direction;
 
 import java.util.Objects;
 
@@ -53,49 +54,8 @@ public final class FileBuffer {
         return this.cursor;
     }
 
-    public void moveInsertionPointDown(){
-        boolean canMoveDown = cursor.getY() + 1 < text.getAmountOfLines();
-        if(canMoveDown){
-            cursor.incrementY();
-            boolean validX =  cursor.getX() < text.getLineLength(cursor.getY());
-            if(!validX){
-                cursor.setX(text.getLineLength(cursor.getY()));
-            }
-        }
-    }
-
-    public void moveInsertionPointUp(){
-        cursor.decrementY();
-        boolean validX = cursor.getX() < text.getLine(cursor.getY()).length();
-        if(!validX){
-            cursor.setX(text.getLine(cursor.getY()).length());
-        }
-    }
-
-    public void moveInsertionPointLeft(){
-        if(cursor.getX() == 0 && cursor.getY() == 0) {
-            return;
-        }
-        if(cursor.getX() == 0){
-            cursor.decrementY();
-            int length = text.getLineLength(cursor.getY());
-            cursor.setX(length);
-            return;
-        }
-        cursor.decrementX();
-    }
-
-    public void moveInsertionPointRight(){
-        int length  = text.getLineLength(cursor.getY());
-        if(cursor.getX() == length && cursor.getY() == text.getAmountOfLines() - 1){
-            return;
-        }
-        if(cursor.getX() == length){
-            cursor.incrementY();
-            cursor.setX(0);
-            return;
-        }
-        cursor.incrementX();
+    public void moveInsertionPoint(Direction direction){
+        CursorMover.move(cursor, direction, text);
     }
 
     /**
@@ -130,7 +90,7 @@ public final class FileBuffer {
     public void removeCharacter(){
         int lineAboveLength = text.getLineLength(Math.max(0, cursor.getY() - 1));
         int oldAmountOfLines = text.getAmountOfLines();
-        text.removeCharacter(cursor.getY(), cursor.getX());
+        text.removeCharacter(cursor.getY(), cursor.getX() - 1);
         int newAmountOfLines = text.getAmountOfLines();
         boolean deletedALine = newAmountOfLines < oldAmountOfLines;
         if(deletedALine){
@@ -139,6 +99,10 @@ public final class FileBuffer {
         }else{
             cursor.decrementX();
         }
+    }
+
+    public void removeNextCharacter(){
+        text.removeCharacter(cursor.getY(), cursor.getX());
     }
 
     /**
