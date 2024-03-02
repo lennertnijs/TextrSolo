@@ -1,6 +1,6 @@
 package com.Textr.ViewDrawer;
 
-import com.Textr.Point.Point;
+import com.Textr.Util.Point;
 import com.Textr.Terminal.TerminalService;
 
 public final class CursorDrawer {

@@ -1,6 +1,6 @@
 package com.Textr.Terminal;
 
-import com.Textr.Point.Point;
+import com.Textr.Util.Point;
 import com.Textr.View.Dimension2D;
 import io.github.btj.termios.Terminal;
 

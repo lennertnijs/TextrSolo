@@ -1,4 +1,4 @@
-package com.Textr.Point;
+package com.Textr.Util;
 
 import com.Textr.Validator.Validator;
 
@@ -30,8 +30,8 @@ public final class Point {
      * @throws IllegalArgumentException If the passed x or y value is negative.
      */
     public static Point create(int x, int y){
-        Validator.notNegative(x, "Cannot create a Point with a negative x value.");
-        Validator.notNegative(y, "Cannot create a Point with a negative y value.");
+        Validator.notNegative(x, "Cannot create a Util with a negative x value.");
+        Validator.notNegative(y, "Cannot create a Util with a negative y value.");
         return new Point(x, y);
     }
 
@@ -56,7 +56,7 @@ public final class Point {
      * @throws IllegalArgumentException If the given x is negative.
      */
     public void setX(int x){
-        Validator.notNegative(x, "Cannot set this Point's x coordinate to a negative value.");
+        Validator.notNegative(x, "Cannot set this Util's x coordinate to a negative value.");
         this.x = x;
     }
 
@@ -67,7 +67,7 @@ public final class Point {
      * @throws IllegalArgumentException If the given y is negative.
      */
     public void setY(int y){
-        Validator.notNegative(y, "Cannot set this Point's y coordinate to a negative value.");
+        Validator.notNegative(y, "Cannot set this Util's y coordinate to a negative value.");
         this.y = y;
     }
 

@@ -1,6 +1,6 @@
 package com.Textr.View;
 
-import com.Textr.Point.Point;
+import com.Textr.Util.Point;
 import com.Textr.Validator.Validator;
 
 public class AnchorUpdater {

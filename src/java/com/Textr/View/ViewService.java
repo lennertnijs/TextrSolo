@@ -2,7 +2,7 @@ package com.Textr.View;
 
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.Point.Point;
+import com.Textr.Util.Point;
 import com.Textr.Validator.Validator;
 import com.Textr.ViewDrawer.CursorDrawer;
 import com.Textr.ViewDrawer.ViewDrawer;

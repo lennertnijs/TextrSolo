@@ -1,7 +1,7 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
-import com.Textr.Point.Point;
+import com.Textr.Util.Point;
 import com.Textr.Validator.Validator;
 
 import java.util.Objects;
@@ -73,14 +73,29 @@ public final class FileBuffer {
     }
 
     public void moveInsertionPointLeft(){
+        if(cursor.getX() == 0 && cursor.getY() == 0) {
+            return;
+        }
+        if(cursor.getX() == 0){
+            cursor.decrementY();
+            int length = text.getLineLength(cursor.getY());
+            cursor.setX(length);
+            return;
+        }
         cursor.decrementX();
     }
 
     public void moveInsertionPointRight(){
-        boolean canMoveRight = cursor.getX() < text.getLines()[cursor.getY()].length();
-        if(canMoveRight){
-            cursor.incrementX();
+        int length  = text.getLineLength(cursor.getY());
+        if(cursor.getX() == length && cursor.getY() == text.getAmountOfLines() - 1){
+            return;
         }
+        if(cursor.getX() == length){
+            cursor.incrementY();
+            cursor.setX(0);
+            return;
+        }
+        cursor.incrementX();
     }
 
     /**
