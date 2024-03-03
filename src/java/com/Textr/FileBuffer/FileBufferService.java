@@ -10,15 +10,25 @@ import com.Textr.View.Direction;
 import java.util.List;
 
 /**
- * Class used to present a bunch of FileBuffer methods to the outside world. (probably create an interface for this)
+ * The service class for the {@link FileBuffer} objects.
+ * Used as an API to communicate with these objects.
  */
 public final class FileBufferService {
 
     private final IFileBufferRepo fileBufferRepo;
     private final FileService fileService;
 
-    public FileBufferService(FileService fileService){
-        this.fileBufferRepo = new FileBufferRepo();
+    /**
+     * Constructor for a FileBufferService.
+     * @param fileService The {@link File}'s service API.
+     * @param fileBufferRepo The {@link FileBuffer} repository.
+     *
+     * @throws IllegalArgumentException If the file service or the file buffer repository is null.
+     */
+    public FileBufferService(FileService fileService, IFileBufferRepo fileBufferRepo){
+        Validator.notNull(fileService, "Cannot create a FileBufferService with a null FileService.");
+        Validator.notNull(fileBufferRepo, "Cannot create a FileBufferService with a null FileBufferRepository");
+        this.fileBufferRepo = fileBufferRepo;
         this.fileService = fileService;
     }
 
@@ -62,11 +72,5 @@ public final class FileBufferService {
     public void moveCursor(Direction direction){
         Validator.notNull(direction, "Cannot move the insertion point in the null Direction.");
         getActiveBuffer().moveCursor(direction);
-    }
-
-    public void moveBufferToNext(){
-        int id = fileBufferRepo.getActiveBufferId();
-        fileBufferRepo.setActiveToNext();
-        fileBufferRepo.removeBuffer(id);
     }
 }
