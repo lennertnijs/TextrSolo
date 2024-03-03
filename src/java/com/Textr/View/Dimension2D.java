@@ -47,9 +47,8 @@ public final class Dimension2D {
     }
 
     /**
-     * Compares this {@link Dimension2D} to the given {@link Object} and returns True if they're equal, False otherwise.
-     * Equality means they have the same width & height.
-     * @param o The other {@link Object} to be compared to this {@link Dimension2D}
+     * Compares this {@link Dimension2D} to the given object and returns True if they're equal, False otherwise.
+     * @param o The other object
      *
      * @return True if equal, False otherwise.
      */
@@ -79,7 +78,7 @@ public final class Dimension2D {
     /**
      * Creates and returns a {@link String} representation of this {@link Dimension2D}.
      *
-     * @return The {@link String}
+     * @return The string representation
      */
     @Override
     public String toString(){

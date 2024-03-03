@@ -3,6 +3,9 @@ package com.Textr.View;
 import com.Textr.Util.Point;
 import com.Textr.Validator.Validator;
 
+/**
+ * Updates the anchor point of a View.
+ */
 public class AnchorUpdater {
 
     /**
@@ -13,16 +16,17 @@ public class AnchorUpdater {
 
     /**
      * Updates the anchor point based on the cursor point and the terminal dimensions.
-     * @param anchor The anchor point. Cannot be null.
-     * @param cursor The cursor point. Cannot be null.
+     * The anchor point represents the top-left point from which onwards a part of the buffer's text should be printed.
+     * @param anchor The anchor. Cannot be null.
+     * @param cursor The cursor. Cannot be null.
      * @param dimensions The dimensions of the terminal. Cannot be nul.
      *
-     * @throws IllegalArgumentException If the anchor point, cursor point or dimensions are null.
+     * @throws IllegalArgumentException If the anchor, cursor or dimensions are null.
      */
     public static void updateAnchor(Point anchor, Point cursor, Dimension2D dimensions){
-        Validator.notNull(anchor, "cd");
-        Validator.notNull(cursor, "The insertion point cannot be null.");
-        Validator.notNull(dimensions, "The dimensions cannot be null.");
+        Validator.notNull(anchor, "Cannot update a null anchor.");
+        Validator.notNull(cursor, "Cannot update the anchor because the cursor is null.");
+        Validator.notNull(dimensions, "Cannot update the anchor because the dimensions of the terminal are null.");
         if(cursor.getX() < anchor.getX()){
             anchor.setX(cursor.getX());
         }
