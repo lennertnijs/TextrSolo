@@ -5,7 +5,7 @@ import com.Textr.Terminal.TerminalService;
 import com.Textr.View.Direction;
 import com.Textr.View.ViewService;
 
-import static com.Textr.Inputs.*;
+import static com.Textr.InputHandler.Inputs.*;
 
 public final class RawInputHandler implements InputHandler{
     private final ViewService viewService;
@@ -17,45 +17,34 @@ public final class RawInputHandler implements InputHandler{
     }
     @Override
     public void handleInput(){
-        int input = TerminalService.readByte();
+        int b = TerminalService.readByte();
         TerminalService.clearScreen();
-        boolean isRegularInput = input >= 65 && input <= 122 || input == SPACE;
+        boolean isRegularInput = b >= 65 && b <= 122 || b == SPACE;
         if(isRegularInput){
-            viewService.insertCharacter((char) input);
+            viewService.insertCharacter((char) b);
+        }else{
+            handleSpecialInput(b);
         }
-        switch (input) {
-            case BACKSPACE -> viewService.deleteChar();
-            case DELETE -> viewService.deleteNextChar();
-            case ENTER -> viewService.createNewline();
-            case ESCAPE -> handleEscapeInput();
-            case CTRL_P -> fileBufferService.moveActiveBufferToPrev();
-            case CTRL_N -> fileBufferService.moveActiveBufferToNext();
-        }
+
         drawAll();
     }
 
+    private void handleSpecialInput(int b){
+        Input input = InputTranslator.translateBytes(b);
+        switch(input){
+            case ENTER -> viewService.createNewline();
+            case CTRL_P -> fileBufferService.moveActiveBufferToPrev();
+            case CTRL_N -> fileBufferService.moveActiveBufferToNext();
+            case ARROW_UP -> viewService.moveCursor(Direction.UP);
+            case ARROW_RIGHT -> viewService.moveCursor(Direction.RIGHT);
+            case ARROW_DOWN -> viewService.moveCursor(Direction.DOWN);
+            case ARROW_LEFT -> viewService.moveCursor(Direction.LEFT);
+            case DELETE -> viewService.deleteNextChar();
+            case BACKSPACE -> viewService.deleteChar();
+        }
+    }
     private void drawAll(){
         viewService.drawAllViews();
         viewService.drawCursor();
-    }
-
-    private void handleEscapeInput(){
-        int b = TerminalService.readByte();
-        if (b == '[') {
-            b = TerminalService.readByte();
-            switch (b) {
-                case ARROW_RIGHT -> viewService.moveCursor(Direction.RIGHT);
-                case ARROW_LEFT -> viewService.moveCursor(Direction.LEFT);
-                case ARROW_DOWN -> viewService.moveCursor(Direction.DOWN);
-                case ARROW_UP -> viewService.moveCursor(Direction.UP);
-
-            }
-        }
-        if(b == 'O'){
-            b = TerminalService.readByte();
-            if(b == 'S'){
-                //
-            }
-        }
     }
 }

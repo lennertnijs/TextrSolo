@@ -1,4 +1,4 @@
-package com.Textr;
+package com.Textr.InputHandler;
 
 public final class Inputs {
 
