@@ -1,7 +1,6 @@
 package com.Textr.FileRepo;
 
 import com.Textr.File.File;
-import com.Textr.FileRepo.IFileRepo;
 import com.Textr.Validator.Validator;
 
 import java.util.*;
@@ -16,10 +15,10 @@ public final class FileRepo implements IFileRepo {
 
 
     /**
-     * Checks whether a {@link File} with the given id is stored.
+     * Checks whether a file with the given id exists.
      * @param id The id
      *
-     * @return True if a matching {@link File} was found. False otherwise.
+     * @return True if a matching file was found. False otherwise.
      */
     @Override
     public boolean contains(int id) {
@@ -33,7 +32,7 @@ public final class FileRepo implements IFileRepo {
 
 
     /**
-     * @return The amount of {@link File}s stored.
+     * @return The amount of files stored.
      */
     @Override
     public int getSize(){
@@ -41,11 +40,11 @@ public final class FileRepo implements IFileRepo {
     }
 
     /**
-     * Finds and returns the {@link File} with the given id.
+     * Finds and returns the file with the given id.
      * @param id The id
      *
-     * @return The {@link File}
-     * @throws NoSuchElementException If no matching {@link File} was found.
+     * @return The file
+     * @throws NoSuchElementException If no matching file was found.
      */
     public File get(int id){
         for(File file : files){
@@ -57,7 +56,7 @@ public final class FileRepo implements IFileRepo {
     }
 
     /**
-     * @return All stored {@link File}s.
+     * @return All stored files.
      */
     public List<File> getAll(){
         return files;
@@ -65,10 +64,10 @@ public final class FileRepo implements IFileRepo {
 
 
     /**
-     * Stores the given {@link File}.
-     * @param file The {@link File}. Cannot be null.
+     * Stores the given file.
+     * @param file The file. Cannot be null.
      *
-     * @throws IllegalArgumentException If the {@link File} is null.
+     * @throws IllegalArgumentException If the given file is null.
      */
     public void add(File file){
         Validator.notNull(file, "Cannot store a null File.");
@@ -76,7 +75,7 @@ public final class FileRepo implements IFileRepo {
     }
 
     /**
-     * Removes the {@link File} with the given id.
+     * Removes the file with the given id.
      * If no match was found, does nothing.
      * @param id The id
      */
