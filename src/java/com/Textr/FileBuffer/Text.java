@@ -95,10 +95,10 @@ public final class Text {
     }
 
     /**
-     * Inserts the given character into this {@link Text} at the given 0-based row & column.
+     * Inserts the given character into this {@link Text} at the given 0-based row & column indices.
      * @param character The character
-     * @param row The row. Cannot be negative or bigger than the amount of lines in this {@link Text} - 1.
-     * @param col The column. Cannot be negative or bigger than the length of the row.
+     * @param row The row index. Cannot be negative or bigger than the amount of lines in this text - 1.
+     * @param col The column index. Cannot be negative or bigger than the length of the row.
      *
      * @throws IllegalArgumentException If the row or column index is invalid.
      */
@@ -187,7 +187,7 @@ public final class Text {
     }
 
     /**
-     * Compares this {@link Text} to the given {@link Object}. Returns true if equal, false otherwise.
+     * Compares this text to the given object. Returns true if equal, false otherwise.
      * @param o The other object
      *
      * @return True if equal, false otherwise.
@@ -214,12 +214,12 @@ public final class Text {
     }
 
     /**
-     * Generates and returns a {@link String} representation of this {@link Text}.
+     * Generates and returns a {@link String} representation of this text.
      *
-     * @return The {@link String} representation.
+     * @return The string representation.
      */
     @Override
     public String toString(){
-        return String.format("Text[Lines: %s]", String.join("\r\n", lines));
+        return String.format("Text[Lines: %s]", String.join(System.lineSeparator(), lines));
     }
 }
