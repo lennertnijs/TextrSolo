@@ -45,6 +45,7 @@ public final class RawInputHandler implements InputHandler{
             case ENTER -> viewService.createNewline();
             case CTRL_P -> fileBufferService.moveActiveBufferToPrev();
             case CTRL_N -> fileBufferService.moveActiveBufferToNext();
+            case CTRL_S -> fileBufferService.saveActiveBuffer();
             case ARROW_UP -> viewService.moveCursor(Direction.UP);
             case ARROW_RIGHT -> viewService.moveCursor(Direction.RIGHT);
             case ARROW_DOWN -> viewService.moveCursor(Direction.DOWN);

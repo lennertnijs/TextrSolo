@@ -116,10 +116,6 @@ public final class ViewService {
         initialiseViewsVertical();
     }
 
-    public void saveBuffer(){
-
-    }
-
     /**
      * Deletes the character just after the cursor of the active buffer.
      */
