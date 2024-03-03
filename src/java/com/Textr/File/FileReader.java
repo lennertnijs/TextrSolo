@@ -23,7 +23,6 @@ public final class FileReader {
      * @param url The uniform resource locator of the text file.
      *
      * @return The file's contents
-     * @throws IOException If anything goes wrong during the reading of the text file's contents.
      * @throws IllegalArgumentException If a non-ASCII character was found in the file's contents.
      */
     public static String readContents(String url){
