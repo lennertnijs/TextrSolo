@@ -5,6 +5,7 @@ import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.File.FileService;
 import com.Textr.FileBufferRepo.FileBufferRepo;
 import com.Textr.FileRepo.FileRepo;
+import com.Textr.InputHandler.RawInputHandler;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.ViewService;
 import com.Textr.ViewRepo.ViewRepo;
@@ -23,6 +24,8 @@ public class Main {
 
 
         final FileController fileController = new FileController(fileService, fileBufferService, viewService);
+
+       Settings.inputHandler = new RawInputHandler(viewService, fileBufferService);
 
         TerminalService.enterRawInputMode();
         TerminalService.clearScreen();
