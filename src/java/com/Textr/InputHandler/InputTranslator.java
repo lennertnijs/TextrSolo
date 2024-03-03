@@ -43,16 +43,16 @@ public class InputTranslator {
     private static Input translateBracketByteCode(){
         int b = TerminalService.readByte();
         switch(b){
-            case ARROW_UP -> {
+            case 'A' -> {
                 return Input.ARROW_UP;
             }
-            case ARROW_RIGHT -> {
+            case 'C' -> {
                 return Input.ARROW_RIGHT;
             }
-            case ARROW_DOWN -> {
+            case 'B' -> {
                 return Input.ARROW_DOWN;
             }
-            case ARROW_LEFT -> {
+            case 'D' -> {
                 return Input.ARROW_LEFT;
             }
             case '3' -> {
@@ -64,7 +64,7 @@ public class InputTranslator {
 
     private static Input translate3ByteCode(){
         int b = TerminalService.readByte();
-        if(b == DELETE){
+        if(b == '~'){
             return Input.DELETE;
         }
         throw new InputMismatchException("Could not translate the input.");
