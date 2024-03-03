@@ -27,6 +27,7 @@ public final class FileController {
     }
 
     public void loadFiles(String[] files){
+        Settings.loadDefaultLineSeparator();
         TerminalService.enterRawInputMode();
         TerminalService.clearScreen();
         String[] f = Arrays.copyOfRange(files, 0, files.length);
@@ -49,7 +50,6 @@ public final class FileController {
         viewService.initialiseViewsVertical();
         viewService.drawAllViews();
         viewService.drawCursor();
-        TerminalService.leaveRawInputMode();
     }
 
     private void loadSettings(String input){

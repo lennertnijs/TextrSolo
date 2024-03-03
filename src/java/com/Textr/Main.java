@@ -20,10 +20,10 @@ public class Main {
 
         final ViewRepo viewRepo = new ViewRepo();
         final ViewService viewService = new ViewService(fileBufferService, viewRepo);
+
+
         final FileController fileController = new FileController(fileService, fileBufferService, viewService);
-        Settings.loadDefaultLineSeparator();
         fileController.loadFiles(args);
-        TerminalService.enterRawInputMode();
         while(true){
             fileController.handleInput();
         }
