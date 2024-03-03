@@ -1,5 +1,6 @@
 package com.Textr.File;
 
+import com.Textr.Settings;
 import com.Textr.Validator.Validator;
 
 import java.io.BufferedReader;
@@ -43,10 +44,25 @@ public final class FileReader {
 
     private static void checkForNonAscii(String text){
         for(char c : text.toCharArray()){
-            boolean isNonASCII = (c < 32 && c != 10 && c != 13) || 127 <= c;
+            boolean isNonASCII = checkForNonAsciiWithLineSeparatorSetting(c);
             if(isNonASCII){
                 throw new IllegalArgumentException("A non-ASCII character was present in the File.");
             }
         }
+    }
+
+    private static boolean checkForNonAsciiWithLineSeparatorSetting(char c){
+        switch(Settings.defaultLineSeparator){
+            case CR -> {
+                return (c < 32 && c != 13) || 127 <= c;
+            }
+            case LF -> {
+                return (c < 32 && c != 10) || 127 <= c;
+            }
+            case CRLF -> {
+                return (c < 32 && c != 10 && c != 13) || 127 <= c;
+            }
+        }
+        throw new IllegalArgumentException();
     }
 }

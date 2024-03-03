@@ -2,6 +2,11 @@ package com.Textr.InputHandler;
 
 public final class Inputs {
 
+    /**
+     * CR -> 13 decimal \r
+     * LF -> 10 decimal \n
+     * CR LF -> 13 10 \r\n
+     */
 
     public static final int ENTER = 13;
     public static final int CTRL_N = 14;

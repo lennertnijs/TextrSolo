@@ -2,8 +2,6 @@ package com.Textr.File;
 
 import com.Textr.Validator.Validator;
 
-import java.util.Objects;
-
 /**
  * Class to represent a File object.
  */
