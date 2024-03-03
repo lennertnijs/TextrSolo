@@ -16,10 +16,10 @@ public final class ViewRepo implements IViewRepo{
     }
 
     /**
-     * Checks whether a {@link View} with the given id is stored.
+     * Checks whether a view with the given id is stored.
      * @param id The id
      *
-     * @return True if a matching {@link View} was found, false otherwise.
+     * @return True if a matching view was found, false otherwise.
      */
     @Override
     public boolean contains(int id) {
@@ -32,7 +32,7 @@ public final class ViewRepo implements IViewRepo{
     }
 
     /**
-     * @return The amount of stored {@link View}s.
+     * @return The amount of stored views.
      */
     @Override
     public int getSize() {
@@ -40,11 +40,11 @@ public final class ViewRepo implements IViewRepo{
     }
 
     /**
-     * Finds the {@link View} with the given id and returns it. Throws an Exception if no match was found.
+     * Finds the view with the given id and returns it. Throws an Exception if no match was found.
      * @param id The id
      *
-     * @return The {@link View}
-     * @throws NoSuchElementException If no {@link View} was found.
+     * @return The view
+     * @throws NoSuchElementException If no view was found.
      */
 
     @Override
@@ -58,12 +58,12 @@ public final class ViewRepo implements IViewRepo{
     }
 
     /**
-     * Finds the {@link View} with the given {@link FileBuffer} id and returns it.
+     * Finds the view with the given {@link FileBuffer} id and returns it.
      * Throws an Exception if no match was found.
-     * @param fileBufferId The {@link FileBuffer} id.
+     * @param fileBufferId The file buffer id.
      *
-     * @return The {@link View}
-     * @throws NoSuchElementException If no {@link View} was found.
+     * @return The view
+     * @throws NoSuchElementException If no view was found.
      */
     @Override
     public View getByBufferId(int fileBufferId){
@@ -76,7 +76,7 @@ public final class ViewRepo implements IViewRepo{
     }
 
     /**
-     * @return All the stored {@link View}s.
+     * @return All the stored views.
      */
     @Override
     public List<View> getAll(){
@@ -84,10 +84,10 @@ public final class ViewRepo implements IViewRepo{
     }
 
     /**
-     * Stores the given {@link View}.
-     * @param view The {@link View}. Cannot be null.
+     * Stores the given view.
+     * @param view The view. Cannot be null.
      *
-     * @throws IllegalArgumentException If the passed {@link View} is null.
+     * @throws IllegalArgumentException If the passed view is null.
      */
     public void add(View view){
         Validator.notNull(view, "Cannot store a null View.");
@@ -97,6 +97,8 @@ public final class ViewRepo implements IViewRepo{
     /**
      * Stores all the views in the view repository.
      * @param views The views
+     *
+     * @throws IllegalArgumentException If the given list of views is or contains null.
      */
     @Override
     public void addAll(List<View> views){
@@ -107,7 +109,7 @@ public final class ViewRepo implements IViewRepo{
         }
     }
     /**
-     * Removes the {@link View} with the given id.
+     * Removes the view with the given id.
      * Does nothing if no match was found.
      * @param id The id
      */
@@ -116,6 +118,10 @@ public final class ViewRepo implements IViewRepo{
         views.removeIf(e -> e.getId() == id);
     }
 
+    /**
+     * Removes all the views.
+     * USE WITH CAUTION
+     */
     @Override
     public void removeAll(){
         views = new ArrayList<>();
