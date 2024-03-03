@@ -42,6 +42,10 @@ public final class FileReader {
         }
     }
 
+    /**
+     * Checks a string of text for non-ascii characters. Throws an error if any were found.
+     * @param text The text.
+     */
     private static void checkForNonAscii(String text){
         for(char c : text.toCharArray()){
             boolean isNonASCII = checkForNonAsciiWithLineSeparatorSetting(c);
@@ -51,6 +55,11 @@ public final class FileReader {
         }
     }
 
+    /**
+     * Checks whether a character is within ASCII characters, including the set line separator.
+     * @param c The character
+     * @return True if non-ascii. False otherwise.
+     */
     private static boolean checkForNonAsciiWithLineSeparatorSetting(char c){
         switch(Settings.defaultLineSeparator){
             case CR -> {

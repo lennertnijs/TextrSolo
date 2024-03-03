@@ -1,20 +1,28 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.Util.Point;
+import com.Textr.Validator.Validator;
 import com.Textr.View.Direction;
 
+/**
+ * Handles the movement of the cursor.
+ * Currently only supports 4-directional movement by one unit.
+ */
 public final class CursorMover {
 
     private CursorMover(){
     }
 
     /**
-     * Moves the cursor 1 unit in the given direction and updates the cursor's values appropriately.
+     * Moves the cursor 1 unit in the given direction within the given text and updates the cursor's values appropriately.
      * @param cursor The cursor. Cannot be null.
-     * @param direction
-     * @param text
+     * @param direction The direction. Cannot be null.
+     * @param text The text in which the cursor is moving. Cannot be null.
      */
     public static void move(Point cursor, Direction direction, Text text){
+        Validator.notNull(cursor, "Cannot move a null cursor.");
+        Validator.notNull(direction, "Cannot move the cursor in a null Direction.");
+        Validator.notNull(text, "Cannot move the cursor over a null Text.");
         switch(direction){
             case UP -> moveUp(cursor, text);
             case RIGHT -> moveRight(cursor, text);
@@ -24,10 +32,11 @@ public final class CursorMover {
     }
 
     /**
-     * Moves the cursor up one line, if appropriate.
+     * Moves the cursor up one line, if not already on the first line.
      * After moving up it will update the cursor's X value if necessary.
-     * @param cursor The cursor
-     * @param text The text
+     * More precisely, if the new line is shorter than the old line, it will move the cursor to the end of the new line.
+     * @param cursor The cursor. Cannot be null.
+     * @param text The text. Cannot be null.
      */
     private static void moveUp(Point cursor, Text text){
         boolean onFirstRow = cursor.getY() == 0;
@@ -35,14 +44,18 @@ public final class CursorMover {
             return;
         }
         cursor.decrementY();
-        updateXAfterYChange(cursor, text.getLineLength(cursor.getY()));
+        int newLineLength = text.getLineLength(cursor.getY());
+        if(cursor.getX() > newLineLength){
+            cursor.setX(newLineLength);
+        }
     }
 
     /**
-     * Moves the cursor down one line, if appropriate.
+     * Moves the cursor down one line, if not already on the last line.
      * After moving down it will update the cursor's X value if necessary.
-     * @param cursor The cursor
-     * @param text The text
+     * More precisely, if the new line is shorter than the old line, it will move the cursor to the end of the new line.
+     * @param cursor The cursor. Cannot be null.
+     * @param text The text. Cannot be null.
      */
     private static void moveDown(Point cursor, Text text){
         boolean onLastRow = cursor.getY() == text.getAmountOfLines() - 1;
@@ -50,14 +63,19 @@ public final class CursorMover {
             return;
         }
         cursor.incrementY();
-        updateXAfterYChange(cursor, text.getLineLength(cursor.getY()));
+        int newLineLength = text.getLineLength(cursor.getY());
+        if(cursor.getX() > newLineLength){
+            cursor.setX(newLineLength);
+        }
     }
 
     /**
-     * Moves the cursor right one position, if appropriate.
+     * Moves the cursor right one position, if not already at the end of the current line.
      * After moving right, it will update the cursor's Y value if necessary.
-     * @param cursor The cursor
-     * @param text The text
+     * More precisely, if the cursor was at the end of the line, it will move to the start of the next line,
+     * if it was not at the last line of the text.
+     * @param cursor The cursor. Cannot be null.
+     * @param text The text. Cannot be null.
      */
     private static void moveRight(Point cursor, Text text){
         boolean isAtEndOfLine = cursor.getX() == text.getLineLength(cursor.getY());
@@ -73,10 +91,12 @@ public final class CursorMover {
     }
 
     /**
-     * Moves the cursor left one position, if appropriate.
+     * Moves the cursor left one position, if not already at the end of the current line.
      * After moving left, it will update the cursor's Y value if necessary.
-     * @param cursor The cursor
-     * @param text The text
+     * More precisely, if the cursor was at the beginning of the line, it will move to the end of the previous line,
+     * if it was not at the first line of the text.
+     * @param cursor The cursor. Cannot be null.
+     * @param text The text. Cannot be null.
      */
     private static void moveLeft(Point cursor, Text text){
         boolean isAtStartOfLine = cursor.getX() == 0;
@@ -88,17 +108,6 @@ public final class CursorMover {
         if(!isAtStartOfText){
             cursor.decrementY();
             cursor.setX(text.getLineLength(cursor.getY()));
-        }
-    }
-
-    /**
-     * Updates the X value of the cursor if necessary.
-     * @param cursor The cursor
-     * @param lineLength The length of the new line
-     */
-    private static void updateXAfterYChange(Point cursor, int lineLength){
-        if(cursor.getX() > lineLength){
-            cursor.setX(lineLength);
         }
     }
 }
