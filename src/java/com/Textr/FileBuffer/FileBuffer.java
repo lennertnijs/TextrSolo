@@ -5,8 +5,6 @@ import com.Textr.Util.Point;
 import com.Textr.Validator.Validator;
 import com.Textr.View.Direction;
 
-import java.util.Objects;
-
 /**
  * Represents a buffer.
  */
@@ -131,9 +129,8 @@ public final class FileBuffer {
 
 
     /**
-     * Compares this {@link FileBuffer} to the given {@link Objects} and returns True if they're equal.
-     * More precisely, returns true if all of their fields are equal.
-     * @param o The other {@link Object}
+     * Compares this file buffer to the given object and returns True if they're equal.
+     * @param o The other object
      *
      * @return True if equal, false otherwise.
      */
@@ -149,7 +146,7 @@ public final class FileBuffer {
     }
 
     /**
-     * Creates and returns a hash code for this {@link FileBuffer}.
+     * Creates and returns a hash code for this file buffer.
      *
      * @return The hash code
      */
@@ -159,9 +156,9 @@ public final class FileBuffer {
     }
 
     /**
-     * Creates and returns a {@link String} representation of this {@link FileBuffer}.
+     * Creates and returns a {@link String} representation of this file buffer.
      *
-     * @return The {@link String} representation
+     * @return The string representation
      */
     @Override
     public String toString(){
@@ -171,14 +168,14 @@ public final class FileBuffer {
 
     /**
      * Creates and returns a new {@link FileBuffer.Builder} to build a {@link FileBuffer} with.
-     * @return The {@link FileBuffer.Builder}
+     * @return The builder.
      */
     public static Builder builder(){
         return new Builder();
     }
 
     /**
-     * A subclass {@link FileBuffer.Builder} used to build valid {@link FileBuffer} instances with.
+     * Used to build valid {@link FileBuffer} instances with.
      * To obtain a {@link FileBuffer.Builder}, use FileBuffer.builder();
      */
     public static class Builder{
@@ -188,17 +185,14 @@ public final class FileBuffer {
         private Point cursor = null;
         private BufferState state = null;
 
-        /**
-         * Constructor for the {@link FileBuffer.Builder}
-         */
         private Builder(){
         }
 
         /**
-         * Sets the active file id of this {@link FileBuffer.Builder} to the given id.
+         * Sets the active file id of this builder to the given id.
          * @param id The id
          *
-         * @return This {@link FileBuffer.Builder}
+         * @return The builder
          */
         public Builder fileId(int id){
             this.fileId = id;
@@ -206,10 +200,10 @@ public final class FileBuffer {
         }
 
         /**
-         * Sets the buffer text of this {@link FileBuffer.Builder} to the given text.
+         * Sets the text of this buffer to the given text.
          * @param text The text
          *
-         * @return This {@link FileBuffer.Builder}
+         * @return The builder
          */
         public Builder text(Text text){
             this.text = text;
@@ -217,10 +211,10 @@ public final class FileBuffer {
         }
 
         /**
-         * Sets the insertion point index of this {@link FileBuffer.Builder} to the given index.
-         * @param cursor The position
+         * Sets the cursor of this buffer to the given cursor.
+         * @param cursor The cursor
          *
-         * @return This {@link FileBuffer.Builder}
+         * @return The builder
          */
         public Builder cursor(Point cursor){
             this.cursor = cursor;
@@ -228,10 +222,10 @@ public final class FileBuffer {
         }
 
         /**
-         * Sets the {@link BufferState} of this {@link FileBuffer.Builder} to the given state.
+         * Sets the state of this buffer to the given state.
          * @param state The state
          *
-         * @return This {@link FileBuffer.Builder}
+         * @return This builder
          */
         public Builder state(BufferState state){
             this.state = state;
@@ -240,21 +234,21 @@ public final class FileBuffer {
 
 
         /**
-         * Validates all the fields of this {@link FileBuffer.Builder}.
-         * If all are valid, creates and returns a new immutable {@link FileBuffer} with these fields.
+         * Validates all the fields of this builder.
+         * If all are valid, creates and returns a new {@link FileBuffer} with these fields.
          * More precisely, the following conditions must hold on the fields:
          * - The active file id cannot be negative.
-         * - The buffer text cannot be null.
-         * - The insertion point index must be within: 0 <= insertionIndex <= bufferText.length().
+         * - The text cannot be null.
+         * - The cursor cannot be null.
          * - The state cannot be null.
-         * @throws  IllegalArgumentException If any of the fields are invalid.
          *
-         * @return a newly created valid & immutable {@link FileBuffer}
+         * @return The new file buffer.
+         * @throws  IllegalArgumentException If any of the fields are invalid.
          */
         public FileBuffer build(){
             Validator.notNegative(fileId, "The id the File in the FileBuffer cannot be negative.");
-            Validator.notNull(text, "The buffer text in the FileBuffer cannot be null.");
-            Validator.notNull(cursor, "The insertion point of the FileBuffer cannot be null.");
+            Validator.notNull(text, "The text in the FileBuffer cannot be null.");
+            Validator.notNull(cursor, "The cursor of the FileBuffer cannot be null.");
             Validator.notNull(state,"The state of the FileBuffer cannot be null.");
             return new FileBuffer(this);
         }
