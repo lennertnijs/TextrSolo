@@ -4,10 +4,17 @@ import com.Textr.Validator.Validator;
 
 import java.util.Arrays;
 
+/**
+ * Represents a text.
+ */
 public final class Text {
 
     private String[] lines;
 
+    /**
+     * Private constructor. Use the create() methods.
+     * @param lines The text lines. Cannot be, or contain null.
+     */
     private Text(String[] lines){
         this.lines = lines;
     }
@@ -16,14 +23,14 @@ public final class Text {
      * Static factory method to create a {@link Text} with.
      * @param lines The text's lines
      *
-     * @return The {@link Text}
+     * @return The text
      * @throws IllegalArgumentException If the array is null, or contains a null element.
      */
     public static Text create(String[] lines){
         Validator.notNull(lines, "Cannot create a Text with null array of lines.");
         String[] linesCopy = new String[lines.length];
         for(int i = 0; i < lines.length; i++){
-            Validator.notNull(lines[i], "Cannot create a Text with the array because it contains a null line.");
+            Validator.notNull(lines[i], "Cannot create a Text because it contains a null line.");
             linesCopy[i] = lines[i];
         }
         return new Text(linesCopy);
@@ -33,7 +40,7 @@ public final class Text {
      * Static factory method tot create a {@link Text} with.
      * @param text The text
      *
-     * @return The {@link Text}
+     * @return The text
      * @throws IllegalArgumentException If the text is null.
      */
     public static Text create(String text){
@@ -42,29 +49,7 @@ public final class Text {
     }
 
     /**
-     * Returns the line of this {@link Text} at the given 0-based row index.
-     * @param row The row. Cannot be negative or bigger than the amount of lines - 1.
-     *
-     * @return The line at index row
-     */
-    public String getLine(int row){
-        Validator.withinRange(row, 0, lines.length - 1, "Invalid index to retrieve a text line.");
-        return lines[row];
-    }
-
-    /**
-     * Returns the length of the line of this {@link Text} at the given 0-based row index.
-     * @param row The row. Cannot be negative or bigger than the amount of lines s- 1.
-     *
-     * @return The length of the line at index row.
-     */
-    public int getLineLength(int row){
-        Validator.withinRange(row, 0, lines.length - 1, "Invalid index to retrieve a text line length.");
-        return lines[row].length();
-    }
-
-    /**
-     * @return This {@link Text}'s lines.
+     * @return This text's lines.
      */
     public String[] getLines(){
         String[] linesCopy = new String[lines.length];
@@ -73,21 +58,33 @@ public final class Text {
     }
 
     /**
-     * @return This {@link Text}'s text.
+     * @return This text's text.
      */
     public String getText(){
         return String.join(System.lineSeparator(), lines);
     }
 
     /**
-     * @return The amount of lines in this {@link Text}.
+     * Returns the length of this text's line at the given 0-based row index.
+     * @param row The row index. Cannot be negative or bigger than the amount of lines - 1.
+     *
+     * @return The length of the line at index row.
+     * @throws IllegalArgumentException If the row index is negative or bigger than the amount of lines - 1.
+     */
+    public int getLineLength(int row){
+        Validator.withinRange(row, 0, lines.length - 1, "Invalid index to retrieve a text line length.");
+        return lines[row].length();
+    }
+
+    /**
+     * @return The amount of lines in this text.
      */
     public int getAmountOfLines(){
         return lines.length;
     }
 
     /**
-     * @return The amount of characters in this {@link Text}. Does not include newline characters.
+     * @return The amount of characters in this text. Does not include newline characters.
      */
     public int getAmountOfChars(){
         int length = 0;
