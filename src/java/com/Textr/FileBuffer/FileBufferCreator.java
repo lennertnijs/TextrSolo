@@ -17,12 +17,12 @@ public final class FileBufferCreator {
 
     /**
      * Creates and returns a new {@link FileBuffer} for the given {@link File}.
-     * A new {@link FileBuffer} means:
-     * * The insertion point starts at (0,0)
+     * A new file buffer means:
+     * * The cursor starts at (0,0)
      * * The state of the buffer is CLEAN
-     * @param file The {@link File} for which a {@link FileBuffer} is to be created.
+     * @param file The file for which a buffer should be created.
      *
-     * @return The newly created {@link FileBuffer}.
+     * @return The new file buffer.
      * @throws IllegalArgumentException If the given {@link File} is null.
      */
     public static FileBuffer create(File file){
