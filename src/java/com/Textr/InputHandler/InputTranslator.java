@@ -123,5 +123,4 @@ public class InputTranslator {
         }
         throw new InputMismatchException("Could not translate the input.");
     }
-
 }
