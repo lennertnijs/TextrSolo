@@ -14,9 +14,9 @@ public final class Validator {
     }
 
     /**
-     * Checks whether the given {@link Object} is null. If so, throws an Exception.
-     * @param object The object
-     * @param message The error message
+     * Checks whether the given object is null. If so, throws an Exception with the given message.
+     * @param object The object.
+     * @param message The error message.
      *
      * @throws IllegalArgumentException If the {@link Object} is null.
      */
@@ -54,6 +54,15 @@ public final class Validator {
         }
     }
 
+    /**
+     * Checks whether the given number is within the boundaries [start, end] (INCLUSIVE!). If not, throws an Exception.
+     * @param num The number to check
+     * @param start The lowest allowed value
+     * @param end The highest allowed value
+     * @param message The error message
+     *
+     * @throws IllegalArgumentException If the number is outside the range.
+     */
     public static void withinRange(int num, int start, int end, String message){
         if(num < start || num > end){
             throw new IllegalArgumentException(message);

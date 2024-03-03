@@ -84,7 +84,7 @@ public class PointTest {
 
     @Test
     public void testToString(){
-        String expected = "InsertionPoint[x = 1, y = 2]";
+        String expected = "Point[x = 1, y = 2]";
         Assertions.assertEquals(expected, point1.toString());
     }
 }

@@ -26,12 +26,12 @@ public final class Point {
      * @param x The x coordinate. Cannot be negative
      * @param y The y coordinate. Cannot be negative
      *
-     * @return The {@link Point}
+     * @return The new point.
      * @throws IllegalArgumentException If the passed x or y value is negative.
      */
     public static Point create(int x, int y){
-        Validator.notNegative(x, "Cannot create a Util with a negative x value.");
-        Validator.notNegative(y, "Cannot create a Util with a negative y value.");
+        Validator.notNegative(x, "Cannot create a Point with a negative x value.");
+        Validator.notNegative(y, "Cannot create a Point with a negative y value.");
         return new Point(x, y);
     }
 
@@ -50,58 +50,58 @@ public final class Point {
     }
 
     /**
-     * Sets the x coordinate of this {@link Point} to the given x.
+     * Sets the x coordinate of this point to the given x.
      * @param x The new x coordinate.
      *
      * @throws IllegalArgumentException If the given x is negative.
      */
     public void setX(int x){
-        Validator.notNegative(x, "Cannot set this Util's x coordinate to a negative value.");
+        Validator.notNegative(x, "Cannot set this point's x coordinate to a negative value.");
         this.x = x;
     }
 
     /**
-     * Sets the y coordinate of this {@link Point} to the given y.
+     * Sets the y coordinate of this point to the given y.
      * @param y The new y coordinate.
      *
      * @throws IllegalArgumentException If the given y is negative.
      */
     public void setY(int y){
-        Validator.notNegative(y, "Cannot set this Util's y coordinate to a negative value.");
+        Validator.notNegative(y, "Cannot set this point's y coordinate to a negative value.");
         this.y = y;
     }
 
     /**
-     * Increments the x coordinate of this {@link Point} by 1.
+     * Increments the x coordinate of this point by 1.
      */
     public void incrementX(){
         x += 1;
     }
 
     /**
-     * Decrements the x coordinate of this {@link Point} by 1, if it is not already at 0.
+     * Decrements the x coordinate of this point by 1, if it is not already at 0.
      */
     public void decrementX(){
         x = Math.max(x - 1, 0);
     }
 
     /**
-     * Increments the y coordinate of this {@link Point} by 1.
+     * Increments the y coordinate of this point by 1.
      */
     public void incrementY(){
         y += 1;
     }
 
     /**
-     * Decrements the y coordinate of this {@link Point} by 1, if it is not already at 0.
+     * Decrements the y coordinate of this point by 1, if it is not already at 0.
      */
     public void decrementY(){
         y = Math.max(y - 1, 0);
     }
 
     /**
-     * Compares this {@link Point} to the given {@link Object}. Returns True if equal, False otherwise.
-     * @param o The {@link Object}
+     * Compares this point to the given object. Returns True if equal, False otherwise.
+     * @param o The object
      *
      * @return True if equal, false otherwise.
      */
@@ -117,7 +117,7 @@ public final class Point {
     }
 
     /**
-     * Generates and returns a hash code for this {@link Point}.
+     * Generates and returns a hash code for this point.
      *
      * @return The hash code
      */
@@ -129,12 +129,12 @@ public final class Point {
     }
 
     /**
-     * Creates and returns a {@link String} representation of this {@link Point}.
+     * Creates and returns a {@link String} representation of this point.
      *
-     * @return The {@link String} representation
+     * @return The string representation
      */
     @Override
     public String toString(){
-        return String.format("InsertionPoint[x = %d, y = %d]", x, y);
+        return String.format("Point[x = %d, y = %d]", x, y);
     }
 }
