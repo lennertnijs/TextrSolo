@@ -16,9 +16,9 @@ public final class ViewService {
     private final IViewRepo viewRepo;
 
     /**
-     * Constructor for the {@link ViewService}.
-     * @param fileBufferService The service to be used to talk to the file buffers.
-     * @param viewRepo The repository to be used for storage and retrieval of views.
+     * Constructor for the ViewService.
+     * @param fileBufferService The {@link FileBuffer}'s service API.
+     * @param viewRepo The {@link View} repository.
      */
     public ViewService(FileBufferService fileBufferService, IViewRepo viewRepo){
         this.fileBufferService = fileBufferService;
@@ -27,6 +27,7 @@ public final class ViewService {
 
     /**
      * Generates a vertically stacked layout of views for the currently existing buffers and stores them.
+     * Presumes no views are currently stored.
      */
     public void initialiseViewsVertical(){
         List<View> views = ViewLayoutInitializer.generateVerticallyStackedViews(fileBufferService.getAllFileBuffers());
@@ -53,8 +54,10 @@ public final class ViewService {
 
     /**
      * Moves the cursor of the active buffer by 1 unit in the given direction.
-     * Then calls for a possible update on the anchor point of the active view.
+     * Then calls for an update of the anchor.
      * @param direction The direction. Cannot be null.
+     *
+     * @throws IllegalArgumentException If the given direction is null.
      */
     public void moveCursor(Direction direction){
         Validator.notNull(direction, "Cannot move the cursor in the null direction.");
@@ -63,8 +66,8 @@ public final class ViewService {
     }
 
     /**
-     * Creates a new line (\r\n on Windows) at the insertion point in the active buffer.
-     * Then calls for a possible update on the anchor point of the active view.
+     * Creates a new line (\r\n on Windows) at the cursor in the active buffer.
+     * Then calls for an update of the anchor.
      */
     public void createNewline(){
         getActiveBuffer().createNewLine();
@@ -72,7 +75,7 @@ public final class ViewService {
     }
 
     /**
-     * Inserts the given character at the cursor point of the active buffer.
+     * Inserts the given character at the cursor of the active buffer.
      * @param character The input character
      */
     public void insertCharacter(char character){
@@ -81,17 +84,19 @@ public final class ViewService {
 
     /**
      * Deletes the character just before the cursor of the active buffer.
-     * Then calls for a possible update on the anchor point of the active view.
+     * Then calls for an update of the anchor.
      */
-    public void deleteChar(){
+    public void deletePrevChar(){
         getActiveBuffer().removeCharacterBefore();
         updateAnchor();
     }
 
+    /**
+     * Deletes the character just after the cursor of the active buffer.
+     */
     public void deleteNextChar(){
         getActiveBuffer().removeCharacterAfter();
     }
-
 
     /**
      * @return The active buffer.
@@ -115,7 +120,7 @@ public final class ViewService {
     }
 
     /**
-     * Updates the anchor point of the active buffer to possible changes to the cursor point.
+     * Updates the anchor point of the active buffer to adjust it to possible changes to the cursor point.
      */
     private void updateAnchor(){
         AnchorUpdater.updateAnchor(getAnchor(), getActiveBuffer().getCursor(), getActiveView().getDimensions());

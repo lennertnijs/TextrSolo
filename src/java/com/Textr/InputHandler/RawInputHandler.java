@@ -40,7 +40,7 @@ public final class RawInputHandler implements InputHandler{
             case ARROW_DOWN -> viewService.moveCursor(Direction.DOWN);
             case ARROW_LEFT -> viewService.moveCursor(Direction.LEFT);
             case DELETE -> viewService.deleteNextChar();
-            case BACKSPACE -> viewService.deleteChar();
+            case BACKSPACE -> viewService.deletePrevChar();
         }
     }
     private void drawAll(){
