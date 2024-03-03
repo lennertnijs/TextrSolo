@@ -15,9 +15,10 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
 
 
     /**
-     * Returns the amount of {@link FileBuffer}s in the repository.
+     * Returns the amount of file buffers in the repository.
+     * This includes the active file buffer (because it is forced to be present to be active).
      *
-     * @return The size
+     * @return The amount of file buffers.
      */
     @Override
     public int getSize(){
@@ -25,7 +26,7 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
     }
 
     /**
-     * Returns True if a {@link FileBuffer} with the given id exists in the repository. Returns False otherwise.
+     * Returns True if a file buffer with the given id exists in the repository. Returns False otherwise.
      * @param id The id
      *
      * @return True if a match was found, False otherwise.
@@ -41,11 +42,11 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
     }
 
     /**
-     * Fetches and returns the {@link FileBuffer} with the given id. Throws an Exception if no element was found.
+     * Fetches and returns the file buffer with the given id. Throws an Exception if no buffer was found.
      * @param id The id
      *
-     * @return The {@link FileBuffer}
-     * @throws NoSuchElementException If no {@link FileBuffer} with that id was found.
+     * @return The file buffer
+     * @throws NoSuchElementException If no buffer with that id was found.
      */
     @Override
     public FileBuffer get(int id){
@@ -58,9 +59,9 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
     }
 
     /**
-     * Returns all the existing {@link FileBuffer}s. (Not copied)
+     * Returns all the existing file buffers. (Not copied)
      *
-     * @return The {@link FileBuffer}s
+     * @return All file buffers.
      */
     @Override
     public List<FileBuffer> getAll(){
@@ -68,10 +69,10 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
     }
 
     /**
-     * Adds the given {@link FileBuffer} to the repository.
-     * @param fileBuffer The {@link FileBuffer}. Cannot be null.
+     * Adds the given file buffer to the repository. (does not check duplicates)
+     * @param fileBuffer The file buffer. Cannot be null.
      *
-     * @throws IllegalArgumentException If the passed {@link FileBuffer} is null.
+     * @throws IllegalArgumentException If the passed buffer is null.
      */
     @Override
     public void add(FileBuffer fileBuffer){
@@ -80,7 +81,7 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
     }
 
     /**
-     * Removes the {@link FileBuffer} with the given id from the repository.
+     * Removes the file buffer with the given id from the repository.
      * If no match was found, does nothing.
      * @param id The id
      */
@@ -89,6 +90,10 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
         buffers.removeIf(fileBuffer -> fileBuffer.getId() == id);
     }
 
+    /**
+     * Removes all the file buffers from the repository.
+     * USE WITH CARE
+     */
     @Override
     public void removeAll(){
         for(Iterator<FileBuffer> it = buffers.listIterator(); it.hasNext(); ){
@@ -98,12 +103,12 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
     }
 
     /**
-     * Finds and returns the next {@link FileBuffer} of the {@link FileBuffer} with the given id.
+     * Finds and returns the next file buffer to the file buffer with the given id.
      * (Works because insertion order is maintained)
      * @param id The id
      *
-     * @return The {@link FileBuffer}
-     * @throws IllegalStateException If no next {@link FileBuffer} was found.
+     * @return The next file buffer
+     * @throws IllegalStateException If no next buffer was found.
      */
     @Override
     public FileBuffer getNext(int id){
@@ -117,12 +122,12 @@ public final class AllFileBuffersRepo implements IAllFileBuffersRepo {
     }
 
     /**
-     * Finds and returns the previous {@link FileBuffer} of the {@link FileBuffer} with the given id.
+     * Finds and returns the previous file buffer to the file buffer with the given id.
      * (Works because insertion order is maintained)
      * @param id The id
      *
-     * @return The {@link FileBuffer}
-     * @throws IllegalStateException If no previous {@link FileBuffer} was found.
+     * @return The previous file buffer
+     * @throws IllegalStateException If no previous buffer was found.
      */
     @Override
     public FileBuffer getPrevious(int id){

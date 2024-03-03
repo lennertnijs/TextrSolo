@@ -15,8 +15,8 @@ public final class ActiveFileBufferRepo implements IActiveFileBufferRepo {
 
 
     /**
-     * Checks whether there is an active {@link FileBuffer}. Returns True if so, False otherwise.
-     * @return True if there's an active {@link FileBuffer}, False otherwise.
+     * Checks whether the active file buffer is empty (no active buffer). Returns True if so, False otherwise.
+     * @return True if no active file buffer is set. False if one has been set.
      */
     @Override
     public boolean isEmpty(){
@@ -25,10 +25,10 @@ public final class ActiveFileBufferRepo implements IActiveFileBufferRepo {
 
 
     /**
-     * Returns the id of the active {@link FileBuffer}.
+     * Returns the id of the active file buffer.
      *
      * @return The id
-     * @throws NullPointerException If the active {@link FileBuffer} is null.
+     * @throws NullPointerException If the active file buffer is null.
      */
     @Override
     public int getBufferId(){
@@ -38,10 +38,10 @@ public final class ActiveFileBufferRepo implements IActiveFileBufferRepo {
 
 
     /**
-     * Returns the active {@link FileBuffer}, if one is set. Throws an Exception otherwise.
+     * Returns the active file buffer if one is set. Throws an Exception otherwise.
      *
-     * @return The active {@link FileBuffer}.
-     * @throws NullPointerException If the active {@link FileBuffer} is null.
+     * @return The active file buffer.
+     * @throws NullPointerException If the active file buffer is null.
      */
     @Override
     public FileBuffer getBuffer(){
@@ -51,10 +51,10 @@ public final class ActiveFileBufferRepo implements IActiveFileBufferRepo {
 
 
     /**
-     * Overwrite the active {@link FileBuffer} with the given {@link FileBuffer}.
-     * @param fileBuffer The new active {@link FileBuffer}. Cannot be null.
+     * Overwrite the active file buffer with the given file buffer.
+     * @param fileBuffer The new active file buffer. Cannot be null.
      *
-     * @throws IllegalArgumentException If the passed {@link FileBuffer} is null.
+     * @throws IllegalArgumentException If the passed file buffer is null.
      */
     @Override
     public void setBuffer(FileBuffer fileBuffer){
@@ -64,7 +64,7 @@ public final class ActiveFileBufferRepo implements IActiveFileBufferRepo {
 
 
     /**
-     * Overwrites the active {@link FileBuffer} with null.
+     * Empties the active file buffer.
      * USE WITH CARE
      */
     @Override
