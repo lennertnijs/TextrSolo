@@ -7,6 +7,4 @@
 /dataSources/
 /dataSources.local.xml
 /out
-/Textr.iml
-/.idea
-
+/.idea/*
