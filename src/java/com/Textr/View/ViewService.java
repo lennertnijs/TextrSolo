@@ -84,12 +84,12 @@ public final class ViewService {
      * Then calls for a possible update on the anchor point of the active view.
      */
     public void deleteChar(){
-        getActiveBuffer().removeCharacter();
+        getActiveBuffer().removeCharacterBefore();
         updateAnchor();
     }
 
     public void deleteNextChar(){
-        getActiveBuffer().removeNextCharacter();
+        getActiveBuffer().removeCharacterAfter();
     }
 
 

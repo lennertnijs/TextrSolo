@@ -97,40 +97,36 @@ public final class FileBuffer {
      */
     public void insertCharacter(char character){
         text.insertCharacter(character, cursor.getY(), cursor.getX());
-        cursor.incrementX();
+        CursorMover.move(cursor, Direction.RIGHT, text);
     }
 
     /**
-     * Removes the character before the insertion {@link Point} from this {@link FileBuffer}'s buffer {@link Text}.
+     * Removes the character before the cursor from the text.
+     * Also moves the cursor one unit to the left.
      * Used when backspace is pressed.
      */
-    public void removeCharacter(){
-        int lineAboveLength = text.getLineLength(Math.max(0, cursor.getY() - 1));
-        int oldAmountOfLines = text.getAmountOfLines();
+    public void removeCharacterBefore(){
         text.removeCharacter(cursor.getY(), cursor.getX() - 1);
-        int newAmountOfLines = text.getAmountOfLines();
-        boolean deletedALine = newAmountOfLines < oldAmountOfLines;
-        if(deletedALine){
-            cursor.decrementY();
-            cursor.setX(lineAboveLength);
-        }else{
-            cursor.decrementX();
-        }
+        CursorMover.move(cursor, Direction.LEFT, text);
     }
 
-    public void removeNextCharacter(){
+    /**
+     * Removes the character after the cursor from the text.
+     * Does not move the cursor.
+     * Used when delete is pressed.
+     */
+    public void removeCharacterAfter(){
         text.removeCharacter(cursor.getY(), cursor.getX());
     }
 
     /**
-     * Splits the text up into a new line at the insertion {@link Point}.
-     * Used when Enter is pressed.
-     * Also moves the insertion {@link Point} to the appropriate location.
+     * Breaks the line of the text into 2 new lines (seperated by a space), at the cursor.
+     * Also moves the cursor into the new line.
+     * Used when enter is pressed.
      */
     public void createNewLine(){
         text.splitLineAtColumn(cursor.getY(), cursor.getX());
-        cursor.setX(0);
-        cursor.incrementY();
+        CursorMover.move(cursor, Direction.RIGHT, text);
     }
 
 
