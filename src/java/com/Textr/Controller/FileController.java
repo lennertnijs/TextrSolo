@@ -26,45 +26,18 @@ public final class FileController {
         this.inputHandler = new RawInputHandler(viewService, fileBufferService);
     }
 
-    public void loadFiles(String[] files){
-        Settings.loadDefaultLineSeparator();
-        TerminalService.enterRawInputMode();
-        TerminalService.clearScreen();
-        String[] f = Arrays.copyOfRange(files, 0, files.length);
-        if(files[0].contains("--")){
-            loadSettings(files[0]);
-            f = Arrays.copyOfRange(files, 1, files.length);
+    public void loadFiles(String[] args){
+        String[] files = ArgumentHandler.handleArguments(args);
+        for(String file: files){
+            fileService.initialiseFile(file);
         }
-        for(String filePath: f){
-            fileService.initialiseFile(filePath);
+        for(File file : fileService.getAllFiles()){
+            fileBufferService.initialisePassiveFileBuffer(file);
         }
-        for(int i = 0 ; i < fileService.getAllFiles().size(); i++){
-            File file = fileService.getAllFiles().get(i);
-            if(i == 0){
-                fileBufferService.initialiseActiveFileBuffer(file);
-            }else{
-                fileBufferService.initialisePassiveFileBuffer(file);
-            }
-        }
-        // Create TerminalViews
+        fileBufferService.setActiveFileBuffer(0);
         viewService.initialiseViewsVertical();
         viewService.drawAllViews();
         viewService.drawCursor();
-    }
-
-    private void loadSettings(String input){
-        String str = input.replace("--", "");
-        switch(str){
-            case "lf":
-                Settings.defaultLineSeparator = DefaultLineSeparator.LF;
-                break;
-            case "cr":
-                Settings.defaultLineSeparator = DefaultLineSeparator.CR;
-                break;
-            case "crlf":
-                Settings.defaultLineSeparator = DefaultLineSeparator.CRLF;
-                break;
-        }
     }
 
     public void handleInput(){

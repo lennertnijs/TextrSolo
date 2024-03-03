@@ -48,6 +48,9 @@ public final class FileBufferService {
         fileBufferRepo.setActiveBuffer(fileBuffer);
     }
 
+    public void setActiveFileBuffer(int id){
+        fileBufferRepo.setActiveBuffer(fileBufferRepo.getBuffer(id));
+    }
     public List<FileBuffer> getAllFileBuffers(){
         return fileBufferRepo.getAllBuffers();
     }

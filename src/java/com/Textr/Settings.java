@@ -18,6 +18,8 @@ public class Settings {
             case ("\n") -> defaultLineSeparator = DefaultLineSeparator.LF;
             case ("\r\n") -> defaultLineSeparator = DefaultLineSeparator.CRLF;
         }
-        throw new IllegalStateException("This system's line separator is not supported.");
+        if(defaultLineSeparator == null){
+            throw new IllegalStateException("This system's line separator is not supported.");
+        }
     }
 }

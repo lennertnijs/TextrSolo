@@ -23,6 +23,9 @@ public class Main {
 
 
         final FileController fileController = new FileController(fileService, fileBufferService, viewService);
+
+        TerminalService.enterRawInputMode();
+        TerminalService.clearScreen();
         fileController.loadFiles(args);
         while(true){
             fileController.handleInput();
