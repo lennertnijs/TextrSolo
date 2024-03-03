@@ -68,6 +68,11 @@ public final class FileBufferService {
     public void deleteBuffer(int id){
         fileBufferRepo.removeBuffer(id);
     }
+
+    public void saveActiveBuffer(){
+        // roep u writer op -> aparte class, zoals FileReader. Indien ge een IOException vangt met try/catch, swap de
+        // input handler van Settings naar een nieuwe AnythingInputHandler
+    }
     public void moveCursor(Direction direction){
         Validator.notNull(direction, "Cannot move the insertion point in the null Direction.");
         getActiveBuffer().moveCursor(direction);
