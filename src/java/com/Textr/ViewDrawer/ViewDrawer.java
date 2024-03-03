@@ -31,11 +31,14 @@ public final class ViewDrawer{
         int maxY = startY + height - 1;
         String[] lines = text.getLines();
         for(int i = view.getAnchor().getY(); i < Math.min(lines.length, view.getAnchor().getY() + height - 1); i++){
+            // only need to draw if any text is in these columns
             if(lines[i].length() > view.getAnchor().getX()){
-                TerminalService.printText(x, startY, lines[i].substring(view.getAnchor().getX(), Math.min(view.getAnchor().getX() + view.getDimensions().getWidth(), lines[i].length())));
+                int maxLineIndex = Math.min(view.getAnchor().getX() + view.getDimensions().getWidth(), lines[i].length());
+                TerminalService.printText(x, startY, lines[i].substring(view.getAnchor().getX(), maxLineIndex));
             }
             startY++;
         }
-        TerminalService.printText(x, maxY, statusBar.substring(0, Math.min(view.getDimensions().getWidth(), statusBar.length())));
+        int maxStatusBarIndex = Math.min(view.getDimensions().getWidth(), statusBar.length());
+        TerminalService.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
     }
 }
