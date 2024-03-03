@@ -111,9 +111,11 @@ public final class Text {
     }
 
     /**
-     * Removes the character at the given 0-based row and column from this {@link Text}.
+     * Removes the character from the text at the given 0-based row and column indices.
      * @param row The row. Cannot be negative or bigger than the amount of lines in this {@link Text} - 1.
-     * @param col The column. Cannot be negative or bigger than the amount of lines in this {@link Text} - 1.
+     * @param col The column. Cannot be -2 or lower, nor be bigger than the length of the row.
+     *            The reason -1 and the length line are allowed is because these operations are equal to removing the
+     *            newline character at the start/end of the line, thus concatenating two lines.
      *
      * @throws IllegalArgumentException If the row or column index is invalid.
      */
@@ -135,7 +137,7 @@ public final class Text {
     }
 
     /**
-     * Removes a character from this {@link Text} that is not at the 0th column.
+     * Removes a character from this text that is not at the -1 column or last column.
      * @param row The row
      * @param col The column
      */
@@ -146,8 +148,8 @@ public final class Text {
     }
 
     /**
-     * Removes a character from this {@link Text} that is at the 0th column.
-     * This means concatenating the two adjacent lines into one line.
+     * Removes a character from this {@link Text} that is at the -1 column.
+     * This means concatenating this row and the next into 1 line.
      * @param row The row
      */
     private void concatenateRowAndNext(int row){
@@ -165,9 +167,11 @@ public final class Text {
     }
 
     /**
-     * Splits the line at index row of this {@link Text} into two new lines (breaks at index col).
+     * Splits the line at index row of this text into two new lines (breaks at index col).
      * @param row The row index. Cannot be negative, or bigger than the amount of lines in the text - 1.
      * @param col The colum index. Cannot be negative, or bigger than the length of the line at index row.
+     *
+     * @throws IllegalArgumentException If the row or column index is invalid.
      */
     public void splitLineAtColumn(int row, int col){
         Validator.withinRange(row, 0, lines.length - 1, "Cannot split a line at an invalid row index.");
