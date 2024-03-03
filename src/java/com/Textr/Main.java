@@ -12,6 +12,7 @@ import com.Textr.ViewRepo.ViewRepo;
 
 public class Main {
 
+    public static RawInputHandler inputHandler;
     public static void main(String[] args){
         final FileRepo fileRepo = new FileRepo();
         final FileService fileService = new FileService(fileRepo);
@@ -24,8 +25,8 @@ public class Main {
 
 
         final FileController fileController = new FileController(fileService, fileBufferService, viewService);
-
-       Settings.inputHandler = new RawInputHandler(viewService, fileBufferService);
+        inputHandler = new RawInputHandler(viewService, fileBufferService);
+       Settings.inputHandler = inputHandler;
 
         TerminalService.enterRawInputMode();
         TerminalService.clearScreen();

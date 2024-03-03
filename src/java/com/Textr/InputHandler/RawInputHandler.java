@@ -4,6 +4,7 @@ import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.Direction;
 import com.Textr.View.ViewService;
+import io.github.btj.termios.Terminal;
 
 import static com.Textr.InputHandler.Inputs.*;
 
@@ -20,18 +21,27 @@ public final class RawInputHandler implements InputHandler{
         int b = TerminalService.readByte();
         TerminalService.clearScreen();
         boolean isRegularInput = b >= 65 && b <= 122 || b == SPACE;
+        boolean draw = true;
         if(isRegularInput){
             viewService.insertCharacter((char) b);
         }else{
-            handleSpecialInput(b);
+            draw = handleSpecialInput(b);
         }
-
-        drawAll();
+        if(draw){
+            drawAll();
+        }
     }
 
-    private void handleSpecialInput(int b){
+    private boolean handleSpecialInput(int b){
         Input input = InputTranslator.translateBytes(b);
         switch(input){
+            case F4 -> {
+                if(!viewService.attemptDeleteView()){
+                    Terminal.clearScreen();
+                    TerminalService.printText(1, 1, "The buffer is dirty. Are you sure you want to delete it?");
+                    return false;
+                }
+            }
             case ENTER -> viewService.createNewline();
             case CTRL_P -> fileBufferService.moveActiveBufferToPrev();
             case CTRL_N -> fileBufferService.moveActiveBufferToNext();
@@ -41,7 +51,9 @@ public final class RawInputHandler implements InputHandler{
             case ARROW_LEFT -> viewService.moveCursor(Direction.LEFT);
             case DELETE -> viewService.deleteNextChar();
             case BACKSPACE -> viewService.deletePrevChar();
+
         }
+        return true;
     }
     private void drawAll(){
         viewService.drawAllViews();

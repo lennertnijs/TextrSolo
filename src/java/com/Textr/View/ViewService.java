@@ -1,7 +1,10 @@
 package com.Textr.View;
 
+import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
+import com.Textr.InputHandler.CloseDirtyBufferInputHandler;
+import com.Textr.Settings;
 import com.Textr.Util.Point;
 import com.Textr.Validator.Validator;
 import com.Textr.ViewDrawer.CursorDrawer;
@@ -80,6 +83,7 @@ public final class ViewService {
      */
     public void insertCharacter(char character){
         getActiveBuffer().insertCharacter(character);
+        getActiveBuffer().setState(BufferState.DIRTY);
     }
 
     /**
@@ -89,6 +93,27 @@ public final class ViewService {
     public void deletePrevChar(){
         getActiveBuffer().removeCharacterBefore();
         updateAnchor();
+    }
+
+    public boolean attemptDeleteView(){
+        if(getActiveBuffer().getState() == BufferState.DIRTY){
+            Settings.inputHandler = new CloseDirtyBufferInputHandler(this);
+            return false;
+        }
+        deleteView();
+        return true;
+    }
+
+    /**
+     * Deletes the view from the repository and moves the active file buffer to the next.
+     * Then updates the views to take up the screen.
+     */
+    public void deleteView(){
+        int id = getActiveBuffer().getId();
+        fileBufferService.moveActiveBufferToNext();
+        fileBufferService.deleteBuffer(id);
+        viewRepo.removeAll();
+        initialiseViewsVertical();
     }
 
     /**

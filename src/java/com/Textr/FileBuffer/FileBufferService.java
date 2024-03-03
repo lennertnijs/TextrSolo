@@ -42,12 +42,6 @@ public final class FileBufferService {
         fileBufferRepo.addBuffer(FileBufferCreator.create(file));
     }
 
-    public void initialiseActiveFileBuffer(File file){
-        FileBuffer fileBuffer = FileBufferCreator.create(file);
-        fileBufferRepo.addBuffer(fileBuffer);
-        fileBufferRepo.setActiveBuffer(fileBuffer);
-    }
-
     public void setActiveFileBuffer(int id){
         fileBufferRepo.setActiveBuffer(fileBufferRepo.getBuffer(id));
     }
@@ -71,6 +65,9 @@ public final class FileBufferService {
         return fileBufferRepo.getActiveBuffer();
     }
 
+    public void deleteBuffer(int id){
+        fileBufferRepo.removeBuffer(id);
+    }
     public void moveCursor(Direction direction){
         Validator.notNull(direction, "Cannot move the insertion point in the null Direction.");
         getActiveBuffer().moveCursor(direction);
