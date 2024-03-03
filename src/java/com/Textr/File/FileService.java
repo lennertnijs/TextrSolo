@@ -13,7 +13,12 @@ public final class FileService {
 
     private final IFileRepo fileRepo;
 
+    /**
+     * Constructor for a FileService.
+     * @param fileRepo The {@link File} repository.
+     */
     public FileService(IFileRepo fileRepo){
+        Validator.notNull(fileRepo, "Cannot create a FileService with a null FileRepository.");
         this.fileRepo = fileRepo;
     }
 
