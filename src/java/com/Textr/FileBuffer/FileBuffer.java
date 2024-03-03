@@ -7,6 +7,9 @@ import com.Textr.View.Direction;
 
 import java.util.Objects;
 
+/**
+ * Represents a buffer.
+ */
 public final class FileBuffer {
 
     private final int id;
@@ -16,13 +19,13 @@ public final class FileBuffer {
     private BufferState state;
 
     /**
-     * Constructor for a {@link FileBuffer}.
-     * A {@link FileBuffer} is used to store changes to the {@link File}'s text until the changes are saved.
-     * Uses a static {@link FileBuffer.Builder} to ensure creation of valid {@link FileBuffer}'s.
-     * @param builder The {@link FileBuffer.Builder}. Cannot be null.
+     * Constructor for a file buffer.
+     * A file buffer is used to temporarily store changes to the file's text until the changes are saved.
+     * Uses a static file buffer builder to ensure creation of valid file buffers.
+     * @param builder The file buffer builder. Cannot be null.
      */
     private FileBuffer(Builder builder){
-        Objects.requireNonNull(builder, "Cannot build a FileBuffer because the Builder is null.");
+        Validator.notNull(builder, "Cannot build a FileBuffer because the Builder is null.");
         this.id = FileBufferIdGenerator.getId();
         this.fileId = builder.fileId;
         this.text = builder.text;
@@ -30,48 +33,62 @@ public final class FileBuffer {
         this.state = builder.state;
     }
 
-
+    /**
+     * @return This file buffer's id.
+     */
     public int getId(){
         return this.id;
     }
+
     /**
-     * Returns the id of the active {@link File} of this {@link FileBuffer}.
-     * @return This {@link FileBuffer}'s active {@link File} id.
+     * @return This file buffer's {@link File} id.
      */
     public int getFileId(){
         return this.fileId;
     }
 
+    /**
+     * @return This file buffer's text.
+     */
     public Text getText(){
         return this.text;
     }
 
     /**
-     * Returns the insertion point index of this {@link FileBuffer}.
-     * @return This {@link FileBuffer}'s insertion point index.
+     * @return This file buffer's cursor.
      */
     public Point getCursor(){
         return this.cursor;
     }
 
-    public void moveInsertionPoint(Direction direction){
-        CursorMover.move(cursor, direction, text);
-    }
 
     /**
-     * Returns the {@link BufferState} of this {@link FileBuffer}.
-     * @return This {@link FileBuffer}'s state as a {@link BufferState}
+     * @return This file buffer's state.
      */
     public BufferState getState(){
         return this.state;
     }
 
-    public void setDirty(){
-        state = BufferState.DIRTY;
+    /**
+     * Moves the cursor 1 unit in the given {@link Direction}, within text boundaries.
+     * @param direction The direction. Cannot be null.
+     *
+     * @throws IllegalArgumentException If the given direction is null.
+     */
+    public void moveCursor(Direction direction){
+        Validator.notNull(direction, "Cannot move the cursor in the null Direction.");
+        CursorMover.move(cursor, direction, text);
     }
 
-    public void setClean(){
-        state = BufferState.CLEAN;
+    /**
+     * Sets the state of this file buffer to the given state.
+     * @param state The new state. Cannot be null.
+     *
+     * @throws IllegalArgumentException If the state is null.
+     */
+    public void setState(BufferState state) {
+        Validator.notNull(state, "Cannot set the file buffer's state to null.");
+        this.state = state;
     }
 
     /**

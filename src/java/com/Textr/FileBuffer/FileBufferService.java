@@ -61,7 +61,7 @@ public final class FileBufferService {
 
     public void moveCursor(Direction direction){
         Validator.notNull(direction, "Cannot move the insertion point in the null Direction.");
-        getActiveBuffer().moveInsertionPoint(direction);
+        getActiveBuffer().moveCursor(direction);
     }
 
     public void moveBufferToNext(){
