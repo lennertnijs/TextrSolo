@@ -11,12 +11,25 @@ import com.Textr.View.ViewCreator;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Initializes view layouts.
+ */
 public class ViewLayoutInitializer {
 
+    /**
+     * Private constructor. No use.
+     */
     private ViewLayoutInitializer(){
-
     }
 
+    /**
+     * Generate a list of views that completely covers the terminal area, one stacked atop the other vertically.
+     * @param buffers The buffers. Cannot be null or contain null.
+     *
+     * @return The list of views.
+     * @throws IllegalArgumentException If the list of buffers is or contains null.
+     * @throws IllegalStateException If there are no buffers.
+     */
     public static List<View> generateVerticallyStackedViews(List<FileBuffer> buffers){
         validateBuffers(buffers);
         int terminalWidth = TerminalService.getTerminalArea().getWidth();
@@ -40,32 +53,12 @@ public class ViewLayoutInitializer {
     }
 
     /**
-     * DOESNT WORK
-     * @param buffers
-     * @return
+     * Validates the given list of buffers.
+     * Checks whether this list is, or contains, a null.
+     * @param buffers The buffer list.
+     *
+     * @throws IllegalArgumentException If the given list of buffers is or contains null.
      */
-    public static List<View> generateHorizontallyStackedViews(List<FileBuffer> buffers){
-        validateBuffers(buffers);
-        int terminalWidth = TerminalService.getTerminalArea().getWidth();
-        int terminalHeight = TerminalService.getTerminalArea().getHeight();
-        int amountOfBuffers = buffers.size();
-        if(amountOfBuffers == 0){
-            throw new IllegalStateException("Cannot generate Views because there are no FileBuffers.");
-        }
-        int widthPerView = ((terminalWidth) / amountOfBuffers);
-        int remainder = ((terminalWidth) % amountOfBuffers);
-        int x = 0;
-        List<View> views = new ArrayList<>();
-        for(FileBuffer buffer : buffers){
-            Point position = Point.create(x, 0);
-            int viewWidth = remainder-- > 0 ? widthPerView + 1 : widthPerView;
-            Dimension2D dimensions = Dimension2D.create(viewWidth, terminalHeight);
-            views.add(ViewCreator.create(buffer.getId(), position, dimensions));
-            x += viewWidth;
-        }
-        return views;
-    }
-
     private static void validateBuffers(List<FileBuffer> buffers){
         Validator.notNull(buffers, "Cannot generate views because the passed FileBuffers is null.");
         for(FileBuffer buffer : buffers){
