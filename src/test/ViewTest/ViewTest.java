@@ -57,15 +57,11 @@ public class ViewTest {
                 .dimensions(dimensions).anchor(anchor).build();
         View view2 = View.builder().fileBufferId(2).position(point)
                 .dimensions(dimensions).anchor(anchor).build();
-        View view3 = View.builder().fileBufferId(1).position(point)
-                .dimensions(dimensions).anchor(anchor).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(view1, view1),
-                () -> Assertions.assertEquals(view1, view3),
                 () -> Assertions.assertNotEquals(view1, view2),
                 () -> Assertions.assertNotEquals(view1, new Object()),
                 () -> Assertions.assertEquals(view1.hashCode(), view1.hashCode()),
-                () -> Assertions.assertEquals(view1.hashCode(), view3.hashCode()),
                 () -> Assertions.assertNotEquals(view2.hashCode(), view1.hashCode())
         );
     }
@@ -77,7 +73,7 @@ public class ViewTest {
         Dimension2D dimensions = Dimension2D.create(15, 15);
         View view = View.builder().fileBufferId(1).position(point)
                 .dimensions(dimensions).anchor(anchor).build();
-        String expected = "View[fileBufferId = 1, position = Point[x = 5, y = 5], dimensions = Dimension2D[width = 15, height = 15], anchor = Point[x = 1, y = 1]]";
+        String expected = "View[id = 0, fileBufferId = 1, position = Point[x = 5, y = 5], dimensions = Dimension2D[width = 15, height = 15], anchor = Point[x = 1, y = 1]]";
         Assertions.assertAll(
                 () -> Assertions.assertEquals(view.toString(), expected)
         );
