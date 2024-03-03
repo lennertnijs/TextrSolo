@@ -13,12 +13,12 @@ public final class ViewCreator {
 
     /**
      * Creates and returns a new view with the given parameters.
-     * * Anchor point is set always initiated at (0,0)
-     * @param fileBufferId The id of the buffer of this view.
-     * @param position The global Terminal position of this view
-     * @param dimensions The dimensions of this view
+     * * The anchor point is set always initiated at (0,0)
+     * @param fileBufferId The id of the file buffer of this view. Cannot be negative.
+     * @param position The global Terminal position of this view. Cannot be null.
+     * @param dimensions The dimensions of this view. Cannot be null.
      *
-     * @return The {@link View}
+     * @return The view.
      * @throws IllegalArgumentException If a parameter is invalid.
      */
     public static View create(int fileBufferId, Point position, Dimension2D dimensions){
