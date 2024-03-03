@@ -30,6 +30,7 @@ public final class FileController {
         fileBufferService.setActiveFileBuffer(0);
         viewService.initialiseViewsVertical();
         viewService.drawAllViews();
+
         viewService.drawCursor();
     }
 
