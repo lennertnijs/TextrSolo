@@ -5,17 +5,21 @@ import com.Textr.Terminal.TerminalService;
 import com.Textr.Validator.Validator;
 import com.Textr.View.View;
 
+/**
+ * Draws a view.
+ */
 public final class ViewDrawer{
 
     private ViewDrawer(){
     }
 
     /**
-     * Draws a {@link View}.
-     * @param view The view
-     * @param text The text of the view's filebuffer
-     * @param statusBar The status bar.
-     * @throws IllegalArgumentException If any of them are null.
+     * Draws the given view to the terminal.
+     * @param view The view. Cannot be null.
+     * @param text The text of the view's file buffer. Cannot be null.
+     * @param statusBar The status bar. Cannot be null.
+     *
+     * @throws IllegalArgumentException If any parameter is null.
      */
     public static void draw(View view, Text text, String statusBar) {
         Validator.notNull(view, "Cannot draw a null View.");
