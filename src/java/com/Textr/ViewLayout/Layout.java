@@ -1,6 +1,8 @@
 package com.Textr.ViewLayout;
 
+import com.Textr.DefaultLineSeparator;
 import com.Textr.View.View;
+import com.sun.source.doctree.ThrowsTree;
 
 import java.util.*;
 
@@ -139,6 +141,57 @@ public class Layout implements ILayout {
             }
         }
         return sum;
+    }
+
+    public Layout getNext(){
+        List<Layout> siblings = this.parent.getChildren();
+        int position = siblings.indexOf(this);
+        if(position+1==siblings.size()){
+            if(parent!=null)
+                return parent.getNext();
+            else
+                return null;
+        }
+        else
+            return siblings.get(position+1);
+    }
+    public Layout getFirstLeaf(){
+        if(view.isPresent())
+            return this;
+        else
+            return this.children.getFirst().getFirstLeaf();
+    }
+    public void rotatewithnext(boolean clockwise){
+        Layout nextnode = getNext();
+        if(nextnode!= null){
+            Layout nextleaf = nextnode.getFirstLeaf();
+            if(parent.equals(nextleaf.getParent())){
+                Layout newsubLayout = new Layout();
+                if(clockwise){
+                    moveLeafTo(newsubLayout);
+                    nextleaf.moveLeafTo(newsubLayout);
+                }
+                else {
+                    nextleaf.moveLeafTo(newsubLayout);
+                    moveLeafTo(newsubLayout);
+                }
+            }
+            else{
+                if (clockwise){
+                    nextleaf.moveLeafTo(parent);
+                }
+                else {
+                    parent.removeSubLayout(this);
+                    nextleaf.moveLeafTo(parent);
+                    parent.addSubLayout(this);
+                }
+            }
+
+        }
+        else{
+            String ding = "DING";
+            //PING-sound
+        }
     }
 
 }
