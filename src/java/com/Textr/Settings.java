@@ -1,14 +1,11 @@
 package com.Textr;
 
-import com.Textr.InputHandler.InputHandler;
-
 /**
  * Stores any global app settings.
  */
 public class Settings {
 
     public static DefaultLineSeparator defaultLineSeparator = null;
-    public static InputHandler inputHandler = null;
 
     /**
      * Loads the correct default line separator for the given system.

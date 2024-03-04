@@ -1,10 +1,11 @@
-package com.Textr.InputHandler;
+package com.Textr.InputUtil;
 
+import com.Textr.InputUtil.Input;
 import com.Textr.Terminal.TerminalService;
 
 import java.util.InputMismatchException;
 
-import static com.Textr.InputHandler.Inputs.*;
+import static com.Textr.InputUtil.Inputs.*;
 
 /**
  * Used to translate a byte or stream of bytes into single input.

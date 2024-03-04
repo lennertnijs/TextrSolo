@@ -1,10 +1,9 @@
 package com.Textr.InputHandler;
 
-import com.Textr.Main;
-import com.Textr.Settings;
+import com.Textr.Init.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
 
-public final class AnythingInputHandler implements InputHandler{
+public final class AnythingInputHandler implements IInputHandler {
 
 
     public AnythingInputHandler(){
@@ -13,6 +12,6 @@ public final class AnythingInputHandler implements InputHandler{
     @Override
     public void handleInput() {
         int b = TerminalService.readByte();
-        Settings.inputHandler = Main.inputHandler;
+        InputHandlerRepo.setStandardInputHandler();
     }
 }

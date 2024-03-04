@@ -1,18 +1,20 @@
 package com.Textr.InputHandler;
 
 import com.Textr.FileBuffer.FileBufferService;
+import com.Textr.InputUtil.Input;
+import com.Textr.InputUtil.InputTranslator;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.Direction;
 import com.Textr.View.ViewService;
 import io.github.btj.termios.Terminal;
 
-import static com.Textr.InputHandler.Inputs.*;
+import static com.Textr.InputUtil.Inputs.*;
 
-public final class RawInputHandler implements InputHandler{
+public final class StandardInputHandler implements IInputHandler {
     private final ViewService viewService;
     private final FileBufferService fileBufferService;
 
-    public RawInputHandler(ViewService viewService, FileBufferService fileBufferService){
+    public StandardInputHandler(ViewService viewService, FileBufferService fileBufferService){
         this.viewService = viewService;
         this.fileBufferService = fileBufferService;
     }

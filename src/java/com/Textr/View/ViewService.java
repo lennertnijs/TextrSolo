@@ -3,8 +3,7 @@ package com.Textr.View;
 import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.InputHandler.CloseDirtyBufferInputHandler;
-import com.Textr.Settings;
+import com.Textr.Init.InputHandlerRepo;
 import com.Textr.Util.Point;
 import com.Textr.Validator.Validator;
 import com.Textr.ViewDrawer.CursorDrawer;
@@ -97,7 +96,7 @@ public final class ViewService {
 
     public boolean attemptDeleteView(){
         if(getActiveBuffer().getState() == BufferState.DIRTY){
-            Settings.inputHandler = new CloseDirtyBufferInputHandler(this);
+            InputHandlerRepo.setCloseDirtyBufferInputHandler();
             return false;
         }
         deleteView();

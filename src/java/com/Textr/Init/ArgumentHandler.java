@@ -1,4 +1,4 @@
-package com.Textr.Controller;
+package com.Textr.Init;
 
 import com.Textr.DefaultLineSeparator;
 import com.Textr.Settings;

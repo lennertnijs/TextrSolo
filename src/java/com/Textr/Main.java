@@ -1,18 +1,17 @@
 package com.Textr;
 
-import com.Textr.Controller.FileController;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.File.FileService;
 import com.Textr.FileBufferRepo.FileBufferRepo;
 import com.Textr.FileRepo.FileRepo;
-import com.Textr.InputHandler.RawInputHandler;
+import com.Textr.Init.Initialiser;
+import com.Textr.Init.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.ViewService;
 import com.Textr.ViewRepo.ViewRepo;
 
 public class Main {
 
-    public static RawInputHandler inputHandler;
     public static void main(String[] args){
         final FileRepo fileRepo = new FileRepo();
         final FileService fileService = new FileService(fileRepo);
@@ -23,16 +22,13 @@ public class Main {
         final ViewRepo viewRepo = new ViewRepo();
         final ViewService viewService = new ViewService(fileBufferService, viewRepo);
 
-
-        final FileController fileController = new FileController(fileService, fileBufferService, viewService);
-        inputHandler = new RawInputHandler(viewService, fileBufferService);
-       Settings.inputHandler = inputHandler;
-
-        TerminalService.enterRawInputMode();
-        TerminalService.clearScreen();
-        fileController.loadFiles(args);
+        /**
+         * Initializes the system with the files, and loads the correct lines separator.
+         * Also
+         */
+        Initialiser.initialise(fileService, fileBufferService, viewService, args);
         while(true){
-            fileController.handleInput();
+            InputHandlerRepo.handleInput();
         }
     }
 }

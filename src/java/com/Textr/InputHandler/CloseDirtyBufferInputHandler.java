@@ -1,11 +1,10 @@
 package com.Textr.InputHandler;
 
-import com.Textr.Main;
-import com.Textr.Settings;
+import com.Textr.Init.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.ViewService;
 
-public class CloseDirtyBufferInputHandler implements InputHandler{
+public final class CloseDirtyBufferInputHandler implements IInputHandler {
 
     private final ViewService viewService;
     public CloseDirtyBufferInputHandler(ViewService viewService){
@@ -17,11 +16,11 @@ public class CloseDirtyBufferInputHandler implements InputHandler{
         switch (b) {
             case 'Y' -> {
                 viewService.deleteView();
-                Settings.inputHandler = Main.inputHandler;
+                InputHandlerRepo.setStandardInputHandler();
                 viewService.drawAllViews();
             }
             case 'N' -> {
-                Settings.inputHandler = Main.inputHandler;
+                InputHandlerRepo.setStandardInputHandler();
                 viewService.drawAllViews();
             }
         }
