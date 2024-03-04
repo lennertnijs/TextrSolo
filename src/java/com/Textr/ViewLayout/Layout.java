@@ -28,6 +28,10 @@ public class Layout implements ILayout {
         layout.setParent(this);
     }
 
+    public void addSubLayout(Layout layout, int placement){
+        this.children.add(placement, layout);
+        layout.setParent(this);
+    }
 
     public void removeSubLayout(Layout layout){
         children.remove(layout);
@@ -54,8 +58,12 @@ public class Layout implements ILayout {
 
     public void moveLeafTo(Layout newParent){
         parent.removeSubLayout(this);
-        newParent.removeSubLayout(this);
-        parent = newParent;
+        newParent.addSubLayout(this);
+    }
+
+    public void moveLeafTo(Layout newParent, int placement){
+        parent.removeSubLayout(this);
+        newParent.addSubLayout(this, placement);
     }
 
 
@@ -181,12 +189,8 @@ public class Layout implements ILayout {
                     nextleaf.moveLeafTo(parent);
                 }
                 else {
-                    Layout standin = new Layout();
-                    parent.addSubLayout(standin);
-                    parent.removeSubLayout(this);
-                    nextleaf.moveLeafTo(parent);
-                    parent.addSubLayout(this);
-                    parent.removeSubLayout(standin);
+                    int placement = parent.getChildren().indexOf(this);
+                    nextleaf.moveLeafTo(parent, placement);
                 }
             }
 
