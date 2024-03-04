@@ -181,9 +181,12 @@ public class Layout implements ILayout {
                     nextleaf.moveLeafTo(parent);
                 }
                 else {
+                    Layout standin = new Layout();
+                    parent.addSubLayout(standin);
                     parent.removeSubLayout(this);
                     nextleaf.moveLeafTo(parent);
                     parent.addSubLayout(this);
+                    parent.removeSubLayout(standin);
                 }
             }
 
