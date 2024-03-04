@@ -4,7 +4,7 @@ public interface ILayout {
 
     void setParent(Layout layoutNode);
 
-    void removesubLayout(Layout layout);
+    void removeSubLayout(Layout layout);
 
-    void addsubLayout(Layout layout);
+    void addSubLayout(Layout layout);
 }

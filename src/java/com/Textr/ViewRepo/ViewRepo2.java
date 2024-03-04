@@ -19,14 +19,14 @@ public class ViewRepo2 implements IViewRepo {
      */
     @Override
     public boolean contains(int id) {
-        return rootlayout.containsview(id);
+        return rootlayout.containsView(id);
     }
     /**
      * @return The amount of stored views.
      */
     @Override
     public int getSize() {
-        return rootlayout.getsize();
+        return rootlayout.getSize();
     }
     /**
      * Finds the view with the given id and returns it. Throws an Exception if no match was found.
@@ -37,7 +37,7 @@ public class ViewRepo2 implements IViewRepo {
      */
     @Override
     public View get(int id) {
-        View result = rootlayout.lookforviewbyId(id);
+        View result = rootlayout.getViewById(id);
         if(result!= null) {
             return result;
         }
@@ -54,7 +54,7 @@ public class ViewRepo2 implements IViewRepo {
      */
     @Override
     public View getByBufferId(int fileBufferId) {
-        View result = rootlayout.lookforviewbybufferId(fileBufferId);
+        View result = rootlayout.getViewByBufferId(fileBufferId);
         if(result!= null) {
             return result;
         }
@@ -66,7 +66,7 @@ public class ViewRepo2 implements IViewRepo {
      */
     @Override
     public List<View> getAll() {
-        return rootlayout.getallViews();
+        return rootlayout.getAllViews();
     }
     /**
      * Stores the given view.
@@ -78,7 +78,7 @@ public class ViewRepo2 implements IViewRepo {
     public void add(View view) {
         Validator.notNull(view, "Cannot store a null View.");
         Layout layout = new Layout(view);
-        rootlayout.addsubLayout(layout);
+        rootlayout.addSubLayout(layout);
     }
     /**
      * Stores all the views in the view repository.
@@ -99,9 +99,9 @@ public class ViewRepo2 implements IViewRepo {
      */
     @Override
     public void remove(int id) {
-        Layout leaf = rootlayout.lookforviewLocation(id);
+        Layout leaf = rootlayout.getViewLocation(id);
         if(leaf!=null && leaf.getParent()!= null)
-            leaf.getParent().removesubLayout(leaf);
+            leaf.getParent().removeSubLayout(leaf);
     }
     /**
      * Removes all the views.

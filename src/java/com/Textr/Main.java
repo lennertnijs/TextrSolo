@@ -22,10 +22,6 @@ public class Main {
         final ViewRepo viewRepo = new ViewRepo();
         final ViewService viewService = new ViewService(fileBufferService, viewRepo);
 
-        /**
-         * Initializes the system with the files, and loads the correct lines separator.
-         * Also
-         */
         Initialiser.initialise(fileService, fileBufferService, viewService, args);
         while(true){
             InputHandlerRepo.handleInput();

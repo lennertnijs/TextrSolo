@@ -1,61 +1,73 @@
 package com.Textr.ViewLayout;
 
-import com.Textr.Validator.Validator;
 import com.Textr.View.View;
 
 import java.util.*;
 
-public class Layout  implements ILayout {
+public class Layout implements ILayout {
 
-    private final List <Layout> sublayouts= new ArrayList<>();
+    private final List<Layout> children = new ArrayList<>();
     private final Optional<View> view;
     private Layout parent;
-    public Layout( View view){
+
+
+    public Layout(View view){
         this.view = Optional.ofNullable(view);
     }
+
     public Layout(){
         this.view = Optional.empty();
     }
 
-    public void addsubLayout(Layout layout){
-        this.sublayouts.add(layout);
+
+
+    public void addSubLayout(Layout layout){
+        this.children.add(layout);
         layout.setParent(this);
     }
-    public void removesubLayout(Layout layout){
-        sublayouts.remove(layout);
-        if(sublayouts.size()==1){
-            Layout tomove = sublayouts.getFirst();
+
+
+    public void removeSubLayout(Layout layout){
+        children.remove(layout);
+        if(children.size()==1){
+            Layout toMove = children.getFirst();
             if(getParent()!= null)
-                tomove.moveLeafto(this.parent);
+                toMove.moveLeafTo(this.parent);
 
         }
     }
     public void setParent(Layout parent){
         this.parent = parent;
     }
+
+
     public  Layout getParent(){
         return parent;
     }
 
-    public List<Layout> getsubLayouts(){
-        return sublayouts;
+    public List<Layout> getChildren(){
+        return children;
     }
-    public void moveLeafto(Layout newparent){
-        parent.removesubLayout(this);
-        newparent.addsubLayout(this);
-        parent = newparent;
+
+
+    public void moveLeafTo(Layout newParent){
+        parent.removeSubLayout(this);
+        newParent.removeSubLayout(this);
+        parent = newParent;
     }
+
+
     public View getView(){
         return view.orElse(null);
     }
 
-    public boolean containsview(int id){
+    public boolean containsView(int id){
         if(view.isPresent() && getView().getId()==id){
             return true;
         }
         else{
-            for (Layout layout : this.getsubLayouts()){
-                if(layout.containsview(id)){
+            for (Layout layout : this.getChildren()){
+                if(layout.containsView(id)){
                     return true;
                 }
             }
@@ -63,13 +75,13 @@ public class Layout  implements ILayout {
         }
     }
 
-    public View lookforviewbyId(int id){
+    public View getViewById(int id){
         if(view.isPresent() && getView().getId()==id){
             return this.getView();
         }
 
-        for (Layout layout : this.getsubLayouts()){
-            View result= layout.lookforviewbyId(id);
+        for (Layout layout : this.getChildren()){
+            View result= layout.getViewById(id);
             if(result!=null){
                 return result;
             }
@@ -78,12 +90,12 @@ public class Layout  implements ILayout {
 
     }
 
-    public View lookforviewbybufferId(int id){
+    public View getViewByBufferId(int id){
         if(view.isPresent() && getView().getFileBufferId()==id){
             return this.getView();
         }
-        for (Layout layout : this.getsubLayouts()){
-            View result= layout.lookforviewbybufferId(id);
+        for (Layout layout : this.getChildren()){
+            View result= layout.getViewByBufferId(id);
             if(result!=null){
                 return result;
             }
@@ -91,13 +103,13 @@ public class Layout  implements ILayout {
         return null;
 
     }
-    public Layout lookforviewLocation(int id){
+    public Layout getViewLocation(int id){
         if(view.isPresent() && getView().getId()==id){
             return this;
         }
 
-        for (Layout layout : this.getsubLayouts()){
-            Layout result= layout.lookforviewLocation(id);
+        for (Layout layout : this.getChildren()){
+            Layout result= layout.getViewLocation(id);
             if(result!=null){
                 return result;
             }
@@ -105,25 +117,25 @@ public class Layout  implements ILayout {
         return null;
 
     }
-    public List<View> getallViews(){
+    public List<View> getAllViews(){
         List<View> result = new ArrayList<>();
         if(view.isPresent()){
             result.add(getView());
             return result;
         }
-        for (Layout layout : sublayouts){
-            result.addAll(layout.getallViews());
+        for (Layout layout : children){
+            result.addAll(layout.getAllViews());
         }
         return result;
     }
-    public int getsize(){
+    public int getSize(){
         int sum = 0;
         if(view.isPresent()){
             return 1;
         }
         else {
-            for (Layout layout : sublayouts){
-                sum+= layout.getsize();
+            for (Layout layout : children){
+                sum+= layout.getSize();
             }
         }
         return sum;
