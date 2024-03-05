@@ -9,7 +9,7 @@ public final class File {
 
     private final int id;
     private final String url;
-    private final String text;
+    private String text;
 
     /**
      * Constructor for a {@link File}.
@@ -53,6 +53,16 @@ public final class File {
      */
     public String getText(){
         return this.text;
+    }
+
+    /**
+     * Sets the text to the file to the given string.
+     * Is used to update to represent the current data saved to disk.
+     *
+     * @param text The String of the text saved to disk
+     */
+    void setText(String text) { // NOTE: PACKAGE-PRIVATE
+        this.text = text;
     }
 
     /**
