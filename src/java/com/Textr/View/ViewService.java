@@ -149,4 +149,11 @@ public final class ViewService {
     private void updateAnchor(){
         AnchorUpdater.updateAnchor(getAnchor(), getActiveBuffer().getCursor(), getActiveView().getDimensions());
     }
+
+
+    public void rotateview(boolean clockwise){
+        viewRepo.rotate(clockwise, getActiveView().getId());
+
+
+    }
 }

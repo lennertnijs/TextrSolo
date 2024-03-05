@@ -9,6 +9,7 @@ import java.util.*;
 public class Layout implements ILayout {
 
     private final List<Layout> children = new ArrayList<>();
+
     private final Optional<View> view;
     private Layout parent;
 
@@ -20,7 +21,6 @@ public class Layout implements ILayout {
     public Layout(){
         this.view = Optional.empty();
     }
-
 
 
     public void addSubLayout(Layout layout){
@@ -106,11 +106,13 @@ public class Layout implements ILayout {
         }
         for (Layout layout : this.getChildren()){
             View result= layout.getViewByBufferId(id);
-            if(result!=null){
+            if(result!=null) {
                 return result;
             }
+
         }
         return null;
+
 
     }
     public Layout getViewLocation(int id){
@@ -175,7 +177,8 @@ public class Layout implements ILayout {
             Layout nextleaf = nextnode.getFirstLeaf();
             if(parent.equals(nextleaf.getParent())){
                 Layout newsubLayout = new Layout();
-                if(clockwise){
+                parent.addSubLayout(newsubLayout);
+                if(clockwise && leftOff(nextleaf)|| !clockwise && !leftOff(nextleaf)){
                     moveLeafTo(newsubLayout);
                     nextleaf.moveLeafTo(newsubLayout);
                 }
@@ -185,7 +188,7 @@ public class Layout implements ILayout {
                 }
             }
             else{
-                if (clockwise){
+                if (clockwise && leftOff(nextleaf) || !clockwise && !leftOff(nextleaf)){
                     nextleaf.moveLeafTo(parent);
                 }
                 else {
@@ -199,6 +202,10 @@ public class Layout implements ILayout {
             String ding = "DING";
             //PING-sound
         }
+    }
+
+    private boolean leftOff(Layout layout){
+        return this.getView().getPosition().getX()< layout.getView().getPosition().getX();
     }
 
 }

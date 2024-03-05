@@ -36,6 +36,12 @@ public class InputTranslator {
             case CTRL_P -> {
                 return Input.CTRL_P;
             }
+            case CTRL_T -> {
+                return Input.CTRL_T;
+            }
+            case CTRL_R -> {
+                return Input.CTRL_R;
+            }
             case SPACE -> {
                 return Input.SPACE;
             }
