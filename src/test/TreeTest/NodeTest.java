@@ -29,22 +29,22 @@ public class NodeTest {
         node3.addChild(node4);
         node4.addChild(node5);
         Assertions.assertAll(
-                () -> Assertions.assertEquals(node1.getValue().get(), 1),
+                () -> Assertions.assertEquals(node1.getValue(), 1),
                 () -> Assertions.assertFalse(node1.hasParent()),
                 () -> Assertions.assertEquals(node1.getChildren(), new ArrayList<>(List.of(node2, node3))),
 
-                () -> Assertions.assertEquals(node2.getValue().get(), 2),
-                () -> Assertions.assertEquals(node3.getValue().get(), 3),
+                () -> Assertions.assertEquals(node2.getValue(), 2),
+                () -> Assertions.assertEquals(node3.getValue(), 3),
                 () -> Assertions.assertEquals(node2.getParent(), node1),
                 () -> Assertions.assertFalse(node3.hasChildren()),
                 () -> Assertions.assertEquals(node2.getChildren(), new ArrayList<>()),
                 () -> Assertions.assertEquals(node3.getChildren(), new ArrayList<>(List.of(node4))),
 
-                () -> Assertions.assertEquals(node4.getValue().get(), 4),
+                () -> Assertions.assertEquals(node4.getValue(), 4),
                 () -> Assertions.assertEquals(node4.getChildren(), new ArrayList<>(List.of(node5))),
                 () -> Assertions.assertTrue(node4.hasParent()),
 
-                () -> Assertions.assertEquals(node5.getValue().get(), 5),
+                () -> Assertions.assertEquals(node5.getValue(), 5),
                 () -> Assertions.assertEquals(node5.getChildren(), new ArrayList<>())
         );
     }

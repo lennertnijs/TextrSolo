@@ -94,7 +94,7 @@ public final class Tree<T> {
      */
     private boolean containsValueDFS(Node<T> current, T t){
         for(Node<T> child : current.getChildren()){
-            if(child.hasValue() && child.getValue().get().equals(t)){
+            if(child.hasValue() && child.getValue().equals(t)){
                 return true;
             }
             if(containsValueDFS(child, t)){
@@ -163,7 +163,7 @@ public final class Tree<T> {
     private int getDepthOfValueDFS(Node<T> current, T t, int depth){
         depth += 1;
         for(Node<T> child : current.getChildren()){
-            if(child.hasValue() && child.getValue().get().equals(t)){
+            if(child.hasValue() && child.getValue().equals(t)){
                 return depth;
             }
             int d = getDepthOfValueDFS(child, t, depth);
@@ -238,7 +238,7 @@ public final class Tree<T> {
      */
     private Node<T> findNodeByValueDFS(Node<T> current, T t){
         for(Node<T> child : current.getChildren()){
-            if(child.hasValue() && child.getValue().get().equals(t)){
+            if(child.hasValue() && child.getValue().equals(t)){
                 return child;
             }
             boolean hasChildren = child.getChildren().size() != 0;
@@ -261,7 +261,7 @@ public final class Tree<T> {
      */
     public void addChildToRoot(Node<T> child){
         Validator.notNull(child, "Cannot add a null Node as a child to the root of the Tree.");
-        if(child.hasValue() && containsValue(child.getValue().get())){
+        if(child.hasValue() && containsValue(child.getValue())){
             throw new IllegalStateException("A Node with the given value already exists in the Tree.");
         }
         root.addChild(child);
@@ -278,7 +278,7 @@ public final class Tree<T> {
     public void addChildToNode(Node<T> child, Node<T> parent){
         Validator.notNull(child, "Cannot add a null Node as a child.");
         Validator.notNull(parent, "Cannot add a child Node to a null parent Node.");
-        if(child.hasValue() && containsValue(child.getValue().get())){
+        if(child.hasValue() && containsValue(child.getValue())){
             throw new IllegalStateException("A Node with the given value already exists in the Tree.");
         }
         parent.addChild(child);
@@ -302,7 +302,7 @@ public final class Tree<T> {
      */
     private void removeChildFromValueDFS( Node<T> current, T t){
         for(Node<T> child : current.getChildren()){
-            if(child.hasValue() && child.getValue().get().equals(t)){
+            if(child.hasValue() && child.getValue().equals(t)){
                 current.getChildren().remove(child);
                 return;
             }
@@ -344,7 +344,7 @@ public final class Tree<T> {
         List<T> values = new ArrayList<>();
         for(Node<T> child : current.getChildren()){
             if(child.hasValue()){
-                values.add(child.getValue().get());
+                values.add(child.getValue());
             }
             values.addAll(getAllValuesDFS(child));
         }
@@ -359,7 +359,7 @@ public final class Tree<T> {
         List<T> values = new ArrayList<>();
         for(Node<T> child : current.getChildren()){
             if(getDepth(child) == depth){
-                T value = child.hasValue() ? child.getValue().get() : null;
+                T value = child.hasValue() ? child.getValue() : null;
                 values.add(value);
             }
             values.addAll(getAllValuesAtDepthBFS(child, depth));
