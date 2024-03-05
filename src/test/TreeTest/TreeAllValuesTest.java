@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class TreeTest {
+public class TreeAllValuesTest {
 
     private Node<Integer> node1;
     private Node<Integer> node2;
@@ -57,6 +57,13 @@ public class TreeTest {
     public void testTreeSize(){
         Assertions.assertAll(
                 () -> Assertions.assertEquals(tree.getSize(), 5)
+        );
+    }
+
+    @Test
+    public void testTreeSizeWithValues(){
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(tree.getSizeValuesOnly(), 5)
         );
     }
 
