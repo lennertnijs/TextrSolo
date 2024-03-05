@@ -1,25 +1,26 @@
-package com.Textr.FileBufferRepo;
+package com.Textr.FileBuffer;
 
-import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.Validator.Validator;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public final class FileBufferRepo implements IFileBufferRepo {
 
-    private final IActiveFileBufferRepo activeFileBufferRepo;
-    private final IAllFileBuffersRepo allFileBufferRepo;
+    private FileBuffer activeBuffer;
+    private List<FileBuffer> buffers;
 
     public FileBufferRepo(){
-        this.activeFileBufferRepo = new ActiveFileBufferRepo();
-        this.allFileBufferRepo = new AllFileBuffersRepo();
+        this.activeBuffer = null;
+        this.buffers = new ArrayList<>();
     }
 
     /**
      * @return True if an active file buffer is set. False otherwise.
      */
     public boolean hasActiveBuffer(){
-        return !activeFileBufferRepo.isEmpty();
+        return activeBuffer != null;
     }
 
     /**
@@ -27,7 +28,7 @@ public final class FileBufferRepo implements IFileBufferRepo {
      */
     @Override
     public int getSize(){
-        return allFileBufferRepo.getSize();
+        return buffers.size();
     }
 
     /**
@@ -39,7 +40,12 @@ public final class FileBufferRepo implements IFileBufferRepo {
      */
     @Override
     public FileBuffer getBuffer(int id){
-        return allFileBufferRepo.get(id);
+        for(FileBuffer buffer : buffers){
+            if(buffer.getId() == id){
+                return buffer;
+            }
+        }
+        throw new NoSuchElementException("No buffer with the given id exists.");
     }
 
     /**
@@ -51,7 +57,7 @@ public final class FileBufferRepo implements IFileBufferRepo {
     @Override
     public void addBuffer(FileBuffer fileBuffer) {
         Validator.notNull(fileBuffer, "Cannot store a null FileBuffer.");
-        allFileBufferRepo.add(fileBuffer);
+        buffers.add(fileBuffer);
     }
 
     /**
@@ -61,7 +67,10 @@ public final class FileBufferRepo implements IFileBufferRepo {
      */
     @Override
     public int getActiveBufferId() {
-        return activeFileBufferRepo.getBufferId();
+        if(activeBuffer == null){
+            throw new IllegalStateException("Cannot fetch the id of the active buffer because it is null.");
+        }
+        return activeBuffer.getId();
     }
 
     /**
@@ -69,7 +78,7 @@ public final class FileBufferRepo implements IFileBufferRepo {
      */
     @Override
     public FileBuffer getActiveBuffer(){
-        return activeFileBufferRepo.getBuffer();
+        return activeBuffer;
     }
 
     /**
@@ -82,11 +91,11 @@ public final class FileBufferRepo implements IFileBufferRepo {
     @Override
     public void setActiveBuffer(FileBuffer fileBuffer) {
         Validator.notNull(fileBuffer, "Cannot set the active file buffer to a null buffer.");
-        boolean existsInAllRepo = allFileBufferRepo.contains(fileBuffer.getId());
+        boolean existsInAllRepo = buffers.contains(fileBuffer);
         if(!existsInAllRepo){
             throw new IllegalStateException("Cannot set the active FileBuffer to a buffer that does not exist.");
         }
-        activeFileBufferRepo.setBuffer(fileBuffer);
+        activeBuffer = fileBuffer;
     }
 
     /**
@@ -98,14 +107,15 @@ public final class FileBufferRepo implements IFileBufferRepo {
      */
     @Override
     public void removeBuffer(int id) {
-        if(activeFileBufferRepo.isEmpty()){
-            allFileBufferRepo.remove(id);
-        }else{
-            if(id == activeFileBufferRepo.getBufferId()){
-                throw new IllegalStateException("Cannot remove the active FileBuffer.");
-            }
-            allFileBufferRepo.remove(id);
+        if(activeBuffer == null) {
+            buffers.removeIf(e -> e.getId() == id);
+            return;
         }
+        if(id != activeBuffer.getId()){
+            buffers.removeIf(e -> e.getId() == id);
+            return;
+        }
+        throw new IllegalStateException("Cannot remove the active FileBuffer.");
     }
 
 
@@ -114,8 +124,8 @@ public final class FileBufferRepo implements IFileBufferRepo {
      */
     @Override
     public void removeAllBuffers(){
-        activeFileBufferRepo.deleteBuffer();
-        allFileBufferRepo.removeAll();
+        activeBuffer = null;
+        buffers = new ArrayList<>();
     }
 
     /**
@@ -124,7 +134,7 @@ public final class FileBufferRepo implements IFileBufferRepo {
      */
     @Override
     public void removeActiveBuffer(){
-        activeFileBufferRepo.deleteBuffer();
+        activeBuffer = null;
     }
 
     /**
@@ -132,7 +142,7 @@ public final class FileBufferRepo implements IFileBufferRepo {
      */
     @Override
     public List<FileBuffer> getAllBuffers(){
-        return allFileBufferRepo.getAll();
+        return buffers;
     }
 
     /**
@@ -140,8 +150,17 @@ public final class FileBufferRepo implements IFileBufferRepo {
      */
     @Override
     public void setActiveToNext(){
-        int id = activeFileBufferRepo.getBufferId();
-        activeFileBufferRepo.setBuffer(allFileBufferRepo.getNext(id));
+        int id = getActiveBufferId();
+        int nextId = -1;
+        for(int i = 0; i < buffers.size(); i++){
+            if(buffers.get(i).getId() == id){
+                nextId = (i + 1) % buffers.size();
+            }
+        }
+        if(nextId == -1){
+            throw new NoSuchElementException("No next buffer found.");
+        }
+        activeBuffer = getBuffer(nextId);
     }
 
 
@@ -150,7 +169,16 @@ public final class FileBufferRepo implements IFileBufferRepo {
      */
     @Override
     public void setActiveToPrevious(){
-        int id = activeFileBufferRepo.getBufferId();
-        activeFileBufferRepo.setBuffer(allFileBufferRepo.getPrevious(id));
+        int id = getActiveBufferId();
+        int prevId = -1;
+        for(int i = 0; i < buffers.size(); i++){
+            if(buffers.get(i).getId() == id){
+                prevId = (i - 1) >= 0 ? i - 1 : buffers.size() - 1;
+            }
+        }
+        if(prevId == -1){
+            throw new NoSuchElementException("No next buffer found.");
+        }
+        activeBuffer = getBuffer(prevId);
     }
 }
