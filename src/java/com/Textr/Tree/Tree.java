@@ -2,6 +2,8 @@ package com.Textr.Tree;
 
 import com.Textr.Validator.Validator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -334,5 +336,20 @@ public final class Tree<T> {
             }
             removeChildDFS(child, goal);
         }
+    }
+
+    public List<T> getAllValues(){
+        return getAllValuesDFS(root);
+    }
+
+    private List<T> getAllValuesDFS(Node<T> current){
+        List<T> values = new ArrayList<>();
+        for(Node<T> child : current.getChildren()){
+            if(child.hasValue()){
+                values.add(child.getValue().get());
+            }
+            values.addAll(getAllValuesDFS(child));
+        }
+        return values;
     }
 }

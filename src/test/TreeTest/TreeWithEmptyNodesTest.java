@@ -199,4 +199,11 @@ public class TreeWithEmptyNodesTest {
                 () -> Assertions.assertEquals(tree.getSizeValuesOnly(), 0)
         );
     }
+
+    @Test
+    public void testGetAllValues(){
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(tree.getAllValues(), new ArrayList<>(List.of(1,2,3,4)))
+        );
+    }
 }

@@ -150,4 +150,11 @@ public class TreeAllValuesTest {
                 () -> Assertions.assertFalse(tree.containsValue(1))
         );
     }
+
+    @Test
+    public void testGetAllValues(){
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(tree.getAllValues(), new ArrayList<>(List.of(1,2,3,5,4)))
+        );
+    }
 }
