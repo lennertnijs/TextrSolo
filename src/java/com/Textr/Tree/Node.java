@@ -81,15 +81,13 @@ public final class Node<T> {
         if(!(o instanceof Node<?> node)){
             return false;
         }
-        return t.equals(node.t) &&
-                children.equals(node.children) &&
-                parent.equals(node.parent);
+        boolean equalValues = (t != null && node.t != null) ? t.equals(node.t) : t == node.t;
+        return equalValues && children.equals(node.children);
     }
 
     @Override
     public int hashCode(){
         int result = t == null ? 0 : t.hashCode();
-        result = 31 * result + (parent == null ? 0 : parent.hashCode());
         for(Node<T> child : children){
             result = 31 * result + child.hashCode();
         }
