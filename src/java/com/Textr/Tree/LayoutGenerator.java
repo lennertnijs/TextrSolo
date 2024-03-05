@@ -23,7 +23,7 @@ public class LayoutGenerator {
             int viewHeight = remainder-- > 0 ? heightPerView + 1 : heightPerView;
             Dimension2D dimensionsOfView = Dimension2D.create(dimensions.getWidth(), viewHeight);
             if(integer == null){
-                generateVerticallyStackedViews(position, dimensionsOfView, depth + 1, repo);
+                generateHorizontallyStackedViews(position, dimensionsOfView, depth + 1, repo);
             }else{
                 repo.get(integer).setPosition(position);
                 repo.get(integer).setDimensions(dimensionsOfView);
