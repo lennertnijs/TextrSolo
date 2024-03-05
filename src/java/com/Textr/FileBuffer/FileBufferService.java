@@ -2,7 +2,6 @@ package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
 import com.Textr.File.FileService;
-import com.Textr.File.FileWriter;
 import com.Textr.FileBufferRepo.IFileBufferRepo;
 import com.Textr.Init.InputHandlerRepo;
 import com.Textr.Validator.Validator;
@@ -77,18 +76,16 @@ public final class FileBufferService {
      */
     public void saveActiveBuffer(){
         FileBuffer activeBuffer = fileBufferRepo.getActiveBuffer();
-        String bufferText = activeBuffer.getText().getText(); // Double ".getText()", might need refactoring
-        File bufferedFile = fileService.getFile(activeBuffer.getFileId());
-        String bufferUrl = bufferedFile.getUrl();
+        Text bufferTextObj = activeBuffer.getText();
+        String bufferText = bufferTextObj.getText(); // Double ".getText()", might need refactoring
         try {
-            FileWriter.writeToFile(bufferText, bufferUrl);
+            fileService.saveToFile(bufferText, activeBuffer.getFileId());
         } catch (IOException e) {
-            // Something went wrong when writing (e.g. file could not be created/opened, writing itself failed...)
+            // Something went wrong during writing, move to new input handler for error messages
             InputHandlerRepo.setAnythingInputHandler();
         } finally {
             // Writing was successful, buffer holds text saved on disk
             activeBuffer.setState(BufferState.CLEAN);
-            // TODO: File instance now holds incorrect "original" text, must be updated.
         }
     }
 
