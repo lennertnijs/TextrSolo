@@ -13,8 +13,8 @@ public final class View {
 
     private final int id;
     private final int fileBufferId;
-    private final Point position;
-    private final Dimension2D dimensions;
+    private Point position;
+    private Dimension2D dimensions;
     private final Point anchor;
 
     /**
@@ -53,11 +53,21 @@ public final class View {
         return this.position;
     }
 
+    public void setPosition(Point position){
+        Validator.notNull(position, "xd");
+        this.position = position;
+    }
+
     /**
      * @return This view's dimensions.
      */
     public Dimension2D getDimensions(){
         return this.dimensions;
+    }
+
+    public void setDimensions(Dimension2D dimensions){
+        Validator.notNull(dimensions, "XD");
+        this.dimensions = dimensions;
     }
 
     /**

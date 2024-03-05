@@ -4,6 +4,8 @@ import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.Init.InputHandlerRepo;
+import com.Textr.Tree.LayoutGenerator;
+import com.Textr.Tree.ViewTreeRepo;
 import com.Textr.Util.Point;
 import com.Textr.Validator.Validator;
 import com.Textr.ViewDrawer.CursorDrawer;
@@ -34,6 +36,15 @@ public final class ViewService {
     public void initialiseViewsVertical(){
         List<View> views = ViewLayoutInitializer.generateVerticallyStackedViews(fileBufferService.getAllFileBuffers());
         viewRepo.addAll(views);
+    }
+
+    public void generateViews(){
+        LayoutGenerator.generateViews((ViewTreeRepo) viewRepo);
+    }
+
+    public void rotateClockWise(){
+        ((ViewTreeRepo)viewRepo).rotateClockWise(getActiveView().getId(), (getActiveView().getId() + 1) % viewRepo.getSize());
+        generateViews();
     }
 
     /**

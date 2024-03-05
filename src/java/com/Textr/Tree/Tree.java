@@ -352,4 +352,23 @@ public final class Tree<T> {
         }
         return values;
     }
+
+    public List<T> getAllValuesAtDepth(int depth){
+        return getAllValuesAtDepthBFS(root, depth);
+    }
+
+    private List<T> getAllValuesAtDepthBFS(Node<T> current, int depth){
+        List<T> values = new ArrayList<>();
+        for(Node<T> child : current.getChildren()){
+            if(getDepth(child) == depth){
+                if(!child.hasValue()){
+                    values.add(null);
+                }else{
+                    values.add(child.getValue().get());
+                }
+            }
+            values.addAll(getAllValuesAtDepthBFS(child, depth));
+        }
+        return values;
+    }
 }

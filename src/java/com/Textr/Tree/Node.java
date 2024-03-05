@@ -67,10 +67,10 @@ public final class Node<T> {
 
     public boolean isSiblingWith(Node<T> node){
         Validator.notNull(node, "Cannot check sibling relationship with a null Node.");
-        if(this.hasParent()){
-            return this.getParent().getChildren().contains(node);
+        if(!this.hasParent() || !node.hasParent()){
+            throw new IllegalStateException("Cannot check for sibling relationship with the root.");
         }
-        throw new IllegalStateException("Cannot check for sibling relationship with the root.");
+        return this.parent.equals(node.parent);
     }
 
     @Override
