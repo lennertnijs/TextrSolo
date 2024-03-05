@@ -111,4 +111,9 @@ public class ViewRepo2 implements IViewRepo {
     public void removeAll() {
         rootlayout = new Layout();
     }
+
+    public void rotate(boolean clockwise, int activeviewid){
+        Layout leaf = rootlayout.getViewLocation(activeviewid);
+        leaf.rotatewithnext(clockwise);
+    }
 }

@@ -13,8 +13,8 @@ public final class View {
 
     private final int id;
     private final int fileBufferId;
-    private final Point position;
-    private final Dimension2D dimensions;
+    private Point position;
+    private Dimension2D dimensions;
     private final Point anchor;
 
     /**
@@ -65,6 +65,24 @@ public final class View {
      */
     public Point getAnchor(){
         return anchor;
+    }
+
+    /**
+     * Set this views Position
+     * @param position = the new position of the view
+     */
+    public void setPosition(Point position){
+        Validator.notNull(position, "Error: Cannot set the new Position of a View to null.");
+        this.position = position;
+    }
+
+    /**
+     * Set this views Dimensions
+     * @param dimensions = the new dimensions of the view
+     */
+    public void setDimensions(Dimension2D dimensions){
+        Validator.notNull(position, "Error: Cannot set the new Dimension of a View to null.");
+        this.dimensions = dimensions;
     }
 
 
