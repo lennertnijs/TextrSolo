@@ -157,7 +157,7 @@ public class Layout implements ILayout {
         List<Layout> siblings = this.parent.getChildren();
         int position = siblings.indexOf(this);
         if(position+1==siblings.size()){
-            if(parent!=null)
+            if(parent.parent!=null)
                 return parent.getNext();
             else
                 return null;
@@ -177,8 +177,9 @@ public class Layout implements ILayout {
             Layout nextleaf = nextnode.getFirstLeaf();
             if(parent.equals(nextleaf.getParent())){
                 Layout newsubLayout = new Layout();
-                parent.addSubLayout(newsubLayout);
-                if(clockwise && leftOff(nextleaf)|| !clockwise && !leftOff(nextleaf)){
+                int placement = parent.children.indexOf(this);
+                parent.addSubLayout(newsubLayout, placement);
+                if(clockwise && leftOff(nextleaf) || !clockwise && !leftOff(nextleaf)){
                     moveLeafTo(newsubLayout);
                     nextleaf.moveLeafTo(newsubLayout);
                 }
