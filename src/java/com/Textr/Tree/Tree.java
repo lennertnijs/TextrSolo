@@ -265,7 +265,6 @@ public final class Tree<T> {
             throw new IllegalStateException("A Node with the given value already exists in the Tree.");
         }
         root.addChild(child);
-        child.setParent(root);
     }
 
     /**
@@ -283,7 +282,6 @@ public final class Tree<T> {
             throw new IllegalStateException("A Node with the given value already exists in the Tree.");
         }
         parent.addChild(child);
-        child.setParent(parent);
     }
 
     /**

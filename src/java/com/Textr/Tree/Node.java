@@ -9,8 +9,8 @@ import java.util.Optional;
 public final class Node<T> {
 
     private Node<T> parent = null;
-    private T t;
-    private List<Node<T>> children = new ArrayList<>();
+    private final T t;
+    private final List<Node<T>> children = new ArrayList<>();
 
 
     public Node(T t){
@@ -42,10 +42,6 @@ public final class Node<T> {
         return children;
     }
 
-    public void setParent(Node<T> parent){
-        Validator.notNull(parent, "Cannot add a null Node as a parent.");
-        this.parent = parent;
-    }
 
     public void addChildren(List<Node<T>> children){
         Validator.notNull(children, "Cannot add a null List of child Nodes.");
@@ -53,11 +49,15 @@ public final class Node<T> {
             Validator.notNull(child, "Cannot add a null List of child Nodes.");
         }
         this.children.addAll(children);
+        for(Node<T> child : children){
+            child.parent = this;
+        }
     }
 
     public void addChild(Node<T> child){
         Validator.notNull(child, "Cannot add a null child Node.");
         children.add(child);
+        child.parent = this;
     }
 
     public void removeChild(Node<T> child){

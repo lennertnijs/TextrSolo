@@ -26,9 +26,7 @@ public class NodeTest {
     @Test
     public void testNode(){
         node1.addChildren(List.of(node2, node3));
-        node2.setParent(node1);
         node3.addChild(node4);
-        node4.setParent(node3);
         node4.addChild(node5);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(node1.getValue().get(), 1),
@@ -47,8 +45,7 @@ public class NodeTest {
                 () -> Assertions.assertTrue(node4.hasParent()),
 
                 () -> Assertions.assertEquals(node5.getValue().get(), 5),
-                () -> Assertions.assertEquals(node5.getChildren(), new ArrayList<>()),
-                () -> Assertions.assertFalse(node5.hasParent())
+                () -> Assertions.assertEquals(node5.getChildren(), new ArrayList<>())
         );
     }
 

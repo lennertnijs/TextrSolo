@@ -120,15 +120,12 @@ public class ViewTreeRepo implements IViewRepo {
         Node<Integer> emptyNode = new Node<>(null);
         emptyNode.addChild(sibling1);
         emptyNode.addChild(sibling2);
-        sibling1.setParent(emptyNode);
-        sibling2.setParent(emptyNode);
         parent.replaceChild(parent.getChildren().indexOf(sibling1), emptyNode);
     }
 
     private void rotateNonSiblingClockWise(Node<Integer> node1, Node<Integer> node2){
         Node<Integer> parentOfFirst = node1.getParent();
         node2.getParent().removeChild(node2);
-        node2.setParent(parentOfFirst);
         parentOfFirst.addChild(node2);
     }
 
