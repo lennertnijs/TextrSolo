@@ -53,6 +53,82 @@ public class ViewLayoutInitializer {
     }
 
     /**
+     * Generate a list of views that completely covers the terminal area, one stacked atop the other vertically.
+     * @param rootlayout  the root of the hiërarchyTree
+     * @return The list of views.
+     * @throws IllegalArgumentException If the list of buffers is or contains null.
+     * @throws IllegalStateException If there are no buffers.
+     */
+    public static List<View> generateHiërarchicalViews(Layout rootlayout){
+        int terminalWidth = TerminalService.getTerminalArea().getWidth();
+        int terminalHeight = TerminalService.getTerminalArea().getHeight();
+        return generateLayoutsVerticalSubTree(Point.create(0,0), Point.create(terminalWidth, terminalHeight), rootlayout );
+    }
+
+    /**
+     * Generate a list of sublayouts that completely covers the layout area, one stacked atop the other vertically.
+     * These layouts are then themselves filled horizontally with layouts, and so forth until the layouts are all views.
+     * @return The list of views.
+     * @throws IllegalArgumentException If the list of buffers is or contains null.
+     * @throws IllegalStateException If there are no buffers.
+     */
+    public static List<View> generateLayoutsVerticalSubTree(Point topLeft, Point bottomRight, Layout rootlayout){
+        int heightPerLayout = ((bottomRight.getY()-topLeft.getY()) / rootlayout.getChildren().size());
+        int remainder = ((bottomRight.getY()-topLeft.getY()) % rootlayout.getChildren().size());
+        List<View> views = new ArrayList<>();
+        int y = topLeft.getY();
+        for(Layout child : rootlayout.getChildren()){
+            Point position = Point.create(topLeft.getX(), y);
+            int LayoutHeight = remainder-- > 0 ? heightPerLayout + 1 : heightPerLayout;
+            Dimension2D dimensions = Dimension2D.create(bottomRight.getX()-topLeft.getX(), LayoutHeight);
+            if(child.getView()!=null){
+                View toAdd = child.getView();
+                toAdd.setPosition(position);
+                toAdd.setDimensions(dimensions);
+
+                views.add(toAdd);
+            }
+            else{
+                Point parameterbottomright = Point.create(position.getX()+dimensions.getWidth(),position.getY()+dimensions.getHeight());
+                views.addAll(generateLayoutsHorizontalSubTree(position, parameterbottomright, child));
+            }
+            y += LayoutHeight;
+        }
+        return views;
+    }
+
+    /**
+     * Generate a list of sublayouts that completely covers the layout area, one stacked beside the other horizontally.
+     * These layouts are then themselves filled vertically with layouts, and so forth until the layouts are all views.
+     * @return The list of views.
+     * @throws IllegalArgumentException If the list of buffers is or contains null.
+     * @throws IllegalStateException If there are no buffers.
+     */
+    public static List<View> generateLayoutsHorizontalSubTree(Point topLeft, Point bottomRight, Layout rootlayout){
+        int widthPerLayout = ((bottomRight.getX()-topLeft.getX()) / rootlayout.getChildren().size());
+        int remainder = ((bottomRight.getX()-topLeft.getX()) % rootlayout.getChildren().size());
+        List<View> views = new ArrayList<>();
+        int x = topLeft.getX();
+        for(Layout child : rootlayout.getChildren()){
+            Point position = Point.create(x, 0);
+            int LayoutHeight = remainder-- > 0 ? widthPerLayout + 1 : widthPerLayout;
+            Dimension2D dimensions = Dimension2D.create(bottomRight.getY()-topLeft.getX(), LayoutHeight);
+            if(child.getView()!=null){
+                View toAdd = child.getView();
+                toAdd.setPosition(position);
+                toAdd.setDimensions(dimensions);
+                views.add(toAdd);
+            }
+            else{
+                Point parameterbottomright = Point.create(position.getX()+dimensions.getWidth(),position.getY()+dimensions.getHeight());
+                views.addAll(generateLayoutsVerticalSubTree(position, parameterbottomright, child));
+            }
+            x += LayoutHeight;
+        }
+        return views;
+    }
+
+    /**
      * Validates the given list of buffers.
      * Checks whether this list is, or contains, a null.
      * @param buffers The buffer list.
