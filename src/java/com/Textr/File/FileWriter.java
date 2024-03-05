@@ -30,7 +30,8 @@ public final class FileWriter {
         Validator.notNull(data, "Data to write may not be null.");
 
         // Writing to file
-        BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileLocation)); // Potential IOException
-        writer.write(data); // Potential IOException
+        try (BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileLocation))) { // Potential IOException
+            writer.write(data); // Potential IOException
+        }
     }
 }
