@@ -1,4 +1,4 @@
-package com.Textr.FileRepo;
+package com.Textr.File;
 
 import com.Textr.File.File;
 
@@ -10,5 +10,7 @@ public interface IFileRepo {
     File get(int id);
     List<File> getAll();
     void add(File file);
+    void addAll(List<File> files);
     void remove(int id);
+    void removeAll();
 }
