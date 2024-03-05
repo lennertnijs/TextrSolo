@@ -1,9 +1,9 @@
 package com.Textr;
 
+import com.Textr.File.FileRepo;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.File.FileService;
 import com.Textr.FileBufferRepo.FileBufferRepo;
-import com.Textr.FileRepo.FileRepo;
 import com.Textr.Init.Initialiser;
 import com.Textr.Init.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
