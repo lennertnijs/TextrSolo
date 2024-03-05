@@ -1,6 +1,5 @@
 package com.Textr.InputUtil;
 
-import com.Textr.InputUtil.Input;
 import com.Textr.Terminal.TerminalService;
 
 import java.util.InputMismatchException;
@@ -35,6 +34,9 @@ public class InputTranslator {
             }
             case CTRL_P -> {
                 return Input.CTRL_P;
+            }
+            case CTRL_R -> {
+                return Input.CTRL_R;
             }
             case SPACE -> {
                 return Input.SPACE;

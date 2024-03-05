@@ -54,6 +54,15 @@ public class TreeAllValuesTest {
     }
 
     @Test
+    public void testNodesAtDepth(){
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(tree.getAllValuesAtDepth(1), new ArrayList<>(List.of(1, 2))),
+                () -> Assertions.assertEquals(tree.getAllValuesAtDepth(2), new ArrayList<>(List.of(3, 4))),
+                () -> Assertions.assertEquals(tree.getAllValuesAtDepth(3), new ArrayList<>(List.of(5)))
+        );
+    }
+
+    @Test
     public void testTreeSize(){
         Assertions.assertAll(
                 () -> Assertions.assertEquals(tree.getSize(), 5)
@@ -148,6 +157,13 @@ public class TreeAllValuesTest {
                 () -> tree.removeFromValue(1),
                 () -> Assertions.assertEquals(tree.getSize(), 4),
                 () -> Assertions.assertFalse(tree.containsValue(1))
+        );
+    }
+
+    @Test
+    public void testGetAllValues(){
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(tree.getAllValues(), new ArrayList<>(List.of(1,2,3,5,4)))
         );
     }
 }

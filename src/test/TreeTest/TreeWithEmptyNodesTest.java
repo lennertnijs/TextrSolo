@@ -145,6 +145,24 @@ public class TreeWithEmptyNodesTest {
     }
 
     @Test
+    public void testNodesAtDepth(){
+        List<Integer> depth1 = new ArrayList<>();
+        depth1.add(1);
+        depth1.add(null);
+        depth1.add(null);
+
+        List<Integer> depth2 = new ArrayList<>();
+        depth2.add(2);
+        depth2.add(null);
+        depth2.add(null);
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(tree.getAllValuesAtDepth(1), depth1),
+                () -> Assertions.assertEquals(tree.getAllValuesAtDepth(2), depth2),
+                () -> Assertions.assertEquals(tree.getAllValuesAtDepth(3), new ArrayList<>(List.of(3, 4)))
+        );
+    }
+
+    @Test
     public void getNodeByValue(){
         Assertions.assertAll(
                 () -> Assertions.assertEquals(tree.getNodeByValue(1), node1),
@@ -197,6 +215,13 @@ public class TreeWithEmptyNodesTest {
                 () -> tree.removeFromValue(1),
                 () -> Assertions.assertEquals(tree.getSize(), 4),
                 () -> Assertions.assertEquals(tree.getSizeValuesOnly(), 0)
+        );
+    }
+
+    @Test
+    public void testGetAllValues(){
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(tree.getAllValues(), new ArrayList<>(List.of(1,2,3,4)))
         );
     }
 }

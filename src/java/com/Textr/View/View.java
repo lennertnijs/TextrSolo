@@ -53,11 +53,21 @@ public final class View {
         return this.position;
     }
 
+    public void setPosition(Point position){
+        Validator.notNull(position, "xd");
+        this.position = position;
+    }
+
     /**
      * @return This view's dimensions.
      */
     public Dimension2D getDimensions(){
         return this.dimensions;
+    }
+
+    public void setDimensions(Dimension2D dimensions){
+        Validator.notNull(dimensions, "XD");
+        this.dimensions = dimensions;
     }
 
     /**

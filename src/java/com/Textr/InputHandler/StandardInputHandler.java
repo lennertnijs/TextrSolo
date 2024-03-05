@@ -48,6 +48,7 @@ public final class StandardInputHandler implements IInputHandler {
             case CTRL_P -> fileBufferService.moveActiveBufferToPrev();
             case CTRL_N -> fileBufferService.moveActiveBufferToNext();
             case CTRL_S -> fileBufferService.saveActiveBuffer();
+            case CTRL_R -> viewService.rotateClockWise();
             case ARROW_UP -> viewService.moveCursor(Direction.UP);
             case ARROW_RIGHT -> viewService.moveCursor(Direction.RIGHT);
             case ARROW_DOWN -> viewService.moveCursor(Direction.DOWN);
