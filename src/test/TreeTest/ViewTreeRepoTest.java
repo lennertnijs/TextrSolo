@@ -98,7 +98,6 @@ public class ViewTreeRepoTest {
         );
 
         repo.rotateClockWise(2,3);
-        System.out.println(repo.getTree().getAllValues());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(tree.getSize(), 7),
                 () -> Assertions.assertEquals(tree.getSizeValuesOnly(), 5),
@@ -110,7 +109,6 @@ public class ViewTreeRepoTest {
         );
 
         repo.rotateClockWise(2,3);
-        System.out.println(repo.getTree().getAllValues());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(tree.getSize(), 8),
                 () -> Assertions.assertEquals(tree.getSizeValuesOnly(), 5),
@@ -122,7 +120,6 @@ public class ViewTreeRepoTest {
         );
 
         repo.rotateClockWise(3,4);
-        System.out.println(repo.getTree().getAllValues());
         Assertions.assertAll(
                 () -> Assertions.assertEquals(tree.getSize(), 8),
                 () -> Assertions.assertEquals(tree.getSizeValuesOnly(), 5),

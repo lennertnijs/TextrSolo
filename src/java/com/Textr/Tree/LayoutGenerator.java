@@ -33,6 +33,22 @@ public class LayoutGenerator {
     }
 
     private static void generateHorizontallyStackedViews(Point topLeft, Dimension2D dimensions, int depth, ViewTreeRepo repo){
-
+        List<Integer> nodeCount = repo.getAllValuesAtDepth(depth);
+        int amountOfViews = nodeCount.size();
+        int widthPerView = dimensions.getWidth() / amountOfViews;
+        int remainder = dimensions.getWidth() % amountOfViews;
+        int x = topLeft.getX();
+        for(Integer integer : nodeCount){
+            Point position = Point.create(x, topLeft.getY());
+            int viewWidth = remainder-- > 0 ? widthPerView + 1 : widthPerView;
+            Dimension2D dimensionsOfView = Dimension2D.create(viewWidth, dimensions.getHeight());
+            if(integer == null){
+                generateVerticallyStackedViews(position, dimensionsOfView, depth + 1, repo);
+            }else{
+                repo.get(integer).setPosition(position);
+                repo.get(integer).setDimensions(dimensionsOfView);
+            }
+            x += viewWidth;
+        }
     }
 }
