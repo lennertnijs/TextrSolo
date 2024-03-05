@@ -30,9 +30,9 @@ public class Layout implements ILayout {
     public void removeSubLayout(Layout layout){
         children.remove(layout);
         if(children.size()==1){
-            Layout toMove = children.getFirst();
-            if(getParent()!= null)
-                toMove.moveLeafTo(this.parent);
+//            Layout toMove = children.getFirst();
+//            if(getParent()!= null)
+//                toMove.moveLeafTo(this.parent);
 
         }
     }
