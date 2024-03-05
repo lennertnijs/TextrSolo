@@ -45,6 +45,9 @@ public class InputTranslator {
             case ESCAPE -> {
                 return translateEscapeByteCode();
             }
+            case CTRL_S -> {
+                return Input.CTRL_S;
+            }
         }
         throw new InputMismatchException("Could not translate the input.");
     }
