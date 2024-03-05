@@ -51,4 +51,18 @@ public class NodeTest {
                 () -> Assertions.assertFalse(node5.hasParent())
         );
     }
+
+    @Test
+    public void testSibling(){
+        node1.addChildren(List.of(node2, node3));
+        node2.setParent(node1);
+        node3.addChild(node4);
+        node3.setParent(node1);
+        node4.setParent(node3);
+        node4.addChild(node5);
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(node2.isSiblingWith(node3)),
+                () -> Assertions.assertFalse(node3.isSiblingWith(node4))
+        );
+    }
 }
