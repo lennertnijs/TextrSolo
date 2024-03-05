@@ -361,11 +361,8 @@ public final class Tree<T> {
         List<T> values = new ArrayList<>();
         for(Node<T> child : current.getChildren()){
             if(getDepth(child) == depth){
-                if(!child.hasValue()){
-                    values.add(null);
-                }else{
-                    values.add(child.getValue().get());
-                }
+                T value = child.hasValue() ? child.getValue().get() : null;
+                values.add(value);
             }
             values.addAll(getAllValuesAtDepthBFS(child, depth));
         }

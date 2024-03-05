@@ -70,7 +70,12 @@ public class ViewTreeRepo implements IViewRepo {
     }
 
     public View get(int viewId){
-        return views.get(viewId);
+        for(View view : views){
+            if(view.getId() == viewId){
+                return view;
+            }
+        }
+        throw new NoSuchElementException();
     }
 
     public View getByBufferId(int bufferId){
@@ -110,14 +115,14 @@ public class ViewTreeRepo implements IViewRepo {
 
     private void rotateSiblingsClockWise(Node<Integer> sibling1, Node<Integer> sibling2){
         Node<Integer> parent = sibling1.getParent();
-        parent.removeChild(sibling1);
+        //parent.removeChild(sibling1);
         parent.removeChild(sibling2);
         Node<Integer> emptyNode = new Node<>(null);
         emptyNode.addChild(sibling1);
         emptyNode.addChild(sibling2);
         sibling1.setParent(emptyNode);
         sibling2.setParent(emptyNode);
-        parent.addChild(emptyNode);
+        parent.replaceChild(parent.getChildren().indexOf(sibling1), emptyNode);
     }
 
     private void rotateNonSiblingClockWise(Node<Integer> node1, Node<Integer> node2){

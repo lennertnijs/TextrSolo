@@ -1,17 +1,15 @@
 package com.Textr.Tree;
 
-import com.Textr.Terminal.TerminalService;
 import com.Textr.Util.Point;
 import com.Textr.View.Dimension2D;
-import com.Textr.View.View;
 
 import java.util.List;
 
 public class LayoutGenerator {
 
-    public static void generateViews(ViewTreeRepo repo){
+    public static void generateViews(ViewTreeRepo repo, Dimension2D dimension2D){
         Point topLeft = Point.create(0,0);
-        generateVerticallyStackedViews(topLeft, TerminalService.getTerminalArea(), 1, repo);
+        generateVerticallyStackedViews(topLeft, dimension2D, 1, repo);
     }
 
     private static void generateVerticallyStackedViews(Point topLeft, Dimension2D dimensions, int depth, ViewTreeRepo repo){
@@ -30,7 +28,11 @@ public class LayoutGenerator {
                 repo.get(integer).setPosition(position);
                 repo.get(integer).setDimensions(dimensionsOfView);
             }
-            y+= viewHeight;
+            y += viewHeight;
         }
+    }
+
+    private static void generateHorizontallyStackedViews(Point topLeft, Dimension2D dimensions, int depth, ViewTreeRepo repo){
+
     }
 }

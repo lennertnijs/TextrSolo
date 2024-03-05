@@ -4,6 +4,7 @@ import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.Init.InputHandlerRepo;
+import com.Textr.Terminal.TerminalService;
 import com.Textr.Tree.LayoutGenerator;
 import com.Textr.Tree.ViewTreeRepo;
 import com.Textr.Util.Point;
@@ -39,7 +40,7 @@ public final class ViewService {
     }
 
     public void generateViews(){
-        LayoutGenerator.generateViews((ViewTreeRepo) viewRepo);
+        LayoutGenerator.generateViews((ViewTreeRepo) viewRepo, TerminalService.getTerminalArea());
     }
 
     public void rotateClockWise(){

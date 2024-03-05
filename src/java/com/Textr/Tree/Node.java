@@ -9,8 +9,8 @@ import java.util.Optional;
 public final class Node<T> {
 
     private Node<T> parent = null;
-    private final T t;
-    private final List<Node<T>> children = new ArrayList<>();
+    private T t;
+    private List<Node<T>> children = new ArrayList<>();
 
 
     public Node(T t){
@@ -71,6 +71,10 @@ public final class Node<T> {
             throw new IllegalStateException("Cannot check for sibling relationship with the root.");
         }
         return this.parent.equals(node.parent);
+    }
+
+    public void replaceChild(int index, Node<T> node){
+        this.children.set(index, node);
     }
 
     @Override
