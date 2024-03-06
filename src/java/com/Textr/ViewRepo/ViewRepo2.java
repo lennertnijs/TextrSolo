@@ -3,13 +3,20 @@ package com.Textr.ViewRepo;
 import com.Textr.Validator.Validator;
 import com.Textr.View.View;
 import com.Textr.ViewLayout.Layout;
+import com.Textr.ViewLayout.ViewLayoutInitializer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 public class ViewRepo2 implements IViewRepo {
 
     private Layout rootlayout;
+
+
+    public ViewRepo2(){
+        rootlayout = new Layout();
+    }
 
     /**
      * Checks whether a view with the given id is stored.
@@ -112,8 +119,10 @@ public class ViewRepo2 implements IViewRepo {
         rootlayout = new Layout();
     }
 
+
     public void rotate(boolean clockwise, int activeviewid){
         Layout leaf = rootlayout.getViewLocation(activeviewid);
         leaf.rotatewithnext(clockwise);
+        ViewLayoutInitializer.generateHiërarchicalViews(rootlayout);
     }
 }

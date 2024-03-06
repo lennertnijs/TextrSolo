@@ -126,4 +126,11 @@ public final class ViewRepo implements IViewRepo{
     public void removeAll(){
         views = new ArrayList<>();
     }
+
+    @Override
+    public void rotate(boolean clockwise, int activeviewid) {
+        //WARNING this does nothing
+    }
+
+
 }

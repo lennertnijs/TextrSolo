@@ -110,9 +110,9 @@ public class ViewLayoutInitializer {
         List<View> views = new ArrayList<>();
         int x = topLeft.getX();
         for(Layout child : rootlayout.getChildren()){
-            Point position = Point.create(x, 0);
-            int LayoutHeight = remainder-- > 0 ? widthPerLayout + 1 : widthPerLayout;
-            Dimension2D dimensions = Dimension2D.create(bottomRight.getY()-topLeft.getX(), LayoutHeight);
+            Point position = Point.create(x, topLeft.getY());
+            int LayoutWidth = remainder-- > 0 ? widthPerLayout + 1 : widthPerLayout;
+            Dimension2D dimensions = Dimension2D.create(LayoutWidth, bottomRight.getY()-topLeft.getY() );
             if(child.getView()!=null){
                 View toAdd = child.getView();
                 toAdd.setPosition(position);
@@ -123,7 +123,7 @@ public class ViewLayoutInitializer {
                 Point parameterbottomright = Point.create(position.getX()+dimensions.getWidth(),position.getY()+dimensions.getHeight());
                 views.addAll(generateLayoutsVerticalSubTree(position, parameterbottomright, child));
             }
-            x += LayoutHeight;
+            x += LayoutWidth;
         }
         return views;
     }

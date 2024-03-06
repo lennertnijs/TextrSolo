@@ -6,6 +6,7 @@ import com.Textr.InputUtil.InputTranslator;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.Direction;
 import com.Textr.View.ViewService;
+import com.Textr.ViewRepo.ViewRepo2;
 import io.github.btj.termios.Terminal;
 
 public final class StandardInputHandler implements IInputHandler {
@@ -46,7 +47,9 @@ public final class StandardInputHandler implements IInputHandler {
             case CTRL_P -> fileBufferService.moveActiveBufferToPrev();
             case CTRL_N -> fileBufferService.moveActiveBufferToNext();
             case CTRL_S -> fileBufferService.saveActiveBuffer();
-            case CTRL_R -> viewService.rotateClockWise();
+            case CTRL_R -> viewService.rotateview(false);
+            case CTRL_T -> viewService.rotateview(true);
+
             case ARROW_UP -> viewService.moveCursor(Direction.UP);
             case ARROW_RIGHT -> viewService.moveCursor(Direction.RIGHT);
             case ARROW_DOWN -> viewService.moveCursor(Direction.DOWN);
