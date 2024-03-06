@@ -1,11 +1,8 @@
 package com.Textr.InputUtil;
 
-import com.Textr.InputUtil.Input;
 import com.Textr.Terminal.TerminalService;
 
 import java.util.InputMismatchException;
-
-import static com.Textr.InputUtil.Inputs.*;
 
 /**
  * Used to translate a byte or stream of bytes into single input.
@@ -27,29 +24,32 @@ public class InputTranslator {
      */
     public static Input translateBytes(int b){
         switch (b) {
-            case ENTER -> {
+            case 13 -> {
                 return Input.ENTER;
             }
-            case CTRL_N -> {
+            case 14 -> {
                 return Input.CTRL_N;
             }
-            case CTRL_P -> {
+            case 16 -> {
                 return Input.CTRL_P;
             }
             case CTRL_T -> {
                 return Input.CTRL_T;
             }
-            case CTRL_R -> {
+            case 18 -> {
                 return Input.CTRL_R;
             }
-            case SPACE -> {
+            case 32 -> {
                 return Input.SPACE;
             }
-            case BACKSPACE -> {
+            case 127 -> {
                 return Input.BACKSPACE;
             }
-            case ESCAPE -> {
+            case 27 -> {
                 return translateEscapeByteCode();
+            }
+            case 19 -> {
+                return Input.CTRL_S;
             }
         }
         throw new InputMismatchException("Could not translate the input.");

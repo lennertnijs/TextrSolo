@@ -1,8 +1,8 @@
 package com.Textr.File;
 
-import com.Textr.FileRepo.IFileRepo;
 import com.Textr.Validator.Validator;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -37,6 +37,24 @@ public final class FileService {
      */
     public List<File> getAllFiles(){
         return fileRepo.getAll();
+    }
+
+    /**
+     * Saves the given data to disk, at the location specified by the File with given fileID.
+     *
+     * @param data    The String to write to disk
+     * @param fileID  The relevant fileID to write to.
+     * @throws IOException when file could not be opened or created, or something went wrong during writing.
+     */
+    public void saveToFile(String data, int fileID) throws IOException {
+        File file = getFile(fileID);
+        String bufferUrl = file.getUrl();
+
+        // Possible IOException:
+        FileWriter.writeToFile(data, bufferUrl);
+
+        // If this code is reached, writing was successful: update File text
+        file.setText(data);
     }
 
     /**

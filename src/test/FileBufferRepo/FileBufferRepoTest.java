@@ -1,7 +1,7 @@
 package FileBufferRepo;
 
 import com.Textr.FileBuffer.*;
-import com.Textr.FileBufferRepo.FileBufferRepo;
+import com.Textr.FileBuffer.FileBufferRepo;
 import com.Textr.Util.Point;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

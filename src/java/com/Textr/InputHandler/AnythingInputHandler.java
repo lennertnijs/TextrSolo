@@ -11,7 +11,7 @@ public final class AnythingInputHandler implements IInputHandler {
 
     @Override
     public void handleInput() {
-        int b = TerminalService.readByte();
+        TerminalService.readByte();
         InputHandlerRepo.setStandardInputHandler();
     }
 }

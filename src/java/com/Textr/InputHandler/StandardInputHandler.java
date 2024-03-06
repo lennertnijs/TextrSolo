@@ -9,8 +9,6 @@ import com.Textr.View.ViewService;
 import com.Textr.ViewRepo.ViewRepo2;
 import io.github.btj.termios.Terminal;
 
-import static com.Textr.InputUtil.Inputs.*;
-
 public final class StandardInputHandler implements IInputHandler {
     private final ViewService viewService;
     private final FileBufferService fileBufferService;
@@ -23,7 +21,7 @@ public final class StandardInputHandler implements IInputHandler {
     public void handleInput(){
         int b = TerminalService.readByte();
         TerminalService.clearScreen();
-        boolean isRegularInput = b >= 65 && b <= 122 || b == SPACE;
+        boolean isRegularInput = b >= 65 && b <= 122 || b == 32; // 32 = space
         boolean draw = true;
         if(isRegularInput){
             viewService.insertCharacter((char) b);
@@ -51,6 +49,7 @@ public final class StandardInputHandler implements IInputHandler {
             case CTRL_S -> fileBufferService.saveActiveBuffer();
             case CTRL_R -> viewService.rotateview(false);
             case CTRL_T -> viewService.rotateview(true);
+
             case ARROW_UP -> viewService.moveCursor(Direction.UP);
             case ARROW_RIGHT -> viewService.moveCursor(Direction.RIGHT);
             case ARROW_DOWN -> viewService.moveCursor(Direction.DOWN);

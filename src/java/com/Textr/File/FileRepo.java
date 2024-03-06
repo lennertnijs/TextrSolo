@@ -1,13 +1,12 @@
-package com.Textr.FileRepo;
+package com.Textr.File;
 
-import com.Textr.File.File;
 import com.Textr.Validator.Validator;
 
 import java.util.*;
 
 public final class FileRepo implements IFileRepo {
 
-    private final List<File> files;
+    private List<File> files;
 
     public FileRepo(){
         this.files = new ArrayList<>();
@@ -46,6 +45,7 @@ public final class FileRepo implements IFileRepo {
      * @return The file
      * @throws NoSuchElementException If no matching file was found.
      */
+    @Override
     public File get(int id){
         for(File file : files){
             if(file.getId() == id){
@@ -58,6 +58,7 @@ public final class FileRepo implements IFileRepo {
     /**
      * @return All stored files.
      */
+    @Override
     public List<File> getAll(){
         return files;
     }
@@ -69,9 +70,23 @@ public final class FileRepo implements IFileRepo {
      *
      * @throws IllegalArgumentException If the given file is null.
      */
+    @Override
     public void add(File file){
         Validator.notNull(file, "Cannot store a null File.");
         files.add(file);
+    }
+
+    /**
+     * Adds all the Files to the repository.
+     * @param files The files. Cannot be null or contain null.
+     */
+    @Override
+    public void addAll(List<File> files){
+        Validator.notNull(files, "Cannot add a null List of files to the repository.");
+        for(File file : files){
+            Validator.notNull(file, "Cannot store a null file.");
+            files.add(file);
+        }
     }
 
     /**
@@ -79,7 +94,16 @@ public final class FileRepo implements IFileRepo {
      * If no match was found, does nothing.
      * @param id The id
      */
+    @Override
     public void remove(int id){
         files.removeIf(e -> e.getId() == id);
+    }
+
+    /**
+     * Removes all Files.
+     */
+    @Override
+    public void removeAll(){
+        files = new ArrayList<>();
     }
 }

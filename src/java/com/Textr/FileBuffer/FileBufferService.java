@@ -2,10 +2,11 @@ package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
 import com.Textr.File.FileService;
-import com.Textr.FileBufferRepo.IFileBufferRepo;
+import com.Textr.Init.InputHandlerRepo;
 import com.Textr.Validator.Validator;
 import com.Textr.View.Direction;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -69,10 +70,24 @@ public final class FileBufferService {
         fileBufferRepo.removeBuffer(id);
     }
 
+    /**
+     * Saves the current active buffer to disk, and sets the buffer's state to CLEAN.
+     */
     public void saveActiveBuffer(){
-        // roep u writer op -> aparte class, zoals FileReader. Indien ge een IOException vangt met try/catch, swap de
-        // input handler van Settings naar een nieuwe AnythingInputHandler
+        FileBuffer activeBuffer = fileBufferRepo.getActiveBuffer();
+        Text bufferTextObj = activeBuffer.getText();
+        String bufferText = bufferTextObj.getText(); // Double ".getText()", might need refactoring
+        try {
+            fileService.saveToFile(bufferText, activeBuffer.getFileId());
+        } catch (IOException e) {
+            // Something went wrong during writing, move to new input handler for error messages
+            InputHandlerRepo.setAnythingInputHandler();
+        } finally {
+            // Writing was successful, buffer holds text saved on disk
+            activeBuffer.setState(BufferState.CLEAN);
+        }
     }
+
     public void moveCursor(Direction direction){
         Validator.notNull(direction, "Cannot move the insertion point in the null Direction.");
         getActiveBuffer().moveCursor(direction);

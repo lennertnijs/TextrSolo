@@ -2,7 +2,7 @@ package FileTest;
 
 import com.Textr.File.File;
 import com.Textr.File.FileIdGenerator;
-import com.Textr.FileRepo.FileRepo;
+import com.Textr.File.FileRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

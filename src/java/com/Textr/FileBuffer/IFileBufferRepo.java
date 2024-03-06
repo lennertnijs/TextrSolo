@@ -1,4 +1,4 @@
-package com.Textr.FileBufferRepo;
+package com.Textr.FileBuffer;
 
 import com.Textr.FileBuffer.FileBuffer;
 
