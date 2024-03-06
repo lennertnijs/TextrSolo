@@ -1,11 +1,7 @@
 package com.Textr.Input;
 
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.Input.AnythingInputHandler;
-import com.Textr.Input.CloseDirtyBufferInputHandler;
-import com.Textr.Input.IInputHandler;
-import com.Textr.Input.InputHandler;
-import com.Textr.Validator.Validator;
+import com.Textr.Util.Validator;
 import com.Textr.View.ViewService;
 
 public final class InputHandlerRepo {

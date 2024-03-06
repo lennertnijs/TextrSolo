@@ -3,7 +3,7 @@ package com.Textr.ViewLayout;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.Util.Point;
 import com.Textr.Terminal.TerminalService;
-import com.Textr.Validator.Validator;
+import com.Textr.Util.Validator;
 import com.Textr.View.Dimension2D;
 import com.Textr.View.View;
 import com.Textr.View.ViewCreator;
@@ -59,7 +59,7 @@ public class ViewLayoutInitializer {
      * @throws IllegalArgumentException If the list of buffers is or contains null.
      * @throws IllegalStateException If there are no buffers.
      */
-    public static List<View> generateHiërarchicalViews(Layout rootlayout){
+    public static List<View> generateHierarchicalViews(Layout rootlayout){
         int terminalWidth = TerminalService.getTerminalArea().getWidth();
         int terminalHeight = TerminalService.getTerminalArea().getHeight();
         return generateLayoutsVerticalSubTree(Point.create(0,0), Point.create(terminalWidth, terminalHeight), rootlayout );

@@ -1,6 +1,6 @@
 package com.Textr.File;
 
-import com.Textr.Validator.Validator;
+import com.Textr.Util.Validator;
 
 /**
  * Class to represent a File object.

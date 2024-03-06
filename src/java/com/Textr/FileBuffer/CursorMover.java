@@ -1,7 +1,7 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.Util.Point;
-import com.Textr.Validator.Validator;
+import com.Textr.Util.Validator;
 import com.Textr.View.Direction;
 
 /**

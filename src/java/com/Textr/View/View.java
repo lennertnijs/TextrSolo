@@ -2,7 +2,7 @@ package com.Textr.View;
 
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.Util.Point;
-import com.Textr.Validator.Validator;
+import com.Textr.Util.Validator;
 
 import java.util.Objects;
 

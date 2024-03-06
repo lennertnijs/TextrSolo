@@ -1,7 +1,7 @@
 package com.Textr.File;
 
 import com.Textr.Settings;
-import com.Textr.Validator.Validator;
+import com.Textr.Util.Validator;
 
 import java.io.BufferedReader;
 import java.io.IOException;

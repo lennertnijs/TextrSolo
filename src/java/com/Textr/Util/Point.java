@@ -1,7 +1,5 @@
 package com.Textr.Util;
 
-import com.Textr.Validator.Validator;
-
 /**
  * Class to represent a 2D point (0-based).
  * This means that the point can have any non-negative values.

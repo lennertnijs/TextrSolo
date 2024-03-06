@@ -8,7 +8,7 @@ import com.Textr.Terminal.TerminalService;
 import com.Textr.Tree.LayoutGenerator;
 import com.Textr.Tree.ViewTreeRepo;
 import com.Textr.Util.Point;
-import com.Textr.Validator.Validator;
+import com.Textr.Util.Validator;
 import com.Textr.ViewDrawer.CursorDrawer;
 import com.Textr.ViewDrawer.ViewDrawer;
 import com.Textr.ViewLayout.ViewLayoutInitializer;

@@ -2,7 +2,7 @@ package com.Textr.ViewDrawer;
 
 import com.Textr.Util.Point;
 import com.Textr.Terminal.TerminalService;
-import com.Textr.Validator.Validator;
+import com.Textr.Util.Validator;
 
 /**
  * Draws the cursor.

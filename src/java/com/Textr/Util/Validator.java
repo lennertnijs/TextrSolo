@@ -1,4 +1,4 @@
-package com.Textr.Validator;
+package com.Textr.Util;
 
 import java.util.Objects;
 

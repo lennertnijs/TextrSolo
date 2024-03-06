@@ -2,7 +2,7 @@ package com.Textr.ViewDrawer;
 
 import com.Textr.FileBuffer.Text;
 import com.Textr.Terminal.TerminalService;
-import com.Textr.Validator.Validator;
+import com.Textr.Util.Validator;
 import com.Textr.View.View;
 
 /**

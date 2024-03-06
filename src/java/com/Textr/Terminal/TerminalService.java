@@ -1,7 +1,7 @@
 package com.Textr.Terminal;
 
 import com.Textr.Util.Point;
-import com.Textr.Validator.Validator;
+import com.Textr.Util.Validator;
 import com.Textr.View.Dimension2D;
 import io.github.btj.termios.Terminal;
 

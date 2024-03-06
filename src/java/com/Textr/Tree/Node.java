@@ -1,6 +1,6 @@
 package com.Textr.Tree;
 
-import com.Textr.Validator.Validator;
+import com.Textr.Util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;

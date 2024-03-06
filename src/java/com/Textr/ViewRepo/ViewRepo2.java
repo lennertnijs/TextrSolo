@@ -1,11 +1,10 @@
 package com.Textr.ViewRepo;
 
-import com.Textr.Validator.Validator;
+import com.Textr.Util.Validator;
 import com.Textr.View.View;
 import com.Textr.ViewLayout.Layout;
 import com.Textr.ViewLayout.ViewLayoutInitializer;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -123,6 +122,6 @@ public class ViewRepo2 implements IViewRepo {
     public void rotate(boolean clockwise, int activeviewid){
         Layout leaf = rootlayout.getViewLocation(activeviewid);
         leaf.rotatewithnext(clockwise);
-        ViewLayoutInitializer.generateHiërarchicalViews(rootlayout);
+        ViewLayoutInitializer.generateHierarchicalViews(rootlayout);
     }
 }

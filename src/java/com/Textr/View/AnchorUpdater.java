@@ -1,7 +1,7 @@
 package com.Textr.View;
 
 import com.Textr.Util.Point;
-import com.Textr.Validator.Validator;
+import com.Textr.Util.Validator;
 
 /**
  * Updates the anchor point of a View.

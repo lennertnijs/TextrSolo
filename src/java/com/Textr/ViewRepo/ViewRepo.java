@@ -1,6 +1,6 @@
 package com.Textr.ViewRepo;
 
-import com.Textr.Validator.Validator;
+import com.Textr.Util.Validator;
 import com.Textr.View.View;
 
 import java.util.ArrayList;
