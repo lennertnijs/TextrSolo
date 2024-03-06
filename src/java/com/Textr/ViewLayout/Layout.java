@@ -1,8 +1,6 @@
 package com.Textr.ViewLayout;
 
-import com.Textr.DefaultLineSeparator;
 import com.Textr.View.View;
-import com.sun.source.doctree.ThrowsTree;
 
 import java.util.*;
 
@@ -173,30 +171,30 @@ public class Layout implements ILayout {
         return null;
     }
 
-    public void rotatewithnext(boolean clockwise){
-        Layout nextnode = getNext();
-        if(nextnode!= null){
-            Layout nextleaf = nextnode.getFirstLeaf();
-            if(parent.equals(nextleaf.getParent())){
+    public void rotateWithNext(boolean clockwise){
+        Layout nextNode = getNext();
+        if(nextNode!= null){
+            Layout nextLeaf = nextNode.getFirstLeaf();
+            if(parent.equals(nextLeaf.getParent())){
                 Layout newsubLayout = new Layout();
                 int placement = parent.children.indexOf(this);
                 parent.addSubLayout(newsubLayout, placement);
-                if(clockwise && leftOff(nextleaf) || !clockwise && !leftOff(nextleaf)){
+                if(clockwise && leftOff(nextLeaf) || !clockwise && !leftOff(nextLeaf)){
                     moveLeafTo(newsubLayout);
-                    nextleaf.moveLeafTo(newsubLayout);
+                    nextLeaf.moveLeafTo(newsubLayout);
                 }
                 else {
-                    nextleaf.moveLeafTo(newsubLayout);
+                    nextLeaf.moveLeafTo(newsubLayout);
                     moveLeafTo(newsubLayout);
                 }
             }
             else{
-                if (clockwise && leftOff(nextleaf) || !clockwise && !leftOff(nextleaf)){
-                    nextleaf.moveLeafTo(parent);
+                if (clockwise && leftOff(nextLeaf) || !clockwise && !leftOff(nextLeaf)){
+                    nextLeaf.moveLeafTo(parent);
                 }
                 else {
                     int placement = parent.getChildren().indexOf(this);
-                    nextleaf.moveLeafTo(parent, placement);
+                    nextLeaf.moveLeafTo(parent, placement);
                 }
             }
 

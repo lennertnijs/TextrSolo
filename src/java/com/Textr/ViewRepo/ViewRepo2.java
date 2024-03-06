@@ -121,7 +121,7 @@ public class ViewRepo2 implements IViewRepo {
 
     public void rotate(boolean clockwise, int activeviewid){
         Layout leaf = rootlayout.getViewLocation(activeviewid);
-        leaf.rotatewithnext(clockwise);
+        leaf.rotateWithNext(clockwise);
         ViewLayoutInitializer.generateHierarchicalViews(rootlayout);
     }
 }
