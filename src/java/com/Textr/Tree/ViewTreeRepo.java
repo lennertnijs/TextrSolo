@@ -55,7 +55,7 @@ public class ViewTreeRepo implements IViewRepo {
 
     public boolean contains(int viewId){
         boolean existsInList = views.stream().anyMatch(e -> e.getId() == viewId);
-        boolean existsInTree = tree.containsValue(viewId);
+        boolean existsInTree = tree.contains(viewId);
         if(existsInTree != existsInList){
             throw new IllegalStateException("The element did exist in 1 of them, but not the other.");
         }
@@ -94,8 +94,8 @@ public class ViewTreeRepo implements IViewRepo {
     }
 
     public void remove(int viewId){
-        if(tree.containsValue(viewId) && views.stream().anyMatch(e -> e.getId() == viewId)){
-            tree.removeFromValue(viewId);
+        if(tree.contains(viewId) && views.stream().anyMatch(e -> e.getId() == viewId)){
+            tree.remove(viewId);
             views.removeIf(e -> e.getId() == viewId);
         }
     }
@@ -106,8 +106,8 @@ public class ViewTreeRepo implements IViewRepo {
     }
 
     public void rotateClockWise(int viewId, int nextViewId){
-        Node<Integer> node1 = tree.getNodeByValue(viewId);
-        Node<Integer> node2 = tree.getNodeByValue(nextViewId);
+        Node<Integer> node1 = tree.getNode(viewId);
+        Node<Integer> node2 = tree.getNode(nextViewId);
         if(node1.isSiblingWith(node2)){
             rotateSiblingsClockWise(node1, node2);
             return;
@@ -134,7 +134,7 @@ public class ViewTreeRepo implements IViewRepo {
     public int getAmountAtDepth(int depth){
         int count = 0;
         for(View view: views){
-            if(tree.getDepthOfValue(view.getId()) == depth){
+            if(tree.getDepth(view.getId()) == depth){
                 count++;
             }
         }
@@ -144,7 +144,7 @@ public class ViewTreeRepo implements IViewRepo {
     public List<View> getViewsAtDepth(int depth){
         List<View> views1 = new ArrayList<>();
         for(View view: views){
-            if(tree.getDepthOfValue(view.getId()) == depth){
+            if(tree.getDepth(view.getId()) == depth){
                 views1.add(view);
             }
         }
@@ -152,7 +152,7 @@ public class ViewTreeRepo implements IViewRepo {
     }
 
     public List<Integer> getAllValuesAtDepth(int depth){
-        return tree.getAllValuesAtDepth(depth);
+        return tree.getAllAtDepth(depth);
     }
 
     public void rotate(boolean clockwise, int id){

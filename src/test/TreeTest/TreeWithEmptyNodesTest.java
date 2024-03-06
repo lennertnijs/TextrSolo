@@ -104,16 +104,16 @@ public class TreeWithEmptyNodesTest {
     @Test
     public void testContainsValue(){
         Assertions.assertAll(
-                () -> Assertions.assertTrue(tree.containsValue(1)),
-                () -> Assertions.assertTrue(tree.containsValue(2)),
-                () -> Assertions.assertTrue(tree.containsValue(3)),
-                () -> Assertions.assertTrue(tree.containsValue(4)),
-                () -> Assertions.assertFalse(tree.containsValue(5)),
-                () -> Assertions.assertFalse(tree.containsValue(6)),
-                () -> Assertions.assertFalse(tree.containsValue(7)),
-                () -> Assertions.assertFalse(tree.containsValue(8)),
-                () -> Assertions.assertFalse(tree.containsValue(9)),
-                () -> Assertions.assertFalse(tree.containsValue(10))
+                () -> Assertions.assertTrue(tree.contains(1)),
+                () -> Assertions.assertTrue(tree.contains(2)),
+                () -> Assertions.assertTrue(tree.contains(3)),
+                () -> Assertions.assertTrue(tree.contains(4)),
+                () -> Assertions.assertFalse(tree.contains(5)),
+                () -> Assertions.assertFalse(tree.contains(6)),
+                () -> Assertions.assertFalse(tree.contains(7)),
+                () -> Assertions.assertFalse(tree.contains(8)),
+                () -> Assertions.assertFalse(tree.contains(9)),
+                () -> Assertions.assertFalse(tree.contains(10))
         );
     }
 
@@ -135,12 +135,11 @@ public class TreeWithEmptyNodesTest {
     @Test
     public void testDepthFromValue(){
         Assertions.assertAll(
-                () -> Assertions.assertEquals(tree.getDepthOfValue(1), 1),
-                () -> Assertions.assertEquals(tree.getDepthOfValue(2), 2),
-                () -> Assertions.assertEquals(tree.getDepthOfValue(3), 3),
-                () -> Assertions.assertEquals(tree.getDepthOfValue(4), 3),
-                () -> Assertions.assertThrows(NoSuchElementException.class, () -> tree.getDepthOfValue(5)),
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> tree.getDepthOfValue(null))
+                () -> Assertions.assertEquals(tree.getDepth(1), 1),
+                () -> Assertions.assertEquals(tree.getDepth(2), 2),
+                () -> Assertions.assertEquals(tree.getDepth(3), 3),
+                () -> Assertions.assertEquals(tree.getDepth(4), 3),
+                () -> Assertions.assertThrows(NoSuchElementException.class, () -> tree.getDepth(5))
         );
     }
 
@@ -156,20 +155,20 @@ public class TreeWithEmptyNodesTest {
         depth2.add(null);
         depth2.add(null);
         Assertions.assertAll(
-                () -> Assertions.assertEquals(tree.getAllValuesAtDepth(1), depth1),
-                () -> Assertions.assertEquals(tree.getAllValuesAtDepth(2), depth2),
-                () -> Assertions.assertEquals(tree.getAllValuesAtDepth(3), new ArrayList<>(List.of(3, 4)))
+                () -> Assertions.assertEquals(tree.getAllAtDepth(1), depth1),
+                () -> Assertions.assertEquals(tree.getAllAtDepth(2), depth2),
+                () -> Assertions.assertEquals(tree.getAllAtDepth(3), new ArrayList<>(List.of(3, 4)))
         );
     }
 
     @Test
     public void getNodeByValue(){
         Assertions.assertAll(
-                () -> Assertions.assertEquals(tree.getNodeByValue(1), node1),
-                () -> Assertions.assertEquals(tree.getNodeByValue(2), node2),
-                () -> Assertions.assertEquals(tree.getNodeByValue(3), node3),
-                () -> Assertions.assertEquals(tree.getNodeByValue(4), node4),
-                () -> Assertions.assertThrows(NoSuchElementException.class, () -> tree.getNodeByValue(6))
+                () -> Assertions.assertEquals(tree.getNode(1), node1),
+                () -> Assertions.assertEquals(tree.getNode(2), node2),
+                () -> Assertions.assertEquals(tree.getNode(3), node3),
+                () -> Assertions.assertEquals(tree.getNode(4), node4),
+                () -> Assertions.assertThrows(NoSuchElementException.class, () -> tree.getNode(6))
         );
     }
 
@@ -198,21 +197,21 @@ public class TreeWithEmptyNodesTest {
     @Test
     public void testRemoveByValue(){
         Assertions.assertAll(
-                () -> tree.removeFromValue(4),
+                () -> tree.remove(4),
                 () -> Assertions.assertEquals(tree.getSize(), 7),
                 () -> Assertions.assertEquals(tree.getSizeValuesOnly(), 3),
                 () -> Assertions.assertFalse(tree.contains(node4)),
 
-                () -> tree.removeFromValue(3),
+                () -> tree.remove(3),
                 () -> Assertions.assertEquals(tree.getSize(), 6),
                 () -> Assertions.assertEquals(tree.getSizeValuesOnly(), 2),
                 () -> Assertions.assertTrue(tree.contains(node5)),
 
-                () -> tree.removeFromValue(2),
+                () -> tree.remove(2),
                 () -> Assertions.assertEquals(tree.getSize(), 5),
                 () -> Assertions.assertEquals(tree.getSizeValuesOnly(), 1),
 
-                () -> tree.removeFromValue(1),
+                () -> tree.remove(1),
                 () -> Assertions.assertEquals(tree.getSize(), 4),
                 () -> Assertions.assertEquals(tree.getSizeValuesOnly(), 0)
         );

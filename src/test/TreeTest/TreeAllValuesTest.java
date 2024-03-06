@@ -56,9 +56,9 @@ public class TreeAllValuesTest {
     @Test
     public void testNodesAtDepth(){
         Assertions.assertAll(
-                () -> Assertions.assertEquals(tree.getAllValuesAtDepth(1), new ArrayList<>(List.of(1, 2))),
-                () -> Assertions.assertEquals(tree.getAllValuesAtDepth(2), new ArrayList<>(List.of(3, 4))),
-                () -> Assertions.assertEquals(tree.getAllValuesAtDepth(3), new ArrayList<>(List.of(5)))
+                () -> Assertions.assertEquals(tree.getAllAtDepth(1), new ArrayList<>(List.of(1, 2))),
+                () -> Assertions.assertEquals(tree.getAllAtDepth(2), new ArrayList<>(List.of(3, 4))),
+                () -> Assertions.assertEquals(tree.getAllAtDepth(3), new ArrayList<>(List.of(5)))
         );
     }
 
@@ -91,12 +91,12 @@ public class TreeAllValuesTest {
     @Test
     public void testContainsValue(){
         Assertions.assertAll(
-                () -> Assertions.assertTrue(tree.containsValue(1)),
-                () -> Assertions.assertTrue(tree.containsValue(2)),
-                () -> Assertions.assertTrue(tree.containsValue(3)),
-                () -> Assertions.assertTrue(tree.containsValue(4)),
-                () -> Assertions.assertTrue(tree.containsValue(5)),
-                () -> Assertions.assertFalse(tree.containsValue(6))
+                () -> Assertions.assertTrue(tree.contains(1)),
+                () -> Assertions.assertTrue(tree.contains(2)),
+                () -> Assertions.assertTrue(tree.contains(3)),
+                () -> Assertions.assertTrue(tree.contains(4)),
+                () -> Assertions.assertTrue(tree.contains(5)),
+                () -> Assertions.assertFalse(tree.contains(6))
         );
     }
 
@@ -114,23 +114,23 @@ public class TreeAllValuesTest {
     @Test
     public void testDepthByValue(){
         Assertions.assertAll(
-                () -> Assertions.assertEquals(tree.getDepthOfValue(1), 1),
-                () -> Assertions.assertEquals(tree.getDepthOfValue(2), 1),
-                () -> Assertions.assertEquals(tree.getDepthOfValue(3), 2),
-                () -> Assertions.assertEquals(tree.getDepthOfValue(4), 2),
-                () -> Assertions.assertEquals(tree.getDepthOfValue(5), 3)
+                () -> Assertions.assertEquals(tree.getDepth(1), 1),
+                () -> Assertions.assertEquals(tree.getDepth(2), 1),
+                () -> Assertions.assertEquals(tree.getDepth(3), 2),
+                () -> Assertions.assertEquals(tree.getDepth(4), 2),
+                () -> Assertions.assertEquals(tree.getDepth(5), 3)
         );
     }
 
     @Test
     public void getNodeByValue(){
         Assertions.assertAll(
-                () -> Assertions.assertEquals(tree.getNodeByValue(1), node1),
-                () -> Assertions.assertEquals(tree.getNodeByValue(2), node2),
-                () -> Assertions.assertEquals(tree.getNodeByValue(3), node3),
-                () -> Assertions.assertEquals(tree.getNodeByValue(5), node5),
-                () -> Assertions.assertEquals(tree.getNodeByValue(4), node4),
-                () -> Assertions.assertThrows(NoSuchElementException.class, () -> tree.getNodeByValue(6))
+                () -> Assertions.assertEquals(tree.getNode(1), node1),
+                () -> Assertions.assertEquals(tree.getNode(2), node2),
+                () -> Assertions.assertEquals(tree.getNode(3), node3),
+                () -> Assertions.assertEquals(tree.getNode(5), node5),
+                () -> Assertions.assertEquals(tree.getNode(4), node4),
+                () -> Assertions.assertThrows(NoSuchElementException.class, () -> tree.getNode(6))
         );
     }
 
@@ -154,9 +154,9 @@ public class TreeAllValuesTest {
     @Test
     public void testRemoveFromValue(){
         Assertions.assertAll(
-                () -> tree.removeFromValue(1),
+                () -> tree.remove(1),
                 () -> Assertions.assertEquals(tree.getSize(), 4),
-                () -> Assertions.assertFalse(tree.containsValue(1))
+                () -> Assertions.assertFalse(tree.contains(1))
         );
     }
 
