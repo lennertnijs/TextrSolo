@@ -61,13 +61,13 @@ public final class FileReader {
      */
     private static boolean checkForNonAsciiWithLineSeparatorSetting(char c){
         switch(Settings.defaultLineSeparator){
-            case CR -> {
+            case "\r" -> {
                 return (c < 32 && c != 13) || 127 <= c;
             }
-            case LF -> {
+            case "\n" -> {
                 return (c < 32 && c != 10) || 127 <= c;
             }
-            case CRLF -> {
+            case "\r\n" -> {
                 return (c < 32 && c != 10 && c != 13) || 127 <= c;
             }
         }

@@ -5,6 +5,6 @@ package com.Textr;
  */
 public class Settings {
 
-    public static DefaultLineSeparator defaultLineSeparator = null;
+    public static String defaultLineSeparator = null;
 
 }

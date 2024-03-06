@@ -1,11 +1,9 @@
 package com.Textr;
 
-import com.Textr.DefaultLineSeparator;
 import com.Textr.File.File;
 import com.Textr.File.FileService;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.Input.InputHandlerRepo;
-import com.Textr.Settings;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.ViewService;
 
@@ -38,11 +36,7 @@ public class Initialiser {
      * @throws IllegalStateException If no matching line separator was found.
      */
     private static void loadDefaultLineSeparator(){
-        switch (System.lineSeparator()) {
-            case ("\r") -> Settings.defaultLineSeparator = DefaultLineSeparator.CR;
-            case ("\n") -> Settings.defaultLineSeparator = DefaultLineSeparator.LF;
-            case ("\r\n") -> Settings.defaultLineSeparator = DefaultLineSeparator.CRLF;
-        }
+        Settings.defaultLineSeparator = System.lineSeparator();
         if(Settings.defaultLineSeparator == null){
             throw new IllegalStateException("This system's line separator is not supported.");
         }
@@ -63,9 +57,9 @@ public class Initialiser {
     private static void overWriteDefaultLineSeparator(String input){
         String str = input.replace("--", "");
         switch (str) {
-            case "lf" -> Settings.defaultLineSeparator = DefaultLineSeparator.LF;
-            case "cr" -> Settings.defaultLineSeparator = DefaultLineSeparator.CR;
-            case "crlf" -> Settings.defaultLineSeparator = DefaultLineSeparator.CRLF;
+            case "lf" -> Settings.defaultLineSeparator = "\n";
+            case "cr" -> Settings.defaultLineSeparator = "\r";
+            case "crlf" -> Settings.defaultLineSeparator = "\r\n";
         }
     }
 }
