@@ -23,6 +23,9 @@ public class InputTranslator {
      * @throws InputMismatchException If no translation was found for the given input byte(s).
      */
     public static Input translateBytes(int b){
+        if(b >= 32 && b <= 126){
+            return Input.REGULAR_INPUT;
+        }
         switch (b) {
             case 13 -> {
                 return Input.ENTER;
@@ -33,23 +36,20 @@ public class InputTranslator {
             case 16 -> {
                 return Input.CTRL_P;
             }
-            case 20 -> {
-                return Input.CTRL_T;
-            }
             case 18 -> {
                 return Input.CTRL_R;
             }
-            case 32 -> {
-                return Input.SPACE;
+            case 19 -> {
+                return Input.CTRL_S;
             }
-            case 127 -> {
-                return Input.BACKSPACE;
+            case 20 -> {
+                return Input.CTRL_T;
             }
             case 27 -> {
                 return translateEscapeByteCode();
             }
-            case 19 -> {
-                return Input.CTRL_S;
+            case 127 -> {
+                return Input.BACKSPACE;
             }
         }
         throw new InputMismatchException("Could not translate the input.");

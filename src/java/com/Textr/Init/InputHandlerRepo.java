@@ -4,7 +4,7 @@ import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.InputHandler.AnythingInputHandler;
 import com.Textr.InputHandler.CloseDirtyBufferInputHandler;
 import com.Textr.InputHandler.IInputHandler;
-import com.Textr.InputHandler.StandardInputHandler;
+import com.Textr.InputHandler.InputHandler;
 import com.Textr.Validator.Validator;
 import com.Textr.View.ViewService;
 
@@ -12,7 +12,7 @@ public final class InputHandlerRepo {
 
     private static AnythingInputHandler anythingInputHandler;
     private static CloseDirtyBufferInputHandler closeDirtyBufferInputHandler;
-    private static StandardInputHandler standardInputHandler;
+    private static InputHandler inputHandler;
     private static IInputHandler activeInputHandler;
 
     private InputHandlerRepo(){
@@ -23,7 +23,7 @@ public final class InputHandlerRepo {
         Validator.notNull(viewService, "Cannot create input handlers with a null view service.");
         anythingInputHandler = new AnythingInputHandler();
         closeDirtyBufferInputHandler = new CloseDirtyBufferInputHandler(viewService);
-        standardInputHandler = new StandardInputHandler(viewService, bufferService);
+        inputHandler = new InputHandler(viewService, bufferService);
         setStandardInputHandler();
     }
 
@@ -40,6 +40,6 @@ public final class InputHandlerRepo {
     }
 
     public static void setStandardInputHandler(){
-        activeInputHandler = standardInputHandler;
+        activeInputHandler = inputHandler;
     }
 }

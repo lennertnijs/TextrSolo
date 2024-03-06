@@ -2,6 +2,7 @@ package com.Textr.InputUtil;
 
 public enum Input {
 
+    REGULAR_INPUT, // b >= 32 && b <= 126
     ENTER, // 13
     CTRL_N, // 14
     CTRL_P, // 16
@@ -20,5 +21,6 @@ public enum Input {
     Y_LOWER, // 121
     DELETE, // ESC [ 3 ~ aka 27 91 51 127
     BACKSPACE, // 127
-    F4 // ESC O S aka 27 79 83
+    F4, // ESC O S aka 27 79 83
+    NOT_MAPPED
 }

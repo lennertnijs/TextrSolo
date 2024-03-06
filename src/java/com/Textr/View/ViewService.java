@@ -13,6 +13,7 @@ import com.Textr.ViewDrawer.CursorDrawer;
 import com.Textr.ViewDrawer.ViewDrawer;
 import com.Textr.ViewLayout.ViewLayoutInitializer;
 import com.Textr.ViewRepo.IViewRepo;
+import io.github.btj.termios.Terminal;
 
 import java.util.List;
 
@@ -52,6 +53,7 @@ public final class ViewService {
      * Draws all the currently existing views to the terminal screen.
      */
     public void drawAllViews(){
+        TerminalService.clearScreen();
         for(View view: viewRepo.getAll()){
             FileBuffer fileBuffer = fileBufferService.getFileBuffer(view.getFileBufferId());
             String statusBar = fileBufferService.generateStatusBar(fileBuffer);
@@ -106,13 +108,13 @@ public final class ViewService {
         updateAnchor();
     }
 
-    public boolean attemptDeleteView(){
+    public void attemptDeleteView(){
         if(getActiveBuffer().getState() == BufferState.DIRTY){
+            Terminal.clearScreen();
+            TerminalService.printText(1, 1, "The buffer is dirty. Are you sure you want to delete it?");
             InputHandlerRepo.setCloseDirtyBufferInputHandler();
-            return false;
         }
         deleteView();
-        return true;
     }
 
     /**
