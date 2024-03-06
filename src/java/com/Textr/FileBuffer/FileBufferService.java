@@ -2,7 +2,7 @@ package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
 import com.Textr.File.FileService;
-import com.Textr.Init.InputHandlerRepo;
+import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Validator.Validator;
 import com.Textr.View.Direction;
 

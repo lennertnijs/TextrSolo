@@ -1,4 +1,4 @@
-package com.Textr.InputUtil;
+package com.Textr.Input;
 
 public enum Input {
 

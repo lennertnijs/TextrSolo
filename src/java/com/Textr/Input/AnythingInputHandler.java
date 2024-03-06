@@ -1,6 +1,5 @@
-package com.Textr.InputHandler;
+package com.Textr.Input;
 
-import com.Textr.Init.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
 
 public final class AnythingInputHandler implements IInputHandler {

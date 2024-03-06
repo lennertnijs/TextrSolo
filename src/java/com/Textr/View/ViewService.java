@@ -3,7 +3,7 @@ package com.Textr.View;
 import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.Init.InputHandlerRepo;
+import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.Tree.LayoutGenerator;
 import com.Textr.Tree.ViewTreeRepo;

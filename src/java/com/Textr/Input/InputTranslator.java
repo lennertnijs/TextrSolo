@@ -1,13 +1,11 @@
-package com.Textr.InputUtil;
+package com.Textr.Input;
 
 import com.Textr.Terminal.TerminalService;
-
-import java.util.InputMismatchException;
 
 /**
  * Used to translate a byte or stream of bytes into single input.
  */
-public class InputTranslator {
+public final class InputTranslator {
 
     /**
      * Private constructor. No use.
@@ -20,7 +18,6 @@ public class InputTranslator {
      * @param b The first byte.
      *
      * @return The {@link Input} enum representing an input.
-     * @throws InputMismatchException If no translation was found for the given input byte(s).
      */
     public static Input translateBytes(int b){
         if(b >= 32 && b <= 126){
@@ -52,14 +49,13 @@ public class InputTranslator {
                 return Input.BACKSPACE;
             }
         }
-        throw new InputMismatchException("Could not translate the input.");
+        return Input.NOT_MAPPED;
     }
 
     /**
      * Translates the second byte of an escape sequence. (The first character was ESCAPE).
      *
      * @return The translated {@link Input}
-     * @throws InputMismatchException If no translation was found for the given second input byte.
      */
     private static Input translateEscapeByteCode(){
         int b = TerminalService.readByte();
@@ -71,14 +67,13 @@ public class InputTranslator {
                 return translateOByteCode();
             }
         }
-        throw new InputMismatchException("Could not translate the input.");
+        return Input.NOT_MAPPED;
     }
 
     /**
      * Translates the third byte of an escape sequence, if the second was the right bracket. ([)
      *
      * @return The translated {@link Input}.
-     * @throws InputMismatchException If no translation was found for the given third input byte.
      */
     private static Input translateBracketByteCode(){
         int b = TerminalService.readByte();
@@ -99,7 +94,7 @@ public class InputTranslator {
                 return translate3ByteCode();
             }
         }
-        throw new InputMismatchException("Could not translate the input.");
+        return Input.NOT_MAPPED;
     }
 
 
@@ -107,27 +102,25 @@ public class InputTranslator {
      * Translates the third byte of an escape sequence, if the second was the capital O.
      *
      * @return The translated {@link Input}.
-     * @throws InputMismatchException If no translation was found for the given third input byte.
      */
     private static Input translateOByteCode(){
         int b = TerminalService.readByte();
         if(b == 'S'){
             return Input.F4;
         }
-        throw new InputMismatchException("Could not translate the input.");
+        return Input.NOT_MAPPED;
     }
 
     /**
      * Translates the fourth byte of an escape sequence, if the third was the number 3.
      *
      * @return The translated {@link Input}.
-     * @throws InputMismatchException If no translation was found for the given fourth input byte.
      */
     private static Input translate3ByteCode(){
         int b = TerminalService.readByte();
         if(b == '~'){
             return Input.DELETE;
         }
-        throw new InputMismatchException("Could not translate the input.");
+        return Input.NOT_MAPPED;
     }
 }

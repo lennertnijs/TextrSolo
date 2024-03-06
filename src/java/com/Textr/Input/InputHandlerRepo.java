@@ -1,13 +1,12 @@
-package com.Textr.Init;
+package com.Textr.Input;
 
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.InputHandler.AnythingInputHandler;
-import com.Textr.InputHandler.CloseDirtyBufferInputHandler;
-import com.Textr.InputHandler.IInputHandler;
-import com.Textr.InputHandler.InputHandler;
+import com.Textr.Input.AnythingInputHandler;
+import com.Textr.Input.CloseDirtyBufferInputHandler;
+import com.Textr.Input.IInputHandler;
+import com.Textr.Input.InputHandler;
 import com.Textr.Validator.Validator;
 import com.Textr.View.ViewService;
-import io.github.btj.termios.Terminal;
 
 public final class InputHandlerRepo {
 

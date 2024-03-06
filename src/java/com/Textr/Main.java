@@ -4,11 +4,8 @@ import com.Textr.File.FileRepo;
 import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.File.FileService;
 import com.Textr.FileBuffer.FileBufferRepo;
-import com.Textr.Init.Initialiser;
-import com.Textr.Init.InputHandlerRepo;
-import com.Textr.Tree.ViewTreeRepo;
+import com.Textr.Input.InputHandlerRepo;
 import com.Textr.View.ViewService;
-import com.Textr.ViewRepo.ViewRepo;
 import com.Textr.ViewRepo.ViewRepo2;
 
 public class Main {

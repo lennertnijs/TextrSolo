@@ -1,4 +1,4 @@
-package com.Textr.InputHandler;
+package com.Textr.Input;
 
 public interface IInputHandler {
 

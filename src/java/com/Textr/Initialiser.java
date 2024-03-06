@@ -1,9 +1,10 @@
-package com.Textr.Init;
+package com.Textr;
 
 import com.Textr.DefaultLineSeparator;
 import com.Textr.File.File;
 import com.Textr.File.FileService;
 import com.Textr.FileBuffer.FileBufferService;
+import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Settings;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.ViewService;

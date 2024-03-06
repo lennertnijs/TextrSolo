@@ -1,8 +1,6 @@
-package com.Textr.InputHandler;
+package com.Textr.Input;
 
 import com.Textr.FileBuffer.FileBufferService;
-import com.Textr.InputUtil.Input;
-import com.Textr.InputUtil.InputTranslator;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.Direction;
 import com.Textr.View.ViewService;
