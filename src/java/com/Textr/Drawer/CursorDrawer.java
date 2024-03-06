@@ -1,4 +1,4 @@
-package com.Textr.ViewDrawer;
+package com.Textr.Drawer;
 
 import com.Textr.Util.Point;
 import com.Textr.Terminal.TerminalService;
