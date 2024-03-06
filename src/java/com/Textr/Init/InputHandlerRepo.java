@@ -7,6 +7,7 @@ import com.Textr.InputHandler.IInputHandler;
 import com.Textr.InputHandler.InputHandler;
 import com.Textr.Validator.Validator;
 import com.Textr.View.ViewService;
+import io.github.btj.termios.Terminal;
 
 public final class InputHandlerRepo {
 
