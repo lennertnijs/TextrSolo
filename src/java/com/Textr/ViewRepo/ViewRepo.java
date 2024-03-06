@@ -131,6 +131,4 @@ public final class ViewRepo implements IViewRepo{
     public void rotate(boolean clockwise, int activeviewid) {
         //WARNING this does nothing
     }
-
-
 }

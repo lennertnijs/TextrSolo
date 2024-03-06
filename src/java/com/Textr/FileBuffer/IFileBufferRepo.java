@@ -19,5 +19,4 @@ public interface IFileBufferRepo {
     List<FileBuffer> getAllBuffers();
     void setActiveToNext();
     void setActiveToPrevious();
-
 }

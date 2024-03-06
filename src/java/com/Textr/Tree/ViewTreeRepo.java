@@ -154,4 +154,8 @@ public class ViewTreeRepo implements IViewRepo {
     public List<Integer> getAllValuesAtDepth(int depth){
         return tree.getAllValuesAtDepth(depth);
     }
+
+    public void rotate(boolean clockwise, int id){
+        ///
+    }
 }
