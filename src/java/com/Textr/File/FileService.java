@@ -42,19 +42,14 @@ public final class FileService {
     /**
      * Saves the given data to disk, at the location specified by the File with given fileID.
      *
-     * @param data    The String to write to disk
-     * @param fileID  The relevant fileID to write to.
+     * @param text    The String to write to disk
+     * @param fileId  The relevant fileId to write to.
      * @throws IOException when file could not be opened or created, or something went wrong during writing.
      */
-    public void saveToFile(String data, int fileID) throws IOException {
-        File file = getFile(fileID);
-        String bufferUrl = file.getUrl();
-
-        // Possible IOException:
-        FileWriter.writeToFile(data, bufferUrl);
-
-        // If this code is reached, writing was successful: update File text
-        file.setText(data);
+    public void saveToFile(String text, int fileId) throws IOException {
+        File file = getFile(fileId);
+        FileWriter.write(text, file.getUrl());
+        file.setText(text);
     }
 
     /**
