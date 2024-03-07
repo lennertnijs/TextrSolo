@@ -166,9 +166,8 @@ public class Layout implements ILayout {
     public Layout getFirstLeaf(){
         if(view.isPresent())
             return this;
-//        else
-//            return this.children.getFirst().getFirstLeaf();
-        return null;
+        else
+            return this.children.get(0).getFirstLeaf();
     }
 
     public void rotateWithNext(boolean clockwise){
