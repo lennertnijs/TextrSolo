@@ -1,6 +1,7 @@
 package com.Textr.Tree;
 
 import com.Textr.Util.Validator;
+import com.Textr.ViewLayout.Layout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,6 +135,7 @@ public final class Node<T> {
         int index = this.children.indexOf(oldChild);
         if(index != -1){
             this.children.set(index, newChild);
+            newChild.parent= this;
             return;
         }
         throw new NoSuchElementException("Could not replace the Node, because it does not exist.");

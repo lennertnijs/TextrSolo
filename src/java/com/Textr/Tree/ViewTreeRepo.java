@@ -11,17 +11,21 @@ import java.util.NoSuchElementException;
 public class ViewTreeRepo implements IViewRepo {
 
 
-    private Tree<Integer> tree;
-    private List<View> views;
+    private Tree<View> tree;
 
+    private View Active;
     public ViewTreeRepo(){
-        views = new ArrayList<>();
         tree = new Tree<>();
     }
 
+    private void setActive(View view) {
+        this.Active = view;
+    }
+    private View getActive() {
+        return  Active;
+    }
 
-
-    public Tree<Integer> getTree(){
+    public Tree<View> getTree(){
         return tree;
     }
 
@@ -33,8 +37,7 @@ public class ViewTreeRepo implements IViewRepo {
      */
     public void add(View view){
         Validator.notNull(view, "Cannot store a null View.");
-        tree.addChildToRoot(new Node<>(view.getId()));
-        views.add(view);
+        tree.addChildToRoot(new Node<>(view));
     }
 
     /**
@@ -53,25 +56,41 @@ public class ViewTreeRepo implements IViewRepo {
         }
     }
 
-    public boolean contains(int viewId){
-        boolean existsInList = views.stream().anyMatch(e -> e.getId() == viewId);
-        boolean existsInTree = tree.contains(viewId);
-        if(existsInTree != existsInList){
-            throw new IllegalStateException("The element did exist in 1 of them, but not the other.");
+    @Override
+    public void remove(int id) {
+        List<View> views = tree.getAllValues();
+
+        for(View view : views){
+            if(view.getId() == id){
+                tree.remove(view);
+            }
         }
-        return existsInList;
+    }
+
+    public boolean contains(View view){
+        return tree.contains(view);
+
+    }
+
+    @Override
+    public boolean contains(int id) {
+        List<View> views = tree.getAllValues();
+
+        for(View view : views){
+            if(view.getId() == id){
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getSize(){
-        int treeSize = tree.getSizeValuesOnly();
-        int listSize = views.size();
-        if(treeSize != listSize){
-            throw new IllegalStateException("The size of the tree and the list are not equal.");
-        }
-        return treeSize;
+        return tree.getSizeValuesOnly();
+
     }
 
     public View get(int viewId){
+        List <View> views = tree.getAllValues();
         for(View view : views){
             if(view.getId() == viewId){
                 return view;
@@ -81,6 +100,7 @@ public class ViewTreeRepo implements IViewRepo {
     }
 
     public View getByBufferId(int bufferId){
+        List<View> views = tree.getAllValues();
         for(View view : views){
             if(view.getFileBufferId() == bufferId){
                 return view;
@@ -90,51 +110,82 @@ public class ViewTreeRepo implements IViewRepo {
     }
 
     public List<View> getAll(){
-        return views;
+        return tree.getAllValues();
     }
 
-    public void remove(int viewId){
-        if(tree.contains(viewId) && views.stream().anyMatch(e -> e.getId() == viewId)){
-            tree.remove(viewId);
-            views.removeIf(e -> e.getId() == viewId);
+    public void remove(View view){
+        if(tree.contains(view)){
+            tree.remove(view);
         }
     }
 
     public void removeAll(){
-        views = new ArrayList<>();
         tree= new Tree<>();
     }
+    @Override
+    public void rotate(boolean clockwise, int id){
+        View view = get(id);
+        rotateWithNext(clockwise, tree.getNode(view));
+    }
+    public void rotateWithNext(boolean clockwise, Node<View> currentNode){
+        Node<View> nextNode = tree.getNext(currentNode);
+        if(nextNode!= null){
+            Node<View> nextLeaf =  tree.getFirstLeaf(nextNode);
+            if(currentNode.getParent().equals(nextLeaf.getParent())){
+                rotateSiblings(currentNode, nextNode, clockwise);
+            }
+            else{
+                rotateNonSibling(currentNode, nextLeaf, clockwise);
+            }
 
-    public void rotateClockWise(int viewId, int nextViewId){
-        Node<Integer> node1 = tree.getNode(viewId);
-        Node<Integer> node2 = tree.getNode(nextViewId);
-        if(node1.isSiblingWith(node2)){
-            rotateSiblingsClockWise(node1, node2);
-            return;
         }
-        rotateNonSiblingClockWise(node1, node2);
+        else{
+            String ding = "DING";
+            //PING-sound
+        }
+    }
+    private void rotateSiblings(Node<View> currentNode, Node<View> nextLeaf, boolean clockwise){
+        Node<View> newsubLayout = new Node<View>(null);
+        currentNode.getParent().replaceChild(currentNode,newsubLayout);
+        View current = currentNode.getValue();
+        View next = nextLeaf.getValue();
+        if(clockwise && current.leftOff(next) || !clockwise && !current.leftOff(next)){
+            tree.remove(currentNode);
+            tree.addChildToNode(currentNode,newsubLayout);
+            tree.remove(nextLeaf);
+            tree.addChildToNode(nextLeaf, newsubLayout);
+        }
+        else {
+            tree.remove(nextLeaf);
+            tree.addChildToNode(nextLeaf, newsubLayout);
+            tree.remove(currentNode);
+            tree.addChildToNode(currentNode,newsubLayout);
+        }
     }
 
-    private void rotateSiblingsClockWise(Node<Integer> sibling1, Node<Integer> sibling2){
-        Node<Integer> parent = sibling1.getParent();
-        //parent.removeChild(sibling1);
-        parent.removeChild(sibling2);
-        Node<Integer> emptyNode = new Node<>(null);
-        emptyNode.addChild(sibling1);
-        emptyNode.addChild(sibling2);
-        parent.replaceChild(sibling1, emptyNode);
+    private void rotateNonSibling(Node<View> currentNode, Node<View> nextLeaf, boolean clockwise){
+        View current = (View) currentNode.getValue();
+        View next = (View) nextLeaf.getValue();
+        if (clockwise && current.leftOff(next) || !clockwise && !current.leftOff(next)){
+            tree.remove(nextLeaf);
+            tree.addChildToNode(nextLeaf, currentNode.getParent());
+        }
+        else {
+            Node <View> parent = currentNode.getParent();
+            tree.remove(currentNode);
+            tree.remove(nextLeaf);
+            tree.addChildToNode(nextLeaf, parent);
+            tree.addChildToNode(currentNode, parent);
+        }
     }
 
-    private void rotateNonSiblingClockWise(Node<Integer> node1, Node<Integer> node2){
-        Node<Integer> parentOfFirst = node1.getParent();
-        node2.getParent().removeChild(node2);
-        parentOfFirst.addChild(node2);
-    }
+
 
     public int getAmountAtDepth(int depth){
         int count = 0;
+        List<View> views = tree.getAllValues();
         for(View view: views){
-            if(tree.getDepth(view.getId()) == depth){
+            if(tree.getDepth(view) == depth){
                 count++;
             }
         }
@@ -142,20 +193,18 @@ public class ViewTreeRepo implements IViewRepo {
     }
 
     public List<View> getViewsAtDepth(int depth){
-        List<View> views1 = new ArrayList<>();
+        List<View> views = tree.getAllValues();
+        List<View> views1 = new ArrayList<View>();
         for(View view: views){
-            if(tree.getDepth(view.getId()) == depth){
+            if(tree.getDepth(view) == depth){
                 views1.add(view);
             }
         }
         return views1;
     }
 
-    public List<Integer> getAllValuesAtDepth(int depth){
+    public List<View> getAllValuesAtDepth(int depth){
         return tree.getAllAtDepth(depth);
     }
 
-    public void rotate(boolean clockwise, int id){
-        ///
-    }
 }

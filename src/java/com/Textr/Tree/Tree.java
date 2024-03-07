@@ -1,6 +1,8 @@
 package com.Textr.Tree;
 
 import com.Textr.Util.Validator;
+import com.Textr.View.View;
+import com.Textr.ViewLayout.Layout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -391,4 +393,27 @@ public final class Tree<T> implements ITree<T>{
         }
         return values;
     }
+    public Node<T> getNext(Node<T> current){
+        List<Node<T>> siblings = current.getParent().getChildren();
+        int position = siblings.indexOf(current);
+        if(position+1==siblings.size()){
+            if(current.getParent().getParent()!=null)
+                return getNext(current.getParent());
+            else
+                return null;
+
+        }
+        else
+            return siblings.get(position+1);
+    }
+    public Node<T> getFirstLeaf(Node<T> current){
+        if(current.hasValue())
+            return current;
+        else
+            return getFirstLeaf(current.getChildren().get(0));
+    }
+
+
+
+
 }

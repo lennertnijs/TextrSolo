@@ -15,5 +15,7 @@ public interface IViewRepo {
     void remove(int id);
     void removeAll();
 
-    void rotate(boolean clockwise, int activeviewid);
+    void rotate(boolean clockwise, int id);
+
+
 }

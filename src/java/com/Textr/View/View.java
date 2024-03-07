@@ -1,6 +1,7 @@
 package com.Textr.View;
 
 import com.Textr.FileBuffer.FileBuffer;
+import com.Textr.Tree.Node;
 import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
 
@@ -124,7 +125,9 @@ public final class View {
         return String.format("View[id = %d, fileBufferId = %d, position = %s, dimensions = %s, anchor = %s]",
                 id, fileBufferId, position, dimensions, anchor);
     }
-
+    public boolean leftOff( View next){
+        return this.getPosition().getX()< next.getPosition().getX();
+    }
     /**
      * Creates and returns a new {@link View.Builder} to build a view with.
      * @return The builder
@@ -209,5 +212,6 @@ public final class View {
             Validator.notNull(anchor, "The anchor of the View cannot be null");
             return new View(this);
         }
+
     }
 }

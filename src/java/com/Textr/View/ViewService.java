@@ -44,10 +44,6 @@ public final class ViewService {
         LayoutGenerator.generateViews((ViewTreeRepo) viewRepo, TerminalService.getTerminalArea());
     }
 
-    public void rotateClockWise(){
-        ((ViewTreeRepo)viewRepo).rotateClockWise(getActiveView().getId(), (getActiveView().getId() + 1) % viewRepo.getSize());
-        generateViews();
-    }
 
     /**
      * Draws all the currently existing views to the terminal screen.
@@ -167,7 +163,6 @@ public final class ViewService {
 
     public void rotateview(boolean clockwise){
         viewRepo.rotate(clockwise, getActiveView().getId());
-
-
+        generateViews();
     }
 }
