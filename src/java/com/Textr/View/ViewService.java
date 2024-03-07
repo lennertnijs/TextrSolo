@@ -1,8 +1,9 @@
 package com.Textr.View;
 
+import com.Textr.File.FileService;
 import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBuffer;
-import com.Textr.FileBuffer.FileBufferService;
+import com.Textr.FileBuffer.Text;
 import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.Tree.LayoutGenerator;
@@ -11,33 +12,36 @@ import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
 import com.Textr.Drawer.CursorDrawer;
 import com.Textr.Drawer.ViewDrawer;
-import com.Textr.ViewLayout.ViewLayoutInitializer;
-import com.Textr.ViewRepo.IViewRepo;
+import com.Textr.Tree.IViewRepo;
 import io.github.btj.termios.Terminal;
 
+import java.io.IOException;
 import java.util.List;
 
 public final class ViewService {
-    private final FileBufferService fileBufferService;
+    private final FileService fileService;
     private final IViewRepo viewRepo;
 
     /**
      * Constructor for the ViewService.
-     * @param fileBufferService The {@link FileBuffer}'s service API.
      * @param viewRepo The {@link View} repository.
      */
-    public ViewService(FileBufferService fileBufferService, IViewRepo viewRepo){
-        this.fileBufferService = fileBufferService;
+    public ViewService(FileService fileService, IViewRepo viewRepo){
+        this.fileService = fileService;
         this.viewRepo = viewRepo;
     }
 
-    /**
-     * Generates a vertically stacked layout of views for the currently existing buffers and stores them.
-     * Presumes no views are currently stored.
-     */
-    public void initialiseViewsVertical(){
-        List<View> views = ViewLayoutInitializer.generateVerticallyStackedViews(fileBufferService.getAllFileBuffers());
+    public void storeViews(List<View> views){
         viewRepo.addAll(views);
+        viewRepo.setActive(views.get(0));
+    }
+
+    public void setActiveToNext(){
+        // move to next;
+    }
+
+    public void setActiveToPrevious(){
+        // move to previous
     }
 
     public void generateViews(){
@@ -51,10 +55,15 @@ public final class ViewService {
     public void drawAllViews(){
         TerminalService.clearScreen();
         for(View view: viewRepo.getAll()){
-            FileBuffer fileBuffer = fileBufferService.getFileBuffer(view.getFileBufferId());
-            String statusBar = fileBufferService.generateStatusBar(fileBuffer);
-            ViewDrawer.draw(view, fileBuffer.getText(), statusBar);
+            ViewDrawer.draw(view, view.getBuffer().getText(), generateStatusBar(view.getBuffer()));
         }
+    }
+
+    private String generateStatusBar(FileBuffer buffer){
+        Validator.notNull(buffer, "Cannot generate a status bar for a null FileBuffer.");
+        return String.format("File path: %s - Lines: %d - Characters: %d - InsertionPoint: %s - State: %s",
+                fileService.getFile(buffer.getFileId()).getUrl(), buffer.getText().getAmountOfLines(),
+                buffer.getText().getAmountOfChars(), buffer.getCursor(), buffer.getState());
     }
 
     /**
@@ -73,7 +82,7 @@ public final class ViewService {
      */
     public void moveCursor(Direction direction){
         Validator.notNull(direction, "Cannot move the cursor in the null direction.");
-        fileBufferService.moveCursor(direction);
+        viewRepo.getActive().getBuffer().moveCursor(direction);
         updateAnchor();
     }
 
@@ -118,11 +127,7 @@ public final class ViewService {
      * Then updates the views to take up the screen.
      */
     public void deleteView(){
-        int id = getActiveBuffer().getId();
-        fileBufferService.moveActiveBufferToNext();
-        fileBufferService.deleteBuffer(id);
-        viewRepo.removeAll();
-        initialiseViewsVertical();
+        viewRepo.remove(viewRepo.getActive());
     }
 
     /**
@@ -132,18 +137,33 @@ public final class ViewService {
         getActiveBuffer().removeCharacterAfter();
     }
 
+    public void saveBuffer(){
+        Text bufferTextObj = getActiveBuffer().getText();
+        String bufferText = bufferTextObj.getText(); // Double ".getText()", might need refactoring
+        try {
+            fileService.saveToFile(bufferText, getActiveBuffer().getFileId());
+        } catch (IOException e) {
+            // Something went wrong during writing, move to new input handler for error messages
+            InputHandlerRepo.setAnythingInputHandler();
+        } finally {
+            // Writing was successful, buffer holds text saved on disk
+            getActiveBuffer().setState(BufferState.CLEAN);
+        }
+    }
+
+
     /**
      * @return The active buffer.
      */
     private FileBuffer getActiveBuffer(){
-        return fileBufferService.getActiveBuffer();
+        return viewRepo.getActive().getBuffer();
     }
 
     /**
      * @return The active view.
      */
     private View getActiveView(){
-        return viewRepo.getByBufferId(getActiveBuffer().getId());
+        return viewRepo.getActive();
     }
 
     /**
@@ -161,8 +181,8 @@ public final class ViewService {
     }
 
 
-    public void rotateview(boolean clockwise){
-        viewRepo.rotate(clockwise, getActiveView().getId());
+    public void rotateView(boolean clockwise){
+        viewRepo.rotate(clockwise);
         generateViews();
     }
 }

@@ -11,7 +11,6 @@ public class FileBufferTest {
 
     @BeforeEach
     public void initialise(){
-        FileBufferIdGenerator.resetGenerator();
     }
 
 
@@ -20,7 +19,6 @@ public class FileBufferTest {
         Point point = Point.create(1,1);
         FileBuffer buffer = FileBuffer.builder().fileId(0).text(Text.create("text")).cursor(point).state(BufferState.CLEAN).build();
         Assertions.assertAll(
-                () -> Assertions.assertEquals(buffer.getId(), 0),
                 () -> Assertions.assertEquals(buffer.getFileId(), 0),
                 () -> Assertions.assertEquals(buffer.getText(), Text.create("text")),
                 () -> Assertions.assertEquals(buffer.getCursor(), point),
@@ -51,7 +49,7 @@ public class FileBufferTest {
     public void testEqualsAndHashCode(){
         Point point = Point.create(1,1);
         FileBuffer buffer1 = FileBuffer.builder().fileId(0).text(Text.create("text")).cursor(point).state(BufferState.CLEAN).build();
-        FileBuffer buffer2 = FileBuffer.builder().fileId(0).text(Text.create("text")).cursor(point).state(BufferState.CLEAN).build();
+        FileBuffer buffer2 = FileBuffer.builder().fileId(1).text(Text.create("text")).cursor(point).state(BufferState.CLEAN).build();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(buffer1, buffer1),
                 () -> Assertions.assertNotEquals(buffer1, buffer2),
@@ -65,7 +63,7 @@ public class FileBufferTest {
     public void testToString(){
         Point point = Point.create(1,1);
         FileBuffer buffer = FileBuffer.builder().fileId(0).text(Text.create("text")).cursor(point).state(BufferState.CLEAN).build();
-        String expected = "FileBuffer[id = 0, fileId = 0, text = Text[Lines: text], cursor = Point[x = 1, y = 1], state = CLEAN]";
+        String expected = "FileBuffer[fileId = 0, text = Text[Lines: text], cursor = Point[x = 1, y = 1], state = CLEAN]";
         Assertions.assertAll(
                 () -> Assertions.assertEquals(buffer.toString(), expected)
         );

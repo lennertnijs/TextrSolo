@@ -2,18 +2,25 @@ package com.Textr;
 
 import com.Textr.File.File;
 import com.Textr.File.FileService;
-import com.Textr.FileBuffer.FileBufferService;
+import com.Textr.FileBuffer.FileBuffer;
+import com.Textr.FileBuffer.FileBufferCreator;
 import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
+import com.Textr.Util.Point;
+import com.Textr.View.Dimension2D;
+import com.Textr.View.View;
+import com.Textr.View.ViewCreator;
 import com.Textr.View.ViewService;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Initialiser {
-    public static void initialise(FileService fs, FileBufferService fbs, ViewService vs, String[] args){
+    public static void initialise(FileService fs, ViewService vs, String[] args){
         loadDefaultLineSeparator();
         String[] files = handleArguments(args);
-        InputHandlerRepo.initialiseInputHandlers(fbs, vs);
+        InputHandlerRepo.initialiseInputHandlers(vs);
 
         TerminalService.enterRawInputMode();
         TerminalService.clearScreen();
@@ -21,11 +28,14 @@ public class Initialiser {
         for(String file: files){
             fs.initialiseFile(file);
         }
+        List<View> views = new ArrayList<>();
         for(File file : fs.getAllFiles()){
-            fbs.initialisePassiveFileBuffer(file);
+            FileBuffer buffer = FileBufferCreator.create(file);
+            View view = ViewCreator.create(buffer, Point.create(5,5), Dimension2D.create(5,5));
+            views.add(view);
         }
-        fbs.setActiveFileBuffer(0);
-        vs.initialiseViewsVertical();
+        vs.storeViews(views);
+        vs.generateViews();
         vs.drawAllViews();
         vs.drawCursor();
     }

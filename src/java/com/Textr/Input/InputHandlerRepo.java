@@ -1,6 +1,5 @@
 package com.Textr.Input;
 
-import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.Util.Validator;
 import com.Textr.View.ViewService;
 
@@ -14,12 +13,11 @@ public final class InputHandlerRepo {
     private InputHandlerRepo(){
     }
 
-    public static void initialiseInputHandlers(FileBufferService bufferService, ViewService viewService){
-        Validator.notNull(bufferService, "Cannot create input handlers with a null file buffer service.");
+    public static void initialiseInputHandlers(ViewService viewService){
         Validator.notNull(viewService, "Cannot create input handlers with a null view service.");
         anythingInputHandler = new AnythingInputHandler();
         closeDirtyBufferInputHandler = new CloseDirtyBufferInputHandler(viewService);
-        inputHandler = new InputHandler(viewService, bufferService);
+        inputHandler = new InputHandler(viewService);
         setStandardInputHandler();
     }
 

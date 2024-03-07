@@ -6,7 +6,6 @@ import com.Textr.Util.Point;
 import com.Textr.View.Dimension2D;
 import com.Textr.View.View;
 import com.Textr.View.ViewCreator;
-import com.Textr.View.ViewIdGenerator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,9 +21,8 @@ public class LayoutInitialiserTest {
 
     @BeforeEach
     public void initialise(){
-        ViewIdGenerator.resetGenerator();
         repo = new ViewTreeRepo();
-        repo.addAll(generateSomeViews());
+//        repo.addAll(generateSomeViews());
     }
 
 
@@ -68,12 +66,12 @@ public class LayoutInitialiserTest {
 //        );
 //    }
 
-    private List<View> generateSomeViews(){
-        List<View> views = new ArrayList<>();
-        for(int i = 0; i < 4; i++){
-            Point position = Point.create(i,i);
-            views.add(ViewCreator.create(i, position, Dimension2D.create(5,5)));
-        }
-        return views;
-    }
+//    private List<View> generateSomeViews(){
+//        List<View> views = new ArrayList<>();
+//        for(int i = 0; i < 4; i++){
+//            Point position = Point.create(i,i);
+//            views.add(ViewCreator.create(i, position, Dimension2D.create(5,5)));
+//        }
+//        return views;
+//    }
 }

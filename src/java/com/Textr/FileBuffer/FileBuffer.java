@@ -10,7 +10,6 @@ import com.Textr.View.Direction;
  */
 public final class FileBuffer {
 
-    private final int id;
     private final int fileId;
     private final Text text;
     private final Point cursor;
@@ -24,18 +23,10 @@ public final class FileBuffer {
      */
     private FileBuffer(Builder builder){
         Validator.notNull(builder, "Cannot build a FileBuffer because the Builder is null.");
-        this.id = FileBufferIdGenerator.getId();
         this.fileId = builder.fileId;
         this.text = builder.text;
         this.cursor = builder.cursor;
         this.state = builder.state;
-    }
-
-    /**
-     * @return This file buffer's id.
-     */
-    public int getId(){
-        return this.id;
     }
 
     /**
@@ -142,7 +133,10 @@ public final class FileBuffer {
         if(!(o instanceof FileBuffer fileBuffer)){
             return false;
         }
-        return this.id == fileBuffer.id;
+        return this.fileId == fileBuffer.fileId &&
+                this.text.equals(fileBuffer.text) &&
+                this.cursor.equals(fileBuffer.cursor) &&
+                this.state == fileBuffer.state;
     }
 
     /**
@@ -152,7 +146,11 @@ public final class FileBuffer {
      */
     @Override
     public int hashCode(){
-        return this.id;
+        int result = fileId;
+        result = 31 * result + text.hashCode();
+        result = 31 * result + cursor.hashCode();
+        result = 31 * result + state.hashCode();
+        return result;
     }
 
     /**
@@ -162,8 +160,8 @@ public final class FileBuffer {
      */
     @Override
     public String toString(){
-        return String.format("FileBuffer[id = %d, fileId = %d, text = %s, cursor = %s, state = %s]",
-                id, fileId, text, cursor, state);
+        return String.format("FileBuffer[fileId = %d, text = %s, cursor = %s, state = %s]",
+                fileId, text, cursor, state);
     }
 
     /**

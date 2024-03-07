@@ -1,7 +1,6 @@
 package com.Textr.View;
 
 import com.Textr.FileBuffer.FileBuffer;
-import com.Textr.Tree.Node;
 import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
 
@@ -12,8 +11,7 @@ import java.util.Objects;
  */
 public final class View {
 
-    private final int id;
-    private final int fileBufferId;
+    private final FileBuffer buffer;
     private Point position;
     private Dimension2D dimensions;
     private final Point anchor;
@@ -26,25 +24,14 @@ public final class View {
      */
     private View(Builder builder){
         Objects.requireNonNull(builder, "Cannot build a View with a null Builder.");
-        this.id = ViewIdGenerator.getId();
-        this.fileBufferId = builder.fileBufferId;
+        this.buffer = builder.buffer;
         this.position = builder.position;
         this.dimensions = builder.dimensions;
         this.anchor = builder.anchor;
     }
 
-    /**
-     * @return This view's id.
-     */
-    public int getId(){
-        return this.id;
-    }
-
-    /**
-     * @return This view's {@link FileBuffer} id.
-     */
-    public int getFileBufferId(){
-        return this.fileBufferId;
+    public FileBuffer getBuffer(){
+        return this.buffer;
     }
 
     /**
@@ -101,7 +88,10 @@ public final class View {
         if(!(o instanceof View view)){
             return false;
         }
-        return this.id == view.id;
+        return this.buffer.equals(view.buffer) &&
+                this.dimensions.equals(view.dimensions) &&
+                this.position.equals(view.position) &&
+                this.anchor.equals(view.anchor);
     }
 
     /**
@@ -111,7 +101,11 @@ public final class View {
      */
     @Override
     public int hashCode(){
-        return id;
+        int result = buffer.hashCode();
+        result = result * 31 + dimensions.hashCode();
+        result = result * 31 + position.hashCode();
+        result = result * 31 + anchor.hashCode();
+        return result;
     }
 
 
@@ -122,8 +116,8 @@ public final class View {
      */
     @Override
     public String toString(){
-        return String.format("View[id = %d, fileBufferId = %d, position = %s, dimensions = %s, anchor = %s]",
-                id, fileBufferId, position, dimensions, anchor);
+        return String.format("View[buffer = %s, position = %s, dimensions = %s, anchor = %s]",
+                buffer, position, dimensions, anchor);
     }
     public boolean leftOff( View next){
         return this.getPosition().getX()< next.getPosition().getX();
@@ -142,7 +136,7 @@ public final class View {
      */
     public static class Builder{
 
-        private int fileBufferId;
+        private FileBuffer buffer;
         private Point position;
         private Dimension2D dimensions;
         private Point anchor;
@@ -152,12 +146,12 @@ public final class View {
 
         /**
          * Sets the file buffer id of this builder to the given id.
-         * @param id the id
+         * @param buffer the buffer
          *
          * @return This builder
          */
-        public Builder fileBufferId(int id){
-            this.fileBufferId = id;
+        public Builder buffer(FileBuffer buffer){
+            this.buffer = buffer;
             return this;
         }
 
@@ -206,7 +200,7 @@ public final class View {
          * @throws IllegalArgumentException If any of the fields are invalid.
          */
         public View build(){
-            Validator.notNegative(fileBufferId, "The id of the FileBuffer of the View cannot be negative.");
+            Validator.notNull(buffer, "The id of the FileBuffer of the View cannot be negative.");
             Validator.notNull(position, "The global position of the View in the Terminal cannot be null.");
             Validator.notNull(dimensions, "The dimensions of the View cannot be null.");
             Validator.notNull(anchor, "The anchor of the View cannot be null");

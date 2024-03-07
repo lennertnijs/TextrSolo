@@ -2,11 +2,9 @@ package com.Textr.Tree;
 
 import com.Textr.Util.Validator;
 import com.Textr.View.View;
-import com.Textr.ViewRepo.IViewRepo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class ViewTreeRepo implements IViewRepo {
 
@@ -18,13 +16,17 @@ public class ViewTreeRepo implements IViewRepo {
         tree = new Tree<>();
     }
 
-    private void setActive(View view) {
+    @Override
+    public void setActive(View view) {
         this.Active = view;
     }
-    private View getActive() {
+
+    @Override
+    public View getActive() {
         return  Active;
     }
 
+    @Override
     public Tree<View> getTree(){
         return tree;
     }
@@ -35,6 +37,7 @@ public class ViewTreeRepo implements IViewRepo {
      *
      * @throws IllegalArgumentException If the given view is null.
      */
+    @Override
     public void add(View view){
         Validator.notNull(view, "Cannot store a null View.");
         tree.addChildToRoot(new Node<>(view));
@@ -46,6 +49,7 @@ public class ViewTreeRepo implements IViewRepo {
      *
      * @throws IllegalArgumentException If the given List of Views is or contains null.
      */
+    @Override
     public void addAll(List<View> views){
         Validator.notNull(views, "Cannot store views from a null List.");
         for(View view : views){
@@ -57,75 +61,28 @@ public class ViewTreeRepo implements IViewRepo {
     }
 
     @Override
-    public void remove(int id) {
-        List<View> views = tree.getAllValues();
-
-        for(View view : views){
-            if(view.getId() == id){
-                tree.remove(view);
-            }
-        }
-    }
-
-    public boolean contains(View view){
-        return tree.contains(view);
-
+    public void remove(View view) {
+        tree.remove(view);
     }
 
     @Override
-    public boolean contains(int id) {
-        List<View> views = tree.getAllValues();
-
-        for(View view : views){
-            if(view.getId() == id){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public int getSize(){
+    public int getSize() {
         return tree.getSizeValuesOnly();
 
     }
 
-    public View get(int viewId){
-        List <View> views = tree.getAllValues();
-        for(View view : views){
-            if(view.getId() == viewId){
-                return view;
-            }
-        }
-        throw new NoSuchElementException();
-    }
-
-    public View getByBufferId(int bufferId){
-        List<View> views = tree.getAllValues();
-        for(View view : views){
-            if(view.getFileBufferId() == bufferId){
-                return view;
-            }
-        }
-        throw new NoSuchElementException("No view with that buffer id exists.");
-    }
-
+    @Override
     public List<View> getAll(){
         return tree.getAllValues();
     }
 
-    public void remove(View view){
-        if(tree.contains(view)){
-            tree.remove(view);
-        }
-    }
-
+    @Override
     public void removeAll(){
         tree= new Tree<>();
     }
     @Override
-    public void rotate(boolean clockwise, int id){
-        View view = get(id);
-        rotateWithNext(clockwise, tree.getNode(view));
+    public void rotate(boolean clockwise){
+        rotateWithNext(clockwise, tree.getNode(Active));
     }
     public void rotateWithNext(boolean clockwise, Node<View> currentNode){
         Node<View> nextNode = tree.getNext(currentNode);
