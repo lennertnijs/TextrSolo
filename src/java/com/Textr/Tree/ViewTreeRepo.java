@@ -10,20 +10,21 @@ public class ViewTreeRepo implements IViewRepo {
 
 
     private Tree<View> tree;
+    private View active;
 
-    private View Active;
+
     public ViewTreeRepo(){
         tree = new Tree<>();
     }
 
     @Override
     public void setActive(View view) {
-        this.Active = view;
+        this.active = view;
     }
 
     @Override
     public View getActive() {
-        return  Active;
+        return  active;
     }
 
     @Override
@@ -77,13 +78,20 @@ public class ViewTreeRepo implements IViewRepo {
     }
 
     @Override
+    public void setNextActive(){
+        active = tree.getNext(tree.getNode(active)).getValue();
+    }
+
+    @Override
     public void removeAll(){
-        tree= new Tree<>();
+        tree = new Tree<>();
     }
     @Override
     public void rotate(boolean clockwise){
-        rotateWithNext(clockwise, tree.getNode(Active));
+        rotateWithNext(clockwise, tree.getNode(active));
     }
+
+
     public void rotateWithNext(boolean clockwise, Node<View> currentNode){
         Node<View> nextNode = tree.getNext(currentNode);
         if(nextNode!= null){

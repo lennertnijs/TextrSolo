@@ -14,7 +14,6 @@ public final class FileWriter {
      * Private constructor, has no use.
      */
     private FileWriter(){
-        // No actions
     }
 
     /**

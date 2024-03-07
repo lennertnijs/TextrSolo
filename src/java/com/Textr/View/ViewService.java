@@ -37,7 +37,7 @@ public final class ViewService {
     }
 
     public void setActiveToNext(){
-        // move to next;
+        viewRepo.setNextActive();
     }
 
     public void setActiveToPrevious(){
@@ -138,10 +138,9 @@ public final class ViewService {
     }
 
     public void saveBuffer(){
-        Text bufferTextObj = getActiveBuffer().getText();
-        String bufferText = bufferTextObj.getText(); // Double ".getText()", might need refactoring
+        String text = getActiveBuffer().getText().getText();
         try {
-            fileService.saveToFile(bufferText, getActiveBuffer().getFileId());
+            fileService.saveToFile(text, getActiveBuffer().getFileId());
         } catch (IOException e) {
             // Something went wrong during writing, move to new input handler for error messages
             InputHandlerRepo.setAnythingInputHandler();
