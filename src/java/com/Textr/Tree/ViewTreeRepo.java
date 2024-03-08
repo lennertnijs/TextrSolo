@@ -134,8 +134,8 @@ public class ViewTreeRepo implements IViewRepo {
     }
 
     private void rotateNonSibling(Node<View> currentNode, Node<View> nextLeaf, boolean clockwise){
-        View current = (View) currentNode.getValue();
-        View next = (View) nextLeaf.getValue();
+        View current = currentNode.getValue();
+        View next = nextLeaf.getValue();
         if (clockwise && current.leftOff(next) || !clockwise && !current.leftOff(next)){
             tree.remove(nextLeaf);
             tree.addChildToNode(nextLeaf, currentNode.getParent());

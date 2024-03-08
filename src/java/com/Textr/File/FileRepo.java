@@ -85,7 +85,7 @@ public final class FileRepo implements IFileRepo {
         Validator.notNull(files, "Cannot add a null List of files to the repository.");
         for(File file : files){
             Validator.notNull(file, "Cannot store a null file.");
-            files.add(file);
+            this.files.add(file);
         }
     }
 
