@@ -414,7 +414,45 @@ public final class Tree<T> implements ITree<T>{
         else
             return getFirstLeaf(current.getChildren().get(0));
     }
+    public void restoreInvariants(){
+        if(root.hasChildren()&& root.getChildren().size()==1){
+            Node <T> onlyChild= root.getChildren().get(0);
+            remove(onlyChild);
+            for(Node<T> grandChild : onlyChild.getChildren()){
+                addChildToRoot(grandChild);
+            }
+            flipRootOrientation();
+        }
+        restoreFromNode(root);
+    }
 
+
+    private void restoreFromNode(Node<T> node){
+        if(node.hasChildren() && node.getChildren().size()==1){
+            Node <T> onlyChild= node.getChildren().get(0);
+            if(node.hasParent()){
+                if(onlyChild.hasChildren()){
+                    Node<T> parent = node.getParent();
+                    int position = parent.getChildren().indexOf(node);
+                    parent.removeChild(node);
+                    for(Node<T> grandChild : onlyChild.getChildren()){
+                        addChildToNodeAt(grandChild, parent, position);
+                        position++;
+                    }
+                }
+                else if (onlyChild.hasValue()){
+                    node.getParent().replaceChild(node,onlyChild);
+                }
+            }
+        }
+        if (node.hasChildren()) {
+            List<Node<T>> toRestore = new ArrayList<>(node.getChildren());
+            for(Node<T> child : toRestore){
+                restoreFromNode(child);
+            }
+        }
+
+    }
     public T getNextValue(T t){
         List<T> valuesInOrder = getAllValues();
         int index = valuesInOrder.indexOf(t);
