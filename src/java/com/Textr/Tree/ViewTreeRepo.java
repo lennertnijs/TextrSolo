@@ -94,6 +94,7 @@ public class ViewTreeRepo implements IViewRepo {
     @Override
     public void rotate(boolean clockwise){
         rotateWithNext(clockwise, tree.getNode(active));
+        tree.restoreInvariants();
     }
 
 

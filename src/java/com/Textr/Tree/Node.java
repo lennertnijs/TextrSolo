@@ -43,7 +43,7 @@ public final class Node<T> {
      * @return True if this Node has any children.
      */
     public boolean hasChildren(){
-        return children.size() == 0;
+        return !children.isEmpty();
     }
 
     /**

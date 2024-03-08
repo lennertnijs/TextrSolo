@@ -38,6 +38,7 @@ public final class ViewService {
             View view = ViewCreator.create(buffer, Point.create(0,0), Dimension2D.create(1,1));
             viewRepo.add(view);
         }
+        viewRepo.setActive(viewRepo.getAll().get(0));
         generateViewPositionsAndDimensions();
     }
 
