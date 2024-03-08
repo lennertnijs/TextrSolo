@@ -80,6 +80,18 @@ public final class Node<T> {
     }
 
     /**
+     * Adds the given Node as a child of this Node. Also sets the parent relationship.
+     * @param child The child. Cannot be null.
+     *
+     * @throws IllegalArgumentException If the given child is null.
+     */
+    public void addChildat(Node<T> child, int position) {
+        Validator.notNull(child, "Cannot add a null child Node.");
+        children.add(position, child);
+        child.parent = this;
+
+    }
+    /**
      * Adds the given List of Nodes as children of this Node. Also sets the parent relationship.
      * @param children The children Nodes. Cannot be null or contain a null.
      *
