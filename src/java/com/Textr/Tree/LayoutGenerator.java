@@ -10,7 +10,11 @@ public class LayoutGenerator {
 
     public static void generateViews(ViewTreeRepo repo, Dimension2D dimension2D){
         Point topLeft = Point.create(0,0);
-        generateVerticallyStackedViews(topLeft, dimension2D, 1, repo);
+        if(repo.getTree().getOrientation()){
+            generateVerticallyStackedViews(topLeft, dimension2D, 1, repo);
+        }
+        else
+            generateHorizontallyStackedViews(topLeft,dimension2D,1,repo);
     }
 
     private static void generateVerticallyStackedViews(Point topLeft, Dimension2D dimensions, int depth, ViewTreeRepo repo){
