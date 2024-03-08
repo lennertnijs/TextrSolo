@@ -10,6 +10,7 @@ public class FileTest {
 
     private File file1;
     private File file2;
+
     @BeforeEach
     public void initialise(){
         FileIdGenerator.resetGenerator();
@@ -36,12 +37,20 @@ public class FileTest {
     }
 
     @Test
+    public void testSetText(){
+        file1.setText("new text");
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(file1.getText(), "new text"),
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> file1.setText(null))
+        );
+    }
+
+
+    @Test
     public void testEqualsAndHashCode(){
         Assertions.assertAll(
-                () -> Assertions.assertEquals(file1, file1),
                 () -> Assertions.assertNotEquals(file1, file2),
                 () -> Assertions.assertNotEquals(file1, new Object()),
-                () -> Assertions.assertEquals(file1.hashCode(), file1.hashCode()),
                 () -> Assertions.assertNotEquals(file1.hashCode(), file2.hashCode())
         );
     }

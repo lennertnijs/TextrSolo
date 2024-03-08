@@ -1,8 +1,6 @@
 package com.Textr;
 
-import com.Textr.File.File;
 import com.Textr.File.FileService;
-import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.ViewService;
@@ -10,37 +8,25 @@ import com.Textr.View.ViewService;
 import java.util.Arrays;
 
 public class Initialiser {
-    public static void initialise(FileService fs, FileBufferService fbs, ViewService vs, String[] args){
+
+
+    public static void initialise(FileService fileService, ViewService viewService, String[] args){
         loadDefaultLineSeparator();
-        String[] files = handleArguments(args);
-        InputHandlerRepo.initialiseInputHandlers(fbs, vs);
+        String[] filePaths = handleArguments(args);
+        InputHandlerRepo.initialiseInputHandlers(viewService);
 
         TerminalService.enterRawInputMode();
         TerminalService.clearScreen();
 
-        for(String file: files){
-            fs.initialiseFile(file);
+        for(String file: filePaths){
+            fileService.initialiseFile(file);
         }
-        for(File file : fs.getAllFiles()){
-            fbs.initialisePassiveFileBuffer(file);
-        }
-        fbs.setActiveFileBuffer(0);
-        vs.initialiseViewsVertical();
-        vs.drawAllViews();
-        vs.drawCursor();
+
+        viewService.initialiseViewsForAllFiles();
+        viewService.drawAllViews();
+        viewService.drawCursor();
     }
 
-    /**
-     * Loads the correct default line separator for the given system.
-     *
-     * @throws IllegalStateException If no matching line separator was found.
-     */
-    private static void loadDefaultLineSeparator(){
-        Settings.defaultLineSeparator = System.lineSeparator();
-        if(Settings.defaultLineSeparator == null){
-            throw new IllegalStateException("This system's line separator is not supported.");
-        }
-    }
 
     private static String[] handleArguments(String[] args){
         if(args.length == 0){
@@ -54,6 +40,7 @@ public class Initialiser {
         return files;
     }
 
+
     private static void overWriteDefaultLineSeparator(String input){
         String str = input.replace("--", "");
         switch (str) {
@@ -61,5 +48,22 @@ public class Initialiser {
             case "cr" -> Settings.defaultLineSeparator = "\r";
             case "crlf" -> Settings.defaultLineSeparator = "\r\n";
         }
+    }
+
+    /**
+     * Loads the correct default line separator for the given system.
+     *
+     * @throws IllegalStateException If no matching line separator was found.
+     */
+    private static void loadDefaultLineSeparator(){
+        validateLineSeparator(System.lineSeparator());
+        Settings.defaultLineSeparator = System.lineSeparator();
+    }
+
+    private static void validateLineSeparator(String lineSeparator){
+        if(lineSeparator.equals("\n") || lineSeparator.equals("\r") || lineSeparator.equals("\r\n")){
+            return;
+        }
+        throw new IllegalStateException("This line separator is not supported.");
     }
 }

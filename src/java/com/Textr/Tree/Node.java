@@ -134,6 +134,7 @@ public final class Node<T> {
         int index = this.children.indexOf(oldChild);
         if(index != -1){
             this.children.set(index, newChild);
+            newChild.parent= this;
             return;
         }
         throw new NoSuchElementException("Could not replace the Node, because it does not exist.");

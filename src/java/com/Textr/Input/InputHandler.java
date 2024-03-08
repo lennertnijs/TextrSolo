@@ -1,17 +1,14 @@
 package com.Textr.Input;
 
-import com.Textr.FileBuffer.FileBufferService;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.Direction;
 import com.Textr.View.ViewService;
 
 public final class InputHandler implements IInputHandler {
     private final ViewService viewService;
-    private final FileBufferService fileBufferService;
 
-    public InputHandler(ViewService viewService, FileBufferService fileBufferService){
+    public InputHandler(ViewService viewService){
         this.viewService = viewService;
-        this.fileBufferService = fileBufferService;
     }
 
     @Override
@@ -26,11 +23,11 @@ public final class InputHandler implements IInputHandler {
                 return;
             }
             case ENTER -> viewService.createNewline();
-            case CTRL_P -> fileBufferService.moveActiveBufferToPrev();
-            case CTRL_N -> fileBufferService.moveActiveBufferToNext();
-            case CTRL_S -> fileBufferService.saveActiveBuffer();
-            case CTRL_R -> viewService.rotateview(false);
-            case CTRL_T -> viewService.rotateview(true);
+            case CTRL_P -> viewService.setActiveToPrevious();
+            case CTRL_N -> viewService.setActiveToNext();
+            case CTRL_S -> viewService.saveBuffer();
+            case CTRL_R -> viewService.rotateView(false);
+            case CTRL_T -> viewService.rotateView(true);
             case ARROW_UP -> viewService.moveCursor(Direction.UP);
             case ARROW_RIGHT -> viewService.moveCursor(Direction.RIGHT);
             case ARROW_DOWN -> viewService.moveCursor(Direction.DOWN);

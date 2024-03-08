@@ -61,7 +61,8 @@ public final class File {
      *
      * @param text The String of the text saved to disk
      */
-    void setText(String text) { // NOTE: PACKAGE-PRIVATE
+    public void setText(String text) {
+        Validator.notNull(text, "Cannot set the text of a File to null.");
         this.text = text;
     }
 

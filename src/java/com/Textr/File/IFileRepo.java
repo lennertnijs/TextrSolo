@@ -1,7 +1,5 @@
 package com.Textr.File;
 
-import com.Textr.File.File;
-
 import java.util.List;
 
 public interface IFileRepo {

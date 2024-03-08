@@ -391,4 +391,47 @@ public final class Tree<T> implements ITree<T>{
         }
         return values;
     }
+
+
+    public Node<T> getNext(Node<T> current){
+        List<Node<T>> siblings = current.getParent().getChildren();
+        int position = siblings.indexOf(current);
+        if(position+1==siblings.size()){
+            if(current.getParent().getParent()!= null)
+                return getNext(current.getParent());
+            else
+                return null;
+
+        }
+        else
+            return siblings.get(position+1);
+    }
+
+
+    public Node<T> getFirstLeaf(Node<T> current){
+        if(current.hasValue())
+            return current;
+        else
+            return getFirstLeaf(current.getChildren().get(0));
+    }
+
+    public T getNextValue(T t){
+        List<T> valuesInOrder = getAllValues();
+        int index = valuesInOrder.indexOf(t);
+        if(index != -1){
+            int nextIndex = (index + 1) % valuesInOrder.size();
+            return valuesInOrder.get(nextIndex);
+        }
+        throw new NoSuchElementException("No element with value T was found.");
+    }
+
+    public T getPreviousValue(T t){
+        List<T> valuesInOrder = getAllValues();
+        int index = valuesInOrder.indexOf(t);
+        if(index != -1){
+            int nextIndex = (index - 1) > 0 ? (index - 1) : valuesInOrder.size() - 1;
+            return valuesInOrder.get(nextIndex);
+        }
+        throw new NoSuchElementException("No element with value T was found.");
+    }
 }

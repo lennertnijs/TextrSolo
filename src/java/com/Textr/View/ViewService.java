@@ -1,8 +1,10 @@
 package com.Textr.View;
 
+import com.Textr.File.File;
+import com.Textr.File.FileService;
 import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBuffer;
-import com.Textr.FileBuffer.FileBufferService;
+import com.Textr.FileBuffer.FileBufferCreator;
 import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.Tree.LayoutGenerator;
@@ -11,43 +13,46 @@ import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
 import com.Textr.Drawer.CursorDrawer;
 import com.Textr.Drawer.ViewDrawer;
-import com.Textr.ViewLayout.ViewLayoutInitializer;
-import com.Textr.ViewRepo.IViewRepo;
+import com.Textr.Tree.IViewRepo;
 import io.github.btj.termios.Terminal;
 
 import java.util.List;
 
 public final class ViewService {
-    private final FileBufferService fileBufferService;
+    private final FileService fileService;
     private final IViewRepo viewRepo;
 
     /**
      * Constructor for the ViewService.
-     * @param fileBufferService The {@link FileBuffer}'s service API.
      * @param viewRepo The {@link View} repository.
      */
-    public ViewService(FileBufferService fileBufferService, IViewRepo viewRepo){
-        this.fileBufferService = fileBufferService;
+    public ViewService(FileService fileService, IViewRepo viewRepo){
+        this.fileService = fileService;
         this.viewRepo = viewRepo;
     }
 
-    /**
-     * Generates a vertically stacked layout of views for the currently existing buffers and stores them.
-     * Presumes no views are currently stored.
-     */
-    public void initialiseViewsVertical(){
-        List<View> views = ViewLayoutInitializer.generateVerticallyStackedViews(fileBufferService.getAllFileBuffers());
-        viewRepo.addAll(views);
+
+    public void initialiseViewsForAllFiles(){
+        for(File file : fileService.getAllFiles()){
+            FileBuffer buffer = FileBufferCreator.create(file);
+            View view = ViewCreator.create(buffer, Point.create(0,0), Dimension2D.create(1,1));
+            viewRepo.add(view);
+        }
+        generateViewPositionsAndDimensions();
     }
 
-    public void generateViews(){
+    public void setActiveToNext(){
+        viewRepo.setNextActive();
+    }
+
+    public void setActiveToPrevious(){
+        viewRepo.setPreviousActive();
+    }
+
+    public void generateViewPositionsAndDimensions(){
         LayoutGenerator.generateViews((ViewTreeRepo) viewRepo, TerminalService.getTerminalArea());
     }
 
-    public void rotateClockWise(){
-        ((ViewTreeRepo)viewRepo).rotateClockWise(getActiveView().getId(), (getActiveView().getId() + 1) % viewRepo.getSize());
-        generateViews();
-    }
 
     /**
      * Draws all the currently existing views to the terminal screen.
@@ -55,10 +60,15 @@ public final class ViewService {
     public void drawAllViews(){
         TerminalService.clearScreen();
         for(View view: viewRepo.getAll()){
-            FileBuffer fileBuffer = fileBufferService.getFileBuffer(view.getFileBufferId());
-            String statusBar = fileBufferService.generateStatusBar(fileBuffer);
-            ViewDrawer.draw(view, fileBuffer.getText(), statusBar);
+            ViewDrawer.draw(view, view.getBuffer().getText(), generateStatusBar(view.getBuffer()));
         }
+    }
+
+    private String generateStatusBar(FileBuffer buffer){
+        Validator.notNull(buffer, "Cannot generate a status bar for a null FileBuffer.");
+        return String.format("File path: %s - Lines: %d - Characters: %d - InsertionPoint: %s - State: %s",
+                fileService.getFile(buffer.getFileId()).getUrl(), buffer.getText().getAmountOfLines(),
+                buffer.getText().getAmountOfChars(), buffer.getCursor(), buffer.getState());
     }
 
     /**
@@ -77,7 +87,7 @@ public final class ViewService {
      */
     public void moveCursor(Direction direction){
         Validator.notNull(direction, "Cannot move the cursor in the null direction.");
-        fileBufferService.moveCursor(direction);
+        viewRepo.getActive().getBuffer().moveCursor(direction);
         updateAnchor();
     }
 
@@ -122,11 +132,7 @@ public final class ViewService {
      * Then updates the views to take up the screen.
      */
     public void deleteView(){
-        int id = getActiveBuffer().getId();
-        fileBufferService.moveActiveBufferToNext();
-        fileBufferService.deleteBuffer(id);
-        viewRepo.removeAll();
-        initialiseViewsVertical();
+        viewRepo.remove(viewRepo.getActive());
     }
 
     /**
@@ -136,18 +142,25 @@ public final class ViewService {
         getActiveBuffer().removeCharacterAfter();
     }
 
+    public void saveBuffer(){
+        String text = getActiveBuffer().getText().getText();
+        fileService.saveToFile(text, getActiveBuffer().getFileId());
+        getActiveBuffer().setState(BufferState.CLEAN);
+    }
+
+
     /**
      * @return The active buffer.
      */
     private FileBuffer getActiveBuffer(){
-        return fileBufferService.getActiveBuffer();
+        return viewRepo.getActive().getBuffer();
     }
 
     /**
      * @return The active view.
      */
     private View getActiveView(){
-        return viewRepo.getByBufferId(getActiveBuffer().getId());
+        return viewRepo.getActive();
     }
 
     /**
@@ -165,9 +178,8 @@ public final class ViewService {
     }
 
 
-    public void rotateview(boolean clockwise){
-        viewRepo.rotate(clockwise, getActiveView().getId());
-
-
+    public void rotateView(boolean clockwise){
+        viewRepo.rotate(clockwise);
+        generateViewPositionsAndDimensions();
     }
 }
