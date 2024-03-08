@@ -13,12 +13,14 @@ import java.util.NoSuchElementException;
 public final class Tree<T> implements ITree<T>{
 
     private final Node<T> root;
+    private boolean rootIsVertical;
 
     /**
      * Tree Constructor. Starts as a single root Node with no children, parent, or value.
      */
     public Tree(){
         this.root = new Node<>(null);
+        this.rootIsVertical = true;
     }
 
     /**
@@ -121,7 +123,12 @@ public final class Tree<T> implements ITree<T>{
     }
 
 
-
+    public boolean getOrientation(){
+        return rootIsVertical;
+    }
+    private void flipRootOrientation() {
+        rootIsVertical = !rootIsVertical;
+    }
     /**
      * Adds the Node as a child of the root. Also sets the parent of the Node as the root Node.
      * @param child The child Node. Cannot be null
