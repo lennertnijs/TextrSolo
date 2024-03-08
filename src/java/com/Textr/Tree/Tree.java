@@ -155,6 +155,22 @@ public final class Tree<T> implements ITree<T>{
     }
 
     /**
+     * Adds the Node as a child of the given node at the given position in the children. Also sets the parent of the child Node to the parent.
+     * @param child The child Node. Cannot be null.
+     * @param parent The parent Node. Cannot be null.
+     *
+     * @throws IllegalArgumentException If the child or parent Node are null.
+     * @throws IllegalStateException If the child's value already resides in the Tree.
+     */
+    private void addChildToNodeAt(Node<T> child, Node<T> parent, int position) {
+        Validator.notNull(child, "Cannot add a null Node as a child.");
+        Validator.notNull(parent, "Cannot add a child Node to a null parent Node.");
+        if(child.hasValue() && contains(child.getValue())){
+            throw new IllegalStateException("A Node with the given value already exists in the Tree.");
+        }
+        parent.addChildat(child, position);
+    }
+    /**
      * Removes the Node with the given value from the Tree. Also removes the entire sub Tree under it.
      * @param t The value. Cannot be null.
      *
