@@ -46,7 +46,7 @@ public final class FileService {
      * @param fileId  The relevant fileId to write to.
      * @throws IOException when file could not be opened or created, or something went wrong during writing.
      */
-    public void saveToFile(String text, int fileId) throws IOException {
+    public void saveToFile(String text, int fileId){
         File file = getFile(fileId);
         FileWriter.write(text, file.getUrl());
         file.setText(text);

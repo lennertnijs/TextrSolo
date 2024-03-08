@@ -24,7 +24,7 @@ public final class FileWriter {
      * @param fileLocation  The String holding the file location.
      * @throws IOException when the file cannot be created or opened, or an error happens during writing.
      */
-    public static void write(String data, String fileLocation) throws IOException {
+    public static void write(String data, String fileLocation){
         Validator.notNull(fileLocation, "File location to write to may not be null.");
         Validator.notNull(data, "Data to write may not be null.");
         try (BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileLocation))) {

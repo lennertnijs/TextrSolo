@@ -1,9 +1,10 @@
 package com.Textr.View;
 
+import com.Textr.File.File;
 import com.Textr.File.FileService;
 import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBuffer;
-import com.Textr.FileBuffer.Text;
+import com.Textr.FileBuffer.FileBufferCreator;
 import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.Tree.LayoutGenerator;
@@ -15,7 +16,6 @@ import com.Textr.Drawer.ViewDrawer;
 import com.Textr.Tree.IViewRepo;
 import io.github.btj.termios.Terminal;
 
-import java.io.IOException;
 import java.util.List;
 
 public final class ViewService {
@@ -31,9 +31,14 @@ public final class ViewService {
         this.viewRepo = viewRepo;
     }
 
-    public void storeViews(List<View> views){
-        viewRepo.addAll(views);
-        viewRepo.setActive(views.get(0));
+
+    public void initialiseViewsForAllFiles(){
+        for(File file : fileService.getAllFiles()){
+            FileBuffer buffer = FileBufferCreator.create(file);
+            View view = ViewCreator.create(buffer, Point.create(0,0), Dimension2D.create(1,1));
+            viewRepo.add(view);
+        }
+        generateViewPositionsAndDimensions();
     }
 
     public void setActiveToNext(){
@@ -44,7 +49,7 @@ public final class ViewService {
         // move to previous
     }
 
-    public void generateViews(){
+    public void generateViewPositionsAndDimensions(){
         LayoutGenerator.generateViews((ViewTreeRepo) viewRepo, TerminalService.getTerminalArea());
     }
 
@@ -139,15 +144,8 @@ public final class ViewService {
 
     public void saveBuffer(){
         String text = getActiveBuffer().getText().getText();
-        try {
-            fileService.saveToFile(text, getActiveBuffer().getFileId());
-        } catch (IOException e) {
-            // Something went wrong during writing, move to new input handler for error messages
-            InputHandlerRepo.setAnythingInputHandler();
-        } finally {
-            // Writing was successful, buffer holds text saved on disk
-            getActiveBuffer().setState(BufferState.CLEAN);
-        }
+        fileService.saveToFile(text, getActiveBuffer().getFileId());
+        getActiveBuffer().setState(BufferState.CLEAN);
     }
 
 
@@ -182,6 +180,6 @@ public final class ViewService {
 
     public void rotateView(boolean clockwise){
         viewRepo.rotate(clockwise);
-        generateViews();
+        generateViewPositionsAndDimensions();
     }
 }
