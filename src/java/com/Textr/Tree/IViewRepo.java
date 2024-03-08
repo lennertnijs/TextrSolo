@@ -16,6 +16,6 @@ public interface IViewRepo {
     List<View> getAll();
     void removeAll();
     void rotate(boolean clockwise);
-
     void setNextActive();
+    void setPreviousActive();
 }

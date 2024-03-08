@@ -46,7 +46,7 @@ public final class ViewService {
     }
 
     public void setActiveToPrevious(){
-        // move to previous
+        viewRepo.setPreviousActive();
     }
 
     public void generateViewPositionsAndDimensions(){

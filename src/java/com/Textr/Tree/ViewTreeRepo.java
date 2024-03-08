@@ -79,7 +79,12 @@ public class ViewTreeRepo implements IViewRepo {
 
     @Override
     public void setNextActive(){
-        active = tree.getNext(tree.getNode(active)).getValue();
+        active = tree.getNextValue(active);
+    }
+
+    @Override
+    public void setPreviousActive(){
+        active = tree.getPreviousValue(active);
     }
 
     @Override
