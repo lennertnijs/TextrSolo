@@ -420,28 +420,27 @@ public final class Tree<T> implements ITree<T>{
 
 
     private void restoreFromNode(Node<T> node){
-        if(node.getChildren().size() == 1){
-            Node <T> onlyChild = node.getChildren().get(0);
-            if(node.hasParent()){
-                if(onlyChild.hasChildren()){
-                    Node<T> parent = node.getParent();
-                    int position = parent.getChildren().indexOf(node);
-                    parent.removeChild(node);
-                    for(Node<T> grandChild : onlyChild.getChildren()){
-                        addChildToNodeAt(grandChild, parent, position);
-                        position++;
-                    }
-                }
-                else if(onlyChild.hasValue()){
-                    node.getParent().replaceChild(node,onlyChild);
-                }
-            }
-        }
-        if (node.hasChildren()) {
-            List<Node<T>> toRestore = new ArrayList<>(node.getChildren());
-            for(Node<T> child : toRestore){
+        boolean hasSingleChild = node.getChildren().size() == 1;
+        if (!hasSingleChild) {
+            List<Node<T>> grandChildren = new ArrayList<>(node.getChildren());
+            for(Node<T> child : grandChildren){
                 restoreFromNode(child);
             }
+            return;
+        }
+        Node <T> onlyChild = node.getChildren().get(0);
+        if(!node.hasParent()){
+            return;
+        }
+        Node<T> parent = node.getParent();
+        if(onlyChild.hasChildren()){
+            int position = parent.getChildren().indexOf(node);
+            parent.removeChild(node);
+            for(Node<T> grandChild : onlyChild.getChildren()){
+                addChildToNodeAt(grandChild, parent, position++);
+            }
+        }else if(onlyChild.hasValue()){
+            node.getParent().replaceChild(node,onlyChild);
         }
     }
 
