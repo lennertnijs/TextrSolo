@@ -113,8 +113,7 @@ public final class File {
         return String.format("File[id = %d, url = %s, text = %s]", this.id, this.url, this.text);
     }
 
-    @Override
-    public File clone(){
+    public File copy(){
         return new File(this.id, this.url, this.text);
     }
 }

@@ -62,7 +62,7 @@ public class FileTest {
 
     @Test
     public void testClone(){
-        File clone = file1.clone();
+        File clone = file1.copy();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(clone, file1),
                 () -> clone.setText("new text"),

@@ -13,6 +13,9 @@ public class Initialiser {
     public static void initialise(FileService fileService, ViewService viewService, String[] args){
         loadDefaultLineSeparator();
         String[] filePaths = handleArguments(args);
+        if(filePaths.length > TerminalService.getTerminalArea().getHeight() / 2){
+            throw new IllegalArgumentException("Too many input files.");
+        }
         InputHandlerRepo.initialiseInputHandlers(viewService);
 
         TerminalService.enterRawInputMode();

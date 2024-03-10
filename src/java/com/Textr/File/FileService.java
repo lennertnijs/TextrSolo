@@ -28,7 +28,7 @@ public final class FileService {
      * @return The File
      */
     public File getFile(int id){
-        return fileRepo.get(id).clone();
+        return fileRepo.get(id).copy();
     }
 
     /**
@@ -38,7 +38,7 @@ public final class FileService {
     public List<File> getAllFiles(){
         List<File> clonedFiles = new ArrayList<>();
         for(File file : fileRepo.getAll()){
-            clonedFiles.add(file.clone());
+            clonedFiles.add(file.copy());
         }
         return clonedFiles;
     }
