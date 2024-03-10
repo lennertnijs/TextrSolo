@@ -82,7 +82,8 @@ public final class ViewService {
     public void drawAll(){
         TerminalService.clearScreen();
         for(View view: viewRepo.getAll()){
-            String statusBar = generateStatusBar(view.getBuffer());
+            FileBuffer buffer = view.getBuffer();
+            String statusBar = viewRepo.getActive().equals(view) ? "ACTIVE: " + generateStatusBar(buffer) : generateStatusBar(buffer);
             ViewDrawer.draw(view, statusBar);
         }
         CursorDrawer.draw(getActiveView().getPosition(), getAnchor(), getActiveBuffer().getCursor());

@@ -44,7 +44,6 @@ public class Initialiser {
         String str = input.replace("--", "");
         switch (str) {
             case "lf" -> Settings.defaultLineSeparator = "\n";
-            case "cr" -> Settings.defaultLineSeparator = "\r";
             case "crlf" -> Settings.defaultLineSeparator = "\r\n";
         }
     }
@@ -60,7 +59,7 @@ public class Initialiser {
     }
 
     private static void validateLineSeparator(String lineSeparator){
-        if(lineSeparator.equals("\n") || lineSeparator.equals("\r") || lineSeparator.equals("\r\n")){
+        if(lineSeparator.equals("\n") || lineSeparator.equals("\r\n")){
             return;
         }
         throw new IllegalStateException("This line separator is not supported.");
