@@ -2,7 +2,7 @@ package com.Textr.FileBuffer;
 
 import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
-import com.Textr.View.Direction;
+import com.Textr.Util.Direction;
 
 /**
  * Handles the movement of the cursor.

@@ -1,6 +1,7 @@
 package com.Textr.View;
 
 import com.Textr.FileBuffer.FileBuffer;
+import com.Textr.Util.Dimension2D;
 import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
 
@@ -19,7 +20,6 @@ public final class View {
     /**
      * Constructor for a view.
      * A view is a part of the Terminal, used to display (part of) a buffer.
-     * use {@link ViewCreator} to create views.
      * @param builder The builder. Cannot be null.
      */
     private View(Builder builder){

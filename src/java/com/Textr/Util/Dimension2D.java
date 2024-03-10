@@ -1,6 +1,4 @@
-package com.Textr.View;
-
-import com.Textr.Util.Validator;
+package com.Textr.Util;
 
 /**
  * Class to represent 2D dimensions.

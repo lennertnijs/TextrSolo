@@ -1,4 +1,4 @@
-package com.Textr.View;
+package com.Textr.Util;
 
 public enum Direction {
     UP,

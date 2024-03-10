@@ -3,7 +3,7 @@ package com.Textr.FileBuffer;
 import com.Textr.File.File;
 import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
-import com.Textr.View.Direction;
+import com.Textr.Util.Direction;
 
 /**
  * Represents a buffer.

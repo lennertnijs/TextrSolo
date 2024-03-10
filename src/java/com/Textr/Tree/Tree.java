@@ -160,7 +160,7 @@ public final class Tree<T> implements ITree<T>{
      * @throws IllegalArgumentException If the child or parent Node are null.
      * @throws IllegalStateException If the child's value already resides in the Tree.
      */
-    private void addChildToNodeAt(Node<T> child, Node<T> parent, int position) {
+    public void addChildToNodeAt(Node<T> child, Node<T> parent, int position) {
         Validator.notNull(child, "Cannot add a null Node as a child.");
         Validator.notNull(parent, "Cannot add a child Node to a null parent Node.");
         if(child.hasValue() && contains(child.getValue())){
@@ -458,7 +458,7 @@ public final class Tree<T> implements ITree<T>{
         List<T> valuesInOrder = getAllValues();
         int index = valuesInOrder.indexOf(t);
         if(index != -1){
-            int nextIndex = (index - 1) > 0 ? (index - 1) : valuesInOrder.size() - 1;
+            int nextIndex = (index - 1) >= 0 ? (index - 1) : valuesInOrder.size() - 1;
             return valuesInOrder.get(nextIndex);
         }
         throw new NoSuchElementException("No element with value T was found.");

@@ -1,7 +1,7 @@
 package com.Textr.Input;
 
 import com.Textr.Terminal.TerminalService;
-import com.Textr.View.Direction;
+import com.Textr.Util.Direction;
 import com.Textr.View.ViewService;
 
 public final class InputHandler implements IInputHandler {
