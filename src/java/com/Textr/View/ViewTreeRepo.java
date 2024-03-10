@@ -6,7 +6,7 @@ import com.Textr.Util.Validator;
 
 import java.util.List;
 
-public class ViewTreeRepo implements IViewRepo {
+public final class ViewTreeRepo implements IViewRepo {
 
 
     private Tree<View> tree;

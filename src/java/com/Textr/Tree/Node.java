@@ -89,7 +89,7 @@ public final class Node<T> {
      *
      * @throws IllegalArgumentException If the given child is null.
      */
-    public void addChildat(Node<T> child, int position) {
+    public void addChildAt(Node<T> child, int position) {
         Validator.notNull(child, "Cannot add a null child Node.");
         children.add(position, child);
         child.parent = this;

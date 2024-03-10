@@ -166,7 +166,7 @@ public final class Tree<T> implements ITree<T>{
         if(child.hasValue() && contains(child.getValue())){
             throw new IllegalStateException("A Node with the given value already exists in the Tree.");
         }
-        parent.addChildat(child, position);
+        parent.addChildAt(child, position);
     }
     /**
      * Removes the Node with the given value from the Tree. Also removes the entire sub Tree under it.

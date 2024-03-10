@@ -1,7 +1,5 @@
 package com.Textr.View;
 
-import com.Textr.View.View;
-
 import java.util.List;
 
 public interface IViewRepo {

@@ -1,7 +1,5 @@
 package com.Textr.Terminal;
 
-import com.Textr.Util.Point;
-import com.Textr.Util.Validator;
 import com.Textr.View.Dimension2D;
 import io.github.btj.termios.Terminal;
 
@@ -79,19 +77,6 @@ public final class TerminalService {
      */
     public static void clearScreen(){
         Terminal.clearScreen();
-    }
-
-    /**
-     * Prints the given text starting at the given position in the terminal.
-     * @param point The position (x, y), 0-based.
-     * @param text The text.
-     *
-     * @throws IllegalArgumentException If either parameters are null.
-     */
-    public static void printText(Point point, String text){
-        Validator.notNull(point, "Cannot print to a null point in the terminal.");
-        Validator.notNull(text, "Cannot print a null text to the terminal.");
-        Terminal.printText(point.getY() + 1, point.getX() + 1, text);
     }
 
     /**

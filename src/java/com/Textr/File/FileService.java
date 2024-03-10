@@ -2,7 +2,6 @@ package com.Textr.File;
 
 import com.Textr.Util.Validator;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -43,8 +42,6 @@ public final class FileService {
      * Saves the given data to disk, at the location specified by the File with given fileID.
      * @param text    The String to write to disk
      * @param fileId  The relevant fileId to write to.
-     *
-     * @throws IOException when file could not be opened or created, or something went wrong during writing.
      */
     public void saveToFile(String text, int fileId){
         File file = getFile(fileId);
