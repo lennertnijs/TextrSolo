@@ -30,6 +30,14 @@ public final class View {
         this.anchor = builder.anchor;
     }
 
+    private View(FileBuffer buffer, Point position, Dimension2D dimensions, Point anchor){
+        this.buffer = buffer;
+        this.position = position;
+        this.dimensions = dimensions;
+        this.anchor = anchor;
+
+    }
+
     public FileBuffer getBuffer(){
         return this.buffer;
     }
@@ -120,6 +128,10 @@ public final class View {
                 buffer, position, dimensions, anchor);
     }
 
+    public View copy(){
+        return new View(this.buffer.copy(), this.position.copy(), this.dimensions.copy(), this.anchor.copy());
+    }
+
     public boolean leftOff(View next){
         return this.getPosition().getX() < next.getPosition().getX();
     }
@@ -153,7 +165,7 @@ public final class View {
          * @return This builder
          */
         public Builder buffer(FileBuffer buffer){
-            this.buffer = buffer;
+            this.buffer = buffer.copy();
             return this;
         }
 
@@ -164,7 +176,7 @@ public final class View {
          * @return This builder
          */
         public Builder position(Point position){
-            this.position = position;
+            this.position = position.copy();
             return this;
         }
 
@@ -175,7 +187,7 @@ public final class View {
          * @return This builder
          */
         public Builder dimensions(Dimension2D dimensions){
-            this.dimensions = dimensions;
+            this.dimensions = dimensions.copy();
             return this;
         }
 
@@ -186,7 +198,7 @@ public final class View {
          * @return This builder
          */
         public Builder anchor(Point anchor){
-            this.anchor = anchor;
+            this.anchor = anchor.copy();
             return this;
         }
 

@@ -82,4 +82,8 @@ public final class Dimension2D {
     public String toString(){
         return String.format("Dimension2D[width = %d, height = %d]", width, height);
     }
+
+    public Dimension2D copy(){
+        return new Dimension2D(this.width, this.height);
+    }
 }

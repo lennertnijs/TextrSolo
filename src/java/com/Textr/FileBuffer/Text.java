@@ -226,4 +226,8 @@ public final class Text {
     public String toString(){
         return String.format("Text[Lines: %s]", String.join(System.lineSeparator(), lines));
     }
+
+    public Text copy(){
+        return new Text(Arrays.copyOf(this.lines, this.lines.length));
+    }
 }

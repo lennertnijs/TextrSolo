@@ -4,7 +4,7 @@ import com.Textr.File.File;
 import com.Textr.File.FileService;
 import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBuffer;
-import com.Textr.FileBuffer.FileBufferCreator;
+import com.Textr.FileBuffer.Text;
 import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.Util.Dimension2D;
@@ -32,15 +32,27 @@ public final class ViewService {
      */
     public void initialiseViewsForAllFiles(){
         for(File file : fileService.getAllFiles()){
-            FileBuffer buffer = FileBufferCreator.create(file);
-            Point dummyPoint = Point.create(0, 0);
-            Dimension2D dummyDimensions = Dimension2D.create(1,1);
-            Point anchor = Point.create(0,0);
-            View view = View.builder().buffer(buffer).position(dummyPoint).dimensions(dummyDimensions).anchor(anchor).build();
+            FileBuffer buffer = createBuffer(file);
+            View view = createView(buffer);
             viewRepo.add(view);
         }
         viewRepo.setActive(viewRepo.get(0));
         generateViewPositionsAndDimensions();
+    }
+
+    private FileBuffer createBuffer(File file){
+        int id = file.getId();
+        Text text = Text.create(file.getText());
+        Point insertionPoint = Point.create(0,0);
+        BufferState state = BufferState.CLEAN;
+        return FileBuffer.builder().fileId(id).text(text).cursor(insertionPoint).state(state).build();
+    }
+
+    private View createView(FileBuffer buffer){
+        Point dummyPoint = Point.create(0, 0);
+        Dimension2D dummyDimensions = Dimension2D.create(1,1);
+        Point anchor = Point.create(0,0);
+        return View.builder().buffer(buffer).position(dummyPoint).dimensions(dummyDimensions).anchor(anchor).build();
     }
 
     /**
