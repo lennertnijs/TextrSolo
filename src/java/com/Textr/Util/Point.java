@@ -135,4 +135,8 @@ public final class Point {
     public String toString(){
         return String.format("Point[x = %d, y = %d]", x, y);
     }
+
+    public Point copy(){
+        return new Point(this.x, this.y);
+    }
 }

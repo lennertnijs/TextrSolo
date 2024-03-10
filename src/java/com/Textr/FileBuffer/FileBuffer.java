@@ -29,6 +29,13 @@ public final class FileBuffer {
         this.state = builder.state;
     }
 
+    private FileBuffer(int fileId, Text text, Point cursor, BufferState state){
+        this.fileId = fileId;
+        this.text = text;
+        this.cursor = cursor;
+        this.state = state;
+    }
+
     /**
      * @return This file buffer's {@link File} id.
      */
@@ -164,6 +171,10 @@ public final class FileBuffer {
                 fileId, text, cursor, state);
     }
 
+    public FileBuffer copy(){
+        return new FileBuffer(this.fileId, this.text.copy(), this.cursor.copy(), this.state);
+    }
+
     /**
      * Creates and returns a new {@link FileBuffer.Builder} to build a {@link FileBuffer} with.
      * @return The builder.
@@ -204,7 +215,7 @@ public final class FileBuffer {
          * @return The builder
          */
         public Builder text(Text text){
-            this.text = text;
+            this.text = text.copy();
             return this;
         }
 
@@ -215,7 +226,7 @@ public final class FileBuffer {
          * @return The builder
          */
         public Builder cursor(Point cursor){
-            this.cursor = cursor;
+            this.cursor = cursor.copy();
             return this;
         }
 
