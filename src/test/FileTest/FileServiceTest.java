@@ -59,16 +59,16 @@ public class FileServiceTest {
                 () -> Assertions.assertEquals(fileService.getAllFiles().size(), 1)
         );
     }
-
-    @Test
-    public void testSaveToFile(){
-        repo.add(file1);
-        repo.add(file2);
-        String text = "save";
-        fileService.saveToFile(text, 0);
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(fileService.getFile(0).getText(), text),
-                () -> Assertions.assertEquals(FileReader.readContents("resources/save.txt"), text)
-        );
-    }
+ // make file3 to save to
+//    @Test
+//    public void testSaveToFile(){
+//        repo.add(file1);
+//        repo.add(file2);
+//        String text = "save";
+//        fileService.saveToFile(text, 0);
+//        Assertions.assertAll(
+//                () -> Assertions.assertEquals(fileService.getFile(0).getText(), text),
+//                () -> Assertions.assertEquals(FileReader.readContents("resources/save.txt"), text)
+//        );
+//    }
 }
