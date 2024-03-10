@@ -23,8 +23,8 @@ public final class InputHandler implements IInputHandler {
                 return;
             }
             case ENTER -> viewService.createNewline();
-            case CTRL_P -> viewService.setActiveToPrevious();
-            case CTRL_N -> viewService.setActiveToNext();
+            case CTRL_P -> viewService.setActiveViewToPrevious();
+            case CTRL_N -> viewService.setActiveViewToNext();
             case CTRL_S -> viewService.saveBuffer();
             case CTRL_R -> viewService.rotateView(false);
             case CTRL_T -> viewService.rotateView(true);
@@ -35,7 +35,6 @@ public final class InputHandler implements IInputHandler {
             case DELETE -> viewService.deleteNextChar();
             case BACKSPACE -> viewService.deletePrevChar();
         }
-        viewService.drawAllViews();
-        viewService.drawCursor();
+        viewService.drawAll();
     }
 }

@@ -23,8 +23,7 @@ public class Initialiser {
         }
 
         viewService.initialiseViewsForAllFiles();
-        viewService.drawAllViews();
-        viewService.drawCursor();
+        viewService.drawAll();
     }
 
 

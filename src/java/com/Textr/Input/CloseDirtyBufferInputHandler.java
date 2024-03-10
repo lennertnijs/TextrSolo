@@ -16,11 +16,11 @@ public final class CloseDirtyBufferInputHandler implements IInputHandler {
             case 'Y' -> {
                 viewService.deleteView();
                 InputHandlerRepo.setStandardInputHandler();
-                viewService.drawAllViews();
+                viewService.drawAll();
             }
             case 'N' -> {
                 InputHandlerRepo.setStandardInputHandler();
-                viewService.drawAllViews();
+                viewService.drawAll();
             }
         }
     }
