@@ -1,6 +1,5 @@
 package com.Textr.Drawer;
 
-import com.Textr.FileBuffer.Text;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.Util.Validator;
 import com.Textr.View.View;
@@ -31,8 +30,8 @@ public final class ViewDrawer{
         for(int i = view.getAnchor().getY(); i < Math.min(lines.length, view.getAnchor().getY() + height - 1); i++){
             // only need to draw if any text is in these columns
             if(lines[i].length() > view.getAnchor().getX()){
-                int maxLineIndex = Math.min(view.getAnchor().getX() + view.getDimensions().getWidth(), lines[i].length());
-                TerminalService.printText(x, startY, lines[i].substring(view.getAnchor().getX(), maxLineIndex));
+                int maxColIndex = Math.min(view.getAnchor().getX() + view.getDimensions().getWidth(), lines[i].length());
+                TerminalService.printText(x, startY, lines[i].substring(view.getAnchor().getX(), maxColIndex));
             }
             startY++;
         }
