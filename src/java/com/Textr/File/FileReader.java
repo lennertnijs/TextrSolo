@@ -35,7 +35,7 @@ public final class FileReader {
                 stringBuilder.append(line);
                 stringBuilder.append(System.lineSeparator());
             }
-            return stringBuilder.toString();
+            return stringBuilder.toString().trim();
         }catch(IOException e){
             throw new IllegalArgumentException("An error occurred during the reading of a File");
         }
@@ -47,8 +47,7 @@ public final class FileReader {
      */
     private static void checkForNonAscii(String text){
         for(char c : text.toCharArray()){
-            boolean isNonASCII = checkForNonAsciiWithLineSeparatorSetting(c);
-            if(isNonASCII){
+            if(checkForNonAsciiWithLineSeparatorSetting(c)){
                 throw new IllegalArgumentException("A non-ASCII character was present in the File.");
             }
         }
@@ -71,6 +70,6 @@ public final class FileReader {
                 return (c < 32 && c != 10 && c != 13) || 127 <= c;
             }
         }
-        throw new IllegalArgumentException();
+        throw new IllegalStateException("This line separator is not supported.");
     }
 }

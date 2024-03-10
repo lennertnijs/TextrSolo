@@ -67,6 +67,10 @@ public final class Node<T> {
         return children;
     }
 
+    public boolean hasSingleChild(){
+        return this.children.size() == 1;
+    }
+
     /**
      * Adds the given Node as a child of this Node. Also sets the parent relationship.
      * @param child The child. Cannot be null.
@@ -85,12 +89,13 @@ public final class Node<T> {
      *
      * @throws IllegalArgumentException If the given child is null.
      */
-    public void addChildat(Node<T> child, int position) {
+    public void addChildAt(Node<T> child, int position) {
         Validator.notNull(child, "Cannot add a null child Node.");
         children.add(position, child);
         child.parent = this;
-
     }
+
+
     /**
      * Adds the given List of Nodes as children of this Node. Also sets the parent relationship.
      * @param children The children Nodes. Cannot be null or contain a null.
@@ -189,6 +194,6 @@ public final class Node<T> {
     @Override
     public String toString(){
         String viewStr = t == null ? "null" : t.toString();
-        return String.format("Node[View = %s, Children = %s]", viewStr, children);
+        return String.format("Node[Value = %s, Children = %s]", viewStr, children);
     }
 }

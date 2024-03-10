@@ -1,17 +1,5 @@
-import com.Textr.Tree.LayoutGenerator;
-import com.Textr.Tree.Node;
-import com.Textr.Tree.Tree;
-import com.Textr.Tree.ViewTreeRepo;
-import com.Textr.Util.Point;
-import com.Textr.View.Dimension2D;
-import com.Textr.View.View;
-import com.Textr.View.ViewCreator;
-import org.junit.jupiter.api.Assertions;
+import com.Textr.View.ViewTreeRepo;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class LayoutInitialiserTest {
 

@@ -7,77 +7,90 @@ import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferCreator;
 import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
-import com.Textr.Tree.LayoutGenerator;
-import com.Textr.Tree.ViewTreeRepo;
 import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
 import com.Textr.Drawer.CursorDrawer;
 import com.Textr.Drawer.ViewDrawer;
-import com.Textr.Tree.IViewRepo;
 import io.github.btj.termios.Terminal;
-
-import java.util.List;
 
 public final class ViewService {
     private final FileService fileService;
     private final IViewRepo viewRepo;
 
-    /**
-     * Constructor for the ViewService.
-     * @param viewRepo The {@link View} repository.
-     */
     public ViewService(FileService fileService, IViewRepo viewRepo){
+        Validator.notNull(fileService, "Cannot initiate a ViewService with a null FileService.");
+        Validator.notNull(viewRepo, "Cannot initiate a ViewService with a null IViewRepo");
         this.fileService = fileService;
         this.viewRepo = viewRepo;
+        LayoutGenerator.setViewRepo(viewRepo);
     }
 
-
+    /**
+     * Creates and stores Views for all the existing Files.
+     */
     public void initialiseViewsForAllFiles(){
         for(File file : fileService.getAllFiles()){
             FileBuffer buffer = FileBufferCreator.create(file);
-            View view = ViewCreator.create(buffer, Point.create(0,0), Dimension2D.create(1,1));
+            Point dummyPoint = Point.create(0, 0);
+            Dimension2D dummyDimensions = Dimension2D.create(1,1);
+            View view = ViewCreator.create(buffer, dummyPoint, dummyDimensions);
             viewRepo.add(view);
         }
-        viewRepo.setActive(viewRepo.getAll().get(0));
+        viewRepo.setActive(viewRepo.get(0));
         generateViewPositionsAndDimensions();
     }
 
-    public void setActiveToNext(){
+    /**
+     * Sets positions & dimensions for all the existing Views, according to their hierarchical structure.
+     */
+    private void generateViewPositionsAndDimensions(){
+        LayoutGenerator.generate(TerminalService.getTerminalArea());
+    }
+
+    /**
+     * Sets the active View to the next View.
+     */
+    public void setActiveViewToNext(){
         viewRepo.setNextActive();
     }
 
-    public void setActiveToPrevious(){
+    /**
+     * Sets the active View to the previous View.
+     */
+    public void setActiveViewToPrevious(){
         viewRepo.setPreviousActive();
     }
 
-    public void generateViewPositionsAndDimensions(){
-        LayoutGenerator.generateViews((ViewTreeRepo) viewRepo, TerminalService.getTerminalArea());
-    }
-
-
     /**
-     * Draws all the currently existing views to the terminal screen.
+     * Draws all the Views and the cursor.
      */
-    public void drawAllViews(){
+    public void drawAll(){
         TerminalService.clearScreen();
         for(View view: viewRepo.getAll()){
-            ViewDrawer.draw(view, view.getBuffer().getText(), generateStatusBar(view.getBuffer()));
+            String statusBar = generateStatusBar(view.getBuffer());
+            ViewDrawer.draw(view, statusBar);
         }
+        CursorDrawer.draw(getActiveView().getPosition(), getAnchor(), getActiveBuffer().getCursor());
     }
 
+    /**
+     * Generates and returns a status bar for the given FileBuffer.
+     * @param buffer The file buffer. Cannot be null.
+     *
+     * @return The status bar.
+     * @throws IllegalArgumentException If the given buffer is null.
+     */
     private String generateStatusBar(FileBuffer buffer){
         Validator.notNull(buffer, "Cannot generate a status bar for a null FileBuffer.");
         return String.format("File path: %s - Lines: %d - Characters: %d - InsertionPoint: %s - State: %s",
-                fileService.getFile(buffer.getFileId()).getUrl(), buffer.getText().getAmountOfLines(),
-                buffer.getText().getAmountOfChars(), buffer.getCursor(), buffer.getState());
+                fileService.getFile(buffer.getFileId()).getUrl(),
+                buffer.getText().getAmountOfLines(),
+                buffer.getText().getAmountOfChars(),
+                buffer.getCursor(),
+                buffer.getState());
     }
 
-    /**
-     * Draws the terminal's cursor at the active buffer's cursor point.
-     */
-    public void drawCursor(){
-        CursorDrawer.draw(getActiveView().getPosition(), getAnchor(), getActiveBuffer().getCursor());
-    }
+
 
     /**
      * Moves the cursor of the active buffer by 1 unit in the given direction.
@@ -88,7 +101,7 @@ public final class ViewService {
      */
     public void moveCursor(Direction direction){
         Validator.notNull(direction, "Cannot move the cursor in the null direction.");
-        viewRepo.getActive().getBuffer().moveCursor(direction);
+        getActiveBuffer().moveCursor(direction);
         updateAnchor();
     }
 
@@ -119,23 +132,6 @@ public final class ViewService {
         updateAnchor();
     }
 
-    public void attemptDeleteView(){
-        if(getActiveBuffer().getState() == BufferState.DIRTY){
-            Terminal.clearScreen();
-            TerminalService.printText(1, 1, "The buffer is dirty. Are you sure you want to delete it?");
-            InputHandlerRepo.setCloseDirtyBufferInputHandler();
-        }
-        deleteView();
-    }
-
-    /**
-     * Deletes the view from the repository and moves the active file buffer to the next.
-     * Then updates the views to take up the screen.
-     */
-    public void deleteView(){
-        viewRepo.remove(viewRepo.getActive());
-    }
-
     /**
      * Deletes the character just after the cursor of the active buffer.
      */
@@ -143,10 +139,49 @@ public final class ViewService {
         getActiveBuffer().removeCharacterAfter();
     }
 
+    /**
+     * Attempts to delete the active View. If this View's buffer is Dirty, show user a warning. If it is clean, delete.
+     */
+    public void attemptDeleteView(){
+        if(getActiveBuffer().getState() == BufferState.CLEAN){
+            deleteView();
+            return;
+        }
+        Terminal.clearScreen();
+        TerminalService.printText(1, 1, "The buffer is dirty. Are you sure you want to delete it?");
+        InputHandlerRepo.setCloseDirtyBufferInputHandler();
+    }
+
+    /**
+     * Deletes the view from the repository and moves the active file buffer to the next.
+     * Then updates the views to take up the screen.
+     */
+    public void deleteView(){
+        View oldActive = getActiveView();
+        viewRepo.setNextActive();
+        viewRepo.remove(oldActive);
+        generateViewPositionsAndDimensions();
+        drawAll();
+    }
+
+
+    /**
+     * Saves the active View's buffer changes permanently.
+     */
     public void saveBuffer(){
         String text = getActiveBuffer().getText().getText();
         fileService.saveToFile(text, getActiveBuffer().getFileId());
         getActiveBuffer().setState(BufferState.CLEAN);
+    }
+
+    /**
+     * Rotates the active View and the next View.
+     * Then updates the new positions and dimensions.
+     * @param clockwise The boolean. Indicates whether clockwise, or not.
+     */
+    public void rotateView(boolean clockwise){
+        viewRepo.rotate(clockwise);
+        generateViewPositionsAndDimensions();
     }
 
 
@@ -176,11 +211,5 @@ public final class ViewService {
      */
     private void updateAnchor(){
         AnchorUpdater.updateAnchor(getAnchor(), getActiveBuffer().getCursor(), getActiveView().getDimensions());
-    }
-
-
-    public void rotateView(boolean clockwise){
-        viewRepo.rotate(clockwise);
-        generateViewPositionsAndDimensions();
     }
 }

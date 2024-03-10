@@ -1,24 +1,27 @@
-package com.Textr.Tree;
+package com.Textr.View;
 
 import com.Textr.Util.Point;
-import com.Textr.View.Dimension2D;
-import com.Textr.View.View;
 
 import java.util.List;
 
-public class LayoutGenerator {
+public final class LayoutGenerator {
 
-    public static void generateViews(ViewTreeRepo repo, Dimension2D dimension2D){
+    private static IViewRepo viewRepo;
+
+    public static void setViewRepo(IViewRepo repo){
+        viewRepo = repo;
+    }
+    public static void generate(Dimension2D dimension2D){
         Point topLeft = Point.create(0,0);
-        if(repo.getTree().getOrientation()){
-            generateVerticallyStackedViews(topLeft, dimension2D, 1, repo);
+        if(viewRepo.rootIsVertical()){
+            generateVerticallyStackedViews(topLeft, dimension2D, 1);
+            return;
         }
-        else
-            generateHorizontallyStackedViews(topLeft,dimension2D,1,repo);
+        generateHorizontallyStackedViews(topLeft,dimension2D,1);
     }
 
-    private static void generateVerticallyStackedViews(Point topLeft, Dimension2D dimensions, int depth, ViewTreeRepo repo){
-        List<View> nodeCount = repo.getAllValuesAtDepth(depth);
+    private static void generateVerticallyStackedViews(Point topLeft, Dimension2D dimensions, int depth){
+        List<View> nodeCount = viewRepo.getAllAtDepth(depth);
         int amountOfViews = nodeCount.size();
         int heightPerView = dimensions.getHeight() / amountOfViews;
         int remainder = dimensions.getHeight() % amountOfViews;
@@ -28,7 +31,7 @@ public class LayoutGenerator {
             int viewHeight = remainder-- > 0 ? heightPerView + 1 : heightPerView;
             Dimension2D dimensionsOfView = Dimension2D.create(dimensions.getWidth(), viewHeight);
             if(view == null){
-                generateHorizontallyStackedViews(position, dimensionsOfView, depth + 1, repo);
+                generateHorizontallyStackedViews(position, dimensionsOfView, depth + 1);
             }else{
                 view.setPosition(position);
                 view.setDimensions(dimensionsOfView);
@@ -37,8 +40,8 @@ public class LayoutGenerator {
         }
     }
 
-    private static void generateHorizontallyStackedViews(Point topLeft, Dimension2D dimensions, int depth, ViewTreeRepo repo){
-        List<View> nodeCount = repo.getAllValuesAtDepth(depth);
+    private static void generateHorizontallyStackedViews(Point topLeft, Dimension2D dimensions, int depth){
+        List<View> nodeCount = viewRepo.getAllAtDepth(depth);
         int amountOfViews = nodeCount.size();
         int widthPerView = dimensions.getWidth() / amountOfViews;
         int remainder = dimensions.getWidth() % amountOfViews;
@@ -48,7 +51,7 @@ public class LayoutGenerator {
             int viewWidth = remainder-- > 0 ? widthPerView + 1 : widthPerView;
             Dimension2D dimensionsOfView = Dimension2D.create(viewWidth, dimensions.getHeight());
             if(view == null){
-                generateVerticallyStackedViews(position, dimensionsOfView, depth + 1, repo);
+                generateVerticallyStackedViews(position, dimensionsOfView, depth + 1);
             }else{
                 view.setPosition(position);
                 view.setDimensions(dimensionsOfView);

@@ -59,4 +59,15 @@ public class FileTest {
         String expected = "File[id = 0, url = path1, text = text1]";
         Assertions.assertEquals(file1.toString(), expected);
     }
+
+    @Test
+    public void testClone(){
+        File clone = file1.clone();
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(clone, file1),
+                () -> clone.setText("new text"),
+                () -> System.out.println(clone.getText()),
+                () -> Assertions.assertNotEquals(clone, file1)
+        );
+    }
 }

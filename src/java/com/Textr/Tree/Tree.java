@@ -13,14 +13,12 @@ import java.util.NoSuchElementException;
 public final class Tree<T> implements ITree<T>{
 
     private final Node<T> root;
-    private boolean rootIsVertical;
 
     /**
      * Tree Constructor. Starts as a single root Node with no children, parent, or value.
      */
     public Tree(){
         this.root = new Node<>(null);
-        this.rootIsVertical = true;
     }
 
     /**
@@ -122,13 +120,6 @@ public final class Tree<T> implements ITree<T>{
         return findNodeByValueDFS(root, t);
     }
 
-
-    public boolean getOrientation(){
-        return rootIsVertical;
-    }
-    private void flipRootOrientation() {
-        rootIsVertical = !rootIsVertical;
-    }
     /**
      * Adds the Node as a child of the root. Also sets the parent of the Node as the root Node.
      * @param child The child Node. Cannot be null
@@ -175,7 +166,7 @@ public final class Tree<T> implements ITree<T>{
         if(child.hasValue() && contains(child.getValue())){
             throw new IllegalStateException("A Node with the given value already exists in the Tree.");
         }
-        parent.addChildat(child, position);
+        parent.addChildAt(child, position);
     }
     /**
      * Removes the Node with the given value from the Tree. Also removes the entire sub Tree under it.
@@ -416,66 +407,43 @@ public final class Tree<T> implements ITree<T>{
     }
 
 
-    public Node<T> getNext(Node<T> current){
-        List<Node<T>> siblings = current.getParent().getChildren();
-        int position = siblings.indexOf(current);
-        if(position+1==siblings.size()){
-            if(current.getParent().getParent()!= null)
-                return getNext(current.getParent());
-            else
-                return null;
-
-        }
-        else
-            return siblings.get(position+1);
-    }
-
-
-    public Node<T> getFirstLeaf(Node<T> current){
-        if(current.hasValue())
-            return current;
-        else
-            return getFirstLeaf(current.getChildren().get(0));
-    }
     public void restoreInvariants(){
-        if(root.hasChildren()&& root.getChildren().size()==1){
-            Node <T> onlyChild= root.getChildren().get(0);
-            remove(onlyChild);
-            for(Node<T> grandChild : onlyChild.getChildren()){
+        if(root.hasSingleChild()){
+            Node <T> child = root.getChildren().get(0);
+            remove(child);
+            for(Node<T> grandChild : child.getChildren()){
                 addChildToRoot(grandChild);
             }
-            flipRootOrientation();
         }
         restoreFromNode(root);
     }
 
 
     private void restoreFromNode(Node<T> node){
-        if(node.hasChildren() && node.getChildren().size()==1){
-            Node <T> onlyChild= node.getChildren().get(0);
-            if(node.hasParent()){
-                if(onlyChild.hasChildren()){
-                    Node<T> parent = node.getParent();
-                    int position = parent.getChildren().indexOf(node);
-                    parent.removeChild(node);
-                    for(Node<T> grandChild : onlyChild.getChildren()){
-                        addChildToNodeAt(grandChild, parent, position);
-                        position++;
-                    }
-                }
-                else if (onlyChild.hasValue()){
-                    node.getParent().replaceChild(node,onlyChild);
-                }
-            }
-        }
-        if (node.hasChildren()) {
-            List<Node<T>> toRestore = new ArrayList<>(node.getChildren());
-            for(Node<T> child : toRestore){
+        if (!node.hasSingleChild()) {
+            List<Node<T>> grandChildren = new ArrayList<>(node.getChildren());
+            for(Node<T> child : grandChildren){
                 restoreFromNode(child);
             }
+            return;
         }
-
+        Node <T> onlyChild = node.getChildren().get(0);
+        if(!node.hasParent()){
+            return;
+        }
+        Node<T> parent = node.getParent();
+        if(onlyChild.hasChildren()){
+            int position = parent.getChildren().indexOf(node);
+            parent.removeChild(node);
+            for(Node<T> grandChild : onlyChild.getChildren()){
+                addChildToNodeAt(grandChild, parent, position++);
+            }
+        }else if(onlyChild.hasValue()){
+            node.getParent().replaceChild(node,onlyChild);
+        }
     }
+
+
     public T getNextValue(T t){
         List<T> valuesInOrder = getAllValues();
         int index = valuesInOrder.indexOf(t);
@@ -494,5 +462,9 @@ public final class Tree<T> implements ITree<T>{
             return valuesInOrder.get(nextIndex);
         }
         throw new NoSuchElementException("No element with value T was found.");
+    }
+
+    public boolean isLastValue(T t){
+        return getAllValues().get(getAllValues().size() - 1).equals(t);
     }
 }

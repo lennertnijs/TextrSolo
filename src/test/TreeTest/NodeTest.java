@@ -36,7 +36,7 @@ public class NodeTest {
                 () -> Assertions.assertEquals(node2.getValue(), 2),
                 () -> Assertions.assertEquals(node3.getValue(), 3),
                 () -> Assertions.assertEquals(node2.getParent(), node1),
-                () -> Assertions.assertFalse(node3.hasChildren()),
+                () -> Assertions.assertTrue(node3.hasChildren()),
                 () -> Assertions.assertEquals(node2.getChildren(), new ArrayList<>()),
                 () -> Assertions.assertEquals(node3.getChildren(), new ArrayList<>(List.of(node4))),
 

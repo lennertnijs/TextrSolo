@@ -24,8 +24,8 @@ public final class CursorDrawer {
         Validator.notNull(position, "Cannot draw the cursor because the position is null.");
         Validator.notNull(anchor, "Cannot draw the cursor because the anchor is null.");
         Validator.notNull(cursor, "Cannot draw the cursor because the cursor position is null.");
-        int x = position.getX() + cursor.getX() - anchor.getX();
-        int y = position.getY() + cursor.getY() - anchor.getY();
+        int x = position.getX() + (cursor.getX() - anchor.getX());
+        int y = position.getY() + (cursor.getY() - anchor.getY());
         TerminalService.moveCursor(x, y);
     }
 }
