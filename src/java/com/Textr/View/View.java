@@ -165,7 +165,7 @@ public final class View {
          * @return This builder
          */
         public Builder buffer(FileBuffer buffer){
-            this.buffer = buffer.copy();
+            this.buffer = buffer;
             return this;
         }
 
@@ -176,7 +176,7 @@ public final class View {
          * @return This builder
          */
         public Builder position(Point position){
-            this.position = position.copy();
+            this.position = position;
             return this;
         }
 
@@ -187,7 +187,7 @@ public final class View {
          * @return This builder
          */
         public Builder dimensions(Dimension2D dimensions){
-            this.dimensions = dimensions.copy();
+            this.dimensions = dimensions;
             return this;
         }
 
@@ -198,7 +198,7 @@ public final class View {
          * @return This builder
          */
         public Builder anchor(Point anchor){
-            this.anchor = anchor.copy();
+            this.anchor = anchor;
             return this;
         }
 
@@ -218,6 +218,10 @@ public final class View {
             Validator.notNull(position, "The global position of the View in the Terminal cannot be null.");
             Validator.notNull(dimensions, "The dimensions of the View cannot be null.");
             Validator.notNull(anchor, "The anchor of the View cannot be null");
+            buffer = buffer.copy();
+            position = position.copy();
+            dimensions = dimensions.copy();
+            anchor = anchor.copy();
             return new View(this);
         }
 
