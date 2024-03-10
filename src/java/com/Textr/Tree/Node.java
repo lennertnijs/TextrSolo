@@ -67,6 +67,10 @@ public final class Node<T> {
         return children;
     }
 
+    public boolean hasSingleChild(){
+        return this.children.size() == 1;
+    }
+
     /**
      * Adds the given Node as a child of this Node. Also sets the parent relationship.
      * @param child The child. Cannot be null.

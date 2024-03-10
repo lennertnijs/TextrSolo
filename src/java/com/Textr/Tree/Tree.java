@@ -408,7 +408,7 @@ public final class Tree<T> implements ITree<T>{
 
 
     public void restoreInvariants(){
-        if(root.getChildren().size() == 1){
+        if(root.hasSingleChild()){
             Node <T> child = root.getChildren().get(0);
             remove(child);
             for(Node<T> grandChild : child.getChildren()){
@@ -420,8 +420,7 @@ public final class Tree<T> implements ITree<T>{
 
 
     private void restoreFromNode(Node<T> node){
-        boolean hasSingleChild = node.getChildren().size() == 1;
-        if (!hasSingleChild) {
+        if (!node.hasSingleChild()) {
             List<Node<T>> grandChildren = new ArrayList<>(node.getChildren());
             for(Node<T> child : grandChildren){
                 restoreFromNode(child);
