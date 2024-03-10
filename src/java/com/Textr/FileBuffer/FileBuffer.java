@@ -101,8 +101,10 @@ public final class FileBuffer {
      * Used when backspace is pressed.
      */
     public void removeCharacterBefore(){
-        text.removeCharacter(cursor.getY(), cursor.getX() - 1);
+        int oldY = cursor.getY();
+        int oldX = cursor.getX();
         CursorMover.move(cursor, Direction.LEFT, text);
+        text.removeCharacter(oldY, oldX - 1);
     }
 
     /**

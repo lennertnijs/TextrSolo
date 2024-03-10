@@ -97,11 +97,12 @@ public final class ViewService {
      */
     private String generateStatusBar(FileBuffer buffer){
         Validator.notNull(buffer, "Cannot generate a status bar for a null FileBuffer.");
-        return String.format("File path: %s - Lines: %d - Characters: %d - InsertionPoint: %s - State: %s",
+        return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: (line, col) = (%d, %d) - State: %s",
                 fileService.getFile(buffer.getFileId()).getUrl(),
                 buffer.getText().getAmountOfLines(),
                 buffer.getText().getAmountOfChars(),
-                buffer.getCursor(),
+                buffer.getCursor().getY(),
+                buffer.getCursor().getX(),
                 buffer.getState());
     }
 
