@@ -189,6 +189,6 @@ public final class Node<T> {
     @Override
     public String toString(){
         String viewStr = t == null ? "null" : t.toString();
-        return String.format("Node[View = %s, Children = %s]", viewStr, children);
+        return String.format("Node[Value = %s, Children = %s]", viewStr, children);
     }
 }

@@ -119,9 +119,11 @@ public final class View {
         return String.format("View[buffer = %s, position = %s, dimensions = %s, anchor = %s]",
                 buffer, position, dimensions, anchor);
     }
-    public boolean leftOff( View next){
-        return this.getPosition().getX()< next.getPosition().getX();
+
+    public boolean leftOff(View next){
+        return this.getPosition().getX() < next.getPosition().getX();
     }
+
     /**
      * Creates and returns a new {@link View.Builder} to build a view with.
      * @return The builder
