@@ -216,7 +216,7 @@ public final class FileBuffer {
          * @return The builder
          */
         public Builder text(Text text){
-            this.text = text.copy();
+            this.text = text;
             return this;
         }
 
@@ -227,7 +227,7 @@ public final class FileBuffer {
          * @return The builder
          */
         public Builder cursor(Point cursor){
-            this.cursor = cursor.copy();
+            this.cursor = cursor;
             return this;
         }
 
@@ -260,6 +260,8 @@ public final class FileBuffer {
             Validator.notNull(text, "The text in the FileBuffer cannot be null.");
             Validator.notNull(cursor, "The cursor of the FileBuffer cannot be null.");
             Validator.notNull(state,"The state of the FileBuffer cannot be null.");
+            text = text.copy();
+            cursor = cursor.copy();
             return new FileBuffer(this);
         }
     }
