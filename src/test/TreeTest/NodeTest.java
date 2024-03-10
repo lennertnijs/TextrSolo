@@ -23,6 +23,8 @@ public class NodeTest {
         node5 = new Node<>(5);
     }
 
+
+
     @Test
     public void testNode(){
         node1.addChildren(List.of(node2, node3));
