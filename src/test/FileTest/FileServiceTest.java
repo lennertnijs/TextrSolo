@@ -64,11 +64,11 @@ public class FileServiceTest {
     public void testSaveToFile(){
         repo.add(file1);
         repo.add(file2);
-        String text = "new text for test";
+        String text = "save";
         fileService.saveToFile(text, 0);
         Assertions.assertAll(
                 () -> Assertions.assertEquals(fileService.getFile(0).getText(), text),
-                () -> Assertions.assertEquals(FileReader.readContents("resources/test.txt"), text)
+                () -> Assertions.assertEquals(FileReader.readContents("resources/save.txt"), text)
         );
     }
 }
