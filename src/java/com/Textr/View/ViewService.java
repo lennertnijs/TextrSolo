@@ -16,8 +16,6 @@ import com.Textr.Drawer.ViewDrawer;
 import com.Textr.Tree.IViewRepo;
 import io.github.btj.termios.Terminal;
 
-import java.util.List;
-
 public final class ViewService {
     private final FileService fileService;
     private final IViewRepo viewRepo;
@@ -29,6 +27,7 @@ public final class ViewService {
     public ViewService(FileService fileService, IViewRepo viewRepo){
         this.fileService = fileService;
         this.viewRepo = viewRepo;
+        LayoutGenerator.setViewRepo(viewRepo);
     }
 
 
@@ -51,7 +50,7 @@ public final class ViewService {
     }
 
     public void generateViewPositionsAndDimensions(){
-        LayoutGenerator.generateViews((ViewTreeRepo) viewRepo, TerminalService.getTerminalArea());
+        LayoutGenerator.generateViews(TerminalService.getTerminalArea());
     }
 
 
