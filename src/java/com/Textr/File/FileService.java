@@ -44,7 +44,7 @@ public final class FileService {
      * @param fileId  The relevant fileId to write to.
      */
     public void saveToFile(String text, int fileId){
-        File file = getFile(fileId);
+        File file = fileRepo.get(fileId);
         FileWriter.write(text, file.getUrl());
         file.setText(text);
     }

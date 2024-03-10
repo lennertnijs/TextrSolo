@@ -66,11 +66,11 @@ public final class ViewService {
      */
     public void drawAll(){
         TerminalService.clearScreen();
-        CursorDrawer.draw(getActiveView().getPosition(), getAnchor(), getActiveBuffer().getCursor());
         for(View view: viewRepo.getAll()){
             String statusBar = generateStatusBar(view.getBuffer());
             ViewDrawer.draw(view, statusBar);
         }
+        CursorDrawer.draw(getActiveView().getPosition(), getAnchor(), getActiveBuffer().getCursor());
     }
 
     /**
@@ -145,6 +145,7 @@ public final class ViewService {
     public void attemptDeleteView(){
         if(getActiveBuffer().getState() == BufferState.CLEAN){
             deleteView();
+            return;
         }
         Terminal.clearScreen();
         TerminalService.printText(1, 1, "The buffer is dirty. Are you sure you want to delete it?");
@@ -156,7 +157,11 @@ public final class ViewService {
      * Then updates the views to take up the screen.
      */
     public void deleteView(){
-        viewRepo.remove(getActiveView());
+        View oldActive = getActiveView();
+        viewRepo.setNextActive();
+        viewRepo.remove(oldActive);
+        generateViewPositionsAndDimensions();
+        drawAll();
     }
 
 
@@ -207,6 +212,4 @@ public final class ViewService {
     private void updateAnchor(){
         AnchorUpdater.updateAnchor(getAnchor(), getActiveBuffer().getCursor(), getActiveView().getDimensions());
     }
-
-
 }
