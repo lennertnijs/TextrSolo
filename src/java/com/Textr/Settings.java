@@ -5,5 +5,5 @@ package com.Textr;
  */
 public class Settings {
     public static String defaultLineSeparator = null;
-
+    public static boolean RUNNING = true;
 }

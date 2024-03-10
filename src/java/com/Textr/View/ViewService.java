@@ -6,6 +6,7 @@ import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.Text;
 import com.Textr.Input.InputHandlerRepo;
+import com.Textr.Settings;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.Util.Dimension2D;
 import com.Textr.Util.Direction;
@@ -174,6 +175,10 @@ public final class ViewService {
      * Then updates the views to take up the screen.
      */
     public void deleteView(){
+        if(viewRepo.getSize() == 1){
+            Settings.RUNNING = false;
+            return;
+        }
         View oldActive = getActiveView();
         viewRepo.setNextActive();
         viewRepo.remove(oldActive);

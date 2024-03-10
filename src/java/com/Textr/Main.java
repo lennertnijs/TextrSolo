@@ -16,7 +16,7 @@ public class Main {
         final ViewService viewService = new ViewService(fileService, viewRepo);
 
         Initialiser.initialise(fileService, viewService, args);
-        while(true){
+        while(Settings.RUNNING){
             InputHandlerRepo.handleInput();
         }
     }
