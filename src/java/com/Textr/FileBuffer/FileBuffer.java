@@ -18,7 +18,6 @@ public final class FileBuffer {
     /**
      * Constructor for a file buffer.
      * A file buffer is used to temporarily store changes to the file's text until the changes are saved.
-     * Use {@link FileBufferCreator} to create buffers.
      * @param builder The file buffer builder. Cannot be null.
      */
     private FileBuffer(Builder builder){
