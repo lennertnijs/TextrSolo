@@ -18,7 +18,7 @@ public class LayoutGenerator {
     }
 
     private static void generateVerticallyStackedViews(Point topLeft, Dimension2D dimensions, int depth, ViewTreeRepo repo){
-        List<View> nodeCount = repo.getAllValuesAtDepth(depth);
+        List<View> nodeCount = repo.getAllAtDepth(depth);
         int amountOfViews = nodeCount.size();
         int heightPerView = dimensions.getHeight() / amountOfViews;
         int remainder = dimensions.getHeight() % amountOfViews;
@@ -38,7 +38,7 @@ public class LayoutGenerator {
     }
 
     private static void generateHorizontallyStackedViews(Point topLeft, Dimension2D dimensions, int depth, ViewTreeRepo repo){
-        List<View> nodeCount = repo.getAllValuesAtDepth(depth);
+        List<View> nodeCount = repo.getAllAtDepth(depth);
         int amountOfViews = nodeCount.size();
         int widthPerView = dimensions.getWidth() / amountOfViews;
         int remainder = dimensions.getWidth() % amountOfViews;

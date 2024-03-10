@@ -18,31 +18,46 @@ public class ViewTreeRepo implements IViewRepo {
         rootIsVertical = true;
     }
 
-
-    private void flipRootOrientation() {
-        rootIsVertical = !rootIsVertical;
-    }
-
+    /**
+     * @return Whether the root orientation is vertical or not. If not, the orientation is horizontal.
+     */
+    @Override
     public boolean rootIsVertical(){
         return rootIsVertical;
     }
+
+    /**
+     * @return The size of the Tree. This only counts the Nodes with a non-null value.
+     */
     @Override
-    public void setActive(View view) {
-        this.active = view;
+    public int getSize() {
+        return tree.getSizeValuesOnly();
+
     }
 
+    /**
+     * @return The active View. If none is set, returns null.
+     */
     @Override
     public View getActive() {
         return  active;
     }
 
+    /**
+     * Sets the active View to the given view.
+     * @param view The new active View. Cannot be null.
+     *
+     * @throws IllegalArgumentException If the given View is null.
+     */
     @Override
-    public Tree<View> getTree(){
-        return tree;
+    public void setActive(View view) {
+        Validator.notNull(view, "Cannot set the active View to a null.");
+        this.active = view;
     }
 
     /**
      * Stores the given View.
+     * More specifically, adds the View to the children of the root of the Tree.
      * @param view The View. Cannot be null.
      *
      * @throws IllegalArgumentException If the given view is null.
@@ -54,7 +69,8 @@ public class ViewTreeRepo implements IViewRepo {
     }
 
     /**
-     * Stores the given List of Views in the repository.
+     * Stores the given List of Views.
+     * More specifically, adds the Views to the children of the root of the Tree.
      * @param views The List of Views. Cannot be null or contain null.
      *
      * @throws IllegalArgumentException If the given List of Views is or contains null.
@@ -70,45 +86,84 @@ public class ViewTreeRepo implements IViewRepo {
         }
     }
 
+    /**
+     * Removes the given View from the Tree. If no match is found, does nothing.
+     * @param view The View. Cannot be null.
+     */
     @Override
     public void remove(View view) {
+        Validator.notNull(view, "Cannot remove a null View from the Tree.");
         tree.remove(view);
     }
 
-    @Override
-    public int getSize() {
-        return tree.getSizeValuesOnly();
-
-    }
-
-    @Override
-    public List<View> getAll(){
-        return tree.getAllValues();
-    }
-
-    @Override
-    public void setNextActive(){
-        active = tree.getNextValue(active);
-    }
-
-    @Override
-    public void setPreviousActive(){
-        active = tree.getPreviousValue(active);
-    }
-
+    /**
+     * Empties out the entire Tree.
+     */
     @Override
     public void removeAll(){
         tree = new Tree<>();
     }
 
+    /**
+     * Fetches and returns the View at the given index.
+     * @param index The view index. Cannot be negative or bigger than the size of the Tree - 1.
+     *
+     * @return The view.
+     */
+    @Override
+    public View get(int index){
+        Validator.withinRange(index, 0, tree.getSize() - 1, "Cannot retrieve an element at in invalid index.");
+        return tree.getAllValues().get(index);
+    }
 
+    /**
+     * @return All the Tree's values, in their correct order.
+     */
+    @Override
+    public List<View> getAll(){
+        return tree.getAllValues();
+    }
+
+    /**
+     * Sets the active View to the next in the Tree. Works circularly.
+     */
+    @Override
+    public void setNextActive(){
+        active = tree.getNextValue(active);
+    }
+
+    /**
+     * Sets the active View to the previous in the Tree. Works circularly.
+     */
+    @Override
+    public void setPreviousActive(){
+        active = tree.getPreviousValue(active);
+    }
+
+
+    /**
+     * Rotates the active View and the next View CW / CCW & updates the tree appropriately, keeping its invariance.
+     * @param clockwise The bool whether CW/CCW
+     */
     @Override
     public void rotate(boolean clockwise){
         rotateWithNext(clockwise);
-        tree.restoreInvariants();
         if(tree.getRoot().hasChildren()&& tree.getRoot().getChildren().size() == 1){
             flipRootOrientation();
         }
+        tree.restoreInvariants();
+    }
+
+    /**
+     * Returns a List with all the Tree's values, in order, at the given depth. Null values mean a non-leaf node.
+     * @param depth The depth. Cannot be negative or 0.
+     *
+     * @return The values & nulls at the given depth.
+     */
+    @Override
+    public List<View> getAllAtDepth(int depth){
+        Validator.notNegativeOrZero(depth, "Cannot check the nodes at the given negative or zero depth.");
+        return tree.getAllAtDepth(depth);
     }
 
 
@@ -160,7 +215,7 @@ public class ViewTreeRepo implements IViewRepo {
         }
     }
 
-    public List<View> getAllValuesAtDepth(int depth){
-        return tree.getAllAtDepth(depth);
+    private void flipRootOrientation() {
+        rootIsVertical = !rootIsVertical;
     }
 }
