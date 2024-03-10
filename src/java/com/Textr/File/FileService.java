@@ -2,6 +2,7 @@ package com.Textr.File;
 
 import com.Textr.Util.Validator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public final class FileService {
      * @return The File
      */
     public File getFile(int id){
-        return fileRepo.get(id);
+        return fileRepo.get(id).clone();
     }
 
     /**
@@ -35,7 +36,11 @@ public final class FileService {
      * @return All the Files
      */
     public List<File> getAllFiles(){
-        return fileRepo.getAll();
+        List<File> clonedFiles = new ArrayList<>();
+        for(File file : fileRepo.getAll()){
+            clonedFiles.add(file.clone());
+        }
+        return clonedFiles;
     }
 
     /**

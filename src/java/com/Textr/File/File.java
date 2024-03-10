@@ -20,6 +20,12 @@ public final class File {
         this.text = text;
     }
 
+    private File(int id, String url, String text){
+        this.id = id;
+        this.url = url;
+        this.text = text;
+    }
+
     /**
      * Static factory method to create {@link File}s with.
      * @param url The uniform resource locator (URL) of the file.
@@ -81,7 +87,7 @@ public final class File {
         if(!(o instanceof File file)){
             return false;
         }
-        return this.id == file.id;
+        return this.id == file.id && this.url.equals(file.url) && this.text.equals(file.text);
     }
 
     /**
@@ -91,7 +97,10 @@ public final class File {
      */
     @Override
     public int hashCode(){
-        return id;
+        int result = id;
+        result = result * 31 + url.hashCode();
+        result = result * 31 + text.hashCode();
+        return result;
     }
 
     /**
@@ -102,5 +111,10 @@ public final class File {
     @Override
     public String toString(){
         return String.format("File[id = %d, url = %s, text = %s]", this.id, this.url, this.text);
+    }
+
+    @Override
+    public File clone(){
+        return new File(this.id, this.url, this.text);
     }
 }
