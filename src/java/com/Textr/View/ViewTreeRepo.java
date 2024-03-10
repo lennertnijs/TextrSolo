@@ -206,14 +206,13 @@ public final class ViewTreeRepo implements IViewRepo {
         View next = nextNode.getValue();
         boolean counterClockWise = !clockwise;
         boolean noSwap = clockwise && current.leftOff(next) || counterClockWise && !current.leftOff(next);
-        boolean swap = !noSwap;
         Node<View> parent = currentNode.getParent();
         tree.remove(nextNode);
-        tree.addChildToNode(nextNode, parent);
-        if (swap){
-            tree.remove(currentNode);
-            tree.addChildToNode(currentNode, parent);
+        int position = currentNode.getParent().getChildren().indexOf(currentNode);
+        if (noSwap){
+            position++;
         }
+        tree.addChildToNodeAt(nextNode,parent,position);
     }
 
     private void flipRootOrientation() {

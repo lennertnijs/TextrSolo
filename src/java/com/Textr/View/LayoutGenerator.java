@@ -1,5 +1,6 @@
 package com.Textr.View;
 
+import com.Textr.Util.Dimension2D;
 import com.Textr.Util.Point;
 
 import java.util.List;

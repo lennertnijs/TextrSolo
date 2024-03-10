@@ -1,6 +1,6 @@
 package com.Textr.Terminal;
 
-import com.Textr.View.Dimension2D;
+import com.Textr.Util.Dimension2D;
 import io.github.btj.termios.Terminal;
 
 import java.io.IOException;

@@ -7,6 +7,8 @@ import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferCreator;
 import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
+import com.Textr.Util.Dimension2D;
+import com.Textr.Util.Direction;
 import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
 import com.Textr.Drawer.CursorDrawer;
@@ -33,7 +35,8 @@ public final class ViewService {
             FileBuffer buffer = FileBufferCreator.create(file);
             Point dummyPoint = Point.create(0, 0);
             Dimension2D dummyDimensions = Dimension2D.create(1,1);
-            View view = ViewCreator.create(buffer, dummyPoint, dummyDimensions);
+            Point anchor = Point.create(0,0);
+            View view = View.builder().buffer(buffer).position(dummyPoint).dimensions(dummyDimensions).anchor(anchor).build();
             viewRepo.add(view);
         }
         viewRepo.setActive(viewRepo.get(0));
