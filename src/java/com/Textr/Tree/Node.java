@@ -93,8 +93,9 @@ public final class Node<T> {
         Validator.notNull(child, "Cannot add a null child Node.");
         children.add(position, child);
         child.parent = this;
-
     }
+
+
     /**
      * Adds the given List of Nodes as children of this Node. Also sets the parent relationship.
      * @param children The children Nodes. Cannot be null or contain a null.
