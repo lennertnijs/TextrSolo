@@ -10,3 +10,6 @@
 /.idea/**
 /Textr.iml
 /src/java/META-INF/*
+
+# Files generated during testing
+/test-resources
