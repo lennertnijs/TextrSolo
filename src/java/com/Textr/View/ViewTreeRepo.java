@@ -1,7 +1,8 @@
-package com.Textr.Tree;
+package com.Textr.View;
 
+import com.Textr.Tree.Node;
+import com.Textr.Tree.Tree;
 import com.Textr.Util.Validator;
-import com.Textr.View.View;
 
 import java.util.List;
 

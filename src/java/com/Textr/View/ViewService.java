@@ -7,12 +7,10 @@ import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.FileBuffer.FileBufferCreator;
 import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
-import com.Textr.Tree.LayoutGenerator;
 import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
 import com.Textr.Drawer.CursorDrawer;
 import com.Textr.Drawer.ViewDrawer;
-import com.Textr.Tree.IViewRepo;
 import io.github.btj.termios.Terminal;
 
 public final class ViewService {
@@ -46,7 +44,7 @@ public final class ViewService {
      * Sets positions & dimensions for all the existing Views, according to their hierarchical structure.
      */
     private void generateViewPositionsAndDimensions(){
-        LayoutGenerator.generateViews(TerminalService.getTerminalArea());
+        LayoutGenerator.generate(TerminalService.getTerminalArea());
     }
 
     /**

@@ -1,19 +1,17 @@
-package com.Textr.Tree;
+package com.Textr.View;
 
 import com.Textr.Util.Point;
-import com.Textr.View.Dimension2D;
-import com.Textr.View.View;
 
 import java.util.List;
 
-public class LayoutGenerator {
+public final class LayoutGenerator {
 
     private static IViewRepo viewRepo;
 
     public static void setViewRepo(IViewRepo repo){
         viewRepo = repo;
     }
-    public static void generateViews(Dimension2D dimension2D){
+    public static void generate(Dimension2D dimension2D){
         Point topLeft = Point.create(0,0);
         if(viewRepo.rootIsVertical()){
             generateVerticallyStackedViews(topLeft, dimension2D, 1);

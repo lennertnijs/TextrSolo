@@ -3,7 +3,7 @@ package com.Textr;
 import com.Textr.File.FileRepo;
 import com.Textr.File.FileService;
 import com.Textr.Input.InputHandlerRepo;
-import com.Textr.Tree.ViewTreeRepo;
+import com.Textr.View.ViewTreeRepo;
 import com.Textr.View.ViewService;
 
 public class Main {
