@@ -1,4 +1,4 @@
-package ViewTest;
+package UtilTest;
 
 import com.Textr.Util.Dimension2D;
 import org.junit.jupiter.api.Assertions;
