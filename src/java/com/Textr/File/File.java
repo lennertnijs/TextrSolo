@@ -7,21 +7,15 @@ import com.Textr.Util.Validator;
  */
 public final class File {
 
-    private final int id;
     private final String url;
 
     /**
      * Constructor for a {@link File}.
      */
     private File(String url){
-        this.id = FileIdGenerator.getId();
         this.url = url;
     }
 
-    private File(int id, String url){
-        this.id = id;
-        this.url = url;
-    }
 
     /**
      * Static factory method to create {@link File}s with.
@@ -35,12 +29,6 @@ public final class File {
         return new File(url);
     }
 
-    /**
-     * @return The {@link File}'s id.
-     */
-    public int getId(){
-        return this.id;
-    }
 
     /**
      * @return The {@link File}'s url. (file path)
@@ -65,7 +53,7 @@ public final class File {
         if(!(o instanceof File file)){
             return false;
         }
-        return this.id == file.id && this.url.equals(file.url);
+        return this.url.equals(file.url);
     }
 
     /**
@@ -75,9 +63,7 @@ public final class File {
      */
     @Override
     public int hashCode(){
-        int result = id;
-        result = result * 31 + url.hashCode();
-        return result;
+        return url.hashCode();
     }
 
     /**
@@ -87,10 +73,10 @@ public final class File {
      */
     @Override
     public String toString(){
-        return String.format("File[id = %d, url = %s]", this.id, this.url);
+        return String.format("File[url = %s]", this.url);
     }
 
     public File copy(){
-        return new File(this.id, this.url);
+        return new File(this.url);
     }
 }

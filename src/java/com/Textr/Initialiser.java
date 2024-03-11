@@ -1,6 +1,5 @@
 package com.Textr;
 
-import com.Textr.File.FileService;
 import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.ViewService;
@@ -10,7 +9,7 @@ import java.util.Arrays;
 public class Initialiser {
 
 
-    public static void initialise(FileService fileService, ViewService viewService, String[] args){
+    public static void initialise(ViewService viewService, String[] args){
         loadDefaultLineSeparator();
         String[] filePaths = handleArguments(args);
         TerminalService.enterRawInputMode();
@@ -20,13 +19,7 @@ public class Initialiser {
         }
         InputHandlerRepo.initialiseInputHandlers(viewService);
 
-
-
-        for(String file: filePaths){
-            fileService.initialiseFile(file);
-        }
-
-        viewService.initialiseViewsForAllFiles();
+        viewService.initialiseViews(filePaths);
         viewService.drawAll();
     }
 

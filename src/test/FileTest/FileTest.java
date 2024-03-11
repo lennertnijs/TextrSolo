@@ -1,7 +1,6 @@
 package FileTest;
 
 import com.Textr.File.File;
-import com.Textr.File.FileIdGenerator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ public class FileTest {
 
     @BeforeEach
     public void initialise(){
-        FileIdGenerator.resetGenerator();
         file1 = File.create("path1");
         file2 = File.create("path2");
     }
@@ -22,7 +20,6 @@ public class FileTest {
     @Test
     public void testCreationAndGetters(){
         Assertions.assertAll(
-                () -> Assertions.assertEquals(file1.getId(), 0),
                 () -> Assertions.assertEquals(file1.getUrl(), "path1")
         );
     }
@@ -46,7 +43,7 @@ public class FileTest {
     }
     @Test
     public void testToString(){
-        String expected = "File[id = 0, url = path1]";
+        String expected = "File[url = path1]";
         Assertions.assertEquals(file1.toString(), expected);
     }
 }
