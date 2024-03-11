@@ -73,7 +73,11 @@ public class TreeWithEmptyNodesTest {
 
                 () -> Assertions.assertEquals(node3.getChildren(), new ArrayList<>()),
 
-                () -> Assertions.assertEquals(node4.getChildren(), new ArrayList<>())
+                () -> Assertions.assertEquals(node4.getChildren(), new ArrayList<>()),
+
+                () -> Assertions.assertTrue(tree.isLastValue(4)),
+                () -> Assertions.assertFalse(tree.isLastValue(5)),
+                () -> Assertions.assertFalse(tree.isLastValue(null))
         );
     }
 
@@ -218,9 +222,11 @@ public class TreeWithEmptyNodesTest {
     }
 
     @Test
-    public void testGetAllValues(){
+    public void testGetValues(){
         Assertions.assertAll(
-                () -> Assertions.assertEquals(tree.getAllValues(), new ArrayList<>(List.of(1,2,3,4)))
+                () -> Assertions.assertEquals(tree.getAllValues(), new ArrayList<>(List.of(1,2,3,4))),
+                () -> Assertions.assertEquals(tree.getNextValue(1), 2),
+                () -> Assertions.assertEquals(tree.getPreviousValue(2), 1)
         );
     }
 }

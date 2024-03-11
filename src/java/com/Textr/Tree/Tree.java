@@ -464,7 +464,12 @@ public final class Tree<T> implements ITree<T>{
         throw new NoSuchElementException("No element with value T was found.");
     }
 
-    public boolean isLastValue(T t){
-        return getAllValues().get(getAllValues().size() - 1).equals(t);
+    private List<T> allValues = null;
+
+    public boolean isLastValue(T t) {
+        if (allValues == null) {
+            allValues = getAllValues();
+        }
+        return allValues.get(allValues.size() - 1).equals(t);
     }
 }
