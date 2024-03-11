@@ -34,7 +34,7 @@ public class TreeAllValuesTest {
         tree.addChildToRoot(node2);
         tree.addChildToNode(node3, node2);
         tree.addChildToNode(node4, node2);
-        tree.addChildToNode(node5, node3);
+        tree.addChildToNodeAt(node5, node3, 0);
     }
 
     @Test
@@ -49,7 +49,11 @@ public class TreeAllValuesTest {
                 () -> Assertions.assertEquals(node4.getParent(), node2),
 
                 () -> Assertions.assertEquals(node3.getChildren(), new ArrayList<>(List.of(node5))),
-                () -> Assertions.assertEquals(node5.getParent(), node3)
+                () -> Assertions.assertEquals(node5.getParent(), node3),
+
+                () -> Assertions.assertTrue(tree.isLastValue(4)),
+                () -> Assertions.assertFalse(tree.isLastValue(5)),
+                () -> Assertions.assertFalse(tree.isLastValue(null))
         );
     }
 
@@ -161,9 +165,11 @@ public class TreeAllValuesTest {
     }
 
     @Test
-    public void testGetAllValues(){
+    public void testGetValues(){
         Assertions.assertAll(
-                () -> Assertions.assertEquals(tree.getAllValues(), new ArrayList<>(List.of(1,2,3,5,4)))
+                () -> Assertions.assertEquals(tree.getAllValues(), new ArrayList<>(List.of(1,2,3,5,4))),
+                () -> Assertions.assertEquals(tree.getNextValue(1), 2),
+                () -> Assertions.assertEquals(tree.getPreviousValue(2), 1)
         );
     }
 }

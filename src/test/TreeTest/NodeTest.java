@@ -14,6 +14,9 @@ public class NodeTest {
     private Node<Integer> node3;
     private Node<Integer> node4;
     private Node<Integer> node5;
+    private Node<Integer> node6;
+    private Node<Integer> node7;
+
     @BeforeEach
     public void initialise(){
         node1 = new Node<>(1);
@@ -21,6 +24,8 @@ public class NodeTest {
         node3 = new Node<>(3);
         node4 = new Node<>(4);
         node5 = new Node<>(5);
+        node6 = new Node<>(null);
+        node7 = new Node<>(7);
     }
 
 
@@ -29,8 +34,9 @@ public class NodeTest {
     public void testNode(){
         node1.addChildren(List.of(node2, node3));
         node3.addChild(node4);
-        node4.addChild(node5);
+        node4.addChildAt(node5, 0);
         Assertions.assertAll(
+                () -> Assertions.assertTrue(node1.hasValue()),
                 () -> Assertions.assertEquals(node1.getValue(), 1),
                 () -> Assertions.assertFalse(node1.hasParent()),
                 () -> Assertions.assertEquals(node1.getChildren(), new ArrayList<>(List.of(node2, node3))),
@@ -47,21 +53,36 @@ public class NodeTest {
                 () -> Assertions.assertTrue(node4.hasParent()),
 
                 () -> Assertions.assertEquals(node5.getValue(), 5),
-                () -> Assertions.assertEquals(node5.getChildren(), new ArrayList<>())
+                () -> Assertions.assertEquals(node5.getChildren(), new ArrayList<>()),
+
+                () -> Assertions.assertFalse(node6.hasValue()),
+                () -> Assertions.assertFalse(node6.hasChildren()),
+                () -> Assertions.assertFalse(node6.hasSingleChild())
+
         );
+        node6.addChild(node7);
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(node6.hasSingleChild())
+        );
+        node6.removeChild(node7);
+        Assertions.assertAll(
+                () -> Assertions.assertFalse(node6.hasSingleChild())
+        );
+
     }
 
-//    @Test
-//    public void testSibling(){
-//        node1.addChildren(List.of(node2, node3));
-//        node2.setParent(node1);
-//        node3.addChild(node4);
-//        node3.setParent(node1);
-//        node4.setParent(node3);
-//        node4.addChild(node5);
-//        Assertions.assertAll(
-//                () -> Assertions.assertTrue(node2.isSiblingWith(node3)),
-//                () -> Assertions.assertFalse(node3.isSiblingWith(node4))
-//        );
-//    }
+    @Test
+    public void testSibling(){
+        node1.addChildren(List.of(node2, node3));
+        node3.addChild(node4);
+        node4.addChild(node5);
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(node2.isSiblingWith(node3)),
+                () -> Assertions.assertFalse(node3.isSiblingWith(node4))
+        );
+        node1.replaceChild(node3, node6);
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(node6.isSiblingWith(node3))
+        );
+    }
 }
