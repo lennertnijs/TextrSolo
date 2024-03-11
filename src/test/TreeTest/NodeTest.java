@@ -17,6 +17,8 @@ public class NodeTest {
     private Node<Integer> node6;
     private Node<Integer> node7;
 
+    private Node<Integer> node8;
+
     @BeforeEach
     public void initialise(){
         node1 = new Node<>(1);
@@ -26,6 +28,7 @@ public class NodeTest {
         node5 = new Node<>(5);
         node6 = new Node<>(null);
         node7 = new Node<>(7);
+        node8 = new Node<>(7);
     }
 
 
@@ -84,6 +87,19 @@ public class NodeTest {
         node1.replaceChild(node3, node6);
         Assertions.assertAll(
                 () -> Assertions.assertTrue(node6.isSiblingWith(node3))
+        );
+    }
+    @Test
+    public void testEqualsAndHashCode(){
+        node7.addChild(node6);
+        node8.addChild(node6);
+        Assertions.assertAll(
+                () -> Assertions.assertNotEquals(node1, node2),
+                () -> Assertions.assertEquals(node7, node8),
+                () -> Assertions.assertNotEquals(node1, null),
+                () -> Assertions.assertNotEquals(node1, new Object()),
+                () -> Assertions.assertNotEquals(node1.hashCode(), node2.hashCode()),
+                () -> Assertions.assertEquals(node7.hashCode(), node8.hashCode())
         );
     }
 }
