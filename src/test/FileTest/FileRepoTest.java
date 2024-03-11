@@ -21,9 +21,9 @@ public class FileRepoTest {
     public void initialise(){
         FileIdGenerator.resetGenerator();
         repo = new FileRepo();
-        file1 = File.create("url", "text");
-        file2 = File.create("url", "text2");
-        file3 = File.create("url", "text3");
+        file1 = File.create("url");
+        file2 = File.create("url");
+        file3 = File.create("url");
     }
 
     @Test

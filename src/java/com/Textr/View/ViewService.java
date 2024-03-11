@@ -1,6 +1,7 @@
 package com.Textr.View;
 
 import com.Textr.File.File;
+import com.Textr.File.FileReader;
 import com.Textr.File.FileService;
 import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBuffer;
@@ -43,8 +44,8 @@ public final class ViewService {
 
     private FileBuffer createBuffer(File file){
         int id = file.getId();
-        Text text = Text.create(file.getText());
         Point insertionPoint = Point.create(0,0);
+        Text text = Text.create(FileReader.readContents(file.getUrl()));
         BufferState state = BufferState.CLEAN;
         return FileBuffer.builder().fileId(id).text(text).cursor(insertionPoint).state(state).build();
     }

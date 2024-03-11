@@ -51,7 +51,6 @@ public final class FileService {
     public void saveToFile(String text, int fileId){
         File file = fileRepo.get(fileId);
         FileWriter.write(text, file.getUrl());
-        file.setText(text);
     }
 
     /**
@@ -63,7 +62,7 @@ public final class FileService {
      */
     public void initialiseFile(String url){
         Validator.notNull(url, "Cannot initialise a File with a null url.");
-        File file = File.create(url, FileReader.readContents(url));
+        File file = File.create(url);
         fileRepo.add(file);
     }
 }

@@ -20,8 +20,8 @@ public class FileServiceTest {
     @BeforeEach
     public void initialise(){
         FileIdGenerator.resetGenerator();
-        file1 = File.create("resources/test.txt", "text1");
-        file2 = File.create("resources/test2.txt", "text2");
+        file1 = File.create("resources/test.txt");
+        file2 = File.create("resources/test2.txt");
         repo = new FileRepo();
         fileService = new FileService(repo);
     }
@@ -31,9 +31,7 @@ public class FileServiceTest {
         repo.add(file1);
         File file1Clone = fileService.getFile(0);
         Assertions.assertAll(
-                () -> Assertions.assertEquals(file1Clone, file1),
-                () -> file1Clone.setText("new text"),
-                () -> Assertions.assertNotEquals(file1Clone, file1)
+                () -> Assertions.assertEquals(file1Clone, file1)
         );
     }
 
@@ -43,9 +41,7 @@ public class FileServiceTest {
         repo.add(file2);
         List<File> files = fileService.getAllFiles();
         Assertions.assertAll(
-                () -> Assertions.assertEquals(files, new ArrayList<>(List.of(file1, file2))),
-                () -> files.get(0).setText("new text for test"),
-                () -> Assertions.assertNotEquals(files, new ArrayList<>(List.of(file1, file2)))
+                () -> Assertions.assertEquals(files, new ArrayList<>(List.of(file1, file2)))
         );
     }
 
@@ -54,8 +50,6 @@ public class FileServiceTest {
         fileService.initialiseFile("resources/test.txt");
         Assertions.assertAll(
                 () -> Assertions.assertEquals(fileService.getAllFiles().size(), 1),
-                () -> Assertions.assertThrows(IllegalArgumentException.class,
-                        () -> fileService.initialiseFile("random_url")),
                 () -> Assertions.assertEquals(fileService.getAllFiles().size(), 1)
         );
     }
