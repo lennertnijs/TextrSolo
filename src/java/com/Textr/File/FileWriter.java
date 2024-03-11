@@ -1,6 +1,7 @@
 package com.Textr.File;
 
 import com.Textr.Input.InputHandlerRepo;
+import com.Textr.Settings;
 import com.Textr.Util.Validator;
 
 import java.io.BufferedWriter;
@@ -28,7 +29,7 @@ public final class FileWriter {
         Validator.notNull(fileLocation, "File location to write to may not be null.");
         Validator.notNull(data, "Data to write may not be null.");
         try (BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileLocation))) {
-            writer.write(data);
+            writer.write(data.replace(System.lineSeparator(), Settings.defaultLineSeparator));
         }catch(IOException e){
             InputHandlerRepo.setAnythingInputHandler();
         }

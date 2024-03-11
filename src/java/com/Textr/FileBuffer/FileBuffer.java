@@ -1,6 +1,7 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
+import com.Textr.File.FileReader;
 import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
 import com.Textr.Util.Direction;
@@ -10,36 +11,30 @@ import com.Textr.Util.Direction;
  */
 public final class FileBuffer {
 
-    private final int fileId;
+    private final File file;
     private final Text text;
     private final Point cursor;
     private BufferState state;
 
-    /**
-     * Constructor for a file buffer.
-     * A file buffer is used to temporarily store changes to the file's text until the changes are saved.
-     * @param builder The file buffer builder. Cannot be null.
-     */
-    private FileBuffer(Builder builder){
-        Validator.notNull(builder, "Cannot build a FileBuffer because the Builder is null.");
-        this.fileId = builder.fileId;
-        this.text = builder.text;
-        this.cursor = builder.cursor;
-        this.state = builder.state;
-    }
-
-    private FileBuffer(int fileId, Text text, Point cursor, BufferState state){
-        this.fileId = fileId;
+    private FileBuffer(File file, Text text, Point cursor, BufferState state){
+        this.file = file;
         this.text = text;
         this.cursor = cursor;
         this.state = state;
     }
 
+    public static FileBuffer createFromFilePath(String url){
+        Validator.notNull(url, "Cannot create a FileBuffer from a null url.");
+        File f = File.create(url);
+        Text t = Text.create(FileReader.readContents(url));
+        return new FileBuffer(f, t, Point.create(0,0), BufferState.CLEAN);
+    }
+
     /**
      * @return This file buffer's {@link File} id.
      */
-    public int getFileId(){
-        return this.fileId;
+    public File getFile(){
+        return this.file;
     }
 
     /**
@@ -101,8 +96,10 @@ public final class FileBuffer {
      * Used when backspace is pressed.
      */
     public void removeCharacterBefore(){
-        text.removeCharacter(cursor.getY(), cursor.getX() - 1);
+        int oldY = cursor.getY();
+        int oldX = cursor.getX();
         CursorMover.move(cursor, Direction.LEFT, text);
+        text.removeCharacter(oldY, oldX - 1);
     }
 
     /**
@@ -139,7 +136,7 @@ public final class FileBuffer {
         if(!(o instanceof FileBuffer fileBuffer)){
             return false;
         }
-        return this.fileId == fileBuffer.fileId &&
+        return this.file.equals(fileBuffer.file) &&
                 this.text.equals(fileBuffer.text) &&
                 this.cursor.equals(fileBuffer.cursor) &&
                 this.state == fileBuffer.state;
@@ -152,7 +149,7 @@ public final class FileBuffer {
      */
     @Override
     public int hashCode(){
-        int result = fileId;
+        int result = file.hashCode();
         result = 31 * result + text.hashCode();
         result = 31 * result + cursor.hashCode();
         result = 31 * result + state.hashCode();
@@ -166,99 +163,11 @@ public final class FileBuffer {
      */
     @Override
     public String toString(){
-        return String.format("FileBuffer[fileId = %d, text = %s, cursor = %s, state = %s]",
-                fileId, text, cursor, state);
+        return String.format("FileBuffer[fileId = %s, text = %s, cursor = %s, state = %s]",
+                file, text, cursor, state);
     }
 
     public FileBuffer copy(){
-        return new FileBuffer(this.fileId, this.text.copy(), this.cursor.copy(), this.state);
-    }
-
-    /**
-     * Creates and returns a new {@link FileBuffer.Builder} to build a {@link FileBuffer} with.
-     * @return The builder.
-     */
-    public static Builder builder(){
-        return new Builder();
-    }
-
-    /**
-     * Used to build valid {@link FileBuffer} instances with.
-     * To obtain a {@link FileBuffer.Builder}, use FileBuffer.builder();
-     */
-    public static class Builder{
-
-        private int fileId = -1;
-        private Text text = null;
-        private Point cursor = null;
-        private BufferState state = null;
-
-        private Builder(){
-        }
-
-        /**
-         * Sets the active file id of this builder to the given id.
-         * @param id The id
-         *
-         * @return The builder
-         */
-        public Builder fileId(int id){
-            this.fileId = id;
-            return this;
-        }
-
-        /**
-         * Sets the text of this buffer to the given text.
-         * @param text The text
-         *
-         * @return The builder
-         */
-        public Builder text(Text text){
-            this.text = text.copy();
-            return this;
-        }
-
-        /**
-         * Sets the cursor of this buffer to the given cursor.
-         * @param cursor The cursor
-         *
-         * @return The builder
-         */
-        public Builder cursor(Point cursor){
-            this.cursor = cursor.copy();
-            return this;
-        }
-
-        /**
-         * Sets the state of this buffer to the given state.
-         * @param state The state
-         *
-         * @return This builder
-         */
-        public Builder state(BufferState state){
-            this.state = state;
-            return this;
-        }
-
-
-        /**
-         * Validates all the fields of this builder.
-         * If all are valid, creates and returns a new {@link FileBuffer} with these fields.
-         * More precisely, the following conditions must hold on the fields:
-         * - The active file id cannot be negative.
-         * - The text cannot be null.
-         * - The cursor cannot be null.
-         * - The state cannot be null.
-         *
-         * @return The new file buffer.
-         * @throws  IllegalArgumentException If any of the fields are invalid.
-         */
-        public FileBuffer build(){
-            Validator.notNegative(fileId, "The id the File in the FileBuffer cannot be negative.");
-            Validator.notNull(text, "The text in the FileBuffer cannot be null.");
-            Validator.notNull(cursor, "The cursor of the FileBuffer cannot be null.");
-            Validator.notNull(state,"The state of the FileBuffer cannot be null.");
-            return new FileBuffer(this);
-        }
+        return new FileBuffer(this.file.copy(), this.text.copy(), this.cursor.copy(), this.state);
     }
 }

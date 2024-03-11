@@ -37,5 +37,16 @@ public final class ViewDrawer{
         }
         int maxStatusBarIndex = Math.min(view.getDimensions().getWidth(), statusBar.length());
         TerminalService.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
+        drawScrollBar(view);
     }
+
+    private static void drawScrollBar(View view){
+        int maxY = view.getBuffer().getText().getAmountOfLines() - 1;
+        int currentY = view.getBuffer().getCursor().getY();
+        int yBar = Math.round(((float)currentY / (float)maxY) * (view.getDimensions().getHeight() - 1));
+        TerminalService.printText(view.getPosition().getX() + view.getDimensions().getWidth() - 1,
+                                                            yBar + view.getPosition().getY(), "|");
+    }
+
+
 }

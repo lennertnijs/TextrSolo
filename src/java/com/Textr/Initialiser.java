@@ -1,6 +1,5 @@
 package com.Textr;
 
-import com.Textr.File.FileService;
 import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.View.ViewService;
@@ -10,19 +9,17 @@ import java.util.Arrays;
 public class Initialiser {
 
 
-    public static void initialise(FileService fileService, ViewService viewService, String[] args){
+    public static void initialise(ViewService viewService, String[] args){
         loadDefaultLineSeparator();
         String[] filePaths = handleArguments(args);
-        InputHandlerRepo.initialiseInputHandlers(viewService);
-
         TerminalService.enterRawInputMode();
         TerminalService.clearScreen();
-
-        for(String file: filePaths){
-            fileService.initialiseFile(file);
+        if(filePaths.length > TerminalService.getTerminalArea().getHeight() / 2){
+            throw new IllegalArgumentException("Too many input files.");
         }
+        InputHandlerRepo.initialiseInputHandlers(viewService);
 
-        viewService.initialiseViewsForAllFiles();
+        viewService.initialiseViews(filePaths);
         viewService.drawAll();
     }
 
@@ -44,7 +41,6 @@ public class Initialiser {
         String str = input.replace("--", "");
         switch (str) {
             case "lf" -> Settings.defaultLineSeparator = "\n";
-            case "cr" -> Settings.defaultLineSeparator = "\r";
             case "crlf" -> Settings.defaultLineSeparator = "\r\n";
         }
     }
@@ -60,7 +56,7 @@ public class Initialiser {
     }
 
     private static void validateLineSeparator(String lineSeparator){
-        if(lineSeparator.equals("\n") || lineSeparator.equals("\r") || lineSeparator.equals("\r\n")){
+        if(lineSeparator.equals("\n") || lineSeparator.equals("\r\n")){
             return;
         }
         throw new IllegalStateException("This line separator is not supported.");

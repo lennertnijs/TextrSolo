@@ -1,11 +1,10 @@
 package com.Textr.View;
 
-import com.Textr.File.File;
-import com.Textr.File.FileService;
+import com.Textr.File.FileWriter;
 import com.Textr.FileBuffer.BufferState;
 import com.Textr.FileBuffer.FileBuffer;
-import com.Textr.FileBuffer.Text;
 import com.Textr.Input.InputHandlerRepo;
+import com.Textr.Settings;
 import com.Textr.Terminal.TerminalService;
 import com.Textr.Util.Dimension2D;
 import com.Textr.Util.Direction;
@@ -16,13 +15,10 @@ import com.Textr.Drawer.ViewDrawer;
 import io.github.btj.termios.Terminal;
 
 public final class ViewService {
-    private final FileService fileService;
     private final IViewRepo viewRepo;
 
-    public ViewService(FileService fileService, IViewRepo viewRepo){
-        Validator.notNull(fileService, "Cannot initiate a ViewService with a null FileService.");
+    public ViewService(IViewRepo viewRepo){
         Validator.notNull(viewRepo, "Cannot initiate a ViewService with a null IViewRepo");
-        this.fileService = fileService;
         this.viewRepo = viewRepo;
         LayoutGenerator.setViewRepo(viewRepo);
     }
@@ -30,30 +26,21 @@ public final class ViewService {
     /**
      * Creates and stores Views for all the existing Files.
      */
-    public void initialiseViewsForAllFiles(){
-        for(File file : fileService.getAllFiles()){
-            FileBuffer buffer = createBuffer(file);
-            View view = createView(buffer);
+    public void initialiseViews(String[] filePaths){
+        if(filePaths.length == 0){
+            Settings.RUNNING = false;
+            return;
+        }
+        for(String url : filePaths){
+            Point dummyPosition = Point.create(0, 0);
+            Dimension2D dummyDimensions = Dimension2D.create(1,1);
+            View view = View.createFromFilePath(url, dummyPosition, dummyDimensions);
             viewRepo.add(view);
         }
         viewRepo.setActive(viewRepo.get(0));
         generateViewPositionsAndDimensions();
     }
 
-    private FileBuffer createBuffer(File file){
-        int id = file.getId();
-        Text text = Text.create(file.getText());
-        Point insertionPoint = Point.create(0,0);
-        BufferState state = BufferState.CLEAN;
-        return FileBuffer.builder().fileId(id).text(text).cursor(insertionPoint).state(state).build();
-    }
-
-    private View createView(FileBuffer buffer){
-        Point dummyPoint = Point.create(0, 0);
-        Dimension2D dummyDimensions = Dimension2D.create(1,1);
-        Point anchor = Point.create(0,0);
-        return View.builder().buffer(buffer).position(dummyPoint).dimensions(dummyDimensions).anchor(anchor).build();
-    }
 
     /**
      * Sets positions & dimensions for all the existing Views, according to their hierarchical structure.
@@ -82,7 +69,8 @@ public final class ViewService {
     public void drawAll(){
         TerminalService.clearScreen();
         for(View view: viewRepo.getAll()){
-            String statusBar = generateStatusBar(view.getBuffer());
+            FileBuffer buffer = view.getBuffer();
+            String statusBar = viewRepo.getActive().equals(view) ? "ACTIVE: " + generateStatusBar(buffer) : generateStatusBar(buffer);
             ViewDrawer.draw(view, statusBar);
         }
         CursorDrawer.draw(getActiveView().getPosition(), getAnchor(), getActiveBuffer().getCursor());
@@ -97,11 +85,12 @@ public final class ViewService {
      */
     private String generateStatusBar(FileBuffer buffer){
         Validator.notNull(buffer, "Cannot generate a status bar for a null FileBuffer.");
-        return String.format("File path: %s - Lines: %d - Characters: %d - InsertionPoint: %s - State: %s",
-                fileService.getFile(buffer.getFileId()).getUrl(),
+        return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: (line, col) = (%d, %d) - State: %s",
+                buffer.getFile().getUrl(),
                 buffer.getText().getAmountOfLines(),
                 buffer.getText().getAmountOfChars(),
-                buffer.getCursor(),
+                buffer.getCursor().getY(),
+                buffer.getCursor().getX(),
                 buffer.getState());
     }
 
@@ -136,6 +125,7 @@ public final class ViewService {
     public void insertCharacter(char character){
         getActiveBuffer().insertCharacter(character);
         getActiveBuffer().setState(BufferState.DIRTY);
+        updateAnchor();
     }
 
     /**
@@ -172,6 +162,10 @@ public final class ViewService {
      * Then updates the views to take up the screen.
      */
     public void deleteView(){
+        if(viewRepo.getSize() == 1){
+            Settings.RUNNING = false;
+            return;
+        }
         View oldActive = getActiveView();
         viewRepo.setNextActive();
         viewRepo.remove(oldActive);
@@ -184,8 +178,7 @@ public final class ViewService {
      * Saves the active View's buffer changes permanently.
      */
     public void saveBuffer(){
-        String text = getActiveBuffer().getText().getText();
-        fileService.saveToFile(text, getActiveBuffer().getFileId());
+        FileWriter.write(getActiveBuffer().getText().getText(), getActiveBuffer().getFile().getUrl());
         getActiveBuffer().setState(BufferState.CLEAN);
     }
 

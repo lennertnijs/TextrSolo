@@ -7,7 +7,7 @@ import com.Textr.Util.Validator;
 /**
  * Updates the anchor point of a View.
  */
-public class AnchorUpdater {
+public final class AnchorUpdater {
 
     /**
      * Private constructor. Not for use.
