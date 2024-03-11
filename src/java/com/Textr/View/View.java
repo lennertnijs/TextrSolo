@@ -24,12 +24,12 @@ public final class View {
 
     }
 
-    public static View create(FileBuffer buffer, Point position, Dimension2D dimensions, Point anchor){
-        Validator.notNull(buffer, "The id of the FileBuffer of the View cannot be negative.");
+    public static View createFromFilePath(String url, Point position, Dimension2D dimensions){
+        Validator.notNull(url, "The url of a file buffer cannot be null.");
         Validator.notNull(position, "The global position of the View in the Terminal cannot be null.");
         Validator.notNull(dimensions, "The dimensions of the View cannot be null.");
-        Validator.notNull(anchor, "The anchor of the View cannot be null");
-        return new View(buffer.copy(), position.copy(), dimensions.copy(), anchor.copy());
+        FileBuffer b = FileBuffer.createFromFilePath(url);
+        return new View(b, position.copy(), dimensions.copy(), Point.create(0,0));
     }
 
     public FileBuffer getBuffer(){

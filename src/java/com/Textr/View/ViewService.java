@@ -6,6 +6,7 @@ import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.Input.InputHandlerRepo;
 import com.Textr.Settings;
 import com.Textr.Terminal.TerminalService;
+import com.Textr.Util.Dimension2D;
 import com.Textr.Util.Direction;
 import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
@@ -31,7 +32,9 @@ public final class ViewService {
             return;
         }
         for(String url : filePaths){
-            View view = ViewFactory.create(url);
+            Point dummyPosition = Point.create(0, 0);
+            Dimension2D dummyDimensions = Dimension2D.create(1,1);
+            View view = View.createFromFilePath(url, dummyPosition, dummyDimensions);
             viewRepo.add(view);
         }
         viewRepo.setActive(viewRepo.get(0));

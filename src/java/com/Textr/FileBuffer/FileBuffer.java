@@ -1,6 +1,7 @@
 package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
+import com.Textr.File.FileReader;
 import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
 import com.Textr.Util.Direction;
@@ -22,12 +23,11 @@ public final class FileBuffer {
         this.state = state;
     }
 
-    public static FileBuffer create(File file, Text text, Point cursor, BufferState state){
-        Validator.notNull(file, "The id the File in the FileBuffer cannot be negative.");
-        Validator.notNull(text, "The text in the FileBuffer cannot be null.");
-        Validator.notNull(cursor, "The cursor of the FileBuffer cannot be null.");
-        Validator.notNull(state,"The state of the FileBuffer cannot be null.");
-        return new FileBuffer(file.copy(), text.copy(), cursor.copy(), state);
+    public static FileBuffer createFromFilePath(String url){
+        Validator.notNull(url, "Cannot create a FileBuffer from a null url.");
+        File f = File.create(url);
+        Text t = Text.create(FileReader.readContents(url));
+        return new FileBuffer(f, t, Point.create(0,0), BufferState.CLEAN);
     }
 
     /**
