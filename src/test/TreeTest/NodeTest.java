@@ -57,7 +57,8 @@ public class NodeTest {
 
                 () -> Assertions.assertFalse(node6.hasValue()),
                 () -> Assertions.assertFalse(node6.hasChildren()),
-                () -> Assertions.assertFalse(node6.hasSingleChild())
+                () -> Assertions.assertFalse(node6.hasSingleChild()),
+                () -> Assertions.assertFalse(node1.hasSingleChild())
 
         );
         node6.addChild(node7);
