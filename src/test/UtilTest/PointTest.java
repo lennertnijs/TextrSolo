@@ -1,4 +1,4 @@
-package Point;
+package UtilTest;
 
 import com.Textr.Util.Point;
 import org.junit.jupiter.api.Assertions;
