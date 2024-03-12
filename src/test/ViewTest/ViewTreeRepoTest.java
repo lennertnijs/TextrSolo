@@ -58,7 +58,6 @@ public class ViewTreeRepoTest {
         terminalDimensions = Dimension2D.create(100,100);
         LayoutGenerator.generate(terminalDimensions);
     }
-
     @Test
     public void testAdd(){
         Assertions.assertAll(
@@ -72,7 +71,35 @@ public class ViewTreeRepoTest {
                 () -> Assertions.assertTrue(repo.getAllAtDepth(1).contains(view3) )
         );
     }
+    @Test
+    public void testSetActive(){
+        repo.setActive(view1);
+        Assertions.assertEquals(repo.getActive(), view1);
+    }
+    @Test
+    public void testrootIsVertical(){
+        Assertions.assertTrue(repo.rootIsVertical());
+    }
 
+    @Test
+    public void testsetActiveNext(){
+        repo.setActive(view1);
+        repo.setNextActive();
+        Assertions.assertEquals(repo.getActive(), view2);
+        repo.rotate(true);
+        repo.setNextActive();
+        Assertions.assertEquals(repo.getActive(), view4);
+        repo.setPreviousActive();
+        Assertions.assertEquals(repo.getActive(), view2);
+    }
+
+    @Test
+    public void testRemove(){
+        repo.remove(view3);
+        Assertions.assertFalse(repo.getAll().contains(view3));
+        repo.removeAll();
+        Assertions.assertTrue(repo.getAll().isEmpty());
+    }
     @Test
     public void rotateTest(){
         repo.setActive(view2);
