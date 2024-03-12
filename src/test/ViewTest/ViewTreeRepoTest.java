@@ -91,51 +91,110 @@ public class ViewTreeRepoTest {
                 () -> Assertions.assertEquals(repo.getAllAtDepth(2), List.of(view3, view2))
         );
         LayoutGenerator.generate(terminalDimensions);
+        repo.setActive(view3);
+        repo.rotate(true);
+        Assertions.assertAll(
+                () -> {
+                    List<View> actual = new ArrayList<>();
+                    actual.add(view1);
+                    actual.add(view3);
+                    actual.add(view2);
+                    actual.add(view4);
+                    actual.add(view5);
+                    actual.add(view6);
+                    Assertions.assertEquals(repo.getAllAtDepth(1), actual);
+                }
+        );
+        LayoutGenerator.generate(terminalDimensions);
+        repo.setActive(view2);
+        repo.rotate(false);
+        Assertions.assertAll(
+                () -> {
+                    List<View> actual = new ArrayList<>();
+                    actual.add(view1);
+                    actual.add(view3);
+                    actual.add(null);
+                    actual.add(view5);
+                    actual.add(view6);
+                    Assertions.assertEquals(repo.getAllAtDepth(1), actual);
+                },
+                () -> Assertions.assertEquals(repo.getAllAtDepth(2), List.of(view2, view4))
+        );
+        LayoutGenerator.generate(terminalDimensions);
+        repo.setActive(view4);
+        repo.rotate(true);
+        Assertions.assertAll(
+                () -> {
+                    List<View> actual = new ArrayList<>();
+                    actual.add(view1);
+                    actual.add(view3);
+                    actual.add(null);
+                    actual.add(view6);
+                    Assertions.assertEquals(repo.getAllAtDepth(1), actual);
+                },
+                () -> Assertions.assertEquals(repo.getAllAtDepth(2), List.of(view2, view5, view4))
+        );
+        LayoutGenerator.generate(terminalDimensions);
+        repo.setActive(view4);
+        repo.rotate(false);
+        Assertions.assertAll(
+                () -> {
+                    List<View> actual = new ArrayList<>();
+                    actual.add(view1);
+                    actual.add(view3);
+                    actual.add(null);
+                    Assertions.assertEquals(repo.getAllAtDepth(1), actual);
+                },
+                () -> Assertions.assertEquals(repo.getAllAtDepth(2), List.of(view2, view5, view4, view6))
+        );
+        LayoutGenerator.generate(terminalDimensions);
+
+        repo.setActive(view3);
+        repo.rotate(false);
+        Assertions.assertAll(
+                () -> {
+                    List<View> actual = new ArrayList<>();
+                    actual.add(view1);
+                    actual.add(view3);
+                    actual.add(view2);
+                    actual.add(null);
+                    Assertions.assertEquals(repo.getAllAtDepth(1), actual);
+                },
+                () -> Assertions.assertEquals(repo.getAllAtDepth(2), List.of(view5, view4, view6))
+        );
+        LayoutGenerator.generate(terminalDimensions);
+
         repo.setActive(view2);
         repo.rotate(true);
+        Assertions.assertAll(
+                () -> {
+                    List<View> actual = new ArrayList<>();
+                    actual.add(view1);
+                    actual.add(view3);
+                    actual.add(view5);
+                    actual.add(view2);
+                    actual.add(null);
+                    Assertions.assertEquals(repo.getAllAtDepth(1), actual);
+                },
+                () -> Assertions.assertEquals(repo.getAllAtDepth(2), List.of(view4, view6))
+        );
+        LayoutGenerator.generate(terminalDimensions);
 
-//        Assertions.assertAll(
-//                () -> Assertions.assertEquals(tree.getSize(), 6),
-//                () -> Assertions.assertEquals(tree.getSizeValuesOnly(), 5),
-//                () -> Assertions.assertEquals(tree.getDepth(0), 1),
-//                () -> Assertions.assertEquals(tree.getDepth(1), 2),
-//                () -> Assertions.assertEquals(tree.getDepth(2), 2),
-//                () -> Assertions.assertEquals(tree.getDepth(3), 2),
-//                () -> Assertions.assertEquals(tree.getDepth(4), 1)
-//        );
-//
-//        repo.rotateClockWise(2,3);
-//        Assertions.assertAll(
-//                () -> Assertions.assertEquals(tree.getSize(), 7),
-//                () -> Assertions.assertEquals(tree.getSizeValuesOnly(), 5),
-//                () -> Assertions.assertEquals(tree.getDepth(0), 1),
-//                () -> Assertions.assertEquals(tree.getDepth(1), 2),
-//                () -> Assertions.assertEquals(tree.getDepth(2), 3),
-//                () -> Assertions.assertEquals(tree.getDepth(3), 3),
-//                () -> Assertions.assertEquals(tree.getDepth(4), 1)
-//        );
-//
-//        repo.rotateClockWise(2,3);
-//        Assertions.assertAll(
-//                () -> Assertions.assertEquals(tree.getSize(), 8),
-//                () -> Assertions.assertEquals(tree.getSizeValuesOnly(), 5),
-//                () -> Assertions.assertEquals(tree.getDepth(0), 1),
-//                () -> Assertions.assertEquals(tree.getDepth(1), 2),
-//                () -> Assertions.assertEquals(tree.getDepth(2), 4),
-//                () -> Assertions.assertEquals(tree.getDepth(3), 4),
-//                () -> Assertions.assertEquals(tree.getDepth(4), 1)
-//        );
-//
-//        repo.rotateClockWise(3,4);
-//        Assertions.assertAll(
-//                () -> Assertions.assertEquals(tree.getSize(), 8),
-//                () -> Assertions.assertEquals(tree.getSizeValuesOnly(), 5),
-//                () -> Assertions.assertEquals(tree.getDepth(0), 1),
-//                () -> Assertions.assertEquals(tree.getDepth(1), 2),
-//                () -> Assertions.assertEquals(tree.getDepth(2), 4),
-//                () -> Assertions.assertEquals(tree.getDepth(3), 4),
-//                () -> Assertions.assertEquals(tree.getDepth(4), 4)
-//        );
+        repo.setActive(view3);
+        repo.rotate(false);
+        Assertions.assertAll(
+                () -> {
+                    List<View> actual = new ArrayList<>();
+                    actual.add(view1);
+                    actual.add(null);
+                    actual.add(view2);
+                    actual.add(null);
+                    Assertions.assertEquals(repo.getAllAtDepth(1), actual);
+                },
+                () -> Assertions.assertEquals(repo.getAllAtDepth(2), List.of(view3,view5,view4, view6))
+
+        );
+        LayoutGenerator.generate(terminalDimensions);
     }
 
 }
