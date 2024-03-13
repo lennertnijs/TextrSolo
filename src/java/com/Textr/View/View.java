@@ -71,7 +71,7 @@ public final class View {
      * @param dimensions = the new dimensions of the view
      */
     public void setDimensions(Dimension2D dimensions){
-        Validator.notNull(position, "Error: Cannot set the new Dimension of a View to null.");
+        Validator.notNull(dimensions, "Error: Cannot set the new Dimension of a View to null.");
         this.dimensions = dimensions;
     }
 
