@@ -45,16 +45,14 @@ public final class Text {
      */
     public static Text create(String text){
         Validator.notNull(text, "Cannot create a Text with a null text.");
-        return new Text(text.split(System.lineSeparator()));
+        return new Text(text.split(System.lineSeparator(), -1)); // -1 to keep trailing empty strings
     }
 
     /**
      * @return This text's lines.
      */
     public String[] getLines(){
-        String[] linesCopy = new String[lines.length];
-        System.arraycopy(lines, 0, linesCopy, 0, lines.length);
-        return linesCopy;
+        return Arrays.copyOf(lines, lines.length);
     }
 
     /**
