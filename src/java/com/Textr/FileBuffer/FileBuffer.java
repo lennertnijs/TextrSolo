@@ -2,6 +2,7 @@ package com.Textr.FileBuffer;
 
 import com.Textr.File.File;
 import com.Textr.File.FileReader;
+import com.Textr.File.FileWriter;
 import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
 import com.Textr.Util.Direction;
@@ -121,6 +122,10 @@ public final class FileBuffer {
         CursorMover.move(cursor, Direction.RIGHT, text);
     }
 
+    public void writeToDisk(){
+        FileWriter.write(this.getText().getText(), this.getFile().getUrl());
+        this.setState(BufferState.CLEAN);
+    }
 
     /**
      * Compares this file buffer to the given object and returns True if they're equal.

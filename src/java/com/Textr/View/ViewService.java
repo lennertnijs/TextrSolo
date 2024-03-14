@@ -178,8 +178,7 @@ public final class ViewService {
      * Saves the active View's buffer changes permanently.
      */
     public void saveBuffer(){
-        FileWriter.write(getActiveBuffer().getText().getText(), getActiveBuffer().getFile().getUrl());
-        getActiveBuffer().setState(BufferState.CLEAN);
+        getActiveBuffer().writeToDisk();
     }
 
     /**
