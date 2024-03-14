@@ -36,8 +36,6 @@ public class ViewTest {
 
     @Test
     public void testCreateFromFilePath_ValidArguments() {
-
-        Settings.defaultLineSeparator = "\r\n";
         View view1 = View.createFromFilePath(url, initPoint, initDimension);
         FileBuffer b = FileBuffer.createFromFilePath(url);
 
@@ -50,7 +48,6 @@ public class ViewTest {
 
     @Test
     public void testSetPosition_Invalid() {
-        Settings.defaultLineSeparator = "\r\n";
         View view1 = View.createFromFilePath(url, initPoint, initDimension);
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             view1.setPosition(null);
@@ -58,7 +55,6 @@ public class ViewTest {
     }
     @Test
     public void testSetDimensions_Invalid() {
-        Settings.defaultLineSeparator = "\r\n";
         View view1 = View.createFromFilePath(url, initPoint, initDimension);
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             view1.setDimensions(null);
@@ -67,7 +63,6 @@ public class ViewTest {
     }
     @Test
     public void testSetArguments_Valid() {
-        Settings.defaultLineSeparator = "\r\n";
         View view1 = View.createFromFilePath(url, initPoint, initDimension);
         view1.setPosition(initPoint2);
         view1.setDimensions(initDimension2);
@@ -79,7 +74,6 @@ public class ViewTest {
 
     @Test
     public void testEquals() {
-        Settings.defaultLineSeparator = "\r\n";
         View view1 = View.createFromFilePath(url, initPoint, initDimension);
         View view2 = view1.copy();
         View view3 = View.createFromFilePath(url2, initPoint, initDimension);
@@ -94,7 +88,6 @@ public class ViewTest {
 
     @Test
     public void testHashCode() {
-        Settings.defaultLineSeparator = "\r\n";
         View view1 = View.createFromFilePath(url, initPoint, initDimension);
         View view2 = View.createFromFilePath(url2, initPoint2, initDimension2);
         int result = view1.getBuffer().hashCode();
@@ -107,7 +100,6 @@ public class ViewTest {
 
     @Test
     public void testToString() {
-
         Settings.defaultLineSeparator = "\r\n";
         View view1 = View.createFromFilePath(url, initPoint, initDimension);
         Assertions.assertEquals(view1.toString(), String.format("View[buffer = %s, position = %s, dimensions = %s, anchor = %s]",
@@ -116,7 +108,6 @@ public class ViewTest {
 
     @Test
     public void testLeftOff() {
-        Settings.defaultLineSeparator = "\r\n";
         View view1 = View.createFromFilePath(url, initPoint, initDimension);
         View view2 = View.createFromFilePath(url2, initPoint2, initDimension2);
         View view3 = view1.copy();
