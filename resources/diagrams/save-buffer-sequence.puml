@@ -1,0 +1,53 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+hide footbox
+
+actor User as u
+participant ":InputHandler" as ih
+participant "InputTranslator" as it
+participant ":ViewService" as vs
+participant "active:\nFileBuffer" as fb
+participant "text:\nText" as t
+participant "file:\nFile" as f
+participant "FileWriter" as fw
+
+u -> ih: input(CTRL+S)
+activate u
+activate ih
+
+ih -> it: TranslateBytes(CTRL+S)
+activate it
+it --> ih: Input.CTRL_S
+deactivate it
+
+ih -> vs: saveBuffer()
+activate vs
+
+vs -> vs: active := getActiveBuffer()
+vs -> fb: writeToDisk()
+activate fb
+
+fb -> fb: text := getText()
+fb -> t: content := getContent()
+activate t
+deactivate t
+
+fb -> fb: file := getFile()
+fb -> f: path := getPath()
+activate f
+deactivate f
+
+fb -> fw: write(content, path)
+activate fw
+deactivate fw
+
+fb -> fb: setState(BufferState.CLEAN)
+deactivate fb
+
+deactivate vs
+deactivate ih
+deactivate u
+
+
+@enduml

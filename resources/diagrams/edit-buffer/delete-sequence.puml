@@ -1,0 +1,46 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+hide footbox
+
+actor User as u
+participant ":InputHandler" as ih
+participant "InputTranslator" as it
+participant ":ViewService" as vs
+participant "active:\nFileBuffer" as fb
+participant "cursor:\nPoint" as p
+participant "text:\nText" as t
+
+u -> ih: input(Delete)
+activate u
+activate ih
+
+ih -> it: TranslateBytes(Delete)
+activate it
+it --> ih: Input.DELETE
+deactivate it
+
+ih -> vs: deleteNextChar()
+activate vs
+
+vs -> vs: active := getActiveBuffer()
+vs -> fb: removeCharacterAfter()
+activate fb
+
+fb -> p: y := getY()
+activate p
+fb -> p: x := getX()
+deactivate p
+
+fb -> t: text.removeCharacter(y, x)
+activate t
+deactivate t
+
+fb -> fb: setState(BufferState.DIRTY)
+deactivate fb
+deactivate vs
+deactivate ih
+deactivate u
+
+
+@enduml
