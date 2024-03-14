@@ -2,11 +2,9 @@ package ViewTest;
 
 import com.Textr.FileBuffer.BufferState;
 import com.Textr.Settings;
-import com.Textr.Tree.Tree;
 import com.Textr.Util.Dimension2D;
 import com.Textr.Util.Direction;
 import com.Textr.Util.Point;
-import com.Textr.Util.Validator;
 import com.Textr.View.LayoutGenerator;
 import com.Textr.View.View;
 import com.Textr.View.ViewService;
@@ -23,7 +21,6 @@ import static com.Textr.View.LayoutGenerator.setViewRepo;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ViewServiceTest {
-    private Dimension2D terminalDimensions;
     private ViewTreeRepo repo ;
     private ViewService viewService;
 
@@ -31,18 +28,11 @@ class ViewServiceTest {
 
     private View view2 ;
 
-    private View view3 ;
-
-    private View view4 ;
-
-    private View view5 ;
-
     private View view6 ;
 
-    private List<View> views;
     @BeforeEach
-    public void initialise(){
-        views = new ArrayList<>();
+    public void initialiseTest(){
+        List<View> views = new ArrayList<>();
         Point initPoint = Point.create(0,0);
         Dimension2D initDimension = Dimension2D.create(10,10);
         Settings.defaultLineSeparator = "\r\n";
@@ -50,11 +40,11 @@ class ViewServiceTest {
         views.add(view1);
         view2 = View.createFromFilePath("resources/test2ndfile.txt", initPoint, initDimension);
         views.add(view2);
-        view3 = View.createFromFilePath("resources/test3rdfile.txt", initPoint, initDimension);
+        View view3 = View.createFromFilePath("resources/test3rdfile.txt", initPoint, initDimension);
         views.add(view3);
-        view4 = View.createFromFilePath("resources/save.txt", initPoint, initDimension);
+        View view4 = View.createFromFilePath("resources/save.txt", initPoint, initDimension);
         views.add(view4);
-        view5 = View.createFromFilePath("resources/test2.txt", initPoint, initDimension);
+        View view5 = View.createFromFilePath("resources/test2.txt", initPoint, initDimension);
         views.add(view5);
         view6 = View.createFromFilePath("resources/test.txt", initPoint, initDimension);
         views.add(view6);
@@ -63,50 +53,75 @@ class ViewServiceTest {
         repo.addAll(views);
         repo.setActive(view1);
         viewService = new ViewService(repo);
-        terminalDimensions = Dimension2D.create(10,12);
+        Dimension2D terminalDimensions = Dimension2D.create(10, 12);
         LayoutGenerator.generate(terminalDimensions);
     }
 
     @AfterEach
-    void tearDown() {
-    }
+    void tearDown() {}
 
     @Test
-    void initialiseViews() {
+    public void ViewServiceTest_NullViewRepo(){
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new ViewService(null);
+        });
+    }
+    @Test
+    void initialiseViewsTest() {
         Assertions.assertEquals(repo.getSize(), 6);
+
+        String[] dummyArray = {};
+        viewService.initialiseViews(dummyArray);
+        Assertions.assertFalse(Settings.RUNNING);
     }
 
     @Test
-    void setActiveViewToNext() {
+    public void generateViewPositionsAndDimensionsTest(){
+    }
+    @Test
+    void setActiveViewToNextTest() {
         viewService.setActiveViewToNext();
         Assertions.assertEquals(repo.getActive(), view2);
+        viewService.setActiveViewToNext();
+        Assertions.assertNotEquals(repo.getActive(), view1);
     }
 
     @Test
-    void setActiveViewToPrevious() {
+    void setActiveViewToPreviousTest() {
         viewService.setActiveViewToNext();
         viewService.setActiveViewToPrevious();
         Assertions.assertEquals(repo.getActive(), view1);
+        Assertions.assertNotEquals(repo.getActive(), view2);
+        viewService.setActiveViewToPrevious();
+        Assertions.assertEquals(repo.getActive(), view6);
+        Assertions.assertNotEquals(repo.getActive(), view1);
     }
 
     @Test
-    void moveCursor() {
+    public void moveCursorTest() {
         for( int i=0; i<3; i++){
             viewService.moveCursor(Direction.DOWN);
         }
-        Assertions.assertTrue(repo.getActive().getAnchor().getY()==repo.getActive().getBuffer().getCursor().getY());
+        assertEquals(repo.getActive().getAnchor().getY(), repo.getActive().getBuffer().getCursor().getY());
     }
 
     @Test
-    void createNewline() {
+    public void moveCursorTest_NullDirection() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            viewService.moveCursor(null);
+        });
+    }
+
+    @Test
+    public void createNewlineTest() {
         for( int i=0; i<3; i++){
             viewService.createNewline();
         }
-        Assertions.assertTrue(repo.getActive().getAnchor().getY()==repo.getActive().getBuffer().getCursor().getY());
+        assertEquals(repo.getActive().getAnchor().getY(), repo.getActive().getBuffer().getCursor().getY());
     }
 
     @Test
-    void insertCharacter() {
+    public void insertCharacterTest() {
         for( int i=0; i<20; i++){
             viewService.insertCharacter('d');
         }
@@ -117,7 +132,7 @@ class ViewServiceTest {
     }
 
     @Test
-    void deletePrevChar() {
+    public void deletePrevCharTest() {
         Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
         for( int i=0; i<20; i++){
             viewService.insertCharacter('d');
@@ -131,7 +146,7 @@ class ViewServiceTest {
     }
 
     @Test
-    void deleteNextChar() {
+    public void deleteNextCharTest() {
         Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
         for( int i=0; i<20; i++){
             viewService.insertCharacter('d');
@@ -146,7 +161,7 @@ class ViewServiceTest {
     }
 
     @Test
-    void saveBuffer() {
+    public void saveBufferTest() {
         Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
         viewService.insertCharacter('d');
         Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.DIRTY);
