@@ -124,7 +124,6 @@ public final class ViewService {
      */
     public void insertCharacter(char character){
         getActiveBuffer().insertCharacter(character);
-        getActiveBuffer().setState(BufferState.DIRTY);
         updateAnchor();
     }
 

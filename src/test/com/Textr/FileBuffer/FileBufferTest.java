@@ -135,6 +135,7 @@ class FileBufferTest {
         CursorMover.move(cursorCopy, Direction.RIGHT, textCopy);
         assertEquals(textCopy, buffer.getText(), "Text object after character insertion is not as expected");
         assertEquals(cursorCopy, buffer.getCursor(), "Cursor object after character insertion is not as expected");
+        assertEquals(BufferState.DIRTY, buffer.getState(), "Buffer state is not DIRTY despite having been modified");
     }
 
     @Test
@@ -145,6 +146,9 @@ class FileBufferTest {
         assertDoesNotThrow(() -> buffer.removeCharacterBefore(), "removeCharacterBefore threw on valid input");
         assertEquals(textCopy, buffer.getText(), "Text object after no deletion is not as expected");
         assertEquals(cursorCopy, buffer.getCursor(), "Cursor object after no deletion is not as expected");
+        // BufferState may be DIRTY or CLEAN
+
+        buffer.setState(BufferState.CLEAN);
 
         // Set cursor to next line in text
         buffer.getCursor().setY(1);
@@ -158,6 +162,9 @@ class FileBufferTest {
         textCopy.removeCharacter(cursorCopy.getY(), cursorCopy.getX());
         assertEquals(textCopy, buffer.getText(), "Text object after character deletion is not as expected");
         assertEquals(cursorCopy, buffer.getCursor(), "Cursor object after character deletion is not as expected");
+        assertEquals(BufferState.DIRTY, buffer.getState(), "Buffer state is not DIRTY despite having been modified");
+
+        buffer.setState(BufferState.CLEAN);
 
         // Newline deletion
         assertDoesNotThrow(() -> buffer.removeCharacterBefore(), "removeCharacterBefore threw on valid input");
@@ -166,6 +173,7 @@ class FileBufferTest {
         textCopy.removeCharacter(cursorCopyCopy.getY(), cursorCopyCopy.getX() - 1);
         assertEquals(textCopy, buffer.getText(), "Text object after character insertion is not as expected");
         assertEquals(cursorCopy, buffer.getCursor(), "Cursor object after character insertion is not as expected");
+        assertEquals(BufferState.DIRTY, buffer.getState(), "Buffer state is not DIRTY despite having been modified");
     }
 
     @Test
@@ -181,12 +189,18 @@ class FileBufferTest {
         textCopy.removeCharacter(cursorCopy.getY(), cursorCopy.getX());
         assertEquals(textCopy, buffer.getText(), "Text object after character deletion is not as expected");
         assertEquals(cursorCopy, buffer.getCursor(), "Cursor object after character deletion is not as expected");
+        assertEquals(BufferState.DIRTY, buffer.getState(), "Buffer state is not DIRTY despite having been modified");
+
+        buffer.setState(BufferState.CLEAN);
 
         // Newline deletion
         assertDoesNotThrow(() -> buffer.removeCharacterAfter(), "removeCharacterAfter threw on valid input");
         textCopy.removeCharacter(cursorCopy.getY(), cursorCopy.getX());
         assertEquals(textCopy, buffer.getText(), "Text object after character deletion is not as expected");
         assertEquals(cursorCopy, buffer.getCursor(), "Cursor object after character deletion is not as expected");
+        assertEquals(BufferState.DIRTY, buffer.getState(), "Buffer state is not DIRTY despite having been modified");
+
+        buffer.setState(BufferState.CLEAN);
 
         // End of text deletion (no effect)
         buffer.getCursor().setY(buffer.getText().getAmountOfLines() - 1);
@@ -198,6 +212,9 @@ class FileBufferTest {
         assertDoesNotThrow(() -> buffer.removeCharacterAfter(), "removeCharacterAfter threw on valid input");
         assertEquals(cursorCopy, buffer.getCursor(), "Cursor changed after deletion at end of text");
         assertEquals(textCopy, buffer.getText(), "Text changed after deletion at end of text");
+        // BufferState may be DIRTY or CLEAN
+
+        buffer.setState(BufferState.CLEAN);
     }
 
     @Test
@@ -210,6 +227,9 @@ class FileBufferTest {
         assertEquals(2, buffer.getCursor().getY(), "Buffer cursor did not move to newly created line");
         assertEquals(0, buffer.getCursor().getX(), "Buffer cursor did not move to start of new line");
         assertEquals(textCopy, buffer.getText(), "Text object after newline injection is not as expected");
+        assertEquals(BufferState.DIRTY, buffer.getState(), "Buffer state is not DIRTY despite having been modified");
+
+        buffer.setState(BufferState.CLEAN);
     }
 
     @Test
