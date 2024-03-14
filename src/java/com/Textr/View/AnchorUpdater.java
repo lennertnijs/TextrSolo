@@ -20,7 +20,7 @@ public final class AnchorUpdater {
      * The anchor point represents the top-left point from which onwards a part of the buffer's text should be printed.
      * @param anchor The anchor. Cannot be null.
      * @param cursor The cursor. Cannot be null.
-     * @param dimensions The dimensions of the terminal. Cannot be nul.
+     * @param dimensions The dimensions of the terminal. Cannot be null.
      *
      * @throws IllegalArgumentException If the anchor, cursor or dimensions are null.
      */

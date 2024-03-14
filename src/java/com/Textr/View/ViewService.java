@@ -153,7 +153,7 @@ public final class ViewService {
             return;
         }
         Terminal.clearScreen();
-        TerminalService.printText(1, 1, "The buffer is dirty. Are you sure you want to delete it?");
+        TerminalService.printText(1, 1, "The buffer is dirty. Are you sure you want to delete it? [Y | N]");
         InputHandlerRepo.setCloseDirtyBufferInputHandler();
     }
 
