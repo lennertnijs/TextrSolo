@@ -1,6 +1,5 @@
-package UtilTest;
+package com.Textr.Util;
 
-import com.Textr.Util.Point;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +9,7 @@ public class PointTest {
     private Point point1;
     private Point point2;
     private Point point3;
+
     @BeforeEach
     public void initialise(){
         point1 = Point.create(1,2);

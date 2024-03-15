@@ -1,14 +1,11 @@
-package ViewTest;
+package com.Textr.View;
 
 import com.Textr.FileBuffer.BufferState;
 import com.Textr.Settings;
 import com.Textr.Util.Dimension2D;
 import com.Textr.Util.Direction;
 import com.Textr.Util.Point;
-import com.Textr.View.LayoutGenerator;
-import com.Textr.View.View;
-import com.Textr.View.ViewService;
-import com.Textr.View.ViewTreeRepo;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

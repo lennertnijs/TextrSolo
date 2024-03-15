@@ -1,7 +1,5 @@
-package TreeTest;
+package com.Textr.Tree;
 
-import com.Textr.Tree.Node;
-import com.Textr.Tree.Tree;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
