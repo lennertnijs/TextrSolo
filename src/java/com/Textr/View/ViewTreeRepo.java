@@ -143,7 +143,7 @@ public final class ViewTreeRepo implements IViewRepo {
 
 
     /**
-     * Rotates the active View and the next View CW / CCW & updates the tree appropriately, keeping its invariance.
+     * Rotates the active View and the next View CW / CCW and updates the tree appropriately, keeping its invariance.
      * @param clockwise The bool whether CW/CCW
      */
     @Override
@@ -159,7 +159,7 @@ public final class ViewTreeRepo implements IViewRepo {
      * Returns a List with all the Tree's values, in order, at the given depth. Null values mean a non-leaf node.
      * @param depth The depth. Cannot be negative or 0.
      *
-     * @return The values & nulls at the given depth.
+     * @return The values and nulls at the given depth.
      */
     @Override
     public List<View> getAllAtDepth(int depth){
