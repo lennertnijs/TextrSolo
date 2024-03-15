@@ -93,7 +93,7 @@ public final class Text {
     }
 
     /**
-     * Inserts the given character into this {@link Text} at the given 0-based row & column indices.
+     * Inserts the given character into this {@link Text} at the given 0-based row and column indices.
      * @param character The character
      * @param row The row index. Cannot be negative or bigger than the amount of lines in this text - 1.
      * @param col The column index. Cannot be negative or bigger than the length of the row.

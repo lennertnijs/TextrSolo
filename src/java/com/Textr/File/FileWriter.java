@@ -23,7 +23,6 @@ public final class FileWriter {
      *
      * @param data          The String to write.
      * @param fileLocation  The String holding the file location.
-     * @throws IOException when the file cannot be created or opened, or an error happens during writing.
      */
     public static void write(String data, String fileLocation){
         Validator.notNull(fileLocation, "File location to write to may not be null.");
