@@ -20,7 +20,7 @@ import java.util.List;
 import static com.Textr.View.LayoutGenerator.setViewRepo;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ViewServiceTest {
+public class ViewServiceTest {
     private ViewTreeRepo repo ;
     private ViewService viewService;
 
@@ -31,7 +31,7 @@ class ViewServiceTest {
     private View view6 ;
 
     @BeforeEach
-    public void initialiseTest(){
+    public void initialise(){
         List<View> views = new ArrayList<>();
         Point initPoint = Point.create(0,0);
         Dimension2D initDimension = Dimension2D.create(10,10);
@@ -58,16 +58,16 @@ class ViewServiceTest {
     }
 
     @AfterEach
-    void tearDown() {}
+    public void tearDown() {}
 
     @Test
-    public void ViewServiceTest_NullViewRepo(){
+    public void ViewService_NullViewRepo(){
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new ViewService(null);
         });
     }
     @Test
-    void initialiseViewsTest() {
+    public void initialiseViews() {
         Assertions.assertEquals(repo.getSize(), 6);
 
         String[] dummyArray = {};
@@ -76,29 +76,26 @@ class ViewServiceTest {
     }
 
     @Test
-    public void generateViewPositionsAndDimensionsTest(){
-    }
-    @Test
-    void setActiveViewToNextTest() {
+    public void setActiveViewToNext() {
         viewService.setActiveViewToNext();
-        Assertions.assertEquals(repo.getActive(), view2);
+        Assertions.assertSame(repo.getActive(), view2);
         viewService.setActiveViewToNext();
-        Assertions.assertNotEquals(repo.getActive(), view1);
+        Assertions.assertNotSame(repo.getActive(), view1);
     }
 
     @Test
-    void setActiveViewToPreviousTest() {
+    public void setActiveViewToPrevious() {
         viewService.setActiveViewToNext();
         viewService.setActiveViewToPrevious();
-        Assertions.assertEquals(repo.getActive(), view1);
-        Assertions.assertNotEquals(repo.getActive(), view2);
+        Assertions.assertSame(repo.getActive(), view1);
+        Assertions.assertNotSame(repo.getActive(), view2);
         viewService.setActiveViewToPrevious();
-        Assertions.assertEquals(repo.getActive(), view6);
-        Assertions.assertNotEquals(repo.getActive(), view1);
+        Assertions.assertSame(repo.getActive(), view6);
+        Assertions.assertNotSame(repo.getActive(), view1);
     }
 
     @Test
-    public void moveCursorTest() {
+    public void moveCursor() {
         for( int i=0; i<3; i++){
             viewService.moveCursor(Direction.DOWN);
         }
@@ -106,14 +103,14 @@ class ViewServiceTest {
     }
 
     @Test
-    public void moveCursorTest_NullDirection() {
+    public void moveCursor_NullDirection() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             viewService.moveCursor(null);
         });
     }
 
     @Test
-    public void createNewlineTest() {
+    public void createNewline() {
         for( int i=0; i<3; i++){
             viewService.createNewline();
         }
@@ -121,7 +118,7 @@ class ViewServiceTest {
     }
 
     @Test
-    public void insertCharacterTest() {
+    public void insertCharacter() {
         for( int i=0; i<20; i++){
             viewService.insertCharacter('d');
         }
@@ -132,7 +129,7 @@ class ViewServiceTest {
     }
 
     @Test
-    public void deletePrevCharTest() {
+    public void deletePrevChar() {
         Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
         for( int i=0; i<20; i++){
             viewService.insertCharacter('d');
@@ -146,7 +143,7 @@ class ViewServiceTest {
     }
 
     @Test
-    public void deleteNextCharTest() {
+    public void deleteNextChar() {
         Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
         for( int i=0; i<20; i++){
             viewService.insertCharacter('d');
@@ -161,7 +158,7 @@ class ViewServiceTest {
     }
 
     @Test
-    public void saveBufferTest() {
+    public void saveBuffer() {
         Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
         viewService.insertCharacter('d');
         Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.DIRTY);
