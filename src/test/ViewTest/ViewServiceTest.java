@@ -10,7 +10,6 @@ import com.Textr.View.View;
 import com.Textr.View.ViewService;
 import com.Textr.View.ViewTreeRepo;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +19,7 @@ import java.util.List;
 import static com.Textr.View.LayoutGenerator.setViewRepo;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ViewServiceTest {
+class ViewServiceTest {
     private ViewTreeRepo repo ;
     private ViewService viewService;
 
@@ -31,7 +30,7 @@ public class ViewServiceTest {
     private View view6 ;
 
     @BeforeEach
-    public void initialise(){
+    void initialise(){
         List<View> views = new ArrayList<>();
         Point initPoint = Point.create(0,0);
         Dimension2D initDimension = Dimension2D.create(10,10);
@@ -58,59 +57,56 @@ public class ViewServiceTest {
     }
 
     @AfterEach
-    public void tearDown() {}
+    void tearDown() {}
 
     @Test
-    public void ViewService_NullViewRepo(){
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new ViewService(null);
-        });
+    void ViewService_NullViewRepo(){
+        assertThrows(IllegalArgumentException.class, () -> new ViewService(null));
     }
+
     @Test
-    public void initialiseViews() {
-        Assertions.assertEquals(repo.getSize(), 6);
+    void initialiseViews() {
+        assertEquals(repo.getSize(), 6);
 
         String[] dummyArray = {};
         viewService.initialiseViews(dummyArray);
-        Assertions.assertFalse(Settings.RUNNING);
+        assertFalse(Settings.RUNNING);
     }
 
     @Test
-    public void setActiveViewToNext() {
+    void setActiveViewToNext() {
         viewService.setActiveViewToNext();
-        Assertions.assertSame(repo.getActive(), view2);
+        assertSame(repo.getActive(), view2);
         viewService.setActiveViewToNext();
-        Assertions.assertNotSame(repo.getActive(), view1);
+        assertNotSame(repo.getActive(), view1);
     }
 
     @Test
-    public void setActiveViewToPrevious() {
+    void setActiveViewToPrevious() {
         viewService.setActiveViewToNext();
         viewService.setActiveViewToPrevious();
-        Assertions.assertSame(repo.getActive(), view1);
-        Assertions.assertNotSame(repo.getActive(), view2);
+        assertSame(repo.getActive(), view1);
+        assertNotSame(repo.getActive(), view2);
         viewService.setActiveViewToPrevious();
-        Assertions.assertSame(repo.getActive(), view6);
-        Assertions.assertNotSame(repo.getActive(), view1);
+        assertSame(repo.getActive(), view6);
+        assertNotSame(repo.getActive(), view1);
     }
 
     @Test
-    public void moveCursor() {
-        for( int i=0; i<3; i++){
+    void moveCursor() {
+        for(int i=0; i<3; i++){
             viewService.moveCursor(Direction.DOWN);
         }
         assertEquals(repo.getActive().getAnchor().getY(), repo.getActive().getBuffer().getCursor().getY());
     }
 
     @Test
-    public void moveCursor_NullDirection() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            viewService.moveCursor(null);
-        });
+    void moveCursor_NullDirection() {
+        assertThrows(IllegalArgumentException.class, () -> viewService.moveCursor(null));
     }
 
     @Test
-    public void createNewline() {
+    void createNewline() {
         for( int i=0; i<3; i++){
             viewService.createNewline();
         }
@@ -118,33 +114,33 @@ public class ViewServiceTest {
     }
 
     @Test
-    public void insertCharacter() {
+    void insertCharacter() {
         for( int i=0; i<20; i++){
             viewService.insertCharacter('d');
         }
-        Assertions.assertTrue(repo.getActive().getAnchor().getX()<=repo.getActive().getBuffer().getCursor().getX());
-        Assertions.assertTrue(repo.getActive().getAnchor().getX()+10>=repo.getActive().getBuffer().getCursor().getX());
-        Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.DIRTY);
+        assertTrue(repo.getActive().getAnchor().getX()<=repo.getActive().getBuffer().getCursor().getX());
+        assertTrue(repo.getActive().getAnchor().getX()+10>=repo.getActive().getBuffer().getCursor().getX());
+        assertEquals(repo.getActive().getBuffer().getState(), BufferState.DIRTY);
 
     }
 
     @Test
-    public void deletePrevChar() {
-        Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
+    void deletePrevChar() {
+        assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
         for( int i=0; i<20; i++){
             viewService.insertCharacter('d');
         }
         for( int i=0; i<20; i++){
             viewService.deletePrevChar();
         }
-        Assertions.assertTrue(repo.getActive().getAnchor().getX()<=repo.getActive().getBuffer().getCursor().getX());
-        Assertions.assertTrue(repo.getActive().getAnchor().getX()+10>=repo.getActive().getBuffer().getCursor().getX());
-        Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.DIRTY);
+        assertTrue(repo.getActive().getAnchor().getX()<=repo.getActive().getBuffer().getCursor().getX());
+        assertTrue(repo.getActive().getAnchor().getX()+10>=repo.getActive().getBuffer().getCursor().getX());
+        assertEquals(repo.getActive().getBuffer().getState(), BufferState.DIRTY);
     }
 
     @Test
-    public void deleteNextChar() {
-        Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
+    void deleteNextChar() {
+        assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
         for( int i=0; i<20; i++){
             viewService.insertCharacter('d');
         }
@@ -152,18 +148,18 @@ public class ViewServiceTest {
             viewService.moveCursor(Direction.LEFT);
             viewService.deleteNextChar();
         }
-        Assertions.assertTrue(repo.getActive().getAnchor().getX()<=repo.getActive().getBuffer().getCursor().getX());
-        Assertions.assertTrue(repo.getActive().getAnchor().getX()+10>=repo.getActive().getBuffer().getCursor().getX());
-        Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.DIRTY);
+        assertTrue(repo.getActive().getAnchor().getX()<=repo.getActive().getBuffer().getCursor().getX());
+        assertTrue(repo.getActive().getAnchor().getX()+10>=repo.getActive().getBuffer().getCursor().getX());
+        assertEquals(repo.getActive().getBuffer().getState(), BufferState.DIRTY);
     }
 
     @Test
-    public void saveBuffer() {
-        Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
+    void saveBuffer() {
+        assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
         viewService.insertCharacter('d');
-        Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.DIRTY);
+        assertEquals(repo.getActive().getBuffer().getState(), BufferState.DIRTY);
         viewService.saveBuffer();
-        Assertions.assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
+        assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
         viewService.deletePrevChar();
         viewService.saveBuffer();
     }
