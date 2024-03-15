@@ -1,7 +1,5 @@
-package FileTest;
+package com.Textr.File;
 
-import com.Textr.File.FileReader;
-import com.Textr.File.FileWriter;
 import com.Textr.Settings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,12 +1,13 @@
-package ViewTest;
+package com.Textr.View;
+
 import com.Textr.FileBuffer.FileBuffer;
 import com.Textr.Util.Dimension2D;
 import com.Textr.Util.Point;
-import com.Textr.View.AnchorUpdater;
-import com.Textr.View.View;
+import com.Textr.Settings;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import com.Textr.Settings;
+
 public class AnchorUpdaterTest {
 
     private final String url = "resources/test.txt";
@@ -18,27 +19,23 @@ public class AnchorUpdaterTest {
         Settings.defaultLineSeparator = "\r\n";
         View view1 = View.createFromFilePath(url, initPoint, initDimension);
         FileBuffer b = FileBuffer.createFromFilePath(url);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            AnchorUpdater.updateAnchor(null, b.getCursor(), view1.getDimensions());
-        });
-    };
+        Assertions.assertThrows(IllegalArgumentException.class, () -> AnchorUpdater.updateAnchor(null, b.getCursor(), view1.getDimensions()));
+    }
+
     @Test
     public void testUpdateAnchor_NullCursor(){
         Settings.defaultLineSeparator = "\r\n";
         View view1 = View.createFromFilePath(url, initPoint, initDimension);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            AnchorUpdater.updateAnchor(view1.getAnchor(), null, view1.getDimensions());
-        });
-    };
+        Assertions.assertThrows(IllegalArgumentException.class, () -> AnchorUpdater.updateAnchor(view1.getAnchor(), null, view1.getDimensions()));
+    }
+
     @Test
     public void testUpdateAnchor_NullDimensions(){
         Settings.defaultLineSeparator = "\r\n";
         View view1 = View.createFromFilePath(url, initPoint, initDimension);
         FileBuffer b = FileBuffer.createFromFilePath(url);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            AnchorUpdater.updateAnchor(view1.getAnchor(), b.getCursor(), null);
-        });
-    };
+        Assertions.assertThrows(IllegalArgumentException.class, () -> AnchorUpdater.updateAnchor(view1.getAnchor(), b.getCursor(), null));
+    }
 
     @Test
     public void testUpdateAnchor_ValidArguments(){
@@ -50,5 +47,5 @@ public class AnchorUpdaterTest {
         AnchorUpdater.updateAnchor(anchor, cursor, view1.getDimensions());
         Assertions.assertTrue(anchor.getX() >= cursor.getX());
         Assertions.assertTrue(anchor.getY() >= cursor.getY());
-    };
+    }
 }

@@ -1,10 +1,9 @@
-package ViewTest;
+package com.Textr.View;
+
 import com.Textr.Settings;
 import com.Textr.Util.Dimension2D;
 import com.Textr.Util.Point;
-import com.Textr.View.LayoutGenerator;
-import com.Textr.View.View;
-import com.Textr.View.ViewTreeRepo;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
@@ -17,18 +16,17 @@ import static com.Textr.View.LayoutGenerator.setViewRepo;
 class LayoutGeneratorTest {
     private ViewTreeRepo repo;
 
-    private Dimension2D dimension2D;
-    private View view1 ;
+    private View view1;
 
-    private View view2 ;
+    private View view2;
 
-    private View view3 ;
+    private View view3;
 
-    private View view4 ;
-    private List<View> views;
+    private View view4;
+
     @BeforeEach
     public void initialise(){
-        views = new ArrayList<>();
+        List<View> views = new ArrayList<>();
         Point initPoint = Point.create(0,0);
         Dimension2D initDimension = Dimension2D.create(10,10);
         Settings.defaultLineSeparator = "\r\n";
