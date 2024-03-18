@@ -99,6 +99,7 @@ public final class ViewTreeRepo implements IViewRepo {
     public void remove(View view) {
         Validator.notNull(view, "Cannot remove a null View from the Tree.");
         tree.remove(view);
+        tree.restoreInvariants();
     }
 
     /**
