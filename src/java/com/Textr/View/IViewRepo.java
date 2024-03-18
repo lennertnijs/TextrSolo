@@ -1,5 +1,7 @@
 package com.Textr.View;
 
+import com.Textr.Tree.Node;
+
 import java.util.List;
 
 public interface IViewRepo {
@@ -18,4 +20,6 @@ public interface IViewRepo {
     void setPreviousActive();
     void rotate(boolean clockwise);
     List<View> getAllAtDepth(int depth);
+
+    Node getRoot();
 }

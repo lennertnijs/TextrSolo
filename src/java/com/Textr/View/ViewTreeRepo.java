@@ -27,6 +27,10 @@ public final class ViewTreeRepo implements IViewRepo {
         return rootIsVertical;
     }
 
+    @Override
+    public Node getRoot(){
+        return tree.getRoot();
+    }
     /**
      * @return The size of the Tree. This only counts the Nodes with a non-null value.
      */
@@ -95,6 +99,7 @@ public final class ViewTreeRepo implements IViewRepo {
     public void remove(View view) {
         Validator.notNull(view, "Cannot remove a null View from the Tree.");
         tree.remove(view);
+        tree.restoreInvariants();
     }
 
     /**

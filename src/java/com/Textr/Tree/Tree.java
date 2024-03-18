@@ -410,19 +410,21 @@ public final class Tree<T> implements ITree<T>{
     public void restoreInvariants(){
         if(root.hasSingleChild()){
             Node <T> child = root.getChildren().get(0);
-            remove(child);
-            for(Node<T> grandChild : child.getChildren()){
-                addChildToRoot(grandChild);
+            if(child.hasChildren()){
+                remove(child);
+                for(Node<T> grandChild : child.getChildren()){
+                    addChildToRoot(grandChild);
+                }
             }
+
         }
         restoreFromNode(root);
     }
 
-
     private void restoreFromNode(Node<T> node){
         if (!node.hasSingleChild()) {
-            List<Node<T>> grandChildren = new ArrayList<>(node.getChildren());
-            for(Node<T> child : grandChildren){
+            List<Node<T>> children = new ArrayList<>(node.getChildren());
+            for(Node<T> child : children){
                 restoreFromNode(child);
             }
             return;
