@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
+// TODO: Delete this test (now using java Files)
 public class FileTest {
 
     private File file1;
@@ -11,26 +14,17 @@ public class FileTest {
 
     @BeforeEach
     public void initialise(){
-        file1 = File.create("path1");
-        file2 = File.create("path2");
+        file1 = new File("path1");
+        file2 = new File("path2");
     }
 
 
     @Test
     public void testCreationAndGetters(){
         Assertions.assertAll(
-                () -> Assertions.assertEquals(file1.getUrl(), "path1")
+                () -> Assertions.assertEquals(file1.getPath(), "path1")
         );
     }
-
-    @Test
-    public void testCreationIllegal(){
-        Assertions.assertAll(
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> File.create(null))
-        );
-    }
-
-
 
     @Test
     public void testEqualsAndHashCode(){
@@ -39,10 +33,5 @@ public class FileTest {
                 () -> Assertions.assertNotEquals(file1, new Object()),
                 () -> Assertions.assertNotEquals(file1.hashCode(), file2.hashCode())
         );
-    }
-    @Test
-    public void testToString(){
-        String expected = "File[url = path1]";
-        Assertions.assertEquals(file1.toString(), expected);
     }
 }
