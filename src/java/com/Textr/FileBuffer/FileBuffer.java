@@ -28,7 +28,7 @@ public final class FileBuffer {
     public static FileBuffer createFromFilePath(String url){
         Validator.notNull(url, "Cannot create a FileBuffer from a null url.");
         File f = new File(url);
-        Text t = Text.create(FileReader.readContents(url));
+        Text t = Text.create(FileReader.readContents(f));
         return new FileBuffer(f, t, Point.create(0,0), BufferState.CLEAN);
     }
 
@@ -128,7 +128,7 @@ public final class FileBuffer {
     }
 
     public void writeToDisk(){
-        FileWriter.write(this.getText().getText(), this.getFile().getPath());
+        FileWriter.write(this.getText().getText(), this.getFile());
         this.setState(BufferState.CLEAN);
     }
 

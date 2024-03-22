@@ -4,6 +4,7 @@ import com.Textr.Settings;
 import com.Textr.Util.Validator;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -20,14 +21,14 @@ public final class FileReader {
     /**
      * Reads the contents of a .txt file and returns it.
      * If any non-ASCII characters are found in the file, throws an Exception.
-     * @param url The uniform resource locator of the text file.
+     * @param path  The File to read from.
      *
      * @return The file's contents
      * @throws IllegalArgumentException If a non-ASCII character was found in the file's contents.
      */
-    public static String readContents(String url){
-        Validator.notNull(url, "Cannot read a null file's contents.");
-        try(BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(url))){
+    public static String readContents(File path){
+        Validator.notNull(path, "Cannot read a null file's contents.");
+        try(BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(path))){
             StringBuilder stringBuilder = new StringBuilder();
             String line;
             while((line = bufferedReader.readLine()) != null){
