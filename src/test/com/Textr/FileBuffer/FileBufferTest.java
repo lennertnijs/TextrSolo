@@ -1,6 +1,5 @@
 package com.Textr.FileBuffer;
 
-import com.Textr.File.File;
 import com.Textr.Settings;
 import com.Textr.Util.Direction;
 import com.Textr.Util.Point;
@@ -60,7 +59,7 @@ class FileBufferTest {
         var buffer = FileBuffer.createFromFilePath(fileIO.getPath());
         assertArrayEquals(linesInFile, buffer.getText().getLines(),
                 "Buffer content did not load correctly");
-        assertEquals(fileIO, new java.io.File(buffer.getFile().getUrl()),
+        assertEquals(fileIO, buffer.getFile(),
                 "Buffer's File reference does not link to given file path");
         assertEquals(Point.create(0, 0), buffer.getCursor(),
                 "Buffer's cursor is not set to start of text");
@@ -75,7 +74,7 @@ class FileBufferTest {
 
     @Test
     void getFile() {
-        assertEquals(File.create(fileIO.getPath()), buffer.getFile(),
+        assertEquals(fileIO, buffer.getFile(),
                 "File reference returned is not equal to file reference used to create buffer");
     }
 

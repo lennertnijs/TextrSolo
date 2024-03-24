@@ -4,6 +4,11 @@ import com.Textr.Settings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class FileReaderTest {
 
     @BeforeEach
@@ -13,7 +18,7 @@ public class FileReaderTest {
     @Test
     public void readValidFile(){
         String expected = "tested\r\ntest\r\nte";
-        String reading = FileReader.readContents("resources/test.txt");
+        String reading = FileReader.readContents(new File("resources/test.txt"));
         Assertions.assertAll(
                 () -> Assertions.assertEquals(expected, reading)
         );
@@ -21,16 +26,14 @@ public class FileReaderTest {
 
     @Test
     public void readInvalidFilePath(){
-        Assertions.assertThrows(IllegalArgumentException.class, () -> FileReader.readContents("resources/invalid.txt"));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> FileReader.readContents(null));
+        assertThrows(IllegalArgumentException.class, () -> FileReader.readContents(new File("resources/invalid.txt")));
+        assertThrows(IllegalArgumentException.class, () -> FileReader.readContents(null));
     }
 
     @Test
     public void readFileInvalidLineSeparatorSetting(){
         Settings.defaultLineSeparator = "\s";
-        Assertions.assertAll(
-                () -> Assertions.assertThrows(IllegalStateException.class, () -> FileReader.readContents("resources/test.txt"))
-        );
+        assertThrows(IllegalStateException.class, () -> FileReader.readContents(new File("resources/test.txt")));
     }
 
     // Cannot test because standard newline on windows is CRLF

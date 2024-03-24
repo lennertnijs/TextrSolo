@@ -1,11 +1,12 @@
 package com.Textr.FileBuffer;
 
-import com.Textr.File.File;
 import com.Textr.File.FileReader;
 import com.Textr.File.FileWriter;
 import com.Textr.Util.Point;
 import com.Textr.Util.Validator;
 import com.Textr.Util.Direction;
+
+import java.io.File;
 
 /**
  * Represents a buffer.
@@ -26,8 +27,8 @@ public final class FileBuffer {
 
     public static FileBuffer createFromFilePath(String url){
         Validator.notNull(url, "Cannot create a FileBuffer from a null url.");
-        File f = File.create(url);
-        Text t = Text.create(FileReader.readContents(url));
+        File f = new File(url);
+        Text t = Text.create(FileReader.readContents(f));
         return new FileBuffer(f, t, Point.create(0,0), BufferState.CLEAN);
     }
 
@@ -127,7 +128,7 @@ public final class FileBuffer {
     }
 
     public void writeToDisk(){
-        FileWriter.write(this.getText().getText(), this.getFile().getUrl());
+        FileWriter.write(this.getText().getText(), this.getFile());
         this.setState(BufferState.CLEAN);
     }
 
@@ -177,6 +178,6 @@ public final class FileBuffer {
     }
 
     public FileBuffer copy(){
-        return new FileBuffer(this.file.copy(), this.text.copy(), this.cursor.copy(), this.state);
+        return new FileBuffer(this.file, this.text.copy(), this.cursor.copy(), this.state);
     }
 }
