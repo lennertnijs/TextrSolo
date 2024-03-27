@@ -21,7 +21,8 @@ public class Input {
      * @param character The character associated with the character input
      */
     public static Input createCharacterInput(char character) {
-        // TODO: Perhaps a validation necessary for character validity (eg. isASCII)?
+        // Any character is allowed in Input. "Illegal" characters in the program have to be handled during input
+        // translation phase.
         return new Input(InputType.CHARACTER, character);
     }
 
