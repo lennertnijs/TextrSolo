@@ -15,9 +15,10 @@ public final class InputHandler implements IInputHandler {
     public void handleInput(){
         int b = TerminalService.readByte();
         TerminalService.clearScreen();
-        InputType inputType = InputTranslator.translateBytes(b);
+        Input input = InputTranslator.translateBytes(b);
+        InputType inputType = input.getType();
         switch(inputType){
-            case CHARACTER -> viewService.insertCharacter((char) b);
+            case CHARACTER -> viewService.insertCharacter(input.getCharacter());
             case F4 -> {
                 viewService.attemptDeleteView();
                 return;
