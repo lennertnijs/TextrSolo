@@ -1,6 +1,7 @@
 package com.textr.tree;
 
 import com.textr.util.Validator;
+import com.textr.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +15,14 @@ public final class Tree<T> implements ITree<T>{
 
     private final Node<T> root;
 
+    private boolean rootisVertical;
+
     /**
      * Tree Constructor. Starts as a single root Node with no children, parent, or value.
      */
     public Tree(){
         this.root = new Node<>(null);
+        this.rootisVertical = true;
     }
 
     /**
@@ -28,6 +32,12 @@ public final class Tree<T> implements ITree<T>{
         return root;
     }
 
+    public boolean isRootisVertical() {
+        return rootisVertical;
+    }
+    private void flipRootOrientation() {
+        rootisVertical = !rootisVertical;
+    }
     /**
      * @return The size of this Tree. This includes the Nodes with no value.
      */
@@ -118,6 +128,23 @@ public final class Tree<T> implements ITree<T>{
             throw new NoSuchElementException("No matching element was found.");
         }
         return findNodeByValueDFS(root, t);
+    }
+
+    /**
+     * Finds the last (deepest) common ancestor of the "current" and "next" node.
+     * Only works if both are leaf nodes and next is right after current,
+     * or if "next" is a leaf node and current is an ancestor of the leafnode right before "next".
+     * @param current
+     * @param next
+     * @return The last common ancestor of the current and next node
+     */
+    private Node<T> findCommonAncestor(Node<T> current, Node <T> next) {
+        Node <T> parent = current.getParent();
+        if(containsDFS(parent, next))
+            return parent;
+        else
+            return findCommonAncestor(parent, next);
+
     }
 
     /**
@@ -285,6 +312,8 @@ public final class Tree<T> implements ITree<T>{
         return false;
     }
 
+
+
     /**
      * Private method that uses DFS to find the depth of the Node with the given value T. 0-based. Returns this depth.
      * @param t The value. Cannot be null.
@@ -444,7 +473,65 @@ public final class Tree<T> implements ITree<T>{
             node.getParent().replaceChild(node,onlyChild);
         }
     }
+    public void rotate(boolean clockwise, T active){
+        rotateWithNext(clockwise, active);
+        if(getRoot().hasChildren()&& getRoot().getChildren().size() == 1){
+            flipRootOrientation();
+        }
+        restoreInvariants();
+    }
 
+    private void rotateWithNext(boolean clockwise, T active){
+        if(isLastValue(active)){
+            System.out.println((char)7);
+            return;
+        }
+        Node<T> current = getNode(active);
+        Node<T> next = getNode(getNextValue(active));
+        if(current.isSiblingWith(next)){
+            rotateSiblings(current, next, clockwise);
+            return;
+        }
+        rotateNonSibling(current, next, clockwise);
+    }
+    private void rotateSiblings(Node<T> current, Node<T> next, boolean clockwise){
+        Node<T> nullNode = new Node<>(null);
+        current.getParent().replaceChild(current, nullNode);
+        boolean counterClockWise = !clockwise;
+        boolean orientation;
+        if(getDepth(current.getParent()) % 2 == 0)
+            orientation = rootisVertical;
+        else
+            orientation = !rootisVertical;
+        boolean noSwap = clockwise && orientation || counterClockWise && !orientation;
+        remove(current);
+        remove(next);
+        if(noSwap){
+            addChildToNode(current, nullNode);
+            addChildToNode(next, nullNode);
+            return;
+        }
+        addChildToNode(next, nullNode);
+        addChildToNode(current,nullNode);
+    }
+
+    private void rotateNonSibling(Node<T> currentNode, Node<T> nextNode, boolean clockwise){
+        boolean counterClockWise = !clockwise;
+        Node <T> commonAncestor = findCommonAncestor(currentNode, nextNode);
+        boolean orientation;
+        if(getDepth(commonAncestor) % 2 == 0)
+            orientation = rootisVertical;
+        else
+            orientation = !rootisVertical;
+        boolean noSwap = clockwise && orientation || counterClockWise && !orientation;
+        Node<T> parent = currentNode.getParent();
+        remove(nextNode);
+        int position = currentNode.getParent().getChildren().indexOf(currentNode);
+        if (noSwap){
+            position++;
+        }
+        addChildToNodeAt(nextNode,parent,position);
+    }
 
     public T getNextValue(T t){
         List<T> valuesInOrder = getAllValues();

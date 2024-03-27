@@ -11,12 +11,10 @@ public final class ViewTreeRepo implements IViewRepo {
 
     private Tree<View> tree;
     private View active;
-    private boolean rootIsVertical;
 
 
     public ViewTreeRepo(){
         tree = new Tree<>();
-        rootIsVertical = true;
     }
 
     /**
@@ -24,7 +22,7 @@ public final class ViewTreeRepo implements IViewRepo {
      */
     @Override
     public boolean rootIsVertical(){
-        return rootIsVertical;
+        return tree.isRootisVertical();
     }
 
     @Override
@@ -153,11 +151,7 @@ public final class ViewTreeRepo implements IViewRepo {
      */
     @Override
     public void rotate(boolean clockwise){
-        rotateWithNext(clockwise);
-        if(tree.getRoot().hasChildren()&& tree.getRoot().getChildren().size() == 1){
-            flipRootOrientation();
-        }
-        tree.restoreInvariants();
+        tree.rotate(clockwise, active);
     }
 
     /**
@@ -170,57 +164,5 @@ public final class ViewTreeRepo implements IViewRepo {
     public List<View> getAllAtDepth(int depth){
         Validator.notNegativeOrZero(depth, "Cannot check the nodes at the given negative or zero depth.");
         return tree.getAllAtDepth(depth);
-    }
-
-
-    private void rotateWithNext(boolean clockwise){
-        if(tree.isLastValue(active)){
-            System.out.println((char)7);
-            return;
-        }
-        Node<View> current = tree.getNode(active);
-        Node<View> next = tree.getNode(tree.getNextValue(active));
-        if(current.isSiblingWith(next)){
-            rotateSiblings(current, next, clockwise);
-            return;
-        }
-        rotateNonSibling(current, next, clockwise);
-    }
-
-
-    private void rotateSiblings(Node<View> current, Node<View> next, boolean clockwise){
-        Node<View> nullNode = new Node<>(null);
-        current.getParent().replaceChild(current, nullNode);
-        View currentView = current.getValue();
-        View nextView = next.getValue();
-        boolean counterClockWise = !clockwise;
-        boolean noSwap = clockwise && currentView.leftOff(nextView) || counterClockWise && !currentView.leftOff(nextView);
-        tree.remove(current);
-        tree.remove(next);
-        if(noSwap){
-            tree.addChildToNode(current, nullNode);
-            tree.addChildToNode(next, nullNode);
-            return;
-        }
-        tree.addChildToNode(next, nullNode);
-        tree.addChildToNode(current,nullNode);
-    }
-
-    private void rotateNonSibling(Node<View> currentNode, Node<View> nextNode, boolean clockwise){
-        View current = currentNode.getValue();
-        View next = nextNode.getValue();
-        boolean counterClockWise = !clockwise;
-        boolean noSwap = clockwise && current.leftOff(next) || counterClockWise && !current.leftOff(next);
-        Node<View> parent = currentNode.getParent();
-        tree.remove(nextNode);
-        int position = currentNode.getParent().getChildren().indexOf(currentNode);
-        if (noSwap){
-            position++;
-        }
-        tree.addChildToNodeAt(nextNode,parent,position);
-    }
-
-    private void flipRootOrientation() {
-        rootIsVertical = !rootIsVertical;
     }
 }
