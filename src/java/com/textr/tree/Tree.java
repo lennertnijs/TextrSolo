@@ -107,6 +107,9 @@ public final class Tree<T> implements ITree<T>{
      */
     public int getDepth(Node<T> node){
         Validator.notNull(node, "Cannot look for a null Node.");
+        if(node.equals(root)){
+            return 0;
+        }
         if(!contains(node)){
             throw new IllegalArgumentException("Cannot check the depth for a Node that does not exist.");
         }
@@ -496,14 +499,17 @@ public final class Tree<T> implements ITree<T>{
     }
     private void rotateSiblings(Node<T> current, Node<T> next, boolean clockwise){
         Node<T> nullNode = new Node<>(null);
-        current.getParent().replaceChild(current, nullNode);
-        boolean counterClockWise = !clockwise;
         boolean orientation;
+        if(!current.hasParent() || !contains(current)){
+            throw new IllegalArgumentException("fuck");
+        }
         if(getDepth(current.getParent()) % 2 == 0)
             orientation = rootisVertical;
         else
             orientation = !rootisVertical;
-        boolean noSwap = clockwise && orientation || counterClockWise && !orientation;
+        current.getParent().replaceChild(current, nullNode);
+        boolean counterClockWise = !clockwise;
+        boolean noSwap = clockwise && !orientation || counterClockWise && orientation;
         remove(current);
         remove(next);
         if(noSwap){
@@ -523,7 +529,7 @@ public final class Tree<T> implements ITree<T>{
             orientation = rootisVertical;
         else
             orientation = !rootisVertical;
-        boolean noSwap = clockwise && orientation || counterClockWise && !orientation;
+        boolean noSwap = clockwise && !orientation || counterClockWise && orientation;
         Node<T> parent = currentNode.getParent();
         remove(nextNode);
         int position = currentNode.getParent().getChildren().indexOf(currentNode);
