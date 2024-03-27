@@ -31,9 +31,17 @@ public final class Tree<T> implements ITree<T>{
         return root;
     }
 
-    public boolean isRootisVertical() {
+    /**
+     * Returns true if the root of this tree has its children vertically stacked.
+     * @return whether the root is oriënted vertically.
+     */
+    public boolean isRootVertical() {
         return rootisVertical;
     }
+
+    /**
+     * Flips the oriëntation of the stacking of children in the root.
+     */
     private void flipRootOrientation() {
         rootisVertical = !rootisVertical;
     }
@@ -136,8 +144,8 @@ public final class Tree<T> implements ITree<T>{
      * Finds the last (deepest) common ancestor of the "current" and "next" node.
      * Only works if both are leaf nodes and next is right after current,
      * or if "next" is a leaf node and current is an ancestor of the leafnode right before "next".
-     * @param current
-     * @param next
+     * @param current The current from which to look.
+     * @param next The next leaf.
      * @return The last common ancestor of the current and next node
      */
     private Node<T> findCommonAncestor(Node<T> current, Node <T> next) {
@@ -152,7 +160,6 @@ public final class Tree<T> implements ITree<T>{
     /**
      * Adds the Node as a child of the root. Also sets the parent of the Node as the root Node.
      * @param child The child Node. Cannot be null
-     *
      * @throws IllegalArgumentException If the given Node is null.
      * @throws IllegalStateException If a Node with the given value already exists in the Tree.
      */
@@ -413,7 +420,12 @@ public final class Tree<T> implements ITree<T>{
         }
     }
 
-
+    /**
+     * Private method that uses DFS to recursively look for all values of the subtree under this node, and returns all
+     * values in this subtree.
+     * @param current the node from which to look down
+     * @return list of values in the leaves under this node
+     */
     private List<T> getAllValuesDFS(Node<T> current){
         List<T> values = new ArrayList<>();
         for(Node<T> child : current.getChildren()){
@@ -425,6 +437,13 @@ public final class Tree<T> implements ITree<T>{
         return values;
     }
 
+    /**
+     * Private method that recursively looks for all values at a given depth in the tree,
+     * searching from the "current" node down.
+     * @param current the node from which to look down
+     * @param depth the depth in the tree that values need to be at te be returned
+     * @return list of values in the leaves under this node that are at the given depth in the tree
+     */
     private List<T> getAllValuesAtDepthBFS(Node<T> current, int depth){
         List<T> values = new ArrayList<>();
         for(Node<T> child : current.getChildren()){
@@ -437,7 +456,10 @@ public final class Tree<T> implements ITree<T>{
         return values;
     }
 
-
+    /**
+     * Public method that allows the client code using the tree to let it restore its invariants:
+     * each internal node has more than 1 child or is the root.
+     */
     public void restoreInvariants(){
         if(root.hasSingleChild()){
             Node <T> child = root.getChildren().get(0);
@@ -475,6 +497,13 @@ public final class Tree<T> implements ITree<T>{
             node.getParent().replaceChild(node,onlyChild);
         }
     }
+
+    /**
+     * Rotate a given value, "active", with the next value in the tree according to the current structure of the tree,
+     * given the rotations direction in the boolean "clockwise".
+     * @param clockwise a boolean, true if the rotation should be clockwise, false if it should be counter-clockwise
+     * @param active the value to rotate with the next
+     */
     public void rotate(boolean clockwise, T active){
         rotateWithNext(clockwise, active);
         if(getRoot().hasChildren()&& getRoot().getChildren().size() == 1){
@@ -482,7 +511,11 @@ public final class Tree<T> implements ITree<T>{
         }
         restoreInvariants();
     }
-
+    /**
+     * Internal working of rotation.
+     * @param clockwise a boolean, true if the roation should be clockwise, false if it should be counter-clockwise
+     * @param active the value to rotate with the next
+     */
     private void rotateWithNext(boolean clockwise, T active){
         if(isLastValue(active)){
             System.out.println((char)7);
@@ -496,27 +529,41 @@ public final class Tree<T> implements ITree<T>{
         }
         rotateNonSibling(current, next, clockwise);
     }
-    private void rotateSiblings(Node<T> current, Node<T> next, boolean clockwise){
+
+    /**
+     * Rotate a given leafnode "current", with the next leafnode "next". Should only be called
+     * if these are direct children of the same parent. Rotation direction determined by "clockwise".
+     * @param clockwise a boolean, true if the rotation should be clockwise, false if it should be counter-clockwise
+     * @param currentNode the first leafnode to rotate
+     * @param nextNode the second leafnode to rotate
+     */
+    private void rotateSiblings(Node<T> currentNode, Node<T> nextNode, boolean clockwise){
         Node<T> nullNode = new Node<>(null);
         boolean orientation;
-        if(getDepth(current.getParent()) % 2 == 0)
+        if(getDepth(currentNode.getParent()) % 2 == 0)
             orientation = rootisVertical;
         else
             orientation = !rootisVertical;
-        current.getParent().replaceChild(current, nullNode);
+        currentNode.getParent().replaceChild(currentNode, nullNode);
         boolean counterClockWise = !clockwise;
         boolean noSwap = clockwise && !orientation || counterClockWise && orientation;
-        remove(current);
-        remove(next);
+        remove(currentNode);
+        remove(nextNode);
         if(noSwap){
-            addChildToNode(current, nullNode);
-            addChildToNode(next, nullNode);
+            addChildToNode(currentNode, nullNode);
+            addChildToNode(nextNode, nullNode);
             return;
         }
-        addChildToNode(next, nullNode);
-        addChildToNode(current,nullNode);
+        addChildToNode(nextNode, nullNode);
+        addChildToNode(currentNode,nullNode);
     }
-
+    /**
+     * Rotate a given leafnode "currentNode", with the next leafnode "nextNode". Should only be called
+     * if these are NOT direct children of the same parent. Rotation direction determined by "clockwise".
+     * @param clockwise a boolean, true if the rotation should be clockwise, false if it should be counter-clockwise
+     * @param currentNode the first leafnode to rotate
+     * @param nextNode the second leafnode to rotate
+     */
     private void rotateNonSibling(Node<T> currentNode, Node<T> nextNode, boolean clockwise){
         boolean counterClockWise = !clockwise;
         Node <T> commonAncestor = findCommonAncestor(currentNode, nextNode);
@@ -535,6 +582,11 @@ public final class Tree<T> implements ITree<T>{
         addChildToNodeAt(nextNode,parent,position);
     }
 
+    /**
+     * Get the next value in the tree from the given value, ordered by left-first (depth-first).
+     * @param t the value to start to look from
+     * @return the next value
+     */
     public T getNextValue(T t){
         List<T> valuesInOrder = getAllValues();
         int index = valuesInOrder.indexOf(t);
@@ -545,6 +597,11 @@ public final class Tree<T> implements ITree<T>{
         throw new NoSuchElementException("No element with value T was found.");
     }
 
+    /**
+     * Get the previous value in the tree from the given value, ordered by left-first (depth-first).
+     * @param t the value to start to look from
+     * @return the previous value
+     */
     public T getPreviousValue(T t){
         List<T> valuesInOrder = getAllValues();
         int index = valuesInOrder.indexOf(t);
@@ -555,7 +612,11 @@ public final class Tree<T> implements ITree<T>{
         throw new NoSuchElementException("No element with value T was found.");
     }
 
-
+    /**
+     * See if the given value is the last one in the whole tree.
+     * @param t the given value
+     * @return true if the given value is the last in the tree
+     */
     public boolean isLastValue(T t) {
         List<T> allValues = getAllValues();
         return allValues.get(allValues.size() - 1).equals(t);

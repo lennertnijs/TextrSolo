@@ -22,7 +22,7 @@ public final class ViewTreeRepo implements IViewRepo {
      */
     @Override
     public boolean rootIsVertical(){
-        return tree.isRootisVertical();
+        return tree.isRootVertical();
     }
 
     @Override
