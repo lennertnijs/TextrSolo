@@ -1,7 +1,6 @@
 package com.textr.tree;
 
 import com.textr.util.Validator;
-import com.textr.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
