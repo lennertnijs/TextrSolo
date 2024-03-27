@@ -14,10 +14,10 @@ public final class InputTranslator {
     }
 
     /**
-     * Translates the byte or bytes from the input into a single {@link InputType}.
+     * Translates the byte or bytes from the input into a single {@link Input}.
      * @param b The first byte.
      *
-     * @return The {@link InputType} enum representing an input.
+     * @return The {@link Input} enum representing an input.
      */
     public static Input translateBytes(int b){
         if(b >= 32 && b <= 126){
@@ -55,7 +55,7 @@ public final class InputTranslator {
     /**
      * Translates the second byte of an escape sequence. (The first character was ESCAPE).
      *
-     * @return The translated {@link InputType}
+     * @return The translated {@link Input}
      */
     private static Input translateEscapeByteCode(){
         int b = TerminalService.readByte();
@@ -73,7 +73,7 @@ public final class InputTranslator {
     /**
      * Translates the third byte of an escape sequence, if the second was the right bracket. ([)
      *
-     * @return The translated {@link InputType}.
+     * @return The translated {@link Input}.
      */
     private static Input translateBracketByteCode(){
         int b = TerminalService.readByte();
@@ -101,7 +101,7 @@ public final class InputTranslator {
     /**
      * Translates the third byte of an escape sequence, if the second was the capital O.
      *
-     * @return The translated {@link InputType}.
+     * @return The translated {@link Input}.
      */
     private static Input translateOByteCode(){
         int b = TerminalService.readByte();
@@ -114,7 +114,7 @@ public final class InputTranslator {
     /**
      * Translates the fourth byte of an escape sequence, if the third was the number 3.
      *
-     * @return The translated {@link InputType}.
+     * @return The translated {@link Input}.
      */
     private static Input translate3ByteCode(){
         int b = TerminalService.readByte();
