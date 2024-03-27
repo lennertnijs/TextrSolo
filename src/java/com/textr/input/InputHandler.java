@@ -1,6 +1,5 @@
 package com.textr.input;
 
-import com.textr.terminal.TerminalService;
 import com.textr.util.Direction;
 import com.textr.view.ViewService;
 
@@ -13,11 +12,10 @@ public final class InputHandler implements IInputHandler {
 
     @Override
     public void handleInput(){
-        int b = TerminalService.readByte();
-        TerminalService.clearScreen();
-        Input input = InputTranslator.translateBytes(b);
-        switch(input){
-            case REGULAR_INPUT -> viewService.insertCharacter((char) b);
+        Input input = InputTranslator.getNextInput();
+        InputType inputType = input.getType();
+        switch(inputType){
+            case CHARACTER -> viewService.insertCharacter(input.getCharacter());
             case F4 -> {
                 viewService.attemptDeleteView();
                 return;

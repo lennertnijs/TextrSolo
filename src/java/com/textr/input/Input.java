@@ -1,26 +1,64 @@
 package com.textr.input;
 
-public enum Input {
+public class Input {
+    private final InputType type;
+    private final char character;
 
-    REGULAR_INPUT, // b >= 32 && b <= 126
-    ENTER, // 13
-    CTRL_N, // 14
-    CTRL_P, // 16
-    CTRL_R, // 18
-    CTRL_S, //19
-    CTRL_T, //20
-    ESCAPE, //27
-    SPACE, //32
-    ARROW_UP, //ESC [ A aka 27 91 65
-    ARROW_RIGHT, // ESC [ C aka 27 91 67
-    ARROW_DOWN, // ESC [ B aka 27 91 66
-    ARROW_LEFT, // ESC [ D aka 27 91 68
-    N_UPPER, //78
-    Y_UPPER, // 89
-    N_LOWER, // 110
-    Y_LOWER, // 121
-    DELETE, // ESC [ 3 ~ aka 27 91 51 127
-    BACKSPACE, // 127
-    F4, // ESC O S aka 27 79 83
-    NOT_MAPPED
+    /**
+     * Constructs an Input instance with the given type and character.
+     *
+     * @param type      The InputType of the input entered
+     * @param character The character associated with the character input
+     */
+    private Input(InputType type, char character) {
+        this.type = type;
+        this.character = character;
+    }
+
+    /**
+     * Constructs an Input instance with type {@link InputType}.CHARACTER from the given character.
+     *
+     * @param character The character associated with the character input
+     */
+    public static Input createCharacterInput(char character) {
+        // Any character is allowed in Input. "Illegal" characters in the program have to be handled during input
+        // translation phase.
+        return new Input(InputType.CHARACTER, character);
+    }
+
+    /**
+     * Constructs an Input instance with the given (special) type. This method does not accept the CHARACTER type,
+     * as there should be a character associated with that type, use createCharacterInput instead.
+     *
+     * @param type The InputType of the new Input instance
+     * @return A new Input instance with type set to the given type
+     * @throws IllegalArgumentException when InputType.CHARACTER was given as type
+     */
+    public static Input createSpecialInput(InputType type) {
+        if (type == InputType.CHARACTER)
+            throw new IllegalArgumentException("Character input should be made with createCharacterInput");
+        return new Input(type, '\0'); // Placeholder null character
+    }
+
+    /**
+     * Returns the {@linkplain InputType} of the input.
+     *
+     * @return The InputType of the input
+     */
+    public InputType getType() {
+        return type;
+    }
+
+    /**
+     * Returns the character of the input, assuming the input type was a character. If the input type is not
+     * a character, throws an {@linkplain IllegalStateException} instead.
+     *
+     * @return The InputType of the input
+     */
+    public char getCharacter() {
+        if (type != InputType.CHARACTER) {
+            throw new IllegalStateException("Cannot get character from non-character input");
+        }
+        return character;
+    }
 }

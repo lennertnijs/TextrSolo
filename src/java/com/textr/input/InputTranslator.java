@@ -14,6 +14,16 @@ public final class InputTranslator {
     }
 
     /**
+     * Reads bytes from the {@link TerminalService} and returns an {@link Input} instance.
+     *
+     * @return the {@link Input} instance representing the inputted command
+     */
+    public static Input getNextInput() {
+        int b = TerminalService.readByte();
+        return translateBytes(b);
+    }
+
+    /**
      * Translates the byte or bytes from the input into a single {@link Input}.
      * @param b The first byte.
      *
@@ -21,35 +31,35 @@ public final class InputTranslator {
      */
     public static Input translateBytes(int b){
         if(b >= 32 && b <= 126){
-            return Input.REGULAR_INPUT;
+            return Input.createCharacterInput((char) b);
         }
         switch (b) {
             case 13 -> {
-                return Input.ENTER;
+                return Input.createSpecialInput(InputType.ENTER);
             }
             case 14 -> {
-                return Input.CTRL_N;
+                return Input.createSpecialInput(InputType.CTRL_N);
             }
             case 16 -> {
-                return Input.CTRL_P;
+                return Input.createSpecialInput(InputType.CTRL_P);
             }
             case 18 -> {
-                return Input.CTRL_R;
+                return Input.createSpecialInput(InputType.CTRL_R);
             }
             case 19 -> {
-                return Input.CTRL_S;
+                return Input.createSpecialInput(InputType.CTRL_S);
             }
             case 20 -> {
-                return Input.CTRL_T;
+                return Input.createSpecialInput(InputType.CTRL_T);
             }
             case 27 -> {
                 return translateEscapeByteCode();
             }
             case 127 -> {
-                return Input.BACKSPACE;
+                return Input.createSpecialInput(InputType.BACKSPACE);
             }
         }
-        return Input.NOT_MAPPED;
+        return Input.createSpecialInput(InputType.NOT_MAPPED);
     }
 
     /**
@@ -67,7 +77,7 @@ public final class InputTranslator {
                 return translateOByteCode();
             }
         }
-        return Input.NOT_MAPPED;
+        return Input.createSpecialInput(InputType.NOT_MAPPED);
     }
 
     /**
@@ -79,22 +89,22 @@ public final class InputTranslator {
         int b = TerminalService.readByte();
         switch(b){
             case 'A' -> {
-                return Input.ARROW_UP;
+                return Input.createSpecialInput(InputType.ARROW_UP);
             }
             case 'C' -> {
-                return Input.ARROW_RIGHT;
+                return Input.createSpecialInput(InputType.ARROW_RIGHT);
             }
             case 'B' -> {
-                return Input.ARROW_DOWN;
+                return Input.createSpecialInput(InputType.ARROW_DOWN);
             }
             case 'D' -> {
-                return Input.ARROW_LEFT;
+                return Input.createSpecialInput(InputType.ARROW_LEFT);
             }
             case '3' -> {
                 return translate3ByteCode();
             }
         }
-        return Input.NOT_MAPPED;
+        return Input.createSpecialInput(InputType.NOT_MAPPED);
     }
 
 
@@ -106,9 +116,9 @@ public final class InputTranslator {
     private static Input translateOByteCode(){
         int b = TerminalService.readByte();
         if(b == 'S'){
-            return Input.F4;
+            return Input.createSpecialInput(InputType.F4);
         }
-        return Input.NOT_MAPPED;
+        return Input.createSpecialInput(InputType.NOT_MAPPED);
     }
 
     /**
@@ -119,8 +129,8 @@ public final class InputTranslator {
     private static Input translate3ByteCode(){
         int b = TerminalService.readByte();
         if(b == '~'){
-            return Input.DELETE;
+            return Input.createSpecialInput(InputType.DELETE);
         }
-        return Input.NOT_MAPPED;
+        return Input.createSpecialInput(InputType.NOT_MAPPED);
     }
 }
