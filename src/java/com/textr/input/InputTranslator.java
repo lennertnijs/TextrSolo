@@ -14,6 +14,16 @@ public final class InputTranslator {
     }
 
     /**
+     * Reads bytes from the {@link TerminalService} and returns an {@link Input} instance.
+     *
+     * @return the {@link Input} instance representing the inputted command
+     */
+    public static Input getNextInput() {
+        int b = TerminalService.readByte();
+        return translateBytes(b);
+    }
+
+    /**
      * Translates the byte or bytes from the input into a single {@link Input}.
      * @param b The first byte.
      *
