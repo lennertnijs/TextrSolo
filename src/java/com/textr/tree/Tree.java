@@ -499,9 +499,6 @@ public final class Tree<T> implements ITree<T>{
     private void rotateSiblings(Node<T> current, Node<T> next, boolean clockwise){
         Node<T> nullNode = new Node<>(null);
         boolean orientation;
-        if(!current.hasParent() || !contains(current)){
-            throw new IllegalArgumentException("fuck");
-        }
         if(getDepth(current.getParent()) % 2 == 0)
             orientation = rootisVertical;
         else
