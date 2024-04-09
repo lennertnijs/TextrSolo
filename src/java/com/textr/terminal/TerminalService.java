@@ -51,9 +51,7 @@ public final class TerminalService {
     /**
      * Puts the terminal in the raw input mode. (input is immediately reported)
      */
-    public static void enterRawInputMode(){
-        Terminal.enterRawInputMode();
-    }
+    public static void enterRawInputMode(){ Terminal.enterRawInputMode();}
 
     /**
      * Puts the terminal in the non-raw input mode. (input is reported when enter is pressed)
@@ -69,7 +67,7 @@ public final class TerminalService {
      * @param y The y coordinate. (0-based) Cannot be negative or bigger than the terminal height - 1.
      */
     public static void moveCursor(int x, int y){
-        Terminal.moveCursor(y + 1, x + 1, "kek");
+        Terminal.moveCursor(y + 1, x + 1);
     }
 
     /**
