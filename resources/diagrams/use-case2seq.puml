@@ -1,0 +1,38 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+hide footbox
+actor User as u
+participant ":InputHandler" as ih
+participant "InputTranslator" as it
+participant ":ViewService" as vs
+participant "active:\nFileBuffer" as fb
+participant "CursorMover" as cm
+participant "cursor:\nPoint" as p
+autonumber
+u -> ih: input(Arrowkey)
+activate u
+activate ih
+ih -> it: TranslateBytes(Arrowkey)
+activate it
+it --> ih: Input.ARROWKEY
+deactivate it
+ih -> vs: moveCursor(direction);
+activate vs
+
+vs -> vs: active := getActiveBuffer()
+vs -> fb: moveCursor(direction)
+activate fb
+fb -> cm: move(cursor, direction, text)
+activate cm
+
+cm -> p: setX(newX)
+cm -> p: setY(newY)
+deactivate cm
+deactivate fb
+
+vs -> vs: updateAnchor()
+deactivate vs
+deactivate ih
+deactivate u
+
+@enduml

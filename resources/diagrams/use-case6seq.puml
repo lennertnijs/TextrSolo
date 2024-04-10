@@ -1,0 +1,23 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+hide footbox
+actor User as u
+participant ":InputHandler" as ih
+participant "InputTranslator" as it
+participant ":ViewService" as vs
+participant ":viewRepo" as vr
+autonumber
+u -> ih: input(CTRL_T/CTRL_R)
+activate u
+activate ih
+ih -> it: TranslateBytes(Rotation)
+activate it
+it --> ih: Input.ROTATION
+deactivate it
+ih -> vs: rotateView(clockwise);
+activate vs
+vs -> vr: rotate(clockwise)
+activate vr
+deactivate vs
+deactivate ih
+@enduml
