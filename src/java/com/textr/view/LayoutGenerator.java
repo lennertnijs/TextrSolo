@@ -34,16 +34,16 @@ public final class LayoutGenerator {
  * @throws IllegalArgumentException If the list of buffers is or contains null.
  * @throws IllegalStateException If there are no buffers.
  */
-public static void generateLayoutsVerticalSubTree(Point topLeft, Point bottomRight, Node<View> rootlayout){
+public static void generateLayoutsVerticalSubTree(Point topLeft, Point bottomRight, Node<BufferView> rootlayout){
     int heightPerLayout = ((bottomRight.getY()-topLeft.getY()) / rootlayout.getChildren().size());
     int remainder = ((bottomRight.getY()-topLeft.getY()) % rootlayout.getChildren().size());
     int y = topLeft.getY();
-    for(Node<View> child : rootlayout.getChildren()){
+    for(Node<BufferView> child : rootlayout.getChildren()){
         Point position = Point.create(topLeft.getX(), y);
         int LayoutHeight = remainder-- > 0 ? heightPerLayout + 1 : heightPerLayout;
         Dimension2D dimensions = Dimension2D.create(bottomRight.getX()-topLeft.getX(), LayoutHeight);
         if(child.hasValue()){
-            View toAdd = child.getValue();
+            BufferView toAdd = child.getValue();
             toAdd.setPosition(position);
             toAdd.setDimensions(dimensions);
         }
@@ -63,16 +63,16 @@ public static void generateLayoutsVerticalSubTree(Point topLeft, Point bottomRig
  * @throws IllegalArgumentException If the list of buffers is or contains null.
  * @throws IllegalStateException If there are no buffers.
  */
-public static void generateLayoutsHorizontalSubTree(Point topLeft, Point bottomRight, Node<View> rootlayout){
+public static void generateLayoutsHorizontalSubTree(Point topLeft, Point bottomRight, Node<BufferView> rootlayout){
     int widthPerLayout = ((bottomRight.getX()-topLeft.getX()) / rootlayout.getChildren().size());
     int remainder = ((bottomRight.getX()-topLeft.getX()) % rootlayout.getChildren().size());
     int x = topLeft.getX();
-    for(Node<View> child : rootlayout.getChildren()){
+    for(Node<BufferView> child : rootlayout.getChildren()){
         Point position = Point.create(x, topLeft.getY());
         int LayoutWidth = remainder-- > 0 ? widthPerLayout + 1 : widthPerLayout;
         Dimension2D dimensions = Dimension2D.create(LayoutWidth, bottomRight.getY()-topLeft.getY());
         if(child.hasValue()){
-            View toAdd = child.getValue();
+            BufferView toAdd = child.getValue();
             toAdd.setPosition(position);
             toAdd.setDimensions(dimensions);
         }

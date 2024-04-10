@@ -33,7 +33,7 @@ public final class ViewService {
         for(String url : filePaths){
             Point dummyPosition = Point.create(0, 0);
             Dimension2D dummyDimensions = Dimension2D.create(1,1);
-            View view = View.createFromFilePath(url, dummyPosition, dummyDimensions);
+            BufferView view = BufferView.createFromFilePath(url, dummyPosition, dummyDimensions);
             viewRepo.add(view);
         }
         viewRepo.setActive(viewRepo.get(0));
@@ -49,14 +49,14 @@ public final class ViewService {
     }
 
     /**
-     * Sets the active View to the next View.
+     * Sets the active BufferView to the next BufferView.
      */
     public void setActiveViewToNext(){
         viewRepo.setNextActive();
     }
 
     /**
-     * Sets the active View to the previous View.
+     * Sets the active BufferView to the previous BufferView.
      */
     public void setActiveViewToPrevious(){
         viewRepo.setPreviousActive();
@@ -67,7 +67,7 @@ public final class ViewService {
      */
     public void drawAll(){
         TerminalService.clearScreen();
-        for(View view: viewRepo.getAll()){
+        for(BufferView view: viewRepo.getAll()){
             FileBuffer buffer = view.getBuffer();
             String statusBar = viewRepo.getActive().equals(view) ? "ACTIVE: " + generateStatusBar(buffer) : generateStatusBar(buffer);
             ViewDrawer.draw(view, statusBar);
@@ -143,7 +143,7 @@ public final class ViewService {
     }
 
     /**
-     * Attempts to delete the active View. If this View's buffer is Dirty, show user a warning. If it is clean, delete.
+     * Attempts to delete the active BufferView. If this BufferView's buffer is Dirty, show user a warning. If it is clean, delete.
      */
     public void attemptDeleteView(){
         if(getActiveBuffer().getState() == BufferState.CLEAN){
@@ -164,7 +164,7 @@ public final class ViewService {
             Settings.RUNNING = false;
             return;
         }
-        View oldActive = getActiveView();
+        BufferView oldActive = getActiveView();
         viewRepo.setNextActive();
         viewRepo.remove(oldActive);
         generateViewPositionsAndDimensions();
@@ -173,14 +173,14 @@ public final class ViewService {
 
 
     /**
-     * Saves the active View's buffer changes permanently.
+     * Saves the active BufferView's buffer changes permanently.
      */
     public void saveBuffer(){
         getActiveBuffer().writeToDisk();
     }
 
     /**
-     * Rotates the active View and the next View.
+     * Rotates the active BufferView and the next BufferView.
      * Then updates the new positions and dimensions.
      * @param clockwise The boolean. Indicates whether clockwise, or not.
      */
@@ -200,7 +200,7 @@ public final class ViewService {
     /**
      * @return The active view.
      */
-    private View getActiveView(){
+    private BufferView getActiveView(){
         return viewRepo.getActive();
     }
 

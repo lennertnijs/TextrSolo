@@ -20,29 +20,29 @@ class ViewServiceTest {
     private ViewTreeRepo repo ;
     private ViewService viewService;
 
-    private View view1 ;
+    private BufferView view1 ;
 
-    private View view2 ;
+    private BufferView view2 ;
 
-    private View view6 ;
+    private BufferView view6 ;
 
     @BeforeEach
     void initialise(){
-        List<View> views = new ArrayList<>();
+        List<BufferView> views = new ArrayList<>();
         Point initPoint = Point.create(0,0);
         Dimension2D initDimension = Dimension2D.create(10,10);
         Settings.defaultLineSeparator = "\r\n";
-        view1 = View.createFromFilePath("resources/write1.txt", initPoint, initDimension);
+        view1 = BufferView.createFromFilePath("resources/write1.txt", initPoint, initDimension);
         views.add(view1);
-        view2 = View.createFromFilePath("resources/test2ndfile.txt", initPoint, initDimension);
+        view2 = BufferView.createFromFilePath("resources/test2ndfile.txt", initPoint, initDimension);
         views.add(view2);
-        View view3 = View.createFromFilePath("resources/test3rdfile.txt", initPoint, initDimension);
+        BufferView view3 = BufferView.createFromFilePath("resources/test3rdfile.txt", initPoint, initDimension);
         views.add(view3);
-        View view4 = View.createFromFilePath("resources/save.txt", initPoint, initDimension);
+        BufferView view4 = BufferView.createFromFilePath("resources/save.txt", initPoint, initDimension);
         views.add(view4);
-        View view5 = View.createFromFilePath("resources/test2.txt", initPoint, initDimension);
+        BufferView view5 = BufferView.createFromFilePath("resources/test2.txt", initPoint, initDimension);
         views.add(view5);
-        view6 = View.createFromFilePath("resources/test.txt", initPoint, initDimension);
+        view6 = BufferView.createFromFilePath("resources/test.txt", initPoint, initDimension);
         views.add(view6);
         repo = new ViewTreeRepo();
         setViewRepo(repo);

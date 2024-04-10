@@ -2,7 +2,7 @@ package com.textr.drawer;
 
 import com.textr.terminal.TerminalService;
 import com.textr.util.Validator;
-import com.textr.view.View;
+import com.textr.view.BufferView;
 
 /**
  * Draws a view.
@@ -19,9 +19,9 @@ public final class ViewDrawer{
      *
      * @throws IllegalArgumentException If any parameter is null.
      */
-    public static void draw(View view, String statusBar) {
-        Validator.notNull(view, "Cannot draw a null View.");
-        Validator.notNull(statusBar, "Cannot draw the View because the status bar is null.");
+    public static void draw(BufferView view, String statusBar) {
+        Validator.notNull(view, "Cannot draw a null BufferView.");
+        Validator.notNull(statusBar, "Cannot draw the BufferView because the status bar is null.");
         int height = view.getDimensions().getHeight();
         int x = view.getPosition().getX();
         int startY = view.getPosition().getY();
@@ -40,7 +40,7 @@ public final class ViewDrawer{
         drawScrollBar(view);
     }
 
-    private static void drawScrollBar(View view){
+    private static void drawScrollBar(BufferView view){
         int maxY = view.getBuffer().getText().getAmountOfLines() - 1;
         int currentY = view.getBuffer().getCursor().getY();
         int yBar = Math.round(((float)currentY / (float)maxY) * (view.getDimensions().getHeight() - 1));
