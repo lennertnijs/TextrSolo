@@ -19,7 +19,8 @@ class BufferViewTest {
     private final Point initPoint2 = Point.create(1, 5);
     private final Dimension2D initDimension = Dimension2D.create(10,10);
     private final Dimension2D initDimension2 = Dimension2D.create(15,15);
-    private final BufferView view1 = BufferView.createFromFilePath("resources/write1.txt", initPoint, initDimension);
+    private final Dimension2D initDimension3 = Dimension2D.create(10,2);
+    private final BufferView view1 = BufferView.createFromFilePath("resources/write1.txt", initPoint, initDimension3);
     @Test
     void testCreateFromFilePath_NullURL() {
         assertThrows(IllegalArgumentException.class, () -> BufferView.createFromFilePath(null, initPoint, initDimension));
