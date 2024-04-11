@@ -26,7 +26,7 @@ class LayoutGeneratorTest {
 
     @BeforeEach
     public void initialise(){
-        List<BufferView> views = new ArrayList<>();
+        List<View> views = new ArrayList<>();
         Point initPoint = Point.create(0,0);
         Dimension2D initDimension = Dimension2D.create(10,10);
         Settings.defaultLineSeparator = "\r\n";

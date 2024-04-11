@@ -1,10 +1,13 @@
 package com.textr.view;
 
+import com.textr.filebuffer.BufferState;
 import com.textr.filebuffer.FileBuffer;
 import com.textr.util.Dimension2D;
+import com.textr.util.Direction;
 import com.textr.util.Point;
 import com.textr.Settings;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +19,7 @@ class BufferViewTest {
     private final Point initPoint2 = Point.create(1, 5);
     private final Dimension2D initDimension = Dimension2D.create(10,10);
     private final Dimension2D initDimension2 = Dimension2D.create(15,15);
-
+    private final BufferView view1 = BufferView.createFromFilePath("resources/write1.txt", initPoint, initDimension);
     @Test
     void testCreateFromFilePath_NullURL() {
         assertThrows(IllegalArgumentException.class, () -> BufferView.createFromFilePath(null, initPoint, initDimension));
@@ -64,6 +67,61 @@ class BufferViewTest {
         assertEquals(initDimension2, view1.getDimensions());
         assertEquals(Point.create(0, 0), view1.getAnchor());
 
+    }
+
+    @Test
+    void moveCursor() {
+        for(int i=0; i<3; i++){
+            view1.moveCursor(Direction.DOWN);
+        }
+        assertEquals(view1.getAnchor().getY(), view1.getBuffer().getCursor().getY());
+    }
+    @Test
+    void moveCursor_NullDirection() {
+        assertThrows(IllegalArgumentException.class, () -> view1.moveCursor(null));
+    }
+    @Test
+    void createNewline() {
+        for( int i=0; i<3; i++){
+            view1.createNewline();
+        }
+        assertEquals(view1.getAnchor().getY(), view1.getBuffer().getCursor().getY());
+    }
+    @Test
+    void insertCharacter() {
+        for( int i=0; i<20; i++){
+            view1.insertCharacter('d');
+        }
+        assertTrue(view1.getAnchor().getX()<=view1.getBuffer().getCursor().getX());
+        assertTrue(view1.getAnchor().getX()+10>=view1.getBuffer().getCursor().getX());
+        assertEquals(view1.getBuffer().getState(), BufferState.DIRTY);
+    }
+    @Test
+    void deletePrevChar() {
+        assertEquals(view1.getBuffer().getState(), BufferState.CLEAN);
+        for( int i=0; i<20; i++){
+            view1.insertCharacter('d');
+        }
+        for( int i=0; i<20; i++){
+            view1.deletePrevChar();
+        }
+        assertTrue(view1.getAnchor().getX()<=view1.getBuffer().getCursor().getX());
+        assertTrue(view1.getAnchor().getX()+10>=view1.getBuffer().getCursor().getX());
+        assertEquals(view1.getBuffer().getState(), BufferState.DIRTY);
+    }
+    @Test
+    void deleteNextChar() {
+        assertEquals(view1.getBuffer().getState(), BufferState.CLEAN);
+        for( int i=0; i<20; i++){
+            view1.insertCharacter('d');
+        }
+        for( int i=0; i<20; i++){
+            view1.moveCursor(Direction.LEFT);
+            view1.deleteNextChar();
+        }
+        assertTrue(view1.getAnchor().getX()<=view1.getBuffer().getCursor().getX());
+        assertTrue(view1.getAnchor().getX()+10>=view1.getBuffer().getCursor().getX());
+        assertEquals(view1.getBuffer().getState(), BufferState.DIRTY);
     }
 
     @Test

@@ -179,7 +179,12 @@ public final class ViewService {
             case CTRL_S -> saveBuffer();
             case CTRL_R -> rotateView(false);
             case CTRL_T -> rotateView(true);
+            case TICK -> {
+                getActiveView().incrementTimer();
+                return;
+            }
             default -> getActiveView().handleInput(input);
         }
+        drawAll();
     }
 }

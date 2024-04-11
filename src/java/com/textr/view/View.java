@@ -49,4 +49,10 @@ public class View {
      */
     public void handleInput(Input input) {
     }
+
+    /**
+     * Increments the timer of the view if relevant, see overrides.
+     */
+    public void incrementTimer() {
+    }
 }

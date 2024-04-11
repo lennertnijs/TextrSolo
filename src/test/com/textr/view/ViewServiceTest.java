@@ -28,7 +28,7 @@ class ViewServiceTest {
 
     @BeforeEach
     void initialise(){
-        List<BufferView> views = new ArrayList<>();
+        List<View> views = new ArrayList<>();
         Point initPoint = Point.create(0,0);
         Dimension2D initDimension = Dimension2D.create(10,10);
         Settings.defaultLineSeparator = "\r\n";
@@ -90,74 +90,13 @@ class ViewServiceTest {
     }
 
     @Test
-    void moveCursor() {
-        for(int i=0; i<3; i++){
-            viewService.moveCursor(Direction.DOWN);
-        }
-        assertEquals(repo.getActive().getAnchor().getY(), repo.getActive().getBuffer().getCursor().getY());
-    }
-
-    @Test
-    void moveCursor_NullDirection() {
-        assertThrows(IllegalArgumentException.class, () -> viewService.moveCursor(null));
-    }
-
-    @Test
-    void createNewline() {
-        for( int i=0; i<3; i++){
-            viewService.createNewline();
-        }
-        assertEquals(repo.getActive().getAnchor().getY(), repo.getActive().getBuffer().getCursor().getY());
-    }
-
-    @Test
-    void insertCharacter() {
-        for( int i=0; i<20; i++){
-            viewService.insertCharacter('d');
-        }
-        assertTrue(repo.getActive().getAnchor().getX()<=repo.getActive().getBuffer().getCursor().getX());
-        assertTrue(repo.getActive().getAnchor().getX()+10>=repo.getActive().getBuffer().getCursor().getX());
-        assertEquals(repo.getActive().getBuffer().getState(), BufferState.DIRTY);
-
-    }
-
-    @Test
-    void deletePrevChar() {
-        assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
-        for( int i=0; i<20; i++){
-            viewService.insertCharacter('d');
-        }
-        for( int i=0; i<20; i++){
-            viewService.deletePrevChar();
-        }
-        assertTrue(repo.getActive().getAnchor().getX()<=repo.getActive().getBuffer().getCursor().getX());
-        assertTrue(repo.getActive().getAnchor().getX()+10>=repo.getActive().getBuffer().getCursor().getX());
-        assertEquals(repo.getActive().getBuffer().getState(), BufferState.DIRTY);
-    }
-
-    @Test
-    void deleteNextChar() {
-        assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
-        for( int i=0; i<20; i++){
-            viewService.insertCharacter('d');
-        }
-        for( int i=0; i<20; i++){
-            viewService.moveCursor(Direction.LEFT);
-            viewService.deleteNextChar();
-        }
-        assertTrue(repo.getActive().getAnchor().getX()<=repo.getActive().getBuffer().getCursor().getX());
-        assertTrue(repo.getActive().getAnchor().getX()+10>=repo.getActive().getBuffer().getCursor().getX());
-        assertEquals(repo.getActive().getBuffer().getState(), BufferState.DIRTY);
-    }
-
-    @Test
     void saveBuffer() {
-        assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
-        viewService.insertCharacter('d');
-        assertEquals(repo.getActive().getBuffer().getState(), BufferState.DIRTY);
+        assertEquals(view1.getBuffer().getState(), BufferState.CLEAN);
+        view1.insertCharacter('d');
+        assertEquals(view1.getBuffer().getState(), BufferState.DIRTY);
         viewService.saveBuffer();
-        assertEquals(repo.getActive().getBuffer().getState(), BufferState.CLEAN);
-        viewService.deletePrevChar();
+        assertEquals(view1.getBuffer().getState(), BufferState.CLEAN);
+        view1.deletePrevChar();
         viewService.saveBuffer();
     }
 }

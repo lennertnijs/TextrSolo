@@ -18,10 +18,8 @@ public final class InputHandler implements IInputHandler {
         InputType inputType = input.getType();
         if (Objects.requireNonNull(inputType) == InputType.F4) {
             viewService.attemptDeleteView();
-            return;
         } else {
             viewService.handleInput(input);
         }
-        viewService.drawAll();
     }
 }

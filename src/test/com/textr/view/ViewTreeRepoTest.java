@@ -30,7 +30,7 @@ class ViewTreeRepoTest {
     private Dimension2D terminalDimensions;
     private ViewTreeRepo repo;
 
-    private List<BufferView> views;
+    private List<View> views;
 
 
     @BeforeEach
