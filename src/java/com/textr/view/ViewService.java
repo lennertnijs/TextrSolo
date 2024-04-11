@@ -2,8 +2,10 @@ package com.textr.view;
 
 import com.textr.filebuffer.BufferState;
 import com.textr.filebuffer.FileBuffer;
+import com.textr.input.Input;
 import com.textr.input.InputHandlerRepo;
 import com.textr.Settings;
+import com.textr.input.InputType;
 import com.textr.terminal.TerminalService;
 import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
@@ -67,12 +69,15 @@ public final class ViewService {
      */
     public void drawAll(){
         TerminalService.clearScreen();
-        for(BufferView view: viewRepo.getAll()){
-            FileBuffer buffer = view.getBuffer();
-            String statusBar = viewRepo.getActive().equals(view) ? "ACTIVE: " + generateStatusBar(buffer) : generateStatusBar(buffer);
-            ViewDrawer.draw(view, statusBar);
+        for(View view: viewRepo.getAll()){
+                //TODO + WARNING THIS CURRENTLY DOESN'T WORK ON SNAKEVIEWS AND WILL ERROR
+                FileBuffer buffer = ((BufferView) view).getBuffer();
+                String statusBar = viewRepo.getActive().equals(view) ? "ACTIVE: " + generateStatusBar(buffer) : generateStatusBar(buffer);
+                ViewDrawer.draw((BufferView) view, statusBar);
         }
-        CursorDrawer.draw(getActiveView().getPosition(), getAnchor(), getActiveBuffer().getCursor());
+        if(viewRepo.getActive() instanceof BufferView){
+            CursorDrawer.draw(getActiveView().getPosition(), ((BufferView)getActiveView()).getAnchor(), getActiveBuffer().getCursor());
+        }
     }
 
     /**
@@ -91,55 +96,6 @@ public final class ViewService {
                 buffer.getCursor().getY(),
                 buffer.getCursor().getX(),
                 buffer.getState());
-    }
-
-
-
-    /**
-     * Moves the cursor of the active buffer by 1 unit in the given direction.
-     * Then calls for an update of the anchor.
-     * @param direction The direction. Cannot be null.
-     *
-     * @throws IllegalArgumentException If the given direction is null.
-     */
-    public void moveCursor(Direction direction){
-        Validator.notNull(direction, "Cannot move the cursor in the null direction.");
-        getActiveBuffer().moveCursor(direction);
-        updateAnchor();
-    }
-
-    /**
-     * Creates a new line (\r\n on Windows) at the cursor in the active buffer.
-     * Then calls for an update of the anchor.
-     */
-    public void createNewline(){
-        getActiveBuffer().createNewLine();
-        updateAnchor();
-    }
-
-    /**
-     * Inserts the given character at the cursor of the active buffer.
-     * @param character The input character
-     */
-    public void insertCharacter(char character){
-        getActiveBuffer().insertCharacter(character);
-        updateAnchor();
-    }
-
-    /**
-     * Deletes the character just before the cursor of the active buffer.
-     * Then calls for an update of the anchor.
-     */
-    public void deletePrevChar(){
-        getActiveBuffer().removeCharacterBefore();
-        updateAnchor();
-    }
-
-    /**
-     * Deletes the character just after the cursor of the active buffer.
-     */
-    public void deleteNextChar(){
-        getActiveBuffer().removeCharacterAfter();
     }
 
     /**
@@ -164,7 +120,7 @@ public final class ViewService {
             Settings.RUNNING = false;
             return;
         }
-        BufferView oldActive = getActiveView();
+        View oldActive = getActiveView();
         viewRepo.setNextActive();
         viewRepo.remove(oldActive);
         generateViewPositionsAndDimensions();
@@ -173,10 +129,12 @@ public final class ViewService {
 
 
     /**
+     * Saves only if the active view is a BufferView, otherwise does nothing.
      * Saves the active BufferView's buffer changes permanently.
      */
     public void saveBuffer(){
-        getActiveBuffer().writeToDisk();
+        if(getActiveView() instanceof BufferView)
+            getActiveBuffer().writeToDisk();
     }
 
     /**
@@ -191,30 +149,37 @@ public final class ViewService {
 
 
     /**
+     * Gets the active buffer. WARNING: this only works if the active view is a BufferView.
      * @return The active buffer.
+     * @throws IllegalStateException if the active view isn't a BufferView
      */
     private FileBuffer getActiveBuffer(){
-        return viewRepo.getActive().getBuffer();
+        if(viewRepo.getActive() instanceof BufferView)
+            return ((BufferView) viewRepo.getActive()).getBuffer();
+        else
+            throw new IllegalStateException ();
     }
 
     /**
      * @return The active view.
      */
-    private BufferView getActiveView(){
+    private View getActiveView(){
         return viewRepo.getActive();
     }
 
     /**
-     * @return The anchor point of the active view.
+     * Handling input at the ViewService level, allowing some to flow through to the active view.
+     * @param input
      */
-    private Point getAnchor(){
-        return getActiveView().getAnchor();
-    }
-
-    /**
-     * Updates the anchor point of the active buffer to adjust it to possible changes to the cursor point.
-     */
-    private void updateAnchor(){
-        AnchorUpdater.updateAnchor(getAnchor(), getActiveBuffer().getCursor(), getActiveView().getDimensions());
+    public void handleInput(Input input) {
+        InputType inputType = input.getType();
+        switch (inputType){
+            case CTRL_P -> setActiveViewToPrevious();
+            case CTRL_N -> setActiveViewToNext();
+            case CTRL_S -> saveBuffer();
+            case CTRL_R -> rotateView(false);
+            case CTRL_T -> rotateView(true);
+            default -> getActiveView().handleInput(input);
+        }
     }
 }

@@ -22,5 +22,6 @@ public enum InputType {
     DELETE, // ESC [ 3 ~ aka 27 91 51 127
     BACKSPACE, // 127
     F4, // ESC O S aka 27 79 83
+    TICK, // to register a tick in time
     NOT_MAPPED
 }

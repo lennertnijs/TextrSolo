@@ -8,18 +8,18 @@ public interface IViewRepo {
 
     boolean rootIsVertical();
     int getSize();
-    BufferView getActive();
-    void setActive(BufferView view);
-    void add(BufferView view);
-    void addAll(List<BufferView> views);
-    void remove(BufferView view);
+    View getActive();
+    void setActive(View view);
+    void add(View view);
+    void addAll(List<View> views);
+    void remove(View view);
     void removeAll();
-    BufferView get(int index);
-    List<BufferView> getAll();
+    View get(int index);
+    List<View> getAll();
     void setNextActive();
     void setPreviousActive();
     void rotate(boolean clockwise);
-    List<BufferView> getAllAtDepth(int depth);
+    List<View> getAllAtDepth(int depth);
 
     Node getRoot();
 }

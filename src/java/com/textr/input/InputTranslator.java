@@ -58,6 +58,9 @@ public final class InputTranslator {
             case 127 -> {
                 return Input.createSpecialInput(InputType.BACKSPACE);
             }
+            case -2 -> {
+                return Input.createSpecialInput(InputType.TICK);
+            }
         }
         return Input.createSpecialInput(InputType.NOT_MAPPED);
     }

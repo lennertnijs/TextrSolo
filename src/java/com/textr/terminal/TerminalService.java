@@ -4,6 +4,7 @@ import com.textr.util.Dimension2D;
 import io.github.btj.termios.Terminal;
 
 import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
 public final class TerminalService {
 
@@ -96,9 +97,11 @@ public final class TerminalService {
      */
     public static int readByte(){
         try{
-            return Terminal.readByte();
+            return Terminal.readByte(System.currentTimeMillis()+10);
         }catch(IOException e){
             return -1;
+        } catch (TimeoutException e) {
+            return -2;
         }
     }
 }

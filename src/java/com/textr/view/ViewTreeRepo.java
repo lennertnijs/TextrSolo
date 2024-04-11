@@ -9,8 +9,8 @@ import java.util.List;
 public final class ViewTreeRepo implements IViewRepo {
 
 
-    private Tree<BufferView> tree;
-    private BufferView active;
+    private Tree<View> tree;
+    private View active;
 
 
     public ViewTreeRepo(){
@@ -42,7 +42,7 @@ public final class ViewTreeRepo implements IViewRepo {
      * @return The active BufferView. If none is set, returns null.
      */
     @Override
-    public BufferView getActive() {
+    public View getActive() {
         return  active;
     }
 
@@ -53,7 +53,7 @@ public final class ViewTreeRepo implements IViewRepo {
      * @throws IllegalArgumentException If the given BufferView is null.
      */
     @Override
-    public void setActive(BufferView view) {
+    public void setActive(View view) {
         Validator.notNull(view, "Cannot set the active BufferView to a null.");
         this.active = view;
     }
@@ -66,7 +66,7 @@ public final class ViewTreeRepo implements IViewRepo {
      * @throws IllegalArgumentException If the given view is null.
      */
     @Override
-    public void add(BufferView view){
+    public void add(View view){
         Validator.notNull(view, "Cannot store a null BufferView.");
         tree.addChildToRoot(new Node<>(view));
     }
@@ -79,12 +79,12 @@ public final class ViewTreeRepo implements IViewRepo {
      * @throws IllegalArgumentException If the given List of Views is or contains null.
      */
     @Override
-    public void addAll(List<BufferView> views){
+    public void addAll(List<View> views){
         Validator.notNull(views, "Cannot store views from a null List.");
-        for(BufferView view : views){
+        for(View view : views){
             Validator.notNull(view, "Cannot store a null BufferView.");
         }
-        for(BufferView view : views){
+        for(View view : views){
             add(view);
         }
     }
@@ -94,7 +94,7 @@ public final class ViewTreeRepo implements IViewRepo {
      * @param view The BufferView. Cannot be null.
      */
     @Override
-    public void remove(BufferView view) {
+    public void remove(View view) {
         Validator.notNull(view, "Cannot remove a null BufferView from the Tree.");
         tree.remove(view);
         tree.restoreInvariants();
@@ -115,7 +115,7 @@ public final class ViewTreeRepo implements IViewRepo {
      * @return The view.
      */
     @Override
-    public BufferView get(int index){
+    public View get(int index){
         Validator.withinRange(index, 0, tree.getSize() - 1, "Cannot retrieve an element at in invalid index.");
         return tree.getAllValues().get(index);
     }
@@ -124,7 +124,7 @@ public final class ViewTreeRepo implements IViewRepo {
      * @return All the Tree's values, in their correct order.
      */
     @Override
-    public List<BufferView> getAll(){
+    public List<View> getAll(){
         return tree.getAllValues();
     }
 
@@ -161,7 +161,7 @@ public final class ViewTreeRepo implements IViewRepo {
      * @return The values and nulls at the given depth.
      */
     @Override
-    public List<BufferView> getAllAtDepth(int depth){
+    public List<View> getAllAtDepth(int depth){
         Validator.notNegativeOrZero(depth, "Cannot check the nodes at the given negative or zero depth.");
         return tree.getAllAtDepth(depth);
     }
