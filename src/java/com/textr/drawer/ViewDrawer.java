@@ -59,21 +59,24 @@ public final class ViewDrawer{
         int x = view.getPosition().getX();
         int baseY = view.getPosition().getY()+ height - 2;
         int maxY = view.getPosition().getY() + height - 1;
-        ArrayList<Point> snake = view.getSnake();
-        Point head = snake.removeFirst();
-        switch (view.getHeadOrientation()){
-            case RIGHT -> TerminalService.printText(x+ head.getX(), baseY- head.getY(), ">");
-            case LEFT ->  TerminalService.printText(x+ head.getX(), baseY- head.getY(), "<");
-            case UP -> TerminalService.printText(x+ head.getX(), baseY- head.getY(), "^");
-            case DOWN -> TerminalService.printText(x+ head.getX(), baseY- head.getY(), "v");
+        if(view.getRunning()){ArrayList<Point> snake = view.getSnake();
+            Point head = snake.removeFirst();
+            switch (view.getHeadOrientation()){
+                case RIGHT -> TerminalService.printText(x+ head.getX(), baseY- head.getY(), ">");
+                case LEFT ->  TerminalService.printText(x+ head.getX(), baseY- head.getY(), "<");
+                case UP -> TerminalService.printText(x+ head.getX(), baseY- head.getY(), "^");
+                case DOWN -> TerminalService.printText(x+ head.getX(), baseY- head.getY(), "v");
+            }
+            for(Point point : snake){
+                TerminalService.printText(x+ point.getX(), baseY- point.getY(), "o");
+            }
+            ArrayList<Point> foods = view.getFoods();
+            for(Point point : foods){
+                TerminalService.printText(x+ point.getX(), baseY- point.getY(), "f");
+            }
         }
-        for(Point point : snake){
-            TerminalService.printText(x+ point.getX(), baseY- point.getY(), "o");
-        }
-        ArrayList<Point> foods = view.getFoods();
-        for(Point point : foods){
-            TerminalService.printText(x+ point.getX(), baseY- point.getY(), "f");
-        }
+        else
+            TerminalService.printText(x, baseY, "GAME OVER - Press Enter to restart");
         int maxStatusBarIndex = Math.min(view.getDimensions().getWidth(), statusBar.length());
         TerminalService.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
     }

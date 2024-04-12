@@ -179,5 +179,6 @@ public final class ViewService {
         viewRepo.addNextTo(newGame, getActiveView());
         generateViewPositionsAndDimensions();
         newGame.initializeGame();
+        setActiveViewToNext();
     }
 }

@@ -154,7 +154,8 @@ public final class ViewTreeRepo implements IViewRepo {
         Validator.notNull(newView, "Cannot store a null View.");
         Validator.notNull(existing, "Cannot store a null View.");
         Node<View> sibling = tree.getNode(existing);
-        tree.addChildToNode(new Node<>(newView),sibling.getParent());
+        int placement = sibling.getParent().getChildren().indexOf(sibling)+1;
+        tree.addChildToNodeAt(new Node<>(newView),sibling.getParent(),placement);
     }
     /**
      * Rotates the active BufferView and the next BufferView CW / CCW and updates the tree appropriately, keeping its invariance.

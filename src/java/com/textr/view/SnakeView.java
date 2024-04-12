@@ -88,7 +88,7 @@ public class SnakeView extends View {
     /**
      * Initializes the game. Allows restart of the game within the same view.
      */
-    void initializeGame(){
+    public void initializeGame(){
         this.snake = new LinkedList<>();
         this.foods = new ArrayList<>();
         this.unoccupied = new ArrayList<>();
@@ -342,7 +342,6 @@ public class SnakeView extends View {
             case ENTER -> {
                 if(!running){
                     initializeGame();
-                    //TODO redraw
                 }
             }
             case ARROW_UP -> {
@@ -367,5 +366,9 @@ public class SnakeView extends View {
             }
             case TICK -> incrementTimer();
         }
+    }
+
+    public boolean getRunning() {
+        return running;
     }
 }
