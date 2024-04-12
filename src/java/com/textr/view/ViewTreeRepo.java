@@ -59,15 +59,15 @@ public final class ViewTreeRepo implements IViewRepo {
     }
 
     /**
-     * Stores the given BufferView.
-     * More specifically, adds the BufferView to the children of the root of the Tree.
+     * Stores the given View.
+     * More specifically, adds the View to the children of the root of the Tree.
      * @param view The BufferView. Cannot be null.
      *
      * @throws IllegalArgumentException If the given view is null.
      */
     @Override
     public void add(View view){
-        Validator.notNull(view, "Cannot store a null BufferView.");
+        Validator.notNull(view, "Cannot store a null View.");
         tree.addChildToRoot(new Node<>(view));
     }
 
@@ -82,7 +82,7 @@ public final class ViewTreeRepo implements IViewRepo {
     public void addAll(List<View> views){
         Validator.notNull(views, "Cannot store views from a null List.");
         for(View view : views){
-            Validator.notNull(view, "Cannot store a null BufferView.");
+            Validator.notNull(view, "Cannot store a null View.");
         }
         for(View view : views){
             add(view);
@@ -90,8 +90,8 @@ public final class ViewTreeRepo implements IViewRepo {
     }
 
     /**
-     * Removes the given BufferView from the Tree. If no match is found, does nothing.
-     * @param view The BufferView. Cannot be null.
+     * Removes the given View from the Tree. If no match is found, does nothing.
+     * @param view The View. Cannot be null.
      */
     @Override
     public void remove(View view) {
@@ -109,7 +109,7 @@ public final class ViewTreeRepo implements IViewRepo {
     }
 
     /**
-     * Fetches and returns the BufferView at the given index.
+     * Fetches and returns the View at the given index.
      * @param index The view index. Cannot be negative or bigger than the size of the Tree - 1.
      *
      * @return The view.
@@ -143,8 +143,19 @@ public final class ViewTreeRepo implements IViewRepo {
     public void setPreviousActive(){
         active = tree.getPreviousValue(active);
     }
-
-
+    /**
+     * Stores the given View next to the existing one.
+     * @param newView The new View. Cannot be null.
+     * @param existing the view it'll be placed next to
+     * @throws IllegalArgumentException If the given newview is null.
+     */
+    @Override
+    public void addNextTo(View newView, View existing ){
+        Validator.notNull(newView, "Cannot store a null View.");
+        Validator.notNull(existing, "Cannot store a null View.");
+        Node<View> sibling = tree.getNode(existing);
+        tree.addChildToNode(new Node<>(newView),sibling.getParent());
+    }
     /**
      * Rotates the active BufferView and the next BufferView CW / CCW and updates the tree appropriately, keeping its invariance.
      * @param clockwise The bool whether CW/CCW

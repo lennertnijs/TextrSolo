@@ -70,39 +70,23 @@ public final class ViewService {
     public void drawAll(){
         TerminalService.clearScreen();
         for(View view: viewRepo.getAll()){
-                //TODO + WARNING THIS CURRENTLY DOESN'T WORK ON SNAKEVIEWS AND WILL ERROR
-                FileBuffer buffer = ((BufferView) view).getBuffer();
-                String statusBar = viewRepo.getActive().equals(view) ? "ACTIVE: " + generateStatusBar(buffer) : generateStatusBar(buffer);
-                ViewDrawer.draw((BufferView) view, statusBar);
+                String statusBar = viewRepo.getActive().equals(view) ? "ACTIVE: " + view.generateStatusBar() : view.generateStatusBar();
+                if(view instanceof BufferView)
+                    ViewDrawer.draw((BufferView) view, statusBar);
+                else
+                    ViewDrawer.draw((SnakeView) view, statusBar);
         }
         if(viewRepo.getActive() instanceof BufferView){
             CursorDrawer.draw(getActiveView().getPosition(), ((BufferView)getActiveView()).getAnchor(), getActiveBuffer().getCursor());
         }
     }
 
-    /**
-     * Generates and returns a status bar for the given FileBuffer.
-     * @param buffer The file buffer. Cannot be null.
-     *
-     * @return The status bar.
-     * @throws IllegalArgumentException If the given buffer is null.
-     */
-    private String generateStatusBar(FileBuffer buffer){
-        Validator.notNull(buffer, "Cannot generate a status bar for a null FileBuffer.");
-        return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: (line, col) = (%d, %d) - State: %s",
-                buffer.getFile().getPath(),
-                buffer.getText().getAmountOfLines(),
-                buffer.getText().getAmountOfChars(),
-                buffer.getCursor().getY(),
-                buffer.getCursor().getX(),
-                buffer.getState());
-    }
 
     /**
      * Attempts to delete the active BufferView. If this BufferView's buffer is Dirty, show user a warning. If it is clean, delete.
      */
     public void attemptDeleteView(){
-        if(getActiveBuffer().getState() == BufferState.CLEAN){
+        if( getActiveView() instanceof SnakeView || getActiveBuffer().getState() == BufferState.CLEAN){
             deleteView();
             return;
         }
@@ -179,12 +163,21 @@ public final class ViewService {
             case CTRL_S -> saveBuffer();
             case CTRL_R -> rotateView(false);
             case CTRL_T -> rotateView(true);
+            case  F4-> attemptDeleteView();
+            case CTRL_G -> addGame();
             case TICK -> {
-                getActiveView().incrementTimer();
-                return;
+                if(!getActiveView().incrementTimer())
+                    return;
             }
             default -> getActiveView().handleInput(input);
         }
         drawAll();
+    }
+
+    private void addGame() {
+        SnakeView newGame = new SnakeView(Point.create(0,0), Dimension2D.create(10,10));
+        viewRepo.addNextTo(newGame, getActiveView());
+        generateViewPositionsAndDimensions();
+        newGame.initializeGame();
     }
 }

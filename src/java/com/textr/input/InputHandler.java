@@ -16,10 +16,7 @@ public final class InputHandler implements IInputHandler {
     public void handleInput(){
         Input input = InputTranslator.getNextInput();
         InputType inputType = input.getType();
-        if (Objects.requireNonNull(inputType) == InputType.F4) {
-            viewService.attemptDeleteView();
-        } else {
-            viewService.handleInput(input);
-        }
+        viewService.handleInput(input);
     }
+
 }

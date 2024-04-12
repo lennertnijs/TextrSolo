@@ -44,6 +44,14 @@ public final class BufferView extends View {
     }
 
     /**
+     * Resizes this BufferView
+     * @param dimensions = the new dimensions of the view
+     */
+    public void resize(Dimension2D dimensions){
+        setDimensions(dimensions);
+    }
+
+    /**
      * Compares this view to the given object and returns True if they're equal. Returns False otherwise.
      * @param o The other object
      *
@@ -145,6 +153,24 @@ public final class BufferView extends View {
      */
     private void updateAnchor(){
         AnchorUpdater.updateAnchor(getAnchor(), getBuffer().getCursor(), getDimensions());
+    }
+
+    /**
+     * Generates and returns a status bar for the given FileBuffer.
+     *
+     * @return The status bar.
+     * @throws IllegalArgumentException If the given buffer is null.
+     */
+    @Override
+    public String generateStatusBar(){
+        FileBuffer buffer = getBuffer();
+        return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: (line, col) = (%d, %d) - State: %s",
+                buffer.getFile().getPath(),
+                buffer.getText().getAmountOfLines(),
+                buffer.getText().getAmountOfChars(),
+                buffer.getCursor().getY(),
+                buffer.getCursor().getX(),
+                buffer.getState());
     }
     /**
      * Handle input at the view level. Only view specific operations happen here, and nothing flows to a deeper level in the chain.

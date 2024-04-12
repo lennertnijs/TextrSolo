@@ -34,6 +34,9 @@ public final class InputTranslator {
             return Input.createCharacterInput((char) b);
         }
         switch (b) {
+            case 7 -> {
+                return Input.createSpecialInput(InputType.CTRL_G);
+            }
             case 13 -> {
                 return Input.createSpecialInput(InputType.ENTER);
             }

@@ -51,8 +51,24 @@ public class View {
     }
 
     /**
-     * Increments the timer of the view if relevant, see overrides.
+     * Increments the timer of the view if relevant, and returns whether that changed something requiring a redraw.
      */
-    public void incrementTimer() {
+    public boolean incrementTimer() {
+        return false;
+    }
+
+    /**
+     * Resizes this view to the new dimensions.
+     * @param dimensions the new dimensions of the view.
+     */
+    public void resize(Dimension2D dimensions) {
+    }
+
+    /**
+     * generate the statusbar of this view
+     * @return
+     */
+    public String generateStatusBar() {
+        return "";
     }
 }
