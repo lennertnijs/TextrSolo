@@ -1,6 +1,8 @@
 package com.textr.view;
 
+import com.textr.filebuffer.Cursor;
 import com.textr.filebuffer.FileBuffer;
+import com.textr.filebuffer.ICursor;
 import com.textr.input.Input;
 import com.textr.input.InputType;
 import com.textr.util.Dimension2D;
@@ -14,12 +16,14 @@ import com.textr.util.Validator;
 public final class BufferView extends View {
 
     private final FileBuffer buffer;
+    private final ICursor cursor;
     private final Point anchor;
 
 
-    private BufferView(FileBuffer buffer, Point position, Dimension2D dimensions, Point anchor){
+    private BufferView(FileBuffer buffer, ICursor cursor, Point position, Dimension2D dimensions, Point anchor){
         super(position, dimensions);
         this.buffer = buffer;
+        this.cursor = cursor;
         this.anchor = anchor;
 
     }
@@ -29,7 +33,7 @@ public final class BufferView extends View {
         Validator.notNull(position, "The global position of the BufferView in the Terminal cannot be null.");
         Validator.notNull(dimensions, "The dimensions of the BufferView cannot be null.");
         FileBuffer b = FileBuffer.createFromFilePath(url);
-        return new BufferView(b, position.copy(), dimensions.copy(), Point.create(0,0));
+        return new BufferView(b, Cursor.createNew(), position.copy(), dimensions.copy(), Point.create(0,0));
     }
 
     public FileBuffer getBuffer(){
@@ -41,6 +45,10 @@ public final class BufferView extends View {
      */
     public Point getAnchor(){
         return anchor;
+    }
+
+    public ICursor getCursor(){
+        return cursor;
     }
 
     /**
@@ -98,7 +106,7 @@ public final class BufferView extends View {
     }
 
     public BufferView copy(){
-        return new BufferView(this.buffer.copy(), getPosition().copy(), getDimensions().copy(), this.anchor.copy());
+        return new BufferView(this.buffer.copy(), this.cursor, getPosition().copy(), getDimensions().copy(), this.anchor.copy());
     }
 
     /**
@@ -110,7 +118,7 @@ public final class BufferView extends View {
      */
     public void moveCursor(Direction direction){
         Validator.notNull(direction, "Cannot move the cursor in the null direction.");
-        getBuffer().moveCursor(direction);
+        this.buffer.moveCursor(direction, cursor);
         updateAnchor();
     }
 
@@ -118,8 +126,8 @@ public final class BufferView extends View {
      * Creates a new line (\r\n on Windows) at the cursor in the active buffer.
      * Then calls for an update of the anchor.
      */
-    public void createNewline(){
-        getBuffer().createNewLine();
+    public void insertNewLine(){
+        buffer.createNewLine(cursor);
         updateAnchor();
     }
 
@@ -128,7 +136,7 @@ public final class BufferView extends View {
      * @param character The input character
      */
     public void insertCharacter(char character){
-        getBuffer().insertCharacter(character);
+        buffer.insertCharacter(character, cursor);
         updateAnchor();
     }
 
@@ -136,23 +144,23 @@ public final class BufferView extends View {
      * Deletes the character just before the cursor of the active buffer.
      * Then calls for an update of the anchor.
      */
-    public void deletePrevChar(){
-        getBuffer().removeCharacterBefore();
+    public void deletePreviousCharacter(){
+        buffer.removeCharacterBefore(cursor);
         updateAnchor();
     }
 
     /**
      * Deletes the character just after the cursor of the active buffer.
      */
-    public void deleteNextChar(){
-        getBuffer().removeCharacterAfter();
+    public void deleteNextCharacter(){
+        buffer.removeCharacterAfter(cursor);
     }
 
     /**
      * Updates the anchor point of the active buffer to adjust it to possible changes to the cursor point.
      */
     private void updateAnchor(){
-        AnchorUpdater.updateAnchor(getAnchor(), getBuffer().getCursor(), getDimensions());
+        AnchorUpdater.updateAnchor(getAnchor(), cursor.getInsertPoint(), getDimensions());
     }
 
     /**
@@ -163,13 +171,12 @@ public final class BufferView extends View {
      */
     @Override
     public String generateStatusBar(){
-        FileBuffer buffer = getBuffer();
         return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: (line, col) = (%d, %d) - State: %s",
                 buffer.getFile().getPath(),
                 buffer.getText().getAmountOfLines(),
                 buffer.getText().getAmountOfChars(),
-                buffer.getCursor().getY(),
-                buffer.getCursor().getX(),
+                cursor.getInsertPoint().getY(),
+                cursor.getInsertPoint().getX(),
                 buffer.getState());
     }
     /**
@@ -180,13 +187,13 @@ public final class BufferView extends View {
         InputType inputType = input.getType();
         switch (inputType) {
             case CHARACTER -> insertCharacter(input.getCharacter());
-            case ENTER -> createNewline();
+            case ENTER -> insertNewLine();
             case ARROW_UP -> moveCursor(Direction.UP);
             case ARROW_RIGHT -> moveCursor(Direction.RIGHT);
             case ARROW_DOWN -> moveCursor(Direction.DOWN);
             case ARROW_LEFT -> moveCursor(Direction.LEFT);
-            case DELETE -> deleteNextChar();
-            case BACKSPACE -> deletePrevChar();
+            case DELETE -> deleteNextCharacter();
+            case BACKSPACE -> deletePreviousCharacter();
         }
     }
 }

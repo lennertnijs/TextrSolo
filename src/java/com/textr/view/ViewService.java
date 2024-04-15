@@ -77,7 +77,7 @@ public final class ViewService {
                     ViewDrawer.draw((SnakeView) view, statusBar);
         }
         if(viewRepo.getActive() instanceof BufferView){
-            CursorDrawer.draw(getActiveView().getPosition(), ((BufferView)getActiveView()).getAnchor(), getActiveBuffer().getCursor());
+            CursorDrawer.draw(getActiveView().getPosition(), ((BufferView)getActiveView()).getAnchor(), ((BufferView) getActiveView()).getCursor().getInsertPoint());
         }
     }
 

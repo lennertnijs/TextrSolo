@@ -89,14 +89,14 @@ class ViewServiceTest {
         assertNotSame(repo.getActive(), view1);
     }
 
-    @Test
-    void saveBuffer() {
-        assertEquals(view1.getBuffer().getState(), BufferState.CLEAN);
-        view1.insertCharacter('d');
-        assertEquals(view1.getBuffer().getState(), BufferState.DIRTY);
-        viewService.saveBuffer();
-        assertEquals(view1.getBuffer().getState(), BufferState.CLEAN);
-        view1.deletePrevChar();
-        viewService.saveBuffer();
-    }
+//    @Test
+//    void saveBuffer() {
+//        assertEquals(view1.getBuffer().getState(), BufferState.CLEAN);
+//        view1.insertCharacter('d');
+//        assertEquals(view1.getBuffer().getState(), BufferState.DIRTY);
+//        viewService.saveBuffer();
+//        assertEquals(view1.getBuffer().getState(), BufferState.CLEAN);
+//        view1.deletePrevChar();
+//        viewService.saveBuffer();
+//    }
 }

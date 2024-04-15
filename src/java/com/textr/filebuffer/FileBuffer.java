@@ -14,24 +14,22 @@ import java.io.File;
 public final class FileBuffer {
 
     private final File file;
-    private final Text text;
+    private final IText text;
     private final ChangeHistory changeHistory;
-    private final Point cursor;
     private BufferState state;
 
-    private FileBuffer(File file, Text text, Point cursor, BufferState state){
+    private FileBuffer(File file, IText text, BufferState state){
         this.file = file;
         this.text = text;
         this.changeHistory = new ChangeHistory();
-        this.cursor = cursor;
         this.state = state;
     }
 
     public static FileBuffer createFromFilePath(String url){
         Validator.notNull(url, "Cannot create a FileBuffer from a null url.");
         File f = new File(url);
-        Text t = Text.create(FileReader.readContents(f));
-        return new FileBuffer(f, t, Point.create(0,0), BufferState.CLEAN);
+        LineText t = LineText.createFromString(FileReader.readContents(f));
+        return new FileBuffer(f, t, BufferState.CLEAN);
     }
 
     /**
@@ -44,15 +42,8 @@ public final class FileBuffer {
     /**
      * @return This file buffer's text.
      */
-    public Text getText(){
+    public IText getText(){
         return this.text;
-    }
-
-    /**
-     * @return This file buffer's cursor.
-     */
-    public Point getCursor(){
-        return this.cursor;
     }
 
 
@@ -69,9 +60,9 @@ public final class FileBuffer {
      *
      * @throws IllegalArgumentException If the given direction is null.
      */
-    public void moveCursor(Direction direction){
+    public void moveCursor(Direction direction, ICursor cursor){
         Validator.notNull(direction, "Cannot move the cursor in the null Direction.");
-        CursorMover.move(cursor, direction, text);
+        this.text.moveCursor(direction, cursor);
     }
 
     /**
@@ -86,22 +77,21 @@ public final class FileBuffer {
     }
 
     public void undo(){
-        changeHistory.undo(text, cursor);
+        //changeHistory.undo(text, cursor);
     }
 
     public void redo(){
-        changeHistory.redo(text, cursor);
+        //changeHistory.redo(text, cursor);
     }
 
     /**
      * Inserts the given character into this {@link FileBuffer}'s buffer {@link Text} at the insertion {@link Point}.
      * @param character The character
      */
-    public void insertCharacter(char character){
-        changeHistory.addInsertAction(character, cursor.getY(), cursor.getX());
-        text.insertCharacter(character, cursor.getY(), cursor.getX());
+    public void insertCharacter(char character, ICursor cursor){
+        //changeHistory.addInsertAction(character, cursor.getY(), cursor.getX());
+        text.insertCharacter(character, cursor);
         this.setState(BufferState.DIRTY);
-        CursorMover.move(cursor, Direction.RIGHT, text);
     }
 
     /**
@@ -109,12 +99,9 @@ public final class FileBuffer {
      * Also moves the cursor one unit to the left.
      * Used when backspace is pressed.
      */
-    public void removeCharacterBefore(){
-        int oldY = cursor.getY();
-        int oldX = cursor.getX();
-        CursorMover.move(cursor, Direction.LEFT, text);
-        changeHistory.addDeleteAction(text.getLines()[oldY].charAt(oldX), oldY, oldX);
-        text.removeCharacter(oldY, oldX - 1);
+    public void removeCharacterBefore(ICursor cursor){
+        //changeHistory.addDeleteAction(text.getLines()[oldY].charAt(oldX), oldY, oldX);
+        text.removeCharacterBefore(cursor);
         this.setState(BufferState.DIRTY);
     }
 
@@ -123,8 +110,8 @@ public final class FileBuffer {
      * Does not move the cursor.
      * Used when delete is pressed.
      */
-    public void removeCharacterAfter(){
-        text.removeCharacter(cursor.getY(), cursor.getX());
+    public void removeCharacterAfter(ICursor cursor){
+        text.removeCharacterAfter(cursor);
         this.setState(BufferState.DIRTY);
     }
 
@@ -133,14 +120,13 @@ public final class FileBuffer {
      * Also moves the cursor into the new line.
      * Used when enter is pressed.
      */
-    public void createNewLine(){
-        text.splitLineAtColumn(cursor.getY(), cursor.getX());
+    public void createNewLine(ICursor cursor){
+        text.insertNewLine(cursor);
         this.setState(BufferState.DIRTY);
-        CursorMover.move(cursor, Direction.RIGHT, text);
     }
 
     public void writeToDisk(){
-        FileWriter.write(this.getText().getText(), this.getFile());
+        FileWriter.write(this.getText().getContent(), this.getFile());
         this.setState(BufferState.CLEAN);
     }
 
@@ -160,7 +146,6 @@ public final class FileBuffer {
         }
         return this.file.equals(fileBuffer.file) &&
                 this.text.equals(fileBuffer.text) &&
-                this.cursor.equals(fileBuffer.cursor) &&
                 this.state == fileBuffer.state;
     }
 
@@ -173,7 +158,6 @@ public final class FileBuffer {
     public int hashCode(){
         int result = file.hashCode();
         result = 31 * result + text.hashCode();
-        result = 31 * result + cursor.hashCode();
         result = 31 * result + state.hashCode();
         return result;
     }
@@ -185,11 +169,11 @@ public final class FileBuffer {
      */
     @Override
     public String toString(){
-        return String.format("FileBuffer[fileId = %s, text = %s, cursor = %s, state = %s]",
-                file, text, cursor, state);
+        return String.format("FileBuffer[fileId = %s, text = %s, state = %s]",
+                file, text, state);
     }
 
     public FileBuffer copy(){
-        return new FileBuffer(this.file, this.text.copy(), this.cursor.copy(), this.state);
+        return new FileBuffer(this.file, this.text, this.state);
     }
 }
