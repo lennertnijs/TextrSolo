@@ -10,6 +10,7 @@ import java.util.Arrays;
 public final class Text {
 
     private String[] lines;
+    private final ChangeHistory changeHistory;
 
     /**
      * Private constructor. Use the create() methods.
@@ -17,6 +18,7 @@ public final class Text {
      */
     private Text(String[] lines){
         this.lines = lines;
+        this.changeHistory = new ChangeHistory();
     }
 
     /**
@@ -92,6 +94,14 @@ public final class Text {
         return length;
     }
 
+    public void undo(){
+        changeHistory.undo(this.lines);
+    }
+
+    public void redo(){
+        changeHistory.redo(this.lines);
+    }
+
     /**
      * Inserts the given character into this {@link Text} at the given 0-based row and column indices.
      * @param character The character
@@ -106,6 +116,7 @@ public final class Text {
         StringBuilder builder = new StringBuilder(lines[row]);
         builder.insert(col, character);
         lines[row] = builder.toString();
+        changeHistory.addInsertAction(character, row, col);
     }
 
     /**
@@ -132,6 +143,7 @@ public final class Text {
             return;
         }
         removeCharacterBase(row, col);
+        changeHistory.addInsertAction(this.lines[row].charAt(col), row, col);
     }
 
     /**

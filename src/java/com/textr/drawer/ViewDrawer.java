@@ -60,7 +60,7 @@ public final class ViewDrawer{
         int baseY = view.getPosition().getY()+ height - 2;
         int maxY = view.getPosition().getY() + height - 1;
         if(view.getRunning()){ArrayList<Point> snake = view.getSnake();
-            Point head = snake.removeFirst();
+            Point head = snake.remove(0);
             switch (view.getHeadOrientation()){
                 case RIGHT -> TerminalService.printText(x+ head.getX(), baseY- head.getY(), ">");
                 case LEFT ->  TerminalService.printText(x+ head.getX(), baseY- head.getY(), "<");

@@ -83,6 +83,14 @@ public final class FileBuffer {
         this.state = state;
     }
 
+    public void undo(){
+        text.undo();
+    }
+
+    public void redo(){
+        text.redo();
+    }
+
     /**
      * Inserts the given character into this {@link FileBuffer}'s buffer {@link Text} at the insertion {@link Point}.
      * @param character The character

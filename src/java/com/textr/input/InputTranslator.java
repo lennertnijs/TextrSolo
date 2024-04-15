@@ -34,6 +34,9 @@ public final class InputTranslator {
             return Input.createCharacterInput((char) b);
         }
         switch (b) {
+            case -1 -> {
+                return Input.createSpecialInput(InputType.CTRL_Z);
+            }
             case 7 -> {
                 return Input.createSpecialInput(InputType.CTRL_G);
             }
@@ -54,6 +57,9 @@ public final class InputTranslator {
             }
             case 20 -> {
                 return Input.createSpecialInput(InputType.CTRL_T);
+            }
+            case 21 -> {
+                return Input.createSpecialInput(InputType.CTRL_U);
             }
             case 27 -> {
                 return translateEscapeByteCode();
