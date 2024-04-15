@@ -15,12 +15,14 @@ public final class FileBuffer {
 
     private final File file;
     private final Text text;
+    private final ChangeHistory changeHistory;
     private final Point cursor;
     private BufferState state;
 
     private FileBuffer(File file, Text text, Point cursor, BufferState state){
         this.file = file;
         this.text = text;
+        this.changeHistory = new ChangeHistory();
         this.cursor = cursor;
         this.state = state;
     }
@@ -84,11 +86,11 @@ public final class FileBuffer {
     }
 
     public void undo(){
-        text.undo();
+        changeHistory.undo(text, cursor);
     }
 
     public void redo(){
-        text.redo();
+        changeHistory.redo(text, cursor);
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.textr.filebuffer;
 
+import com.textr.util.Point;
+
 public final class DeleteAction implements Action {
 
     private final char character;
@@ -12,16 +14,16 @@ public final class DeleteAction implements Action {
         this.col = col;
     }
 
-    public void undo(String[] text){
-        StringBuilder builder = new StringBuilder(text[row]);
-        builder.insert(character, col);
-        text[row] = builder.toString();
+    public Point getPosition(){
+        return Point.create(col, row);
+    }
+
+    public void undo(Text text){
+        text.insertCharacter(character, row, col);
 
     }
 
-    public void redo(String[] text){
-        StringBuilder builder = new StringBuilder(text[row]);
-        builder.deleteCharAt(col);
-        text[row] = builder.toString();
+    public void redo(Text text){
+        text.removeCharacter(row, col);
     }
 }

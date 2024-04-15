@@ -1,7 +1,10 @@
 package com.textr.filebuffer;
 
+import com.textr.util.Point;
+
 public interface Action {
 
-    void undo(String[] text);
-    void redo(String[] text);
+    Point getPosition();
+    void undo(Text text);
+    void redo(Text text);
 }

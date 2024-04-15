@@ -1,5 +1,7 @@
 package com.textr.filebuffer;
 
+import com.textr.util.Point;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,18 +25,24 @@ public final class ChangeHistory {
         undoIndex = actionHistory.size() - 1;
     }
 
-    public void undo(String[] text){
+    public void undo(Text text, Point cursor){
         if(undoIndex == -1)
             return;
-        actionHistory.get(undoIndex).undo(text);
+        Action action = actionHistory.get(undoIndex);
+        cursor.setX(action.getPosition().getX());
+        cursor.setY(action.getPosition().getY());
+        action.undo(text);
         undoIndex--;
     }
 
-    public void redo(String[] text){
+    public void redo(Text text, Point cursor){
         int redoIndex = undoIndex + 1;
         if(redoIndex == actionHistory.size())
             return;
-        actionHistory.get(redoIndex).redo(text);
+        Action action = actionHistory.get(redoIndex);
+        cursor.setX(action.getPosition().getX());
+        cursor.setY(action.getPosition().getY());
+        action.redo(text);
         undoIndex++;
     }
 }
