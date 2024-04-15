@@ -28,8 +28,8 @@ public final class Point {
      * @throws IllegalArgumentException If the passed x or y value is negative.
      */
     public static Point create(int x, int y){
-        Validator.notNegative(x, "Cannot create a Point with a negative x value.");
-        Validator.notNegative(y, "Cannot create a Point with a negative y value.");
+        //Validator.notNegative(x, "Cannot create a Point with a negative x value.");
+        //Validator.notNegative(y, "Cannot create a Point with a negative y value.");
         return new Point(x, y);
     }
 
@@ -54,7 +54,7 @@ public final class Point {
      * @throws IllegalArgumentException If the given x is negative.
      */
     public void setX(int x){
-        Validator.notNegative(x, "Cannot set this point's x coordinate to a negative value.");
+        //Validator.notNegative(x, "Cannot set this point's x coordinate to a negative value.");
         this.x = x;
     }
 
@@ -65,7 +65,7 @@ public final class Point {
      * @throws IllegalArgumentException If the given y is negative.
      */
     public void setY(int y){
-        Validator.notNegative(y, "Cannot set this point's y coordinate to a negative value.");
+        //Validator.notNegative(y, "Cannot set this point's y coordinate to a negative value.");
         this.y = y;
     }
 
@@ -97,6 +97,27 @@ public final class Point {
         y = Math.max(y - 1, 0);
     }
 
+    /**
+     * Calculates the difference between this point and another point
+     * @return point = this-other
+     */
+    public Point difference(Point other){
+        return Point.create(getX()-other.getX(),getY()-other.getY() );
+    }
+    /**
+     * Add a point to this one.
+     */
+    public void addOtherToThis(Point other){
+        setX(getX()+ other.getX());
+        setY(getY()+other.getY());
+    }
+    /**
+     * Subtract a point from this one. Warning, point should only be positively valued.
+     */
+    public void subtractOtherFromThis(Point other) {
+        setX(getX()- other.getX());
+        setY(getY()- other.getY());
+    }
     /**
      * Compares this point to the given object. Returns True if equal, False otherwise.
      * @param o The object
@@ -139,4 +160,6 @@ public final class Point {
     public Point copy(){
         return new Point(this.x, this.y);
     }
+
+
 }

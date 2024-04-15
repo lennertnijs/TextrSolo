@@ -45,7 +45,7 @@ public static void generateLayoutsVerticalSubTree(Point topLeft, Point bottomRig
         if(child.hasValue()){
             View toAdd = child.getValue();
             toAdd.setPosition(position);
-            toAdd.setDimensions(dimensions);
+            toAdd.resize(dimensions);
         }
         else{
             Point parameterbottomright = Point.create(position.getX()+dimensions.getWidth(),position.getY()+dimensions.getHeight());
@@ -74,7 +74,7 @@ public static void generateLayoutsHorizontalSubTree(Point topLeft, Point bottomR
         if(child.hasValue()){
             View toAdd = child.getValue();
             toAdd.setPosition(position);
-            toAdd.setDimensions(dimensions);
+            toAdd.resize(dimensions);
         }
         else{
             Point parameterbottomright = Point.create(position.getX()+dimensions.getWidth(),position.getY()+dimensions.getHeight());

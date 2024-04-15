@@ -5,7 +5,7 @@ import com.textr.util.Point;
 import com.textr.util.Validator;
 
 /**
- * Updates the anchor point of a View.
+ * Updates the anchor point of a BufferView.
  */
 public final class AnchorUpdater {
 

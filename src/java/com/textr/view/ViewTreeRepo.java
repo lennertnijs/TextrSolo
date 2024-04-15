@@ -39,7 +39,7 @@ public final class ViewTreeRepo implements IViewRepo {
     }
 
     /**
-     * @return The active View. If none is set, returns null.
+     * @return The active BufferView. If none is set, returns null.
      */
     @Override
     public View getActive() {
@@ -47,21 +47,21 @@ public final class ViewTreeRepo implements IViewRepo {
     }
 
     /**
-     * Sets the active View to the given view.
-     * @param view The new active View. Cannot be null.
+     * Sets the active BufferView to the given view.
+     * @param view The new active BufferView. Cannot be null.
      *
-     * @throws IllegalArgumentException If the given View is null.
+     * @throws IllegalArgumentException If the given BufferView is null.
      */
     @Override
     public void setActive(View view) {
-        Validator.notNull(view, "Cannot set the active View to a null.");
+        Validator.notNull(view, "Cannot set the active BufferView to a null.");
         this.active = view;
     }
 
     /**
      * Stores the given View.
      * More specifically, adds the View to the children of the root of the Tree.
-     * @param view The View. Cannot be null.
+     * @param view The BufferView. Cannot be null.
      *
      * @throws IllegalArgumentException If the given view is null.
      */
@@ -95,7 +95,7 @@ public final class ViewTreeRepo implements IViewRepo {
      */
     @Override
     public void remove(View view) {
-        Validator.notNull(view, "Cannot remove a null View from the Tree.");
+        Validator.notNull(view, "Cannot remove a null BufferView from the Tree.");
         tree.remove(view);
         tree.restoreInvariants();
     }
@@ -129,7 +129,7 @@ public final class ViewTreeRepo implements IViewRepo {
     }
 
     /**
-     * Sets the active View to the next in the Tree. Works circularly.
+     * Sets the active BufferView to the next in the Tree. Works circularly.
      */
     @Override
     public void setNextActive(){
@@ -137,16 +137,28 @@ public final class ViewTreeRepo implements IViewRepo {
     }
 
     /**
-     * Sets the active View to the previous in the Tree. Works circularly.
+     * Sets the active BufferView to the previous in the Tree. Works circularly.
      */
     @Override
     public void setPreviousActive(){
         active = tree.getPreviousValue(active);
     }
-
-
     /**
-     * Rotates the active View and the next View CW / CCW and updates the tree appropriately, keeping its invariance.
+     * Stores the given View next to the existing one.
+     * @param newView The new View. Cannot be null.
+     * @param existing the view it'll be placed next to
+     * @throws IllegalArgumentException If the given newview is null.
+     */
+    @Override
+    public void addNextTo(View newView, View existing ){
+        Validator.notNull(newView, "Cannot store a null View.");
+        Validator.notNull(existing, "Cannot store a null View.");
+        Node<View> sibling = tree.getNode(existing);
+        int placement = sibling.getParent().getChildren().indexOf(sibling)+1;
+        tree.addChildToNodeAt(new Node<>(newView),sibling.getParent(),placement);
+    }
+    /**
+     * Rotates the active BufferView and the next BufferView CW / CCW and updates the tree appropriately, keeping its invariance.
      * @param clockwise The bool whether CW/CCW
      */
     @Override

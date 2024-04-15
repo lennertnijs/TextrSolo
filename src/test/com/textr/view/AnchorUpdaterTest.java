@@ -17,7 +17,7 @@ public class AnchorUpdaterTest {
     @Test
     public void testUpdateAnchor_NullAnchor(){
         Settings.defaultLineSeparator = "\r\n";
-        View view1 = View.createFromFilePath(url, initPoint, initDimension);
+        BufferView view1 = BufferView.createFromFilePath(url, initPoint, initDimension);
         FileBuffer b = FileBuffer.createFromFilePath(url);
         Assertions.assertThrows(IllegalArgumentException.class, () -> AnchorUpdater.updateAnchor(null, b.getCursor(), view1.getDimensions()));
     }
@@ -25,14 +25,14 @@ public class AnchorUpdaterTest {
     @Test
     public void testUpdateAnchor_NullCursor(){
         Settings.defaultLineSeparator = "\r\n";
-        View view1 = View.createFromFilePath(url, initPoint, initDimension);
+        BufferView view1 = BufferView.createFromFilePath(url, initPoint, initDimension);
         Assertions.assertThrows(IllegalArgumentException.class, () -> AnchorUpdater.updateAnchor(view1.getAnchor(), null, view1.getDimensions()));
     }
 
     @Test
     public void testUpdateAnchor_NullDimensions(){
         Settings.defaultLineSeparator = "\r\n";
-        View view1 = View.createFromFilePath(url, initPoint, initDimension);
+        BufferView view1 = BufferView.createFromFilePath(url, initPoint, initDimension);
         FileBuffer b = FileBuffer.createFromFilePath(url);
         Assertions.assertThrows(IllegalArgumentException.class, () -> AnchorUpdater.updateAnchor(view1.getAnchor(), b.getCursor(), null));
     }
@@ -40,7 +40,7 @@ public class AnchorUpdaterTest {
     @Test
     public void testUpdateAnchor_ValidArguments(){
         Settings.defaultLineSeparator = "\r\n";
-        View view1 = View.createFromFilePath(url, initPoint, initDimension);
+        BufferView view1 = BufferView.createFromFilePath(url, initPoint, initDimension);
         FileBuffer b = FileBuffer.createFromFilePath(url);
         Point anchor = view1.getAnchor();
         Point cursor = b.getCursor();

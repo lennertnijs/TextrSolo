@@ -18,8 +18,12 @@ public interface IViewRepo {
     List<View> getAll();
     void setNextActive();
     void setPreviousActive();
+
+    void addNextTo(View newView, View existing);
+
     void rotate(boolean clockwise);
     List<View> getAllAtDepth(int depth);
 
     Node getRoot();
+
 }

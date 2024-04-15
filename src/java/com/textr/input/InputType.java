@@ -9,6 +9,7 @@ public enum InputType {
     CTRL_R, // 18
     CTRL_S, //19
     CTRL_T, //20
+    CTRL_G, //7
     ESCAPE, //27
     SPACE, //32
     ARROW_UP, //ESC [ A aka 27 91 65
@@ -22,5 +23,6 @@ public enum InputType {
     DELETE, // ESC [ 3 ~ aka 27 91 51 127
     BACKSPACE, // 127
     F4, // ESC O S aka 27 79 83
+    TICK, // to register a tick in time
     NOT_MAPPED
 }

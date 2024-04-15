@@ -34,6 +34,9 @@ public final class InputTranslator {
             return Input.createCharacterInput((char) b);
         }
         switch (b) {
+            case 7 -> {
+                return Input.createSpecialInput(InputType.CTRL_G);
+            }
             case 13 -> {
                 return Input.createSpecialInput(InputType.ENTER);
             }
@@ -57,6 +60,9 @@ public final class InputTranslator {
             }
             case 127 -> {
                 return Input.createSpecialInput(InputType.BACKSPACE);
+            }
+            case -2 -> {
+                return Input.createSpecialInput(InputType.TICK);
             }
         }
         return Input.createSpecialInput(InputType.NOT_MAPPED);
