@@ -111,20 +111,29 @@ public final class LineText {
     }
 
     public Point translate1DCursorTo2D(int number){
+        if(number < 0 || number > builder.length())
+            throw new IllegalArgumentException("The integer falls outside the text.");
         String[] lines = builder.toString().split("\n");
         int count = 0;
         int row = -1;
         for(int i = 0; i < lines.length ; i++){
-            if(count + lines[i].length() + 1 > number)
+            if(count + lines[i].length() + 1 > number) {
                 row = i;
+                break;
+            }
             count += lines[i].length() + 1;
         }
         int col = number - count;
-        return Point.create(col, row);
+        return Point.create(row, col);
     }
 
     public int translate2DCursorTo1D(Point point){
+        Objects.requireNonNull(point, "Point is null.");
         String[] lines = builder.toString().split("\n");
+        if(point.getX() >= lines.length)
+            throw new IllegalArgumentException("Y value of the Point is outside valid values.");
+        if(point.getY() > lines[point.getX()].length())
+            throw new IllegalArgumentException("X Value of the Point is outside valid values.");
         int count = 0;
         for(int i = 0; i < point.getX(); i++){
             count += lines[i].length() + 1;

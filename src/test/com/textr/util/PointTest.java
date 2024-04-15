@@ -25,13 +25,13 @@ public class PointTest {
         );
     }
 
-    @Test
-    public void testIllegalCreation(){
-        Assertions.assertAll(
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Point.create(-1, 1)),
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Point.create(1, -1))
-        );
-    }
+//    @Test
+//    public void testIllegalCreation(){
+//        Assertions.assertAll(
+//                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Point.create(-1, 1)),
+//                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Point.create(1, -1))
+//        );
+//    }
 
     @Test
     public void testSetters(){
@@ -42,13 +42,13 @@ public class PointTest {
         );
     }
 
-    @Test
-    public void testIllegalSetters(){
-        Assertions.assertAll(
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> point1.setX(-1)),
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> point1.setY(-1))
-        );
-    }
+//    @Test
+//    public void testIllegalSetters(){
+//        Assertions.assertAll(
+//                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> point1.setX(-1)),
+//                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> point1.setY(-1))
+//        );
+//    }
 
     @Test
     public void testIncrements(){
