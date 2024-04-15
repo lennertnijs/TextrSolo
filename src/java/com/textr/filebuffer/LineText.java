@@ -5,7 +5,7 @@ import com.textr.util.Point;
 
 import java.util.Objects;
 
-public final class LineText {
+public final class LineText implements IText{
 
     private final static char LINEBREAK = '\n';
     private final StringBuilder builder;
@@ -62,20 +62,6 @@ public final class LineText {
             case UP -> moveUp();
             case DOWN -> moveDown();
         }
-    }
-
-    public Point getCursor(){
-        String[] lines = builder.toString().split("\n");
-        int count = 0;
-        for(int i = 0; i < lines.length; i++){
-            if(count + lines[i].length() + 1 < insertionIndex)
-                count++;
-            else {
-                int difference = insertionIndex - count;
-                return Point.create(count, difference);
-            }
-        }
-        throw new RuntimeException();
     }
 
     private void moveRight(){
