@@ -40,7 +40,7 @@ public final class ChangeHistory {
         if(redoIndex == actionHistory.size())
             return;
         Action action = actionHistory.get(redoIndex);
-        cursor.setX(action.getPosition().getX());
+        cursor.setX(action.getPosition().getX() + 1);
         cursor.setY(action.getPosition().getY());
         action.redo(text);
         undoIndex++;

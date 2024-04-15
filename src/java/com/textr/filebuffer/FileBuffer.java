@@ -98,6 +98,7 @@ public final class FileBuffer {
      * @param character The character
      */
     public void insertCharacter(char character){
+        changeHistory.addInsertAction(character, cursor.getY(), cursor.getX());
         text.insertCharacter(character, cursor.getY(), cursor.getX());
         this.setState(BufferState.DIRTY);
         CursorMover.move(cursor, Direction.RIGHT, text);
@@ -112,6 +113,7 @@ public final class FileBuffer {
         int oldY = cursor.getY();
         int oldX = cursor.getX();
         CursorMover.move(cursor, Direction.LEFT, text);
+        changeHistory.addDeleteAction(text.getLines()[oldY].charAt(oldX), oldY, oldX);
         text.removeCharacter(oldY, oldX - 1);
         this.setState(BufferState.DIRTY);
     }
