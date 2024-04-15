@@ -6,19 +6,19 @@ import io.github.btj.termios.Terminal;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-public final class TerminalService {
+public final class TerminalService implements ITerminalService {
 
     /**
-     * Private constructor. No use.
+     * Constructs a new TerminalService instance.
      */
-    private TerminalService(){
+    public TerminalService() {
     }
 
     /**
      * Reads the size of the terminal and returns it.
      * @return The dimensions of the terminal.
      */
-    public static Dimension2D getTerminalArea(){
+    public Dimension2D getTerminalArea(){
         Terminal.reportTextAreaSize();
         try{
             int b = Terminal.readByte();
@@ -52,12 +52,12 @@ public final class TerminalService {
     /**
      * Puts the terminal in the raw input mode. (input is immediately reported)
      */
-    public static void enterRawInputMode(){ Terminal.enterRawInputMode();}
+    public void enterRawInputMode(){ Terminal.enterRawInputMode();}
 
     /**
      * Puts the terminal in the non-raw input mode. (input is reported when enter is pressed)
      */
-    public static void leaveRawInputMode(){
+    public void leaveRawInputMode(){
         Terminal.leaveRawInputMode();
     }
 
@@ -67,14 +67,14 @@ public final class TerminalService {
      * @param x The x coordinate. (0-based) Cannot be negative or bigger than the terminal width - 1.
      * @param y The y coordinate. (0-based) Cannot be negative or bigger than the terminal height - 1.
      */
-    public static void moveCursor(int x, int y){
+    public void moveCursor(int x, int y){
         Terminal.moveCursor(y + 1, x + 1);
     }
 
     /**
      * Clears the terminal.
      */
-    public static void clearScreen(){
+    public void clearScreen(){
         Terminal.clearScreen();
     }
 
@@ -86,7 +86,7 @@ public final class TerminalService {
      *
      * @throws IllegalArgumentException If text is null.
      */
-    public static void printText(int x, int y, String text){
+    public void printText(int x, int y, String text){
         Terminal.printText(y + 1, x + 1 , text);
     }
 
@@ -95,7 +95,7 @@ public final class TerminalService {
      *
      * @return The byte.
      */
-    public static int readByte(){
+    public int readByte(){
         try{
             return Terminal.readByte(System.currentTimeMillis()+10);
         }catch(IOException e){

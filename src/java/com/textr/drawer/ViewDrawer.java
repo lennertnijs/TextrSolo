@@ -1,20 +1,23 @@
 package com.textr.drawer;
 
-import com.textr.terminal.TerminalService;
+import com.textr.terminal.ITerminalService;
 import com.textr.util.Point;
 import com.textr.util.Validator;
 import com.textr.view.BufferView;
 import com.textr.view.SnakeView;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  * Draws a view.
  */
 public final class ViewDrawer{
 
-    private ViewDrawer(){
+    private final ITerminalService terminal;
+
+    public ViewDrawer(ITerminalService terminal){
+        Validator.notNull(terminal, "Cannot instantiate ViewDrawer with null TerminalService");
+        this.terminal = terminal;
     }
 
     /**
@@ -24,7 +27,7 @@ public final class ViewDrawer{
      *
      * @throws IllegalArgumentException If any parameter is null.
      */
-    public static void draw(BufferView view, String statusBar) {
+    public void draw(BufferView view, String statusBar) {
         Validator.notNull(view, "Cannot draw a null BufferView.");
         Validator.notNull(statusBar, "Cannot draw the BufferView because the status bar is null.");
         int height = view.getDimensions().getHeight();
@@ -36,12 +39,12 @@ public final class ViewDrawer{
             // only need to draw if any text is in these columns
             if(lines[i].length() > view.getAnchor().getX()){
                 int maxColIndex = Math.min(view.getAnchor().getX() + view.getDimensions().getWidth(), lines[i].length());
-                TerminalService.printText(x, startY, lines[i].substring(view.getAnchor().getX(), maxColIndex));
+                terminal.printText(x, startY, lines[i].substring(view.getAnchor().getX(), maxColIndex));
             }
             startY++;
         }
         int maxStatusBarIndex = Math.min(view.getDimensions().getWidth(), statusBar.length());
-        TerminalService.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
+        terminal.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
         drawScrollBar(view);
     }
 
@@ -52,7 +55,7 @@ public final class ViewDrawer{
      *
      * @throws IllegalArgumentException If any parameter is null.
      */
-    public static void draw(SnakeView view, String statusBar) {
+    public void draw(SnakeView view, String statusBar) {
         Validator.notNull(view, "Cannot draw a null BufferView.");
         Validator.notNull(statusBar, "Cannot draw the BufferView because the status bar is null.");
         int height = view.getDimensions().getHeight();
@@ -62,30 +65,30 @@ public final class ViewDrawer{
         if(view.getRunning()){ArrayList<Point> snake = view.getSnake();
             Point head = snake.remove(0);
             switch (view.getHeadOrientation()){
-                case RIGHT -> TerminalService.printText(x+ head.getX(), baseY- head.getY(), ">");
-                case LEFT ->  TerminalService.printText(x+ head.getX(), baseY- head.getY(), "<");
-                case UP -> TerminalService.printText(x+ head.getX(), baseY- head.getY(), "^");
-                case DOWN -> TerminalService.printText(x+ head.getX(), baseY- head.getY(), "v");
+                case RIGHT -> terminal.printText(x+ head.getX(), baseY- head.getY(), ">");
+                case LEFT ->  terminal.printText(x+ head.getX(), baseY- head.getY(), "<");
+                case UP -> terminal.printText(x+ head.getX(), baseY- head.getY(), "^");
+                case DOWN -> terminal.printText(x+ head.getX(), baseY- head.getY(), "v");
             }
             for(Point point : snake){
-                TerminalService.printText(x+ point.getX(), baseY- point.getY(), "o");
+                terminal.printText(x+ point.getX(), baseY- point.getY(), "o");
             }
             ArrayList<Point> foods = view.getFoods();
             for(Point point : foods){
-                TerminalService.printText(x+ point.getX(), baseY- point.getY(), "f");
+                terminal.printText(x+ point.getX(), baseY- point.getY(), "f");
             }
         }
         else
-            TerminalService.printText(x, baseY, "GAME OVER - Press Enter to restart");
+            terminal.printText(x, baseY, "GAME OVER - Press Enter to restart");
         int maxStatusBarIndex = Math.min(view.getDimensions().getWidth(), statusBar.length());
-        TerminalService.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
+        terminal.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
     }
 
-    private static void drawScrollBar(BufferView view){
+    private void drawScrollBar(BufferView view){
         int maxY = view.getBuffer().getText().getAmountOfLines() - 1;
         int currentY = view.getBuffer().getCursor().getY();
         int yBar = Math.round(((float)currentY / (float)maxY) * (view.getDimensions().getHeight() - 1));
-        TerminalService.printText(view.getPosition().getX() + view.getDimensions().getWidth() - 1,
+        terminal.printText(view.getPosition().getX() + view.getDimensions().getWidth() - 1,
                                                             yBar + view.getPosition().getY(), "|");
     }
 

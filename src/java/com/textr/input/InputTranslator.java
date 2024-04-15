@@ -1,25 +1,28 @@
 package com.textr.input;
 
-import com.textr.terminal.TerminalService;
+import com.textr.terminal.ITerminalService;
 
 /**
  * Used to translate a byte or stream of bytes into single input.
  */
 public final class InputTranslator {
 
+    private final ITerminalService terminal;
+
     /**
      * Private constructor. No use.
      */
-    private InputTranslator(){
+    public InputTranslator(ITerminalService terminal){
+        this.terminal = terminal;
     }
 
     /**
-     * Reads bytes from the {@link TerminalService} and returns an {@link Input} instance.
+     * Reads bytes from the {@link ITerminalService} and returns an {@link Input} instance.
      *
      * @return the {@link Input} instance representing the inputted command
      */
-    public static Input getNextInput() {
-        int b = TerminalService.readByte();
+    public Input getNextInput() {
+        int b = terminal.readByte();
         return translateBytes(b);
     }
 
@@ -29,7 +32,7 @@ public final class InputTranslator {
      *
      * @return The {@link Input} enum representing an input.
      */
-    public static Input translateBytes(int b){
+    public Input translateBytes(int b){
         if(b >= 32 && b <= 126){
             return Input.createCharacterInput((char) b);
         }
@@ -73,8 +76,8 @@ public final class InputTranslator {
      *
      * @return The translated {@link Input}
      */
-    private static Input translateEscapeByteCode(){
-        int b = TerminalService.readByte();
+    private Input translateEscapeByteCode(){
+        int b = terminal.readByte();
         switch (b) {
             case '[' -> {
                 return translateBracketByteCode();
@@ -91,8 +94,8 @@ public final class InputTranslator {
      *
      * @return The translated {@link Input}.
      */
-    private static Input translateBracketByteCode(){
-        int b = TerminalService.readByte();
+    private Input translateBracketByteCode(){
+        int b = terminal.readByte();
         switch(b){
             case 'A' -> {
                 return Input.createSpecialInput(InputType.ARROW_UP);
@@ -119,8 +122,8 @@ public final class InputTranslator {
      *
      * @return The translated {@link Input}.
      */
-    private static Input translateOByteCode(){
-        int b = TerminalService.readByte();
+    private Input translateOByteCode(){
+        int b = terminal.readByte();
         if(b == 'S'){
             return Input.createSpecialInput(InputType.F4);
         }
@@ -132,8 +135,8 @@ public final class InputTranslator {
      *
      * @return The translated {@link Input}.
      */
-    private static Input translate3ByteCode(){
-        int b = TerminalService.readByte();
+    private Input translate3ByteCode(){
+        int b = terminal.readByte();
         if(b == '~'){
             return Input.createSpecialInput(InputType.DELETE);
         }

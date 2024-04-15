@@ -9,12 +9,12 @@ import java.util.Arrays;
 public class Initialiser {
 
 
-    public static void initialise(ViewService viewService, String[] args){
+    public static void initialise(ViewService viewService, String[] args, TerminalService terminal){
         loadDefaultLineSeparator();
         String[] filePaths = handleArguments(args);
-        TerminalService.enterRawInputMode();
-        TerminalService.clearScreen();
-        if(filePaths.length > TerminalService.getTerminalArea().getHeight() / 2){
+        terminal.enterRawInputMode();
+        terminal.clearScreen();
+        if(filePaths.length > terminal.getTerminalArea().getHeight() / 2){
             throw new IllegalArgumentException("Too many input files.");
         }
         InputHandlerRepo.initialiseInputHandlers(viewService);
