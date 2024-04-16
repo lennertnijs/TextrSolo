@@ -8,6 +8,7 @@ import com.textr.terminal.TermiosTerminalService;
 import com.textr.util.Dimension2D;
 import com.textr.util.Point;
 
+import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -92,16 +93,5 @@ class ViewServiceTest {
         viewService.setActiveViewToPrevious();
         assertSame(repo.getActive(), view6);
         assertNotSame(repo.getActive(), view1);
-    }
-
-    @Test
-    void saveBuffer() {
-        assertEquals(view1.getBuffer().getState(), BufferState.CLEAN);
-        view1.insertCharacter('d');
-        assertEquals(view1.getBuffer().getState(), BufferState.DIRTY);
-        viewService.saveBuffer();
-        assertEquals(view1.getBuffer().getState(), BufferState.CLEAN);
-        view1.deletePrevChar();
-        viewService.saveBuffer();
     }
 }

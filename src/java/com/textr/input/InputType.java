@@ -2,6 +2,7 @@ package com.textr.input;
 
 public enum InputType {
 
+    CTRL_Z, // -1
     CHARACTER, // b >= 32 && b <= 126
     ENTER, // 13
     CTRL_N, // 14
@@ -10,6 +11,7 @@ public enum InputType {
     CTRL_S, //19
     CTRL_T, //20
     CTRL_G, //7
+    CTRL_U, // 21
     ESCAPE, //27
     SPACE, //32
     ARROW_UP, //ESC [ A aka 27 91 65
