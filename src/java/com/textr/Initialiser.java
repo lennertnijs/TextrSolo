@@ -1,7 +1,7 @@
 package com.textr;
 
 import com.textr.input.InputHandlerRepo;
-import com.textr.terminal.TermiosTerminalService;
+import com.textr.terminal.TerminalService;
 import com.textr.view.ViewService;
 
 import java.util.Arrays;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class Initialiser {
 
 
-    public static void initialise(ViewService viewService, String[] args, TermiosTerminalService terminal){
+    public static void initialise(ViewService viewService, String[] args, TerminalService terminal){
         loadDefaultLineSeparator();
         String[] filePaths = handleArguments(args);
         terminal.enterRawInputMode();
