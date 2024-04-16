@@ -68,59 +68,68 @@ public final class FileBuffer {
         changeHistory.undo(text, cursor);
     }
 
+    /**
+     *
+     * @param cursor
+     */
     public void redo(ICursor cursor){
         changeHistory.redo(text, cursor);
     }
 
     /**
-     * Inserts the given character into this {@link FileBuffer}'s buffer text at the insertion {@link Point}.
-     * @param character The character
+     * Inserts the given character at the given index in this {@link FileBuffer}'s {@link IText}.
+     * @param index The index. Cannot be negative, or bigger than the lengths of the current text.
+     * @param character The character.
+     *
+     * @throws IllegalArgumentException If the index is illegal.
      */
-    public void insertCharacter(char character, int insertIndex){
-        changeHistory.addInsertAction(character, insertIndex);
-        text.insert(insertIndex, character);
+    public void insertCharacter(int index, char character){
+        if(index < 0 || index > text.getCharAmount())
+            throw new IllegalArgumentException("Index is illegal.");
+        text.insert(index, character);
+        changeHistory.addInsertAction(index, character);
         this.setState(BufferState.DIRTY);
     }
 
     /**
-     * Removes the character before the cursor from the text.
-     * Also moves the cursor one unit to the left.
-     * Used when backspace is pressed.
+     * Removes the character at the given index in this {@link FileBuffer}'s {@link IText}.
+     * @param index The index. Cannot be negative or equal/bigger than the lengths of the current text.
+     *
+     * @throws IllegalArgumentException If the index is illegal.
      */
-    public void removeCharacterBefore(int index){
-        changeHistory.addDeleteAction(index, text.getCharacter(index));
+    public void removeCharacter(int index){
+        if(index < 0 || index >= text.getCharAmount())
+            throw new IllegalArgumentException("Index is illegal.");
+        char removedCharacter = text.getCharacter(index);
         text.remove(index);
+        changeHistory.addDeleteAction(index, removedCharacter);
         this.setState(BufferState.DIRTY);
     }
 
     /**
-     * Removes the character after the cursor from the text.
-     * Does not move the cursor.
-     * Used when delete is pressed.
+     * Inserts a line break at the given index in this {@link FileBuffer}'s {@link IText}.
+     * @param index The index. Cannot be negative or bigger than the lengths of the current text.
+     *
+     * @throws IllegalArgumentException If the index is illegal.
      */
-    public void removeCharacterAfter(ICursor cursor){
-        text.remove(cursor.getInsertIndex() + 1);
-        this.setState(BufferState.DIRTY);
-    }
-
-    /**
-     * Breaks the line of the text into 2 new lines (seperated by a space), at the cursor.
-     * Also moves the cursor into the new line.
-     * Used when enter is pressed.
-     */
-    public void createNewLine(int index){
+    public void insertLineBreak(int index){
+        if(index < 0 || index > text.getCharAmount())
+            throw new IllegalArgumentException("Index is illegal.");
         text.insertLineBreak(index);
+        changeHistory.addInsertAction(index, '\n');
         this.setState(BufferState.DIRTY);
     }
 
+    /**
+     * Writes this {@link FileBuffer}'s {@link IText} content's to its {@link File}.
+     */
     public void writeToDisk(){
-        FileWriter.write(this.getText().getContent(), this.getFile());
+        FileWriter.write(text.getContent(), file);
         this.setState(BufferState.CLEAN);
     }
 
     /**
      * Compares this file buffer to the given object and returns True if they're equal.
-     * @param o The other object
      *
      * @return True if equal, false otherwise.
      */

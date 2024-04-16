@@ -13,14 +13,12 @@ public final class ChangeHistory {
         this.redoAbles = new ArrayList<>();
     }
 
-    public void addInsertAction(char character, int index){
-        Action insertAction = new InsertAction(index, character);
-        undoAbles.add(insertAction);
+    public void addInsertAction(int index, char character){
+        undoAbles.add(new InsertAction(index, character));
     }
 
     public void addDeleteAction(int index, char character){
-        Action deleteAction = new DeleteAction(index, character);
-        undoAbles.add(deleteAction);
+        undoAbles.add(new DeleteAction(index, character));
     }
 
     public void undo(IText text, ICursor cursor){

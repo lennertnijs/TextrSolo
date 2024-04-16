@@ -16,7 +16,7 @@ public final class DeleteAction implements Action {
 
     public void undo(IText text, ICursor cursor){
         text.insert(index, character);
-        cursor.setInsertIndex(index, text.getSkeleton());
+        cursor.setInsertIndex(index + 1, text.getSkeleton());
     }
 
     public void redo(IText text, ICursor cursor){

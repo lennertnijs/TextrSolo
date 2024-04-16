@@ -48,11 +48,6 @@ public final class Cursor implements ICursor{
         this.insertPoint = Point.create(col, row);
     }
 
-    public void setInsertPoint(Point insertPoint, ITextSkeleton skeleton){
-        this.insertPoint = insertPoint;
-        updateInsertIndex(skeleton);
-    }
-
     private void updateInsertIndex(ITextSkeleton skeleton){
         Objects.requireNonNull(insertPoint, "Point is null.");
         if(insertPoint.getX() >= skeleton.getLineAmount())

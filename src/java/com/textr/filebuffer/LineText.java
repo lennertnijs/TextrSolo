@@ -8,13 +8,14 @@ public final class LineText implements IText{
 
     private final StringBuilder builder;
 
+    private static final char LINEBREAK = '\n';
     private LineText(StringBuilder builder){
         this.builder = builder;
     }
 
     public static LineText createFromString(String string){
         Objects.requireNonNull(string, "String is null.");
-        String replacedLineBreaks = string.replace("\r\n", "\n").replace("\r", "\n");
+        String replacedLineBreaks = string.replace("\r\n", String.valueOf(LINEBREAK)).replace('\r', LINEBREAK);
         return new LineText(new StringBuilder(replacedLineBreaks));
     }
 

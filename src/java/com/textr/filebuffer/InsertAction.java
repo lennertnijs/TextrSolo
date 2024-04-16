@@ -21,6 +21,6 @@ public final class InsertAction implements Action{
 
     public void redo(IText text, ICursor cursor){
         text.insert(index, character);
-        cursor.setInsertIndex(index, text.getSkeleton());
+        cursor.setInsertIndex(index + 1, text.getSkeleton());
     }
 }

@@ -135,7 +135,8 @@ public final class BufferView extends View {
      * Then calls for an update of the anchor.
      */
     public void insertNewLine(){
-        buffer.createNewLine(cursor.getInsertIndex());
+        buffer.insertLineBreak(cursor.getInsertIndex());
+        cursor.move(Direction.RIGHT, buffer.getText().getSkeleton());
         updateAnchor();
     }
 
@@ -144,7 +145,7 @@ public final class BufferView extends View {
      * @param character The input character
      */
     public void insertCharacter(char character){
-        buffer.insertCharacter(character, cursor.getInsertIndex());
+        buffer.insertCharacter(cursor.getInsertIndex(), character);
         cursor.move(Direction.RIGHT, buffer.getText().getSkeleton());
         updateAnchor();
     }
@@ -154,7 +155,8 @@ public final class BufferView extends View {
      * Then calls for an update of the anchor.
      */
     public void deletePreviousCharacter(){
-        buffer.removeCharacterBefore(cursor.getInsertIndex());
+        buffer.removeCharacter(cursor.getInsertIndex() - 1);
+        cursor.move(Direction.LEFT, buffer.getText().getSkeleton());
         updateAnchor();
     }
 
@@ -162,7 +164,7 @@ public final class BufferView extends View {
      * Deletes the character just after the cursor of the active buffer.
      */
     public void deleteNextCharacter(){
-        buffer.removeCharacterAfter(cursor);
+        buffer.removeCharacter(cursor.getInsertIndex());
     }
 
     /**
