@@ -10,17 +10,17 @@ public final class DeleteAction implements Action {
         this.index = index;
     }
 
-    public int getInsertIndex(){
+    public int getIndex(){
         return index;
     }
 
     public void undo(IText text, ICursor cursor){
-        cursor.setInsertIndex(index, text.getSkeleton());
         text.insert(index, character);
+        cursor.setInsertIndex(index, text.getSkeleton());
     }
 
     public void redo(IText text, ICursor cursor){
-        cursor.setInsertIndex(index, text.getSkeleton());
         text.remove(index);
+        cursor.setInsertIndex(index, text.getSkeleton());
     }
 }
