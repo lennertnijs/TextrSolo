@@ -73,7 +73,7 @@ public final class FileBuffer {
     }
 
     /**
-     * Inserts the given character into this {@link FileBuffer}'s buffer {@link Text} at the insertion {@link Point}.
+     * Inserts the given character into this {@link FileBuffer}'s buffer text at the insertion {@link Point}.
      * @param character The character
      */
     public void insertCharacter(char character, int insertIndex){
