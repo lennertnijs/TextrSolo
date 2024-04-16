@@ -31,7 +31,7 @@ public final class DeleteAction implements Action {
         Objects.requireNonNull(cursor, "Cursor is null.");
         text.remove(index);
         if(side == Side.BEFORE)
-            cursor.move(Direction.LEFT, text.getSkeleton());
+            cursor.setInsertIndex(index, text.getSkeleton());
     }
 
     /**
@@ -40,6 +40,6 @@ public final class DeleteAction implements Action {
     public void undo(ICursor cursor){
         Objects.requireNonNull(cursor, "Cursor is null.");
         text.insert(index, character);
-        cursor.move(Direction.RIGHT, text.getSkeleton());
+        cursor.setInsertIndex(index + 1, text.getSkeleton());
     }
 }
