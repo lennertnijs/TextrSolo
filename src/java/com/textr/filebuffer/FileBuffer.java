@@ -4,7 +4,6 @@ import com.textr.file.FileReader;
 import com.textr.file.FileWriter;
 import com.textr.util.Point;
 import com.textr.util.Validator;
-import com.textr.util.Direction;
 
 import java.io.File;
 
@@ -52,17 +51,6 @@ public final class FileBuffer {
      */
     public BufferState getState(){
         return this.state;
-    }
-
-    /**
-     * Moves the cursor 1 unit in the given {@link Direction}, within text boundaries.
-     * @param direction The direction. Cannot be null.
-     *
-     * @throws IllegalArgumentException If the given direction is null.
-     */
-    public void moveCursor(Direction direction, ICursor cursor){
-        Validator.notNull(direction, "Cannot move the cursor in the null Direction.");
-        this.text.moveCursor(direction, cursor);
     }
 
     /**

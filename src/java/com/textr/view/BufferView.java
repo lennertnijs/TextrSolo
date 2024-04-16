@@ -126,7 +126,7 @@ public final class BufferView extends View {
      */
     public void moveCursor(Direction direction){
         Validator.notNull(direction, "Cannot move the cursor in the null direction.");
-        this.buffer.moveCursor(direction, cursor);
+        cursor.move(direction, buffer.getText().getSkeleton());
         updateAnchor();
     }
 

@@ -1,5 +1,6 @@
 package com.textr.filebuffer;
 
+import com.textr.util.Direction;
 import com.textr.util.Point;
 
 import java.util.Objects;
@@ -66,17 +67,43 @@ public final class Cursor implements ICursor{
         this.insertIndex = count;
     }
 
-    public void moveRight(ITextSkeleton skeleton){
-        if(insertIndex == skeleton.getCharacterCount())
-            return;
-        insertIndex++;
-        updateInsertPoint(skeleton);
+    public void move(Direction direction, ITextSkeleton skeleton){
+        Objects.requireNonNull(direction, "Direction is null.");
+        switch(direction){
+            case UP -> moveUp(skeleton);
+            case RIGHT -> moveRight(skeleton);
+            case DOWN -> moveDown(skeleton);
+            case LEFT -> moveLeft(skeleton);
+        }
     }
 
-    public void moveLeft(ITextSkeleton skeleton){
-        if(insertIndex == 0)
+    private void moveRight(ITextSkeleton skeleton){
+        int incrementedIndex = insertIndex + 1;
+        if(incrementedIndex <= skeleton.getCharacterCount()) {
+            this.insertIndex = incrementedIndex;
+            updateInsertPoint(skeleton);
+        }
+    }
+
+    private void moveLeft(ITextSkeleton skeleton){
+        int decrementedIndex = insertIndex - 1;
+        if(decrementedIndex >= 0) {
+            this.insertIndex = decrementedIndex;
+            updateInsertPoint(skeleton);
+        }
+    }
+
+    private void moveUp(ITextSkeleton skeleton){
+        if(insertPoint.getY() == 0)
             return;
-        insertIndex--;
-        updateInsertPoint(skeleton);
+        insertPoint.decrementY();
+        updateInsertIndex(skeleton);
+    }
+
+    private void moveDown(ITextSkeleton skeleton){
+        if(insertPoint.getY() == skeleton.getAmountOfLines() - 1)
+            return;
+        insertPoint.incrementY();
+        updateInsertIndex(skeleton);
     }
 }

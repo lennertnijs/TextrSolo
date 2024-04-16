@@ -6,14 +6,13 @@ import java.util.Objects;
 public final class TextSkeleton implements ITextSkeleton{
 
     private final List<Integer> lineLengths;
-    private final int characterCount;
 
-    private TextSkeleton(List<Integer> lineLengths, int characterCount){
+    public TextSkeleton(List<Integer> lineLengths){
+        validateList(lineLengths);
         this.lineLengths = lineLengths;
-        this.characterCount = characterCount;
     }
 
-    public static TextSkeleton create(List<Integer> lineLengths){
+    private void validateList(List<Integer> lineLengths){
         Objects.requireNonNull(lineLengths, "Line lengths List is null.");
         if(lineLengths.contains(null))
             throw new NullPointerException("Line lengths List contains null.");
@@ -21,15 +20,19 @@ public final class TextSkeleton implements ITextSkeleton{
             if(integer < 0)
                 throw new IllegalArgumentException("Length of a line is negative.");
         }
-        int characterCount = 0;
-        for(Integer integer : lineLengths)
-            characterCount += integer;
-        return new TextSkeleton(lineLengths, characterCount);
     }
 
     @Override
     public int getCharacterCount(){
-        return characterCount;
+        int count = 0;
+        for(Integer integer : lineLengths)
+            count += integer;
+        return count;
+    }
+
+    @Override
+    public int getAmountOfLines(){
+        return lineLengths.size();
     }
 
     @Override
@@ -40,7 +43,19 @@ public final class TextSkeleton implements ITextSkeleton{
     }
 
     @Override
-    public int getAmountOfLines(){
-        return lineLengths.size();
+    public boolean equals(Object other){
+        if(!(other instanceof TextSkeleton skeleton))
+            return false;
+        return lineLengths.equals(skeleton.lineLengths);
+    }
+
+    @Override
+    public int hashCode(){
+        return lineLengths.hashCode();
+    }
+
+    @Override
+    public String toString(){
+        return String.format("TextSkeleton[LineLengths=%s]", lineLengths);
     }
 }

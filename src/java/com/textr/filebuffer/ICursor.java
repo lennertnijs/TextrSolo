@@ -1,5 +1,6 @@
 package com.textr.filebuffer;
 
+import com.textr.util.Direction;
 import com.textr.util.Point;
 
 public interface ICursor {
@@ -7,6 +8,5 @@ public interface ICursor {
     Point getInsertPoint();
     void setInsertIndex(int index, ITextSkeleton skeleton);
     void setInsertPoint(Point point, ITextSkeleton skeleton);
-    void moveRight(ITextSkeleton skeleton);
-    void moveLeft(ITextSkeleton skeleton);
+    void move(Direction direction, ITextSkeleton skeleton);
 }

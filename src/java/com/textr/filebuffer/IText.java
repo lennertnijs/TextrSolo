@@ -14,7 +14,5 @@ public interface IText {
     void removeCharacterBefore(ICursor cursor);
     void removeCharacterAfter(ICursor cursor);
     void insertNewLine(ICursor cursor);
-    void moveCursor(Direction direction, ICursor cursor);
-    List<Integer> getLineLengths();
     ITextSkeleton getSkeleton();
 }

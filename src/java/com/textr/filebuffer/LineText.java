@@ -1,7 +1,6 @@
 package com.textr.filebuffer;
 
 import com.textr.util.Direction;
-import com.textr.util.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,14 +38,14 @@ public final class LineText implements IText{
 
     public void insertCharacter(char character, ICursor cursor){
         builder.insert(cursor.getInsertIndex(), character);
-        cursor.moveRight(getSkeleton());
+        cursor.move(Direction.RIGHT, getSkeleton());
     }
 
     public void removeCharacterBefore(ICursor cursor){
         if(cursor.getInsertIndex() == 0)
             return;
         builder.deleteCharAt(cursor.getInsertIndex() - 1);
-        cursor.moveLeft(getSkeleton());
+        cursor.move(Direction.LEFT, getSkeleton());
     }
 
     public void removeCharacterAfter(ICursor cursor){
@@ -59,57 +58,6 @@ public final class LineText implements IText{
         builder.insert(cursor.getInsertIndex(), "\n");
     }
 
-    public void moveCursor(Direction direction, ICursor cursor){
-        Objects.requireNonNull(direction, "Direction is null.");
-        switch(direction){
-            case UP -> moveUp(cursor);
-            case RIGHT -> moveRight(cursor);
-            case DOWN -> moveDown(cursor);
-            case LEFT -> moveLeft(cursor);
-        }
-    }
-
-    private void moveRight(ICursor cursor){
-        int incrementedCursorIndex = cursor.getInsertIndex() + 1;
-        if(incrementedCursorIndex <= builder.length())
-            cursor.setInsertIndex(incrementedCursorIndex, getSkeleton());
-    }
-
-    private void moveLeft(ICursor cursor){
-        if(cursor.getInsertIndex() - 1 >= 0)
-            cursor.setInsertIndex(cursor.getInsertIndex() - 1, getSkeleton());
-    }
-
-    private void moveUp(ICursor cursor){
-        Point cursor2D = cursor.getInsertPoint();
-        if(cursor2D.getY() == 0)
-            return;
-        String[] lines = builder.toString().split("\n");
-        cursor2D.decrementY();
-        int lengthOfPrevLine = lines[cursor2D.getY()].length();
-        cursor2D.setX(Math.min(lengthOfPrevLine, cursor2D.getX()));
-        cursor.setInsertPoint(cursor2D, getSkeleton());
-    }
-
-    private void moveDown(ICursor cursor){
-        String[] lines = builder.toString().split("\n");
-        Point cursor2D = cursor.getInsertPoint();
-        if(cursor2D.getY() == lines.length - 1)
-            return;
-        cursor2D.incrementY();
-        int lengthOfNextLine = lines[cursor2D.getY()].length();
-        cursor2D.setX(Math.min(lengthOfNextLine, cursor2D.getX()));
-        cursor.setInsertPoint(cursor2D, getSkeleton());
-    }
-
-    public List<Integer> getLineLengths(){
-        String[] lines = builder.toString().split("\n");
-        List<Integer> lengths = new ArrayList<>();
-        for (String line : lines) {
-            lengths.add(line.length());
-        }
-        return lengths;
-    }
 
     public ITextSkeleton getSkeleton(){
         List<Integer> lineLengths = new ArrayList<>();
@@ -117,6 +65,23 @@ public final class LineText implements IText{
         for(String line : lines){
             lineLengths.add(line.length() + 1);
         }
-        return TextSkeleton.create(lineLengths);
+        return new TextSkeleton(lineLengths);
+    }
+
+    @Override
+    public boolean equals(Object other){
+        if(!(other instanceof LineText text))
+            return false;
+        return builder.toString().contentEquals(text.builder);
+    }
+
+    @Override
+    public int hashCode(){
+        return builder.toString().hashCode();
+    }
+
+    @Override
+    public String toString(){
+        return String.format("LineText[Text=%s]", builder.toString());
     }
 }
