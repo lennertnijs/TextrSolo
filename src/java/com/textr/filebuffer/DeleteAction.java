@@ -1,9 +1,13 @@
 package com.textr.filebuffer;
 
+import com.textr.util.Direction;
+
 public final class DeleteAction implements Action {
 
     private final char character;
     private final int index;
+    private final IText text;
+    private final Side side;
 
     /**
      * Creates a new {@link DeleteAction}.
@@ -11,28 +15,27 @@ public final class DeleteAction implements Action {
      * @param index The index.
      * @param character The character.
      */
-    public DeleteAction(int index, char character){
+    public DeleteAction(int index, char character, IText text, Side side){
         this.character = character;
         this.index = index;
+        this.text = text;
+        this.side = side;
     }
 
     /**
      * Executes this {@link DeleteAction}.
-     * @param text The text on which to execute the deletion.
-     * @param cursor The cursor.
      */
-    public void execute(IText text, ICursor cursor){
+    public void execute(ICursor cursor){
         text.remove(index);
-        cursor.setInsertIndex(index, text.getSkeleton());
+        if(side == Side.BEFORE)
+            cursor.move(Direction.LEFT, text.getSkeleton());
     }
 
     /**
      * Undoes this {@link DeleteAction}.
-     * @param text The text on which to undo the deletion.
-     * @param cursor The cursor.
      */
-    public void undo(IText text, ICursor cursor){
+    public void undo(ICursor cursor){
         text.insert(index, character);
-        cursor.setInsertIndex(index + 1, text.getSkeleton());
+        cursor.move(Direction.RIGHT, text.getSkeleton());
     }
 }

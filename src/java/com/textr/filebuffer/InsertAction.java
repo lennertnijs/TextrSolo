@@ -1,9 +1,12 @@
 package com.textr.filebuffer;
 
+import com.textr.util.Direction;
+
 public final class InsertAction implements Action{
 
     private final char character;
     private final int index;
+    private final IText text;
 
     /**
      * Creates a new {@link InsertAction}.
@@ -11,28 +14,25 @@ public final class InsertAction implements Action{
      * @param index The index.
      * @param character The character.
      */
-    public InsertAction(int index, char character){
+    public InsertAction(int index, char character, IText text){
         this.index = index;
         this.character = character;
+        this.text = text;
     }
 
     /**
      * Executes this {@link InsertAction}.
-     * @param text The text on which to execute the insertion.
-     * @param cursor The cursor.
      */
-    public void execute(IText text, ICursor cursor){
+    public void execute(ICursor cursor){
         text.insert(index, character);
-        cursor.setInsertIndex(index + 1, text.getSkeleton());
+        cursor.move(Direction.RIGHT, text.getSkeleton());
     }
 
     /**
      * Undoes this {@link InsertAction}.
-     * @param text The text on which to undo the insertion.
-     * @param cursor The cursor.
      */
-    public void undo(IText text, ICursor cursor){
+    public void undo(ICursor cursor){
         text.remove(index);
-        cursor.setInsertIndex(index, text.getSkeleton());
+        cursor.move(Direction.LEFT, text.getSkeleton());
     }
 }

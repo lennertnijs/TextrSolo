@@ -64,55 +64,16 @@ public final class FileBuffer {
     }
 
     public void undo(ICursor cursor){
-        changeHistory.undo(text, cursor);
+        changeHistory.undo(cursor);
     }
 
     public void redo(ICursor cursor){
-        changeHistory.redo(text, cursor);
+        changeHistory.redo(cursor);
     }
 
-    /**
-     * Inserts the given character at the given index in this {@link FileBuffer}'s {@link IText}.
-     * @param index The index. Cannot be negative, or bigger than the lengths of the current text.
-     * @param character The character.
-     *
-     * @throws IllegalArgumentException If the index is illegal.
-     */
-    public void insertCharacter(int index, char character){
-        if(index < 0 || index > text.getCharAmount())
-            throw new IllegalArgumentException("Index is illegal.");
-        text.insert(index, character);
-        changeHistory.addInsertAction(index, character);
-        this.setState(BufferState.DIRTY);
-    }
 
-    /**
-     * Removes the character at the given index in this {@link FileBuffer}'s {@link IText}.
-     * @param index The index. Cannot be negative or equal/bigger than the lengths of the current text.
-     *
-     * @throws IllegalArgumentException If the index is illegal.
-     */
-    public void removeCharacter(int index){
-        if(index < 0 || index >= text.getCharAmount())
-            throw new IllegalArgumentException("Index is illegal.");
-        char removedCharacter = text.getCharacter(index);
-        text.remove(index);
-        changeHistory.addDeleteAction(index, removedCharacter);
-        this.setState(BufferState.DIRTY);
-    }
-
-    /**
-     * Inserts a line break at the given index in this {@link FileBuffer}'s {@link IText}.
-     * @param index The index. Cannot be negative or bigger than the lengths of the current text.
-     *
-     * @throws IllegalArgumentException If the index is illegal.
-     */
-    public void insertLineBreak(int index){
-        if(index < 0 || index > text.getCharAmount())
-            throw new IllegalArgumentException("Index is illegal.");
-        text.insertLineBreak(index);
-        changeHistory.addInsertAction(index, '\n');
-        this.setState(BufferState.DIRTY);
+    public void executeAndStore(Action action, ICursor cursor){
+        changeHistory.executeAndAddAction(action, cursor);
     }
 
     /**

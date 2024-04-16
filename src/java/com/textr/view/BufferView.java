@@ -1,8 +1,6 @@
 package com.textr.view;
 
-import com.textr.filebuffer.Cursor;
-import com.textr.filebuffer.FileBuffer;
-import com.textr.filebuffer.ICursor;
+import com.textr.filebuffer.*;
 import com.textr.input.Input;
 import com.textr.input.InputType;
 import com.textr.util.Dimension2D;
@@ -40,14 +38,6 @@ public final class BufferView extends View {
         return this.buffer;
     }
 
-    public void undo(){
-        buffer.undo(cursor);
-    }
-
-    public void redo(){
-        buffer.redo(cursor);
-    }
-
     /**
      * @return This view's anchor point. (0-based)
      */
@@ -66,6 +56,84 @@ public final class BufferView extends View {
     public void resize(Dimension2D dimensions){
         setDimensions(dimensions);
     }
+
+
+
+    /**
+     * Moves the cursor of the active buffer by 1 unit in the given direction.
+     * Then calls for an update of the anchor.
+     * @param direction The direction. Cannot be null.
+     *
+     * @throws IllegalArgumentException If the given direction is null.
+     */
+    public void moveCursor(Direction direction){
+        Validator.notNull(direction, "Cannot move the cursor in the null direction.");
+        cursor.move(direction, buffer.getText().getSkeleton());
+        updateAnchor();
+    }
+
+
+    /**
+     * Updates the anchor point of the active buffer to adjust it to possible changes to the cursor point.
+     */
+    private void updateAnchor(){
+        AnchorUpdater.updateAnchor(getAnchor(), cursor.getInsertPoint(), getDimensions());
+    }
+
+    /**
+     * Generates and returns a status bar for the given FileBuffer.
+     *
+     * @return The status bar.
+     * @throws IllegalArgumentException If the given buffer is null.
+     */
+    @Override
+    public String generateStatusBar(){
+        return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: (line, col) = (%d, %d) - State: %s",
+                buffer.getFile().getPath(),
+                buffer.getText().getLineAmount(),
+                buffer.getText().getCharAmount(),
+                cursor.getInsertPoint().getY(),
+                cursor.getInsertPoint().getX(),
+                buffer.getState());
+    }
+    /**
+     * Handle input at the view level. Only view specific operations happen here, and nothing flows to a deeper level in the chain.
+     */
+    @Override
+    public void handleInput(Input input){
+        InputType inputType = input.getType();
+        switch (inputType) {
+            case CHARACTER -> {
+                Action insertAction = new InsertAction(cursor.getInsertIndex(), input.getCharacter(), buffer.getText());
+                buffer.executeAndStore(insertAction, cursor);
+            }
+            case ENTER -> {
+                Action insertAction = new InsertAction(cursor.getInsertIndex(), '\n', buffer.getText());
+                buffer.executeAndStore(insertAction, cursor);
+            }
+            case ARROW_UP -> moveCursor(Direction.UP);
+            case ARROW_RIGHT -> moveCursor(Direction.RIGHT);
+            case ARROW_DOWN -> moveCursor(Direction.DOWN);
+            case ARROW_LEFT -> moveCursor(Direction.LEFT);
+            case DELETE -> {
+                Action deleteAction = new DeleteAction(cursor.getInsertIndex(),
+                        buffer.getText().getCharacter(cursor.getInsertIndex()),
+                        buffer.getText(), Side.AFTER);
+                buffer.executeAndStore(deleteAction, cursor);
+            }
+            case BACKSPACE -> {
+                if(cursor.getInsertIndex() == 0)
+                    return;
+                Action deleteAction = new DeleteAction(cursor.getInsertIndex() - 1,
+                        buffer.getText().getCharacter(cursor.getInsertIndex() - 1),
+                        buffer.getText(), Side.BEFORE);
+                buffer.executeAndStore(deleteAction, cursor);
+            }
+            case CTRL_U -> buffer.redo(cursor);
+            case CTRL_Z -> buffer.undo(cursor);
+        }
+    }
+
 
     /**
      * Compares this view to the given object and returns True if they're equal. Returns False otherwise.
@@ -115,100 +183,5 @@ public final class BufferView extends View {
 
     public BufferView copy(){
         return new BufferView(this.buffer.copy(), this.cursor, getPosition().copy(), getDimensions().copy(), this.anchor.copy());
-    }
-
-    /**
-     * Moves the cursor of the active buffer by 1 unit in the given direction.
-     * Then calls for an update of the anchor.
-     * @param direction The direction. Cannot be null.
-     *
-     * @throws IllegalArgumentException If the given direction is null.
-     */
-    public void moveCursor(Direction direction){
-        Validator.notNull(direction, "Cannot move the cursor in the null direction.");
-        cursor.move(direction, buffer.getText().getSkeleton());
-        updateAnchor();
-    }
-
-    /**
-     * Creates a new line (\r\n on Windows) at the cursor in the active buffer.
-     * Then calls for an update of the anchor.
-     */
-    public void insertNewLine(){
-        buffer.insertLineBreak(cursor.getInsertIndex());
-        cursor.move(Direction.RIGHT, buffer.getText().getSkeleton());
-        updateAnchor();
-    }
-
-    /**
-     * Inserts the given character at the cursor of the active buffer.
-     * @param character The input character
-     */
-    public void insertCharacter(char character){
-        buffer.insertCharacter(cursor.getInsertIndex(), character);
-        cursor.move(Direction.RIGHT, buffer.getText().getSkeleton());
-        updateAnchor();
-    }
-
-    /**
-     * Deletes the character just before the cursor of the active buffer.
-     * Then calls for an update of the anchor.
-     */
-    public void deletePreviousCharacter(){
-        if(cursor.getInsertIndex() == 0)
-            return;
-        buffer.removeCharacter(cursor.getInsertIndex() - 1);
-        cursor.move(Direction.LEFT, buffer.getText().getSkeleton());
-        updateAnchor();
-    }
-
-    /**
-     * Deletes the character just after the cursor of the active buffer.
-     */
-    public void deleteNextCharacter(){
-        buffer.removeCharacter(cursor.getInsertIndex());
-    }
-
-    /**
-     * Updates the anchor point of the active buffer to adjust it to possible changes to the cursor point.
-     */
-    private void updateAnchor(){
-        AnchorUpdater.updateAnchor(getAnchor(), cursor.getInsertPoint(), getDimensions());
-    }
-
-    /**
-     * Generates and returns a status bar for the given FileBuffer.
-     *
-     * @return The status bar.
-     * @throws IllegalArgumentException If the given buffer is null.
-     */
-    @Override
-    public String generateStatusBar(){
-        return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: (line, col) = (%d, %d) - State: %s",
-                buffer.getFile().getPath(),
-                buffer.getText().getLineAmount(),
-                buffer.getText().getCharAmount(),
-                cursor.getInsertPoint().getY(),
-                cursor.getInsertPoint().getX(),
-                buffer.getState());
-    }
-    /**
-     * Handle input at the view level. Only view specific operations happen here, and nothing flows to a deeper level in the chain.
-     */
-    @Override
-    public void handleInput(Input input){
-        InputType inputType = input.getType();
-        switch (inputType) {
-            case CHARACTER -> insertCharacter(input.getCharacter());
-            case ENTER -> insertNewLine();
-            case ARROW_UP -> moveCursor(Direction.UP);
-            case ARROW_RIGHT -> moveCursor(Direction.RIGHT);
-            case ARROW_DOWN -> moveCursor(Direction.DOWN);
-            case ARROW_LEFT -> moveCursor(Direction.LEFT);
-            case DELETE -> deleteNextCharacter();
-            case BACKSPACE -> deletePreviousCharacter();
-            case CTRL_U -> redo();
-            case CTRL_Z -> undo();
-        }
     }
 }
