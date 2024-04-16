@@ -1,18 +1,14 @@
 package com.textr.filebuffer;
 
-import com.textr.util.Direction;
-
-import java.util.List;
-
 public interface IText {
 
     String[] getLines();
     String getContent();
-    int getAmountOfLines();
-    int getAmountOfChars();
-    void insertCharacter(char character, ICursor cursor);
-    void removeCharacterBefore(ICursor cursor);
-    void removeCharacterAfter(ICursor cursor);
-    void insertNewLine(ICursor cursor);
+    int getLineAmount();
+    int getCharAmount();
+    char getCharacter(int index);
+    void insert(int index, char character);
+    void remove(int index);
+    void insertLineBreak(int index);
     ITextSkeleton getSkeleton();
 }

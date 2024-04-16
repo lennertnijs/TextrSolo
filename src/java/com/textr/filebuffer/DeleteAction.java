@@ -3,24 +3,24 @@ package com.textr.filebuffer;
 public final class DeleteAction implements Action {
 
     private final char character;
-    private final int insertIndex;
+    private final int index;
 
-    public DeleteAction(char character, int insertIndex){
+    public DeleteAction(int index, char character){
         this.character = character;
-        this.insertIndex = insertIndex;
+        this.index = index;
     }
 
     public int getInsertIndex(){
-        return insertIndex;
+        return index;
     }
 
     public void undo(IText text, ICursor cursor){
-        cursor.setInsertIndex(insertIndex, text.getSkeleton());
-        text.insertCharacter(character, cursor);
+        cursor.setInsertIndex(index, text.getSkeleton());
+        text.insert(index, character);
     }
 
     public void redo(IText text, ICursor cursor){
-        cursor.setInsertIndex(insertIndex, text.getSkeleton());
-        text.removeCharacterBefore(cursor);
+        cursor.setInsertIndex(index, text.getSkeleton());
+        text.remove(index);
     }
 }

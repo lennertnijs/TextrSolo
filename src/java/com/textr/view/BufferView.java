@@ -135,7 +135,7 @@ public final class BufferView extends View {
      * Then calls for an update of the anchor.
      */
     public void insertNewLine(){
-        buffer.createNewLine(cursor);
+        buffer.createNewLine(cursor.getInsertIndex());
         updateAnchor();
     }
 
@@ -144,7 +144,8 @@ public final class BufferView extends View {
      * @param character The input character
      */
     public void insertCharacter(char character){
-        buffer.insertCharacter(character, cursor);
+        buffer.insertCharacter(character, cursor.getInsertIndex());
+        cursor.move(Direction.RIGHT, buffer.getText().getSkeleton());
         updateAnchor();
     }
 
@@ -153,7 +154,7 @@ public final class BufferView extends View {
      * Then calls for an update of the anchor.
      */
     public void deletePreviousCharacter(){
-        buffer.removeCharacterBefore(cursor);
+        buffer.removeCharacterBefore(cursor.getInsertIndex());
         updateAnchor();
     }
 
@@ -181,8 +182,8 @@ public final class BufferView extends View {
     public String generateStatusBar(){
         return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: (line, col) = (%d, %d) - State: %s",
                 buffer.getFile().getPath(),
-                buffer.getText().getAmountOfLines(),
-                buffer.getText().getAmountOfChars(),
+                buffer.getText().getLineAmount(),
+                buffer.getText().getCharAmount(),
                 cursor.getInsertPoint().getY(),
                 cursor.getInsertPoint().getX(),
                 buffer.getState());

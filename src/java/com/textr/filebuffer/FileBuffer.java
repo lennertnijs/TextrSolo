@@ -76,9 +76,9 @@ public final class FileBuffer {
      * Inserts the given character into this {@link FileBuffer}'s buffer {@link Text} at the insertion {@link Point}.
      * @param character The character
      */
-    public void insertCharacter(char character, ICursor cursor){
-        changeHistory.addInsertAction(character, cursor);
-        text.insertCharacter(character, cursor);
+    public void insertCharacter(char character, int insertIndex){
+        changeHistory.addInsertAction(character, insertIndex);
+        text.insert(insertIndex, character);
         this.setState(BufferState.DIRTY);
     }
 
@@ -87,10 +87,9 @@ public final class FileBuffer {
      * Also moves the cursor one unit to the left.
      * Used when backspace is pressed.
      */
-    public void removeCharacterBefore(ICursor cursor){
-        char character = text.getLines()[cursor.getInsertPoint().getY()].charAt(cursor.getInsertPoint().getX());
-        changeHistory.addDeleteAction(character, cursor);
-        text.removeCharacterBefore(cursor);
+    public void removeCharacterBefore(int index){
+        changeHistory.addDeleteAction(index, text.getCharacter(index));
+        text.remove(index);
         this.setState(BufferState.DIRTY);
     }
 
@@ -100,7 +99,7 @@ public final class FileBuffer {
      * Used when delete is pressed.
      */
     public void removeCharacterAfter(ICursor cursor){
-        text.removeCharacterAfter(cursor);
+        text.remove(cursor.getInsertIndex() + 1);
         this.setState(BufferState.DIRTY);
     }
 
@@ -109,8 +108,8 @@ public final class FileBuffer {
      * Also moves the cursor into the new line.
      * Used when enter is pressed.
      */
-    public void createNewLine(ICursor cursor){
-        text.insertNewLine(cursor);
+    public void createNewLine(int index){
+        text.insertLineBreak(index);
         this.setState(BufferState.DIRTY);
     }
 

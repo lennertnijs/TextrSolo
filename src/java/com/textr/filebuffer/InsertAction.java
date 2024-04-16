@@ -1,7 +1,5 @@
 package com.textr.filebuffer;
 
-import com.textr.util.Point;
-
 public final class InsertAction implements Action{
 
     private final char character;
@@ -17,11 +15,11 @@ public final class InsertAction implements Action{
 
     public void undo(IText text, ICursor cursor){
         cursor.setInsertIndex(insertIndex, text.getSkeleton());
-        text.removeCharacterBefore(cursor);
+        text.remove(insertIndex);
     }
 
     public void redo(IText text, ICursor cursor){
         cursor.setInsertIndex(insertIndex, text.getSkeleton());
-        text.insertCharacter(character, cursor);
+        text.insert(insertIndex, character);
     }
 }
