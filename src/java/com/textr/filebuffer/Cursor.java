@@ -50,10 +50,10 @@ public final class Cursor implements ICursor{
 
     private void updateInsertIndex(ITextSkeleton skeleton){
         int count = 0;
-        for(int i = 0; i < insertPoint.getX(); i++){
-            count += skeleton.getLineLength(i) + 1;
+        for(int i = 0; i < insertPoint.getY(); i++){
+            count += skeleton.getLineLength(i);
         }
-        count += insertPoint.getY();
+        count += insertPoint.getX();
         this.insertIndex = count;
     }
 
@@ -87,7 +87,7 @@ public final class Cursor implements ICursor{
         if(insertPoint.getY() == 0)
             return;
         insertPoint.decrementY();
-        int newLineLength = skeleton.getLineLength(insertPoint.getY());
+        int newLineLength = Math.max(skeleton.getLineLength(insertPoint.getY()) - 1, 0);
         int newX = Math.min(newLineLength, insertPoint.getX());
         insertPoint.setX(newX);
         updateInsertIndex(skeleton);
@@ -97,7 +97,7 @@ public final class Cursor implements ICursor{
         if(insertPoint.getY() == skeleton.getLineAmount() - 1)
             return;
         insertPoint.incrementY();
-        int newLineLength = skeleton.getLineLength(insertPoint.getY());
+        int newLineLength = Math.max(skeleton.getLineLength(insertPoint.getY()) - 1, 0);
         int newX = Math.min(newLineLength, insertPoint.getX());
         insertPoint.setX(newX);
         updateInsertIndex(skeleton);

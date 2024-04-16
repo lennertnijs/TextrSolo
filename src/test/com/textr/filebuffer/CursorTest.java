@@ -73,4 +73,72 @@ public class CursorTest {
         assertEquals(cursor.getInsertIndex(), 8);
         assertEquals(cursor.getInsertPoint(), Point.create(1, 2));
     }
+
+    @Test
+    public void testMoveCursorLeft(){
+        cursor.setInsertIndex(8, skeleton);
+        assertEquals(cursor.getInsertIndex(), 8);
+        assertEquals(cursor.getInsertPoint(), Point.create(1, 2));
+        cursor.move(Direction.LEFT, skeleton);
+        assertEquals(cursor.getInsertIndex(), 7);
+        assertEquals(cursor.getInsertPoint(), Point.create(0, 2));
+        cursor.move(Direction.LEFT, skeleton);
+        assertEquals(cursor.getInsertIndex(), 6);
+        assertEquals(cursor.getInsertPoint(), Point.create(3, 1));
+        cursor.move(Direction.LEFT, skeleton);
+        assertEquals(cursor.getInsertIndex(), 5);
+        assertEquals(cursor.getInsertPoint(), Point.create(2, 1));
+        cursor.move(Direction.LEFT, skeleton);
+        assertEquals(cursor.getInsertIndex(), 4);
+        assertEquals(cursor.getInsertPoint(), Point.create(1, 1));
+        cursor.move(Direction.LEFT, skeleton);
+        assertEquals(cursor.getInsertIndex(), 3);
+        assertEquals(cursor.getInsertPoint(), Point.create(0, 1));
+        cursor.move(Direction.LEFT, skeleton);
+        assertEquals(cursor.getInsertIndex(), 2);
+        assertEquals(cursor.getInsertPoint(), Point.create(2, 0));
+        cursor.move(Direction.LEFT, skeleton);
+        assertEquals(cursor.getInsertIndex(), 1);
+        assertEquals(cursor.getInsertPoint(), Point.create(1, 0));
+        cursor.move(Direction.LEFT, skeleton);
+        assertEquals(cursor.getInsertIndex(), 0);
+        assertEquals(cursor.getInsertPoint(), Point.create(0, 0));
+        cursor.move(Direction.LEFT, skeleton);
+        assertEquals(cursor.getInsertIndex(), 0);
+        assertEquals(cursor.getInsertPoint(), Point.create(0, 0));
+    }
+
+    @Test
+    public void testMoveCursorDown(){
+        cursor.setInsertIndex(2, skeleton);
+        cursor.move(Direction.DOWN, skeleton);
+        assertEquals(cursor.getInsertIndex(), 5);
+        assertEquals(cursor.getInsertPoint(), Point.create(2, 1));
+        cursor.move(Direction.DOWN, skeleton);
+        assertEquals(cursor.getInsertIndex(), 8);
+        assertEquals(cursor.getInsertPoint(), Point.create(1, 2));
+        cursor.move(Direction.DOWN, skeleton);
+        assertEquals(cursor.getInsertIndex(), 8);
+        assertEquals(cursor.getInsertPoint(), Point.create(1, 2));
+    }
+
+    @Test
+    public void testMoveCursorUp(){
+        cursor.setInsertIndex(8, skeleton);
+        assertEquals(cursor.getInsertIndex(), 8);
+        assertEquals(cursor.getInsertPoint(), Point.create(1, 2));
+        cursor.move(Direction.UP, skeleton);
+        assertEquals(cursor.getInsertIndex(), 4);
+        assertEquals(cursor.getInsertPoint(), Point.create(1, 1));
+        cursor.move(Direction.UP, skeleton);
+        assertEquals(cursor.getInsertIndex(), 1);
+        assertEquals(cursor.getInsertPoint(), Point.create(1, 0));
+        cursor.move(Direction.UP, skeleton);
+        assertEquals(cursor.getInsertIndex(), 1);
+        assertEquals(cursor.getInsertPoint(), Point.create(1, 0));
+        cursor.setInsertIndex(6, skeleton);
+        cursor.move(Direction.UP, skeleton);
+        assertEquals(cursor.getInsertIndex(), 2);
+        assertEquals(cursor.getInsertPoint(), Point.create(2, 0));
+    }
 }
