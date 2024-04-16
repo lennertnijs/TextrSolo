@@ -27,8 +27,8 @@ public final class Cursor implements ICursor{
         return insertPoint;
     }
 
-    public void setInsertIndex(int insertIndex, ITextSkeleton skeleton){
-        this.insertIndex = insertIndex;
+    public void setInsertIndex(int index, ITextSkeleton skeleton){
+        this.insertIndex = index;
         updateInsertPoint(skeleton);
     }
 
@@ -38,11 +38,11 @@ public final class Cursor implements ICursor{
         int count = 0;
         int row = -1;
         for(int i = 0; i < skeleton.getLineAmount() ; i++){
-            count += skeleton.getLineLength(i) + 1;
-            if(insertIndex < count) {
+            if(insertIndex < count + skeleton.getLineLength(i)) {
                 row = i;
                 break;
             }
+            count += skeleton.getLineLength(i);
         }
         int col = insertIndex - count;
         this.insertPoint = Point.create(col, row);
@@ -69,7 +69,7 @@ public final class Cursor implements ICursor{
 
     private void moveRight(ITextSkeleton skeleton){
         int incrementedIndex = insertIndex + 1;
-        if(incrementedIndex <= skeleton.getCharAmount()) {
+        if(incrementedIndex < skeleton.getCharAmount()) {
             this.insertIndex = incrementedIndex;
             updateInsertPoint(skeleton);
         }
