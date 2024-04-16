@@ -1,23 +1,23 @@
 package com.textr.input;
 
-import com.textr.terminal.ITerminalService;
+import com.textr.terminal.TerminalService;
 
 /**
  * Used to translate a byte or stream of bytes into single input.
  */
 public final class InputTranslator {
 
-    private final ITerminalService terminal;
+    private final TerminalService terminal;
 
     /**
      * Private constructor. No use.
      */
-    public InputTranslator(ITerminalService terminal){
+    public InputTranslator(TerminalService terminal){
         this.terminal = terminal;
     }
 
     /**
-     * Reads bytes from the {@link ITerminalService} and returns an {@link Input} instance.
+     * Reads bytes from the {@link TerminalService} and returns an {@link Input} instance.
      *
      * @return the {@link Input} instance representing the inputted command
      */

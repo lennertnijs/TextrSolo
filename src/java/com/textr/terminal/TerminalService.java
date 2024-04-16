@@ -6,60 +6,23 @@ import io.github.btj.termios.Terminal;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-public final class TerminalService implements ITerminalService {
-
-    /**
-     * Constructs a new TerminalService instance.
-     */
-    public TerminalService() {
-    }
+public interface TerminalService {
 
     /**
      * Reads the size of the terminal and returns it.
      * @return The dimensions of the terminal.
      */
-    public Dimension2D getTerminalArea(){
-        Terminal.reportTextAreaSize();
-        try{
-            int b = Terminal.readByte();
-            while (b != ';'){
-                b = Terminal.readByte();
-            }
-            b = Terminal.readByte();
-            int height = 0;
-            while(b != ';'){
-                if ('0' <= b && b <= '9') {
-                    height *= 10;
-                    height += b - '0';
-                }
-                b = Terminal.readByte();
-            }
-
-            int width = 0;
-            while(b != 't'){
-                b = Terminal.readByte();
-                if ('0' <= b && b <= '9') {
-                    width *= 10;
-                    width += b - '0';
-                }
-            }
-            return Dimension2D.create(width, height);
-        }catch(IOException e){
-            throw new IllegalStateException("Something went wrong while reading the terminal dimensions.");
-        }
-    }
+    Dimension2D getTerminalArea();
 
     /**
-     * Puts the terminal in the raw input mode. (input is immediately reported)
+     * Puts the terminal in the raw input mode. (Typically, input is immediately reported)
      */
-    public void enterRawInputMode(){ Terminal.enterRawInputMode();}
+    void enterRawInputMode();
 
     /**
-     * Puts the terminal in the non-raw input mode. (input is reported when enter is pressed)
+     * Puts the terminal in the non-raw input mode. (Typically, input is reported when enter is pressed)
      */
-    public void leaveRawInputMode(){
-        Terminal.leaveRawInputMode();
-    }
+    void leaveRawInputMode();
 
     /**
      * Moves the cursor to the given row and column indices (0-based).
@@ -67,16 +30,12 @@ public final class TerminalService implements ITerminalService {
      * @param x The x coordinate. (0-based) Cannot be negative or bigger than the terminal width - 1.
      * @param y The y coordinate. (0-based) Cannot be negative or bigger than the terminal height - 1.
      */
-    public void moveCursor(int x, int y){
-        Terminal.moveCursor(y + 1, x + 1);
-    }
+    void moveCursor(int x, int y);
 
     /**
      * Clears the terminal.
      */
-    public void clearScreen(){
-        Terminal.clearScreen();
-    }
+    void clearScreen();
 
     /**
      * Prints the given text starting at the given position in the terminal.
@@ -86,22 +45,12 @@ public final class TerminalService implements ITerminalService {
      *
      * @throws IllegalArgumentException If text is null.
      */
-    public void printText(int x, int y, String text){
-        Terminal.printText(y + 1, x + 1 , text);
-    }
+    void printText(int x, int y, String text);
 
     /**
      * Reads a byte from the stream and returns it.
      *
      * @return The byte.
      */
-    public int readByte(){
-        try{
-            return Terminal.readByte(System.currentTimeMillis()+10);
-        }catch(IOException e){
-            return -1;
-        } catch (TimeoutException e) {
-            return -2;
-        }
-    }
+    int readByte();
 }

@@ -1,6 +1,6 @@
 package com.textr.drawer;
 
-import com.textr.terminal.ITerminalService;
+import com.textr.terminal.TerminalService;
 import com.textr.util.Point;
 import com.textr.util.Validator;
 import com.textr.view.BufferView;
@@ -13,9 +13,9 @@ import java.util.ArrayList;
  */
 public final class ViewDrawer{
 
-    private final ITerminalService terminal;
+    private final TerminalService terminal;
 
-    public ViewDrawer(ITerminalService terminal){
+    public ViewDrawer(TerminalService terminal){
         Validator.notNull(terminal, "Cannot instantiate ViewDrawer with null TerminalService");
         this.terminal = terminal;
     }

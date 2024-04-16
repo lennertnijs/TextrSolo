@@ -1,6 +1,6 @@
 package com.textr.input;
 
-import com.textr.terminal.TerminalService;
+import com.textr.terminal.TermiosTerminalService;
 import com.textr.util.Validator;
 import com.textr.view.ViewService;
 
@@ -17,9 +17,9 @@ public final class InputHandlerRepo {
     public static void initialiseInputHandlers(ViewService viewService){
         Validator.notNull(viewService, "Cannot create input handlers with a null view service.");
         // FIXME: Creating TerminalServices and InputTranslators shouldn't happen here
-        anythingInputHandler = new AnythingInputHandler(new TerminalService());
-        closeDirtyBufferInputHandler = new CloseDirtyBufferInputHandler(viewService, new TerminalService());
-        inputHandler = new InputHandler(viewService, new InputTranslator(new TerminalService()));
+        anythingInputHandler = new AnythingInputHandler(new TermiosTerminalService());
+        closeDirtyBufferInputHandler = new CloseDirtyBufferInputHandler(viewService, new TermiosTerminalService());
+        inputHandler = new InputHandler(viewService, new InputTranslator(new TermiosTerminalService()));
         setStandardInputHandler();
     }
 

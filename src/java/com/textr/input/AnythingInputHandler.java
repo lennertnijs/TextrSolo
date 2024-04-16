@@ -1,12 +1,12 @@
 package com.textr.input;
 
-import com.textr.terminal.ITerminalService;
+import com.textr.terminal.TerminalService;
 
 public final class AnythingInputHandler implements IInputHandler {
 
-    private final ITerminalService terminal;
+    private final TerminalService terminal;
 
-    public AnythingInputHandler(ITerminalService terminal){
+    public AnythingInputHandler(TerminalService terminal){
         // TODO: Replace this class with a MessageSender object
         this.terminal = terminal;
     }

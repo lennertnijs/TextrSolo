@@ -3,7 +3,7 @@ package com.textr.terminal;
 import com.textr.util.Dimension2D;
 
 // TODO: Implement and use in tests
-public class MockTerminalService implements ITerminalService {
+public class MockTerminalService implements TerminalService {
 
     @Override
     public Dimension2D getTerminalArea() {

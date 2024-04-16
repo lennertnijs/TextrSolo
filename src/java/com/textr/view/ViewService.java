@@ -6,7 +6,7 @@ import com.textr.input.Input;
 import com.textr.input.InputHandlerRepo;
 import com.textr.Settings;
 import com.textr.input.InputType;
-import com.textr.terminal.ITerminalService;
+import com.textr.terminal.TerminalService;
 import com.textr.util.Dimension2D;
 import com.textr.util.Point;
 import com.textr.util.Validator;
@@ -16,10 +16,10 @@ import com.textr.drawer.ViewDrawer;
 public final class ViewService {
 
     private final IViewRepo viewRepo;
-    private final ITerminalService terminal; // FIXME: ViewService shouldn't be coupled to Terminal, only to Drawer(s)
+    private final TerminalService terminal; // FIXME: ViewService shouldn't be coupled to Terminal, only to Drawer(s)
     private final ViewDrawer viewDrawer;
 
-    public ViewService(IViewRepo viewRepo, ViewDrawer viewDrawer, ITerminalService terminal){
+    public ViewService(IViewRepo viewRepo, ViewDrawer viewDrawer, TerminalService terminal){
         Validator.notNull(viewRepo, "Cannot initiate a ViewService with a null IViewRepo");
         Validator.notNull(viewDrawer, "Cannot initiate a ViewService with a null ViewDrawer");
         Validator.notNull(terminal, "Cannot initiate a ViewService with a null TerminalService");

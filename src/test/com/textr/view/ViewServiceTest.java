@@ -3,8 +3,8 @@ package com.textr.view;
 import com.textr.drawer.ViewDrawer;
 import com.textr.filebuffer.BufferState;
 import com.textr.Settings;
-import com.textr.terminal.ITerminalService;
 import com.textr.terminal.TerminalService;
+import com.textr.terminal.TermiosTerminalService;
 import com.textr.util.Dimension2D;
 import com.textr.util.Point;
 
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ViewServiceTest {
     private ViewTreeRepo repo ;
     private ViewService viewService;
-    private final ITerminalService terminal = new TerminalService(); // TODO: Replace with Mock
+    private final TerminalService terminal = new TermiosTerminalService(); // TODO: Replace with Mock
 
     private BufferView view1 ;
 

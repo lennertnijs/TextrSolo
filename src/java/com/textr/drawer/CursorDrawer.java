@@ -1,6 +1,6 @@
 package com.textr.drawer;
 
-import com.textr.terminal.ITerminalService;
+import com.textr.terminal.TerminalService;
 import com.textr.util.Point;
 import com.textr.util.Validator;
 
@@ -20,7 +20,7 @@ public final class CursorDrawer {
      *
      * @throws IllegalArgumentException If the position, anchor or cursor is null.
      */
-    public static void draw(Point position, Point anchor, Point cursor, ITerminalService terminal){
+    public static void draw(Point position, Point anchor, Point cursor, TerminalService terminal){
         Validator.notNull(position, "Cannot draw the cursor because the position is null.");
         Validator.notNull(anchor, "Cannot draw the cursor because the anchor is null.");
         Validator.notNull(cursor, "Cannot draw the cursor because the cursor position is null.");

@@ -1,13 +1,13 @@
 package com.textr.input;
 
-import com.textr.terminal.ITerminalService;
+import com.textr.terminal.TerminalService;
 import com.textr.view.ViewService;
 
 public final class CloseDirtyBufferInputHandler implements IInputHandler {
 
     private final ViewService viewService;
-    private final ITerminalService terminal;
-    public CloseDirtyBufferInputHandler(ViewService viewService, ITerminalService terminal){
+    private final TerminalService terminal;
+    public CloseDirtyBufferInputHandler(ViewService viewService, TerminalService terminal){
         this.viewService = viewService;
         this.terminal = terminal;
     }
