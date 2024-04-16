@@ -84,7 +84,7 @@ public final class ViewDrawer{
         terminal.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
     }
   
-    private static void drawScrollBar(BufferView view){
+    private void drawScrollBar(BufferView view){
         int maxY = view.getBuffer().getText().getLineAmount() - 1;
         int currentY = view.getCursor().getInsertPoint().getY();
         int yBar = Math.round(((float)currentY / (float)maxY) * (view.getDimensions().getHeight() - 1));
