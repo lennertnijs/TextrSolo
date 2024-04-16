@@ -1,10 +1,8 @@
 package com.textr.filebuffer;
 
-import com.textr.util.Point;
-
 public interface Action {
 
-    Point getPosition();
-    void undo(Text text);
-    void redo(Text text);
+    int getInsertIndex();
+    void undo(IText text, ICursor cursor);
+    void redo(IText text, ICursor cursor);
 }

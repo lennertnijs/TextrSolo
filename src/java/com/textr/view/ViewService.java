@@ -163,8 +163,6 @@ public final class ViewService {
             case CTRL_S -> saveBuffer();
             case CTRL_R -> rotateView(false);
             case CTRL_T -> rotateView(true);
-            case CTRL_U -> getActiveBuffer().redo();
-            case CTRL_Z -> getActiveBuffer().undo();
             case  F4-> attemptDeleteView();
             case CTRL_G -> addGame();
             case TICK -> {

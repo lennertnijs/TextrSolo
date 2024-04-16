@@ -76,12 +76,12 @@ public final class FileBuffer {
         this.state = state;
     }
 
-    public void undo(){
-        //changeHistory.undo(text, cursor);
+    public void undo(ICursor cursor){
+        changeHistory.undo(text, cursor);
     }
 
-    public void redo(){
-        //changeHistory.redo(text, cursor);
+    public void redo(ICursor cursor){
+        changeHistory.redo(text, cursor);
     }
 
     /**
@@ -89,7 +89,7 @@ public final class FileBuffer {
      * @param character The character
      */
     public void insertCharacter(char character, ICursor cursor){
-        //changeHistory.addInsertAction(character, cursor.getY(), cursor.getX());
+        changeHistory.addInsertAction(character, cursor);
         text.insertCharacter(character, cursor);
         this.setState(BufferState.DIRTY);
     }
@@ -100,7 +100,8 @@ public final class FileBuffer {
      * Used when backspace is pressed.
      */
     public void removeCharacterBefore(ICursor cursor){
-        //changeHistory.addDeleteAction(text.getLines()[oldY].charAt(oldX), oldY, oldX);
+        char character = text.getLines()[cursor.getInsertPoint().getY()].charAt(cursor.getInsertPoint().getX());
+        changeHistory.addDeleteAction(character, cursor);
         text.removeCharacterBefore(cursor);
         this.setState(BufferState.DIRTY);
     }

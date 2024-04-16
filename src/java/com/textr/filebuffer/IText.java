@@ -2,6 +2,8 @@ package com.textr.filebuffer;
 
 import com.textr.util.Direction;
 
+import java.util.List;
+
 public interface IText {
 
     String[] getLines();
@@ -13,4 +15,6 @@ public interface IText {
     void removeCharacterAfter(ICursor cursor);
     void insertNewLine(ICursor cursor);
     void moveCursor(Direction direction, ICursor cursor);
+    List<Integer> getLineLengths();
+    ITextSkeleton getSkeleton();
 }

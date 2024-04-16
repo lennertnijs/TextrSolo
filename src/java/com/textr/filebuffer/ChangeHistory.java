@@ -1,48 +1,43 @@
 package com.textr.filebuffer;
 
-import com.textr.util.Point;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public final class ChangeHistory {
 
-    private int undoIndex;
-    private final List<Action> actionHistory;
+    private final List<Action> undoAbles;
+    private final List<Action> redoAbles;
 
     public ChangeHistory(){
-        this.undoIndex = -1;
-        this.actionHistory = new ArrayList<>();
+        this.undoAbles = new ArrayList<>();
+        this.redoAbles = new ArrayList<>();
     }
 
-    public void addInsertAction(char character, int row, int col){
-        actionHistory.add(new InsertAction(character, row, col));
-        undoIndex = actionHistory.size() - 1;
+    public void addInsertAction(char character, ICursor cursor){
+        Action insertAction = new InsertAction(character, cursor.getInsertIndex());
+        undoAbles.add(insertAction);
     }
 
-    public void addDeleteAction(char character, int row, int col){
-        actionHistory.add(new DeleteAction(character, row, col));
-        undoIndex = actionHistory.size() - 1;
+    public void addDeleteAction(char character, ICursor cursor){
+        Action deleteAction = new DeleteAction(character, cursor.getInsertIndex());
+        undoAbles.add(deleteAction);
     }
 
-    public void undo(Text text, Point cursor){
-        if(undoIndex == -1)
+    public void undo(IText text, ICursor cursor){
+        if(undoAbles.size() == 0)
             return;
-        Action action = actionHistory.get(undoIndex);
-        cursor.setX(action.getPosition().getX());
-        cursor.setY(action.getPosition().getY());
-        action.undo(text);
-        undoIndex--;
+        Action action = undoAbles.get(undoAbles.size() - 1);
+        action.undo(text, cursor);
+        undoAbles.remove(undoAbles.size() - 1);
+        redoAbles.add(action);
     }
 
-    public void redo(Text text, Point cursor){
-        int redoIndex = undoIndex + 1;
-        if(redoIndex == actionHistory.size())
+    public void redo(IText text, ICursor cursor){
+        if(redoAbles.size() == 0)
             return;
-        Action action = actionHistory.get(redoIndex);
-        cursor.setX(action.getPosition().getX() + 1);
-        cursor.setY(action.getPosition().getY());
-        action.redo(text);
-        undoIndex++;
+        Action action = redoAbles.get(redoAbles.size() - 1);
+        action.redo(text, cursor);
+        redoAbles.remove(redoAbles.size() - 1);
+        undoAbles.add(action);
     }
 }

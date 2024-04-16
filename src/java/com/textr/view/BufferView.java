@@ -40,6 +40,14 @@ public final class BufferView extends View {
         return this.buffer;
     }
 
+    public void undo(){
+        buffer.undo(cursor);
+    }
+
+    public void redo(){
+        buffer.redo(cursor);
+    }
+
     /**
      * @return This view's anchor point. (0-based)
      */
@@ -194,6 +202,8 @@ public final class BufferView extends View {
             case ARROW_LEFT -> moveCursor(Direction.LEFT);
             case DELETE -> deleteNextCharacter();
             case BACKSPACE -> deletePreviousCharacter();
+            case CTRL_U -> redo();
+            case CTRL_Z -> undo();
         }
     }
 }

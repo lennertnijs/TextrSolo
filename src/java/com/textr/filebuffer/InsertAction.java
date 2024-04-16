@@ -5,23 +5,23 @@ import com.textr.util.Point;
 public final class InsertAction implements Action{
 
     private final char character;
-    private int row;
-    private int col;
-    public InsertAction(char character, int row, int col){
+    private final int insertIndex;
+    public InsertAction(char character, int insertIndex){
         this.character = character;
-        this.row = row;
-        this.col = col;
+        this.insertIndex = insertIndex;
     }
 
-    public Point getPosition(){
-        return Point.create(col, row);
+    public int getInsertIndex(){
+        return insertIndex;
     }
 
-    public void undo(Text text){
-        text.removeCharacter(row, col);
+    public void undo(IText text, ICursor cursor){
+        cursor.setInsertIndex(insertIndex, text.getSkeleton());
+        text.removeCharacterBefore(cursor);
     }
 
-    public void redo(Text text){
-        text.insertCharacter(character, row, col);
+    public void redo(IText text, ICursor cursor){
+        cursor.setInsertIndex(insertIndex, text.getSkeleton());
+        text.insertCharacter(character, cursor);
     }
 }

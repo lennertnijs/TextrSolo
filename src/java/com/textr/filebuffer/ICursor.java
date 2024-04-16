@@ -2,11 +2,11 @@ package com.textr.filebuffer;
 
 import com.textr.util.Point;
 
-import java.util.List;
-
 public interface ICursor {
     int getInsertIndex();
     Point getInsertPoint();
-    void setInsertIndex(int index, List<Integer> lengths);
-    void setInsertPoint(Point point, List<Integer> lengths);
+    void setInsertIndex(int index, ITextSkeleton skeleton);
+    void setInsertPoint(Point point, ITextSkeleton skeleton);
+    void moveRight(ITextSkeleton skeleton);
+    void moveLeft(ITextSkeleton skeleton);
 }

@@ -2,7 +2,6 @@ package com.textr.filebuffer;
 
 import com.textr.util.Point;
 
-import java.util.List;
 import java.util.Objects;
 
 public final class Cursor implements ICursor{
@@ -27,43 +26,57 @@ public final class Cursor implements ICursor{
         return insertPoint;
     }
 
-    public void setInsertIndex(int insertIndex, List<Integer> lengths){
+    public void setInsertIndex(int insertIndex, ITextSkeleton skeleton){
         this.insertIndex = insertIndex;
-        updateInsertPoint(lengths);
+        updateInsertPoint(skeleton);
     }
 
-    private void updateInsertPoint(List<Integer> lengths){
-        if(insertIndex < 0 || insertIndex > lengths.size())
+    private void updateInsertPoint(ITextSkeleton skeleton){
+        if(insertIndex < 0 || insertIndex > skeleton.getCharacterCount())
             throw new IllegalArgumentException("The integer falls outside the text.");
         int count = 0;
         int row = -1;
-        for(int i = 0; i < lengths.size() ; i++){
-            if(count + lengths.get(i) + 1 > insertIndex) {
+        for(int i = 0; i < skeleton.getAmountOfLines() ; i++){
+            if(count + skeleton.getLineLength(i) + 1 > insertIndex) {
                 row = i;
                 break;
             }
-            count += lengths.get(i) + 1;
+            count += skeleton.getLineLength(i) + 1;
         }
         int col = insertIndex - count;
-        this.insertPoint = Point.create(row, col);
+        this.insertPoint = Point.create(col, row);
     }
 
-    public void setInsertPoint(Point insertPoint, List<Integer> lengths){
+    public void setInsertPoint(Point insertPoint, ITextSkeleton skeleton){
         this.insertPoint = insertPoint;
-        updateInsertIndex(lengths);
+        updateInsertIndex(skeleton);
     }
 
-    private void updateInsertIndex(List<Integer> lengths){
+    private void updateInsertIndex(ITextSkeleton skeleton){
         Objects.requireNonNull(insertPoint, "Point is null.");
-        if(insertPoint.getX() >= lengths.size())
+        if(insertPoint.getX() >= skeleton.getAmountOfLines())
             throw new IllegalArgumentException("Y value of the Point is outside valid values.");
-        if(insertPoint.getY() > lengths.get(insertPoint.getX()))
+        if(insertPoint.getY() > skeleton.getLineLength(insertPoint.getX()))
             throw new IllegalArgumentException("X Value of the Point is outside valid values.");
         int count = 0;
         for(int i = 0; i < insertPoint.getX(); i++){
-            count += lengths.get(i) + 1;
+            count += skeleton.getLineLength(i) + 1;
         }
         count += insertPoint.getY();
         this.insertIndex = count;
+    }
+
+    public void moveRight(ITextSkeleton skeleton){
+        if(insertIndex == skeleton.getCharacterCount())
+            return;
+        insertIndex++;
+        updateInsertPoint(skeleton);
+    }
+
+    public void moveLeft(ITextSkeleton skeleton){
+        if(insertIndex == 0)
+            return;
+        insertIndex--;
+        updateInsertPoint(skeleton);
     }
 }
