@@ -15,18 +15,35 @@ public final class Cursor implements ICursor{
         this.insertPoint = insertPoint;
     }
 
+    /**
+     * Creates a new {@link Cursor} that starts at index 0.
+     *
+     * @return The cursor.
+     */
     public static Cursor createNew(){
         return new Cursor(0, Point.create(0, 0));
     }
 
+    /**
+     * @return The 1-dimensional index of this {@link Cursor}.
+     */
     public int getInsertIndex(){
         return insertIndex;
     }
 
+    /**
+     * @return The 2-dimensional index of this {@link Cursor}.
+     */
     public Point getInsertPoint(){
         return insertPoint;
     }
 
+    /**
+     * Sets the 1D index of this {@link Cursor} to the given index.
+     * Updates the 2D Point after wards.
+     * @param index The new index.
+     * @param skeleton The skeleton used to update the 2D Point.
+     */
     public void setInsertIndex(int index, ITextSkeleton skeleton){
         this.insertIndex = index;
         updateInsertPoint(skeleton);
@@ -57,6 +74,12 @@ public final class Cursor implements ICursor{
         this.insertIndex = count;
     }
 
+    /**
+     * Moves this {@link Cursor} in the given direction.
+     * Also updates the 2D representation appropriately.
+     * @param direction The direction.
+     * @param skeleton The skeleton to update the 2D.
+     */
     public void move(Direction direction, ITextSkeleton skeleton){
         Objects.requireNonNull(direction, "Direction is null.");
         switch(direction){
