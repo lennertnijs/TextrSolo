@@ -38,22 +38,17 @@ public final class Cursor implements ICursor{
         int count = 0;
         int row = -1;
         for(int i = 0; i < skeleton.getLineAmount() ; i++){
-            if(count + skeleton.getLineLength(i) + 1 > insertIndex) {
+            count += skeleton.getLineLength(i) + 1;
+            if(insertIndex < count) {
                 row = i;
                 break;
             }
-            count += skeleton.getLineLength(i) + 1;
         }
         int col = insertIndex - count;
         this.insertPoint = Point.create(col, row);
     }
 
     private void updateInsertIndex(ITextSkeleton skeleton){
-        Objects.requireNonNull(insertPoint, "Point is null.");
-        if(insertPoint.getX() >= skeleton.getLineAmount())
-            throw new IllegalArgumentException("Y value of the Point is outside valid values.");
-        if(insertPoint.getY() > skeleton.getLineLength(insertPoint.getX()))
-            throw new IllegalArgumentException("X Value of the Point is outside valid values.");
         int count = 0;
         for(int i = 0; i < insertPoint.getX(); i++){
             count += skeleton.getLineLength(i) + 1;
@@ -92,6 +87,9 @@ public final class Cursor implements ICursor{
         if(insertPoint.getY() == 0)
             return;
         insertPoint.decrementY();
+        int newLineLength = skeleton.getLineLength(insertPoint.getY());
+        int newX = Math.min(newLineLength, insertPoint.getX());
+        insertPoint.setX(newX);
         updateInsertIndex(skeleton);
     }
 
@@ -99,6 +97,9 @@ public final class Cursor implements ICursor{
         if(insertPoint.getY() == skeleton.getLineAmount() - 1)
             return;
         insertPoint.incrementY();
+        int newLineLength = skeleton.getLineLength(insertPoint.getY());
+        int newX = Math.min(newLineLength, insertPoint.getX());
+        insertPoint.setX(newX);
         updateInsertIndex(skeleton);
     }
 }

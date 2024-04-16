@@ -155,6 +155,8 @@ public final class BufferView extends View {
      * Then calls for an update of the anchor.
      */
     public void deletePreviousCharacter(){
+        if(cursor.getInsertIndex() == 0)
+            return;
         buffer.removeCharacter(cursor.getInsertIndex() - 1);
         cursor.move(Direction.LEFT, buffer.getText().getSkeleton());
         updateAnchor();

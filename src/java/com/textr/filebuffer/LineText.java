@@ -86,10 +86,8 @@ public final class LineText implements IText{
         List<Integer> lineLengths = new ArrayList<>();
         String[] lines = builder.toString().split("\n", -1);
         for(String line : lines){
-            lineLengths.add(line.length() + 1);
+            lineLengths.add(line.length());
         }
-        int lastIndex = lineLengths.size() - 1;
-        lineLengths.set(lastIndex, lineLengths.get(lastIndex) - 1);
         return new TextSkeleton(lineLengths);
     }
 
