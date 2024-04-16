@@ -33,11 +33,11 @@ public final class Cursor implements ICursor{
     }
 
     private void updateInsertPoint(ITextSkeleton skeleton){
-        if(insertIndex < 0 || insertIndex > skeleton.getCharacterCount())
+        if(insertIndex < 0 || insertIndex > skeleton.getCharAmount())
             throw new IllegalArgumentException("The integer falls outside the text.");
         int count = 0;
         int row = -1;
-        for(int i = 0; i < skeleton.getAmountOfLines() ; i++){
+        for(int i = 0; i < skeleton.getLineAmount() ; i++){
             if(count + skeleton.getLineLength(i) + 1 > insertIndex) {
                 row = i;
                 break;
@@ -55,7 +55,7 @@ public final class Cursor implements ICursor{
 
     private void updateInsertIndex(ITextSkeleton skeleton){
         Objects.requireNonNull(insertPoint, "Point is null.");
-        if(insertPoint.getX() >= skeleton.getAmountOfLines())
+        if(insertPoint.getX() >= skeleton.getLineAmount())
             throw new IllegalArgumentException("Y value of the Point is outside valid values.");
         if(insertPoint.getY() > skeleton.getLineLength(insertPoint.getX()))
             throw new IllegalArgumentException("X Value of the Point is outside valid values.");
@@ -79,7 +79,7 @@ public final class Cursor implements ICursor{
 
     private void moveRight(ITextSkeleton skeleton){
         int incrementedIndex = insertIndex + 1;
-        if(incrementedIndex <= skeleton.getCharacterCount()) {
+        if(incrementedIndex <= skeleton.getCharAmount()) {
             this.insertIndex = incrementedIndex;
             updateInsertPoint(skeleton);
         }
@@ -101,7 +101,7 @@ public final class Cursor implements ICursor{
     }
 
     private void moveDown(ITextSkeleton skeleton){
-        if(insertPoint.getY() == skeleton.getAmountOfLines() - 1)
+        if(insertPoint.getY() == skeleton.getLineAmount() - 1)
             return;
         insertPoint.incrementY();
         updateInsertIndex(skeleton);

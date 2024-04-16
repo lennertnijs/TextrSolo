@@ -2,7 +2,7 @@ package com.textr.filebuffer;
 
 public interface ITextSkeleton {
 
-    int getCharacterCount();
+    int getCharAmount();
     int getLineLength(int index);
-    int getAmountOfLines();
+    int getLineAmount();
 }

@@ -27,8 +27,8 @@ public class TextSkeletonTest {
 
     @Test
     public void testGetters(){
-        assertEquals(skeleton1.getCharacterCount(), 15);
-        assertEquals(skeleton1.getAmountOfLines(), 5);
+        assertEquals(skeleton1.getCharAmount(), 15);
+        assertEquals(skeleton1.getLineAmount(), 5);
     }
 
     @Test

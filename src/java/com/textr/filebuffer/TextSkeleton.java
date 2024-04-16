@@ -23,7 +23,7 @@ public final class TextSkeleton implements ITextSkeleton{
     }
 
     @Override
-    public int getCharacterCount(){
+    public int getCharAmount(){
         int count = 0;
         for(Integer integer : lineLengths)
             count += integer;
@@ -31,7 +31,7 @@ public final class TextSkeleton implements ITextSkeleton{
     }
 
     @Override
-    public int getAmountOfLines(){
+    public int getLineAmount(){
         return lineLengths.size();
     }
 

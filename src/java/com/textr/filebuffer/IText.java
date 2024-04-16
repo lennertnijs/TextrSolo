@@ -7,8 +7,8 @@ public interface IText {
     int getLineAmount();
     int getCharAmount();
     char getCharacter(int index);
+    ITextSkeleton getSkeleton();
     void insert(int index, char character);
     void remove(int index);
     void insertLineBreak(int index);
-    ITextSkeleton getSkeleton();
 }
