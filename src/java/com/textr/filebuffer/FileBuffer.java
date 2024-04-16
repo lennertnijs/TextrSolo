@@ -2,7 +2,6 @@ package com.textr.filebuffer;
 
 import com.textr.file.FileReader;
 import com.textr.file.FileWriter;
-import com.textr.util.Point;
 import com.textr.util.Validator;
 
 import java.io.File;
@@ -68,10 +67,6 @@ public final class FileBuffer {
         changeHistory.undo(text, cursor);
     }
 
-    /**
-     *
-     * @param cursor
-     */
     public void redo(ICursor cursor){
         changeHistory.redo(text, cursor);
     }

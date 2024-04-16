@@ -34,7 +34,7 @@ public final class ChangeHistory {
         if(redoAbles.size() == 0)
             return;
         Action action = redoAbles.get(redoAbles.size() - 1);
-        action.redo(text, cursor);
+        action.execute(text, cursor);
         redoAbles.remove(redoAbles.size() - 1);
         undoAbles.add(action);
     }
