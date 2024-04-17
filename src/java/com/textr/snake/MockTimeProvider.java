@@ -12,7 +12,7 @@ public class MockTimeProvider implements TimeProvider{
         return mockValue;
     }
 
-    public void increaseMockValue(){
-        mockValue++;
+    public void increaseMockValue(int i){
+        mockValue += i;
     }
 }
