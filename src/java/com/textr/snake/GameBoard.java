@@ -60,9 +60,9 @@ public final class GameBoard {
 
     public void resizeBoard(Dimension2D dimensions){
         Objects.requireNonNull(dimensions, "Dimensions is null.");
-        GamePoint oldMiddle = findMiddle(this.dimensions);
+        GamePoint snakeHead = snakeManager.getHead();
         GamePoint newMiddle = findMiddle(dimensions);
-        Vector translationVector = new Vector(oldMiddle.getX() - newMiddle.getX(), oldMiddle.getY() - newMiddle.getY());
+        Vector translationVector = new Vector(Math.abs(snakeHead.getX() - newMiddle.getX()), Math.abs(snakeHead.getY() - newMiddle.getY()));
         for(GamePoint p : snakeManager.getSnake()){
             GamePoint gamePoint = p.translate(translationVector);
             if(isOutOfBounds(gamePoint)){
