@@ -24,6 +24,7 @@ public final class ChangeHistory {
         Objects.requireNonNull(cursor, "Cursor is null.");
         action.execute(cursor);
         undoAbles.add(action);
+        redoAbles.clear();
     }
 
     /**
