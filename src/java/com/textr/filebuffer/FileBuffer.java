@@ -157,7 +157,8 @@ public final class FileBuffer {
                 file, text, state);
     }
 
-    public FileBuffer copy(){
-        return new FileBuffer(this.file, this.text, this.state);
-    }
+    // TODO: DELETE
+//    public FileBuffer copy(){
+//        return new FileBuffer(this.file, this.text, this.state);
+//    }
 }

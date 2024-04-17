@@ -226,9 +226,11 @@ public final class BufferView extends View {
                 buffer, getPosition(), getDimensions(), anchor);
     }
 
-    public BufferView copy(){
+    public BufferView duplicate(){
+        ICursor newCursor = Cursor.createNew(); // TODO: Make clone method for cursor
+        newCursor.setInsertIndex(cursor.getInsertIndex(), buffer.getText().getSkeleton());
         return new BufferView(this.buffer.copy(),
-                this.cursor,
+                newCursor,
                 getPosition().copy(),
                 getDimensions().copy(),
                 this.anchor.copy(),
