@@ -19,6 +19,7 @@ public final class BufferView extends View {
     private final FileBuffer buffer;
     private final ICursor cursor;
     private final Point anchor;
+    private UpdateState updater;
 
     private final Communicator communicator;
 
@@ -33,6 +34,7 @@ public final class BufferView extends View {
         this.cursor = cursor;
         this.anchor = anchor;
         this.communicator = Objects.requireNonNull(communicator, "BufferView's communicator cannot be null");
+        this.updater = new GenericState();
     }
 
     public static BufferView createFromFilePath(String url,
@@ -67,6 +69,16 @@ public final class BufferView extends View {
         return cursor;
     }
 
+    public UpdateState getUpdateState() {
+        return this.updater;
+    }
+
+    public void setUpdateState(UpdateState newState) {
+        if (newState == null)
+            throw new NullPointerException("New update state cannot be null");
+        this.updater = newState;
+    }
+
     /**
      * Resizes this BufferView
      * @param dimensions = the new dimensions of the view
@@ -74,8 +86,6 @@ public final class BufferView extends View {
     public void resize(Dimension2D dimensions){
         setDimensions(dimensions);
     }
-
-
 
     /**
      * Moves the cursor of the active buffer by 1 unit in the given direction.
@@ -141,8 +151,14 @@ public final class BufferView extends View {
                         buffer.getText(), Side.BEFORE);
                 buffer.executeAndStore(deleteAction, cursor);
             }
-            case CTRL_U -> buffer.redo(cursor);
-            case CTRL_Z -> buffer.undo(cursor);
+            case CTRL_U -> {
+                setUpdateState(new JumpToEditState());
+                buffer.redo(cursor);
+            }
+            case CTRL_Z -> {
+                setUpdateState(new JumpToEditState());
+                buffer.undo(cursor);
+            }
         }
     }
 
