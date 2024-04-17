@@ -23,7 +23,7 @@ public class GameClockTest {
 
     @Test
     public void testConstructorWith0Float(){
-        assertThrows(NullPointerException.class, () -> new GameClock(timeProvider, 0));
+        assertThrows(IllegalArgumentException.class, () -> new GameClock(timeProvider, 0));
     }
 
     @Test

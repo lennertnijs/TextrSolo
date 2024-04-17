@@ -12,7 +12,7 @@ public final class SnakeGame {
     public SnakeGame(IGameBoard board, IClock clock){
         this.board = board;
         this.clock = clock;
-        running = true;
+        running = false;
     }
 
     public void update(){
