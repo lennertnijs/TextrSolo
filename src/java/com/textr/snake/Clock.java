@@ -19,7 +19,7 @@ public final class Clock {
         lastMove = System.currentTimeMillis();
     }
 
-    public void updateTimeBetweenMoves(){
+    public void decreaseTimeBetweenMoves(){
         timeBetweenMoves *= 0.8;
     }
 }

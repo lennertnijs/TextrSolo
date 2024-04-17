@@ -7,9 +7,9 @@ public final class SnakeGame {
 
     private boolean running;
     private final IGameBoard board;
-    private final Clock clock;
+    private final IClock clock;
 
-    public SnakeGame(IGameBoard board, Clock clock){
+    public SnakeGame(IGameBoard board, IClock clock){
         this.board = board;
         this.clock = clock;
         running = true;
