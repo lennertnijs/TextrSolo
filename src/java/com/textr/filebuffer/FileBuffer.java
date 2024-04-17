@@ -2,9 +2,7 @@ package com.textr.filebuffer;
 
 import com.textr.file.FileReader;
 import com.textr.file.FileWriter;
-import com.textr.util.Point;
 import com.textr.util.Validator;
-import com.textr.util.Direction;
 
 import java.io.File;
 
@@ -14,22 +12,22 @@ import java.io.File;
 public final class FileBuffer {
 
     private final File file;
-    private final Text text;
-    private final Point cursor;
+    private final IText text;
+    private final ChangeHistory changeHistory;
     private BufferState state;
 
-    private FileBuffer(File file, Text text, Point cursor, BufferState state){
+    private FileBuffer(File file, IText text, BufferState state){
         this.file = file;
         this.text = text;
-        this.cursor = cursor;
+        this.changeHistory = new ChangeHistory();
         this.state = state;
     }
 
     public static FileBuffer createFromFilePath(String url){
         Validator.notNull(url, "Cannot create a FileBuffer from a null url.");
         File f = new File(url);
-        Text t = Text.create(FileReader.readContents(f));
-        return new FileBuffer(f, t, Point.create(0,0), BufferState.CLEAN);
+        LineText t = LineText.createFromString(FileReader.readContents(f));
+        return new FileBuffer(f, t, BufferState.CLEAN);
     }
 
     /**
@@ -42,15 +40,8 @@ public final class FileBuffer {
     /**
      * @return This file buffer's text.
      */
-    public Text getText(){
+    public IText getText(){
         return this.text;
-    }
-
-    /**
-     * @return This file buffer's cursor.
-     */
-    public Point getCursor(){
-        return this.cursor;
     }
 
 
@@ -59,17 +50,6 @@ public final class FileBuffer {
      */
     public BufferState getState(){
         return this.state;
-    }
-
-    /**
-     * Moves the cursor 1 unit in the given {@link Direction}, within text boundaries.
-     * @param direction The direction. Cannot be null.
-     *
-     * @throws IllegalArgumentException If the given direction is null.
-     */
-    public void moveCursor(Direction direction){
-        Validator.notNull(direction, "Cannot move the cursor in the null Direction.");
-        CursorMover.move(cursor, direction, text);
     }
 
     /**
@@ -83,58 +63,29 @@ public final class FileBuffer {
         this.state = state;
     }
 
-    /**
-     * Inserts the given character into this {@link FileBuffer}'s buffer {@link Text} at the insertion {@link Point}.
-     * @param character The character
-     */
-    public void insertCharacter(char character){
-        text.insertCharacter(character, cursor.getY(), cursor.getX());
-        this.setState(BufferState.DIRTY);
-        CursorMover.move(cursor, Direction.RIGHT, text);
+    public void undo(ICursor cursor){
+        changeHistory.undo(cursor);
+    }
+
+    public void redo(ICursor cursor){
+        changeHistory.redo(cursor);
+    }
+
+
+    public void executeAndStore(Action action, ICursor cursor){
+        changeHistory.executeAndAddAction(action, cursor);
     }
 
     /**
-     * Removes the character before the cursor from the text.
-     * Also moves the cursor one unit to the left.
-     * Used when backspace is pressed.
+     * Writes this {@link FileBuffer}'s {@link IText} content's to its {@link File}.
      */
-    public void removeCharacterBefore(){
-        int oldY = cursor.getY();
-        int oldX = cursor.getX();
-        CursorMover.move(cursor, Direction.LEFT, text);
-        text.removeCharacter(oldY, oldX - 1);
-        this.setState(BufferState.DIRTY);
-    }
-
-    /**
-     * Removes the character after the cursor from the text.
-     * Does not move the cursor.
-     * Used when delete is pressed.
-     */
-    public void removeCharacterAfter(){
-        text.removeCharacter(cursor.getY(), cursor.getX());
-        this.setState(BufferState.DIRTY);
-    }
-
-    /**
-     * Breaks the line of the text into 2 new lines (seperated by a space), at the cursor.
-     * Also moves the cursor into the new line.
-     * Used when enter is pressed.
-     */
-    public void createNewLine(){
-        text.splitLineAtColumn(cursor.getY(), cursor.getX());
-        this.setState(BufferState.DIRTY);
-        CursorMover.move(cursor, Direction.RIGHT, text);
-    }
-
     public void writeToDisk(){
-        FileWriter.write(this.getText().getText(), this.getFile());
+        FileWriter.write(text.getContent(), file);
         this.setState(BufferState.CLEAN);
     }
 
     /**
      * Compares this file buffer to the given object and returns True if they're equal.
-     * @param o The other object
      *
      * @return True if equal, false otherwise.
      */
@@ -148,7 +99,6 @@ public final class FileBuffer {
         }
         return this.file.equals(fileBuffer.file) &&
                 this.text.equals(fileBuffer.text) &&
-                this.cursor.equals(fileBuffer.cursor) &&
                 this.state == fileBuffer.state;
     }
 
@@ -161,7 +111,6 @@ public final class FileBuffer {
     public int hashCode(){
         int result = file.hashCode();
         result = 31 * result + text.hashCode();
-        result = 31 * result + cursor.hashCode();
         result = 31 * result + state.hashCode();
         return result;
     }
@@ -173,11 +122,11 @@ public final class FileBuffer {
      */
     @Override
     public String toString(){
-        return String.format("FileBuffer[fileId = %s, text = %s, cursor = %s, state = %s]",
-                file, text, cursor, state);
+        return String.format("FileBuffer[fileId = %s, text = %s, state = %s]",
+                file, text, state);
     }
 
     public FileBuffer copy(){
-        return new FileBuffer(this.file, this.text.copy(), this.cursor.copy(), this.state);
+        return new FileBuffer(this.file, this.text, this.state);
     }
 }

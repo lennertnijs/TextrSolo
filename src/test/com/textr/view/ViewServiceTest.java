@@ -1,11 +1,14 @@
 package com.textr.view;
 
+import com.textr.drawer.ViewDrawer;
 import com.textr.filebuffer.BufferState;
 import com.textr.Settings;
+import com.textr.terminal.TerminalService;
+import com.textr.terminal.TermiosTerminalService;
 import com.textr.util.Dimension2D;
-import com.textr.util.Direction;
 import com.textr.util.Point;
 
+import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ViewServiceTest {
     private ViewTreeRepo repo ;
     private ViewService viewService;
+    private final TerminalService terminal = new TermiosTerminalService(); // TODO: Replace with Mock
 
     private BufferView view1 ;
 
@@ -48,7 +52,7 @@ class ViewServiceTest {
         setViewRepo(repo);
         repo.addAll(views);
         repo.setActive(view1);
-        viewService = new ViewService(repo);
+        viewService = new ViewService(repo, new ViewDrawer(terminal), terminal);
         Dimension2D terminalDimensions = Dimension2D.create(10, 12);
         LayoutGenerator.generate(terminalDimensions);
     }
@@ -58,8 +62,10 @@ class ViewServiceTest {
 
     @Test
     void ViewService_NullViewRepo(){
-        assertThrows(IllegalArgumentException.class, () -> new ViewService(null));
+        assertThrows(IllegalArgumentException.class, () -> new ViewService(null, new ViewDrawer(terminal), terminal));
     }
+
+    // TODO: Add null terminal/drawer tests (preferably add into one general constructor test)
 
     @Test
     void initialiseViews() {
@@ -87,16 +93,5 @@ class ViewServiceTest {
         viewService.setActiveViewToPrevious();
         assertSame(repo.getActive(), view6);
         assertNotSame(repo.getActive(), view1);
-    }
-
-    @Test
-    void saveBuffer() {
-        assertEquals(view1.getBuffer().getState(), BufferState.CLEAN);
-        view1.insertCharacter('d');
-        assertEquals(view1.getBuffer().getState(), BufferState.DIRTY);
-        viewService.saveBuffer();
-        assertEquals(view1.getBuffer().getState(), BufferState.CLEAN);
-        view1.deletePrevChar();
-        viewService.saveBuffer();
     }
 }

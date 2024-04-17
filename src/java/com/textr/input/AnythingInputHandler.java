@@ -4,13 +4,16 @@ import com.textr.terminal.TerminalService;
 
 public final class AnythingInputHandler implements IInputHandler {
 
+    private final TerminalService terminal;
 
-    public AnythingInputHandler(){
+    public AnythingInputHandler(TerminalService terminal){
+        // TODO: Replace this class with a MessageSender object
+        this.terminal = terminal;
     }
 
     @Override
     public void handleInput() {
-        TerminalService.readByte();
+        terminal.readByte();
         InputHandlerRepo.setStandardInputHandler();
     }
 }

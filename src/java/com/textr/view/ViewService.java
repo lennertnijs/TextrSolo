@@ -8,19 +8,24 @@ import com.textr.Settings;
 import com.textr.input.InputType;
 import com.textr.terminal.TerminalService;
 import com.textr.util.Dimension2D;
-import com.textr.util.Direction;
 import com.textr.util.Point;
 import com.textr.util.Validator;
 import com.textr.drawer.CursorDrawer;
 import com.textr.drawer.ViewDrawer;
-import io.github.btj.termios.Terminal;
 
 public final class ViewService {
-    private final IViewRepo viewRepo;
 
-    public ViewService(IViewRepo viewRepo){
+    private final IViewRepo viewRepo;
+    private final TerminalService terminal; // FIXME: ViewService shouldn't be coupled to Terminal, only to Drawer(s)
+    private final ViewDrawer viewDrawer;
+
+    public ViewService(IViewRepo viewRepo, ViewDrawer viewDrawer, TerminalService terminal){
         Validator.notNull(viewRepo, "Cannot initiate a ViewService with a null IViewRepo");
+        Validator.notNull(viewDrawer, "Cannot initiate a ViewService with a null ViewDrawer");
+        Validator.notNull(terminal, "Cannot initiate a ViewService with a null TerminalService");
         this.viewRepo = viewRepo;
+        this.viewDrawer = viewDrawer;
+        this.terminal = terminal;
         LayoutGenerator.setViewRepo(viewRepo);
     }
 
@@ -47,7 +52,7 @@ public final class ViewService {
      * Sets positions & dimensions for all the existing Views, according to their hierarchical structure.
      */
     private void generateViewPositionsAndDimensions(){
-        LayoutGenerator.generate(TerminalService.getTerminalArea());
+        LayoutGenerator.generate(terminal.getTerminalArea()); // FIXME: Pass area as argument (perhaps?)
     }
 
     /**
@@ -68,16 +73,21 @@ public final class ViewService {
      * Draws all the Views and the cursor.
      */
     public void drawAll(){
-        TerminalService.clearScreen();
+        terminal.clearScreen(); // FIXME: Shouldn't drawing be in drawer?
         for(View view: viewRepo.getAll()){
                 String statusBar = viewRepo.getActive().equals(view) ? "ACTIVE: " + view.generateStatusBar() : view.generateStatusBar();
                 if(view instanceof BufferView)
-                    ViewDrawer.draw((BufferView) view, statusBar);
+                    viewDrawer.draw((BufferView) view, statusBar);
                 else
-                    ViewDrawer.draw((SnakeView) view, statusBar);
+                    viewDrawer.draw((SnakeView) view, statusBar);
         }
         if(viewRepo.getActive() instanceof BufferView){
-            CursorDrawer.draw(getActiveView().getPosition(), ((BufferView)getActiveView()).getAnchor(), getActiveBuffer().getCursor());
+            CursorDrawer.draw(
+                    getActiveView().getPosition(),
+                    ((BufferView)getActiveView()).getAnchor(),
+                    ((BufferView) getActiveView()).getCursor().getInsertPoint(),
+                    terminal
+            );
         }
     }
 
@@ -85,13 +95,13 @@ public final class ViewService {
     /**
      * Attempts to delete the active BufferView. If this BufferView's buffer is Dirty, show user a warning. If it is clean, delete.
      */
-    public void attemptDeleteView(){
+    public void attemptDeleteView(){ // TODO: call canDelete() on View, use returned boolean to decide on deletion
         if( getActiveView() instanceof SnakeView || getActiveBuffer().getState() == BufferState.CLEAN){
             deleteView();
             return;
         }
-        Terminal.clearScreen();
-        TerminalService.printText(1, 1, "The buffer is dirty. Are you sure you want to delete it? [Y | N]");
+        terminal.clearScreen(); // FIXME: Use PermissionRequester, saved in BufferView, instead
+        terminal.printText(1, 1, "The buffer is dirty. Are you sure you want to delete it? [Y | N]");
         InputHandlerRepo.setCloseDirtyBufferInputHandler();
     }
 
