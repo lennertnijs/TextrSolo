@@ -40,13 +40,26 @@ public final class Cursor implements ICursor{
 
     /**
      * Sets the 1D index of this {@link Cursor} to the given index.
-     * Updates the 2D Point after wards.
+     * Updates the 2D Point afterwards.
      * @param index The new index.
      * @param skeleton The skeleton used to update the 2D Point.
      */
     public void setInsertIndex(int index, ITextSkeleton skeleton){
         this.insertIndex = index;
         updateInsertPoint(skeleton);
+    }
+
+    /**
+     * Sets the 2D point of this {@link Cursor} to the given point.
+     * Updates the insert index afterwards.
+     * @param point A Point object holding the new insertion location.
+     * @param skeleton The current text skeleton
+     */
+    public void setInsertPoint(Point point, ITextSkeleton skeleton) {
+        if (point == null)
+            throw new NullPointerException("Given insertion point cannot be null");
+        this.insertPoint = point;
+        updateInsertIndex(skeleton);
     }
 
     private void updateInsertPoint(ITextSkeleton skeleton){
