@@ -12,13 +12,21 @@ import com.textr.util.Validator;
 import java.util.Objects;
 
 /**
- * Class to represent a view.
+ * Class to represent a view on a {@link FileBuffer}, i.e. a small window onto its contents. This class holds the buffer
+ * in question, as well as a {@link ICursor} to specify a location to edit said buffer. It also holds a {@link Point} to
+ * represent the anchor of the view, i.e. the top left location of the rectangular section of test that is visible of
+ * the file buffer within the view.
  */
 public final class BufferView extends View {
 
     private final FileBuffer buffer;
     private final ICursor cursor;
     private final Point anchor;
+
+    /**
+     * The current update state of the view, responsible for adjusting the cursor and anchor point when an edit is
+     * observed on the contents of the view.
+     */
     private UpdateState updater;
 
     private final Communicator communicator;
@@ -69,10 +77,19 @@ public final class BufferView extends View {
         return cursor;
     }
 
+    /**
+     * Returns the current update state of this view.
+     * @return The current UpdateState of this view
+     */
     public UpdateState getUpdateState() {
         return this.updater;
     }
 
+    /**
+     * Sets this view's update state to the given UpdateState, if it is not null.
+     * @param newState The new UpdateState of this view
+     * @throws NullPointerException if given state is null
+     */
     public void setUpdateState(UpdateState newState) {
         if (newState == null)
             throw new NullPointerException("New update state cannot be null");
