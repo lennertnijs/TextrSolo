@@ -6,7 +6,7 @@ import com.textr.util.Direction;
 import java.util.List;
 import java.util.Objects;
 
-public final class GameBoard {
+public final class GameBoard implements IGameBoard{
 
     private final Dimension2D dimensions;
     private final Snake snake;
@@ -60,7 +60,7 @@ public final class GameBoard {
         return p.x() < 0 || p.y() < 0 || p.x() >= dimensions.getWidth() || p.y() >= dimensions.getHeight();
     }
 
-    public void resizeBoard(Dimension2D dimensions){
+    public void resize(Dimension2D dimensions){
         Objects.requireNonNull(dimensions, "Dimensions is null.");
         GamePoint snakeHead = snake.getHead();
         GamePoint newMiddle = findMiddle(dimensions);

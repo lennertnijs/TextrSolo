@@ -6,10 +6,10 @@ import com.textr.util.Direction;
 public final class SnakeGame {
 
     private boolean running;
-    private final GameBoard board;
+    private final IGameBoard board;
     private final Clock clock;
 
-    public SnakeGame(GameBoard board, Clock clock){
+    public SnakeGame(IGameBoard board, Clock clock){
         this.board = board;
         this.clock = clock;
         running = true;
@@ -23,7 +23,7 @@ public final class SnakeGame {
     }
 
     public void resize(Dimension2D dimensions){
-        board.resizeBoard(dimensions);
+        board.resize(dimensions);
     }
 
     public void changeDirection(Direction direction){
