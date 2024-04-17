@@ -81,6 +81,7 @@ public final class ViewDrawer{
         else
             terminal.printText(x, baseY, "GAME OVER - Press Enter to restart");
         int maxStatusBarIndex = Math.min(view.getDimensions().getWidth(), statusBar.length());
+        drawBordersGame(view);
         terminal.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
     }
   
@@ -92,5 +93,14 @@ public final class ViewDrawer{
                                                             yBar + view.getPosition().getY(), "|");
     }
 
+    private static void drawBordersGame(SnakeView view){
+        for(int i = 0; i<view.getDimensions().getHeight(); i++) {
+            terminal.printText(view.getPosition().getX() + view.getDimensions().getWidth() - 1,
+                    view.getPosition().getY() + i, "|");
+        }
+        for (int j= 0; j<view.getDimensions().getWidth(); j++){
+            terminal.printText(view.getPosition().getX()+j,view.getPosition().getY() + view.getDimensions().getHeight() - 1, "_");
+        }
 
+    }
 }
