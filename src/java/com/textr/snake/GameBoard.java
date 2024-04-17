@@ -70,8 +70,8 @@ public final class GameBoard implements IGameBoard{
     }
 
     private void translateSnake(Vector2D vector){
-        List<GamePoint> oldSnake = snake.getSnake();
-        snake.clearSnake();
+        List<GamePoint> oldSnake = snake.getBody();
+        snake.clear();
         for(GamePoint p : oldSnake){
             GamePoint gamePoint = p.translate(vector);
             if(isOutOfBounds(gamePoint))
