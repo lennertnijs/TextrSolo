@@ -1,6 +1,7 @@
 package com.textr.snake;
 
 import com.textr.util.Dimension2D;
+import com.textr.util.Direction;
 
 import java.util.Objects;
 
@@ -85,5 +86,9 @@ public final class GameBoard {
         int middleX = dimensions.getWidth()/2;
         int middleY = dimensions.getHeight()/2;
         return new GamePoint(middleX, middleY);
+    }
+
+    public void changeDirection(Direction direction){
+        snakeManager.changeDirection(direction);
     }
 }
