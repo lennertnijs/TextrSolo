@@ -3,8 +3,7 @@ package com.textr.snake;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameClockTest {
 
@@ -15,6 +14,16 @@ public class GameClockTest {
     public void initialise(){
         timeProvider = new MockTimeProvider(0);
         gameClock = new GameClock(timeProvider, 2.5f);
+    }
+
+    @Test
+    public void testConstructorWithNull(){
+        assertThrows(NullPointerException.class, () -> new GameClock(null, 2.5f));
+    }
+
+    @Test
+    public void testConstructorWith0Float(){
+        assertThrows(NullPointerException.class, () -> new GameClock(timeProvider, 0));
     }
 
     @Test
@@ -47,5 +56,10 @@ public class GameClockTest {
         assertFalse(gameClock.shouldMove());
         timeProvider.increaseMockValue(1);
         assertTrue(gameClock.shouldMove());
+    }
+
+    @Test
+    public void testChangeSecondsBetweenMovesIllegal(){
+        assertThrows(IllegalArgumentException.class, () -> gameClock.changeSecondsBetweenMove(0));
     }
 }
