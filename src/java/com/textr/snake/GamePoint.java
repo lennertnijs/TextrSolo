@@ -18,7 +18,7 @@ public record GamePoint(int x, int y) {
      */
     public GamePoint translate(Vector2D vector2D) {
         Objects.requireNonNull(vector2D, "Vector is null.");
-        return new GamePoint(x + vector2D.getX(), y + vector2D.getY());
+        return new GamePoint(x + vector2D.x(), y + vector2D.y());
     }
 
     /**
