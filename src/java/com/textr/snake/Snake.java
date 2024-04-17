@@ -60,20 +60,23 @@ public final class Snake {
 
     public void changeDirection(Direction direction){
         Objects.requireNonNull(direction, "Direction is null.");
-        if(headDirection.isOpposite(direction) || headDirection == direction)
+        if(body.size() >= 2 && body.contains(nextGamePoint(getHead(), direction)))
             return;
         this.headDirection = direction;
     }
 
     public GamePoint getNextHeadPosition(){
-        GamePoint head = getHead();
-        switch(headDirection){
-            case UP -> {return new GamePoint(head.x(), head.y() + 1);}
-            case RIGHT -> {return new GamePoint(head.x() + 1, head.y());}
-            case DOWN -> {return new GamePoint(head.x(), head.y() - 1);}
-            case LEFT -> {return new GamePoint(head.x() - 1, head.y());}
+        return nextGamePoint(getHead(), headDirection);
+    }
+
+    private GamePoint nextGamePoint(GamePoint p, Direction dir){
+        switch(dir){
+            case UP -> {return new GamePoint(p.x(), p.y() + 1);}
+            case RIGHT -> {return new GamePoint(p.x() + 1, p.y());}
+            case DOWN -> {return new GamePoint(p.x(), p.y() - 1);}
+            case LEFT -> {return new GamePoint(p.x() - 1, p.y());}
         }
-        throw new AssertionError("Direction does not exist.");
+        throw new AssertionError("Should be unreachable.");
     }
 
     public void move(){
