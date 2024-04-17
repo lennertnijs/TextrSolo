@@ -32,18 +32,13 @@ public final class FoodManager {
         foods.add(p);
     }
 
+
     public void remove(GamePoint p){
         Objects.requireNonNull(p, "Point is null.");
         foods.remove(p);
     }
 
-    public void replace(GamePoint old, GamePoint p){
-        Objects.requireNonNull(old, "Old GamePoint is null.");
-        Objects.requireNonNull(p, "New GamePoint is null.");
-        int index;
-        if((index = foods.indexOf(old)) == -1)
-            throw new NoSuchElementException("The old GamePoint was not in the snake.");
-        foods.remove(index);
-        foods.add(index, p);
+    public void clearFoods(){
+        foods.clear();
     }
 }

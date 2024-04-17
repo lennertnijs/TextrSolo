@@ -57,28 +57,14 @@ public final class SnakeManager {
         body.remove(body.size() - 1);
     }
 
-    public void replace(GamePoint old, GamePoint p){
-        Objects.requireNonNull(old, "Old GamePoint is null.");
-        Objects.requireNonNull(p, "New GamePoint is null.");
-        int index;
-        if((index = body.indexOf(old)) == -1)
-            throw new NoSuchElementException("The old GamePoint was not in the snake.");
-        body.remove(index);
-        body.add(index, p);
+    public void add(GamePoint p){
+        Objects.requireNonNull(p, "Point is null.");
+        if(body.stream().anyMatch(segment -> segment.equals(p)))
+            throw new IllegalStateException();
+        body.add(p);
     }
 
-    public void cut(GamePoint p){
-        Objects.requireNonNull(p, "GamePoint is null.");
-        if(!body.contains(p))
-            throw new NoSuchElementException("The GamePoint is not in the snake.");
-        boolean cutOffFound = false;
-        Iterator<GamePoint> iterator = body.iterator();
-        while(iterator.hasNext()){
-            GamePoint gamePoint = iterator.next();
-            if(gamePoint.equals(p))
-                cutOffFound = true;
-            if(cutOffFound)
-                iterator.remove();
-        }
+    public void clearSnake(){
+        body.clear();
     }
 }

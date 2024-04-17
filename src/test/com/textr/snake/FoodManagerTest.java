@@ -88,31 +88,14 @@ public class FoodManagerTest {
         assertThrows(NullPointerException.class, () -> foodManager.remove(null));
     }
 
+
     @Test
-    public void testReplace(){
+    public void testClearFoods(){
         foodManager.add(point1);
         foodManager.add(point2);
         foodManager.add(point3);
-
-        GamePoint point4 = new GamePoint(45, 40);
-        foodManager.replace(point1, point4);
-        assertEquals(foodManager.getFoods(), new ArrayList<>(List.of(point4, point2, point3)));
-
-        GamePoint point5 = new GamePoint(35, 40);
-        foodManager.replace(point2, point5);
-        assertEquals(foodManager.getFoods(), new ArrayList<>(List.of(point4, point5, point3)));
-    }
-
-    @Test
-    public void testReplaceWithElementNotPresent(){
-        GamePoint point4 = new GamePoint(45, 40);
-        assertThrows(NoSuchElementException.class, () -> foodManager.replace(point4, point1));
-    }
-
-    @Test
-    public void testReplaceWithNull(){
-        assertThrows(NullPointerException.class, () -> foodManager.replace(null, point1));
-        assertThrows(NullPointerException.class, () -> foodManager.replace(point1, null));
+        foodManager.clearFoods();
+        assertEquals(foodManager.getFoods(), new ArrayList<>());
     }
 
 }

@@ -3,6 +3,7 @@ package com.textr.snake;
 import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
 
+import java.util.List;
 import java.util.Objects;
 
 public final class GameBoard {
@@ -63,23 +64,30 @@ public final class GameBoard {
         Objects.requireNonNull(dimensions, "Dimensions is null.");
         GamePoint snakeHead = snakeManager.getHead();
         GamePoint newMiddle = findMiddle(dimensions);
-        Vector2D translationVector2D = new Vector2D(Math.abs(snakeHead.x() - newMiddle.x()), Math.abs(snakeHead.y() - newMiddle.y()));
-        for(GamePoint p : snakeManager.getSnake()){
-            GamePoint gamePoint = p.translate(translationVector2D);
-            if(isOutOfBounds(gamePoint)){
-                snakeManager.cut(p);
-                break;
-            }
-            snakeManager.replace(p, gamePoint);
-        }
-        for(GamePoint p : foodManager.getFoods()){
-            GamePoint gamePoint = p.translate(translationVector2D);
-            if(isOutOfBounds(gamePoint))
-                foodManager.remove(p);
-            else
-                foodManager.replace(p, gamePoint);
-        }
+        Vector2D translationVector = new Vector2D(Math.abs(snakeHead.x() - newMiddle.x()), Math.abs(snakeHead.y() - newMiddle.y()));
+        translateSnake(translationVector);
+        translateFoods(translationVector);
+    }
 
+    private void translateSnake(Vector2D vector){
+        List<GamePoint> oldSnake = snakeManager.getSnake();
+        snakeManager.clearSnake();
+        for(GamePoint p : oldSnake){
+            GamePoint gamePoint = p.translate(vector);
+            if(isOutOfBounds(gamePoint))
+                break;
+            snakeManager.add(gamePoint);
+        }
+    }
+
+    private void translateFoods(Vector2D vector){
+        List<GamePoint> oldFoods = foodManager.getFoods();
+        foodManager.clearFoods();
+        for(GamePoint p : oldFoods){
+            GamePoint gamePoint = p.translate(vector);
+            if(!isOutOfBounds(gamePoint))
+                foodManager.add(gamePoint);
+        }
     }
 
     private GamePoint findMiddle(Dimension2D dimensions){
