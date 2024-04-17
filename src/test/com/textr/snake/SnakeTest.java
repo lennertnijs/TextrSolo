@@ -27,6 +27,11 @@ public class SnakeTest {
     }
 
     @Test
+    public void testCreateSnakeWithNull(){
+        assertThrows(NullPointerException.class, () -> new Snake(null));
+    }
+
+    @Test
     public void testGetSnake(){
         assertEquals(snake.getBody(), new ArrayList<>());
     }
@@ -58,6 +63,13 @@ public class SnakeTest {
         assertThrows(IllegalStateException.class, () -> snake.add(new GamePoint(0,2)));
         assertThrows(IllegalStateException.class, () -> snake.add(new GamePoint(-2,0)));
         assertThrows(IllegalStateException.class, () -> snake.add(new GamePoint(0,-2)));
+    }
+
+    @Test
+    public void testAddIsNextHeadPosition(){
+        snake.add(point1);
+        snake.changeDirection(Direction.UP);
+        assertThrows(IllegalStateException.class, () -> snake.add(new GamePoint(0, 1)));
     }
 
     @Test
@@ -138,9 +150,24 @@ public class SnakeTest {
         snake.changeDirection(Direction.LEFT);
         assertEquals(snake.getDirection(), Direction.LEFT);
 
-        // should not happen -> move into itself
+        // should not happen -> move into its own second segment
         snake.changeDirection(Direction.RIGHT);
         assertEquals(snake.getDirection(), Direction.LEFT);
+    }
+
+    /**
+     * This test checks that changing the direction into itself, just not the second segment, is allowed.
+     */
+    @Test
+    public void testChangeDirectionIntoSelf(){
+        snake.changeDirection(Direction.DOWN);
+        snake.add(point1);
+        snake.add(point2);
+        snake.add(new GamePoint(1, 1));
+        snake.add(new GamePoint(0, 1));
+        // should be allowed
+        snake.changeDirection(Direction.UP);
+        assertEquals(snake.getDirection(), Direction.UP);
     }
 
     @Test
