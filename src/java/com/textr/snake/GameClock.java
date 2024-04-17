@@ -1,27 +1,21 @@
 package com.textr.snake;
 
-import java.util.Objects;
-
 /**
  * Represents the clock for a game.
  */
 public final class GameClock {
 
-    private final TimeProvider timeProvider;
     private long lastMove;
     private float secondsBetweenMove;
 
     /**
-     * Creates a new {@link GameClock}.
-     * @param timeProvider The {@link TimeProvider}. Cannot be null.
+     * Creates a new {@link GameClock}
      * @param secondsBetweenMove The seconds between each move. Cannot be negative or 0.
      */
-    public GameClock(TimeProvider timeProvider, float secondsBetweenMove){
-        Objects.requireNonNull(timeProvider, "TimeProvider is null.");
+    public GameClock(float secondsBetweenMove){
         if(secondsBetweenMove <= 0)
             throw new IllegalArgumentException("Seconds between move is negative or 0.");
-        this.timeProvider = timeProvider;
-        lastMove = timeProvider.getTimeInMillis();
+        lastMove = 0;
         this.secondsBetweenMove = secondsBetweenMove;
     }
 
@@ -30,7 +24,7 @@ public final class GameClock {
      * @return True if a move should happen. False otherwise.
      */
     public boolean shouldMove(){
-        return (float) (timeProvider.getTimeInMillis() - lastMove) / 1000 > secondsBetweenMove;
+        return (float) (0 - lastMove) / 1000 > secondsBetweenMove;
     }
 
     /**
@@ -38,7 +32,7 @@ public final class GameClock {
      * Use when a move is executed.
      */
     public void reset(){
-        lastMove = timeProvider.getTimeInMillis();
+        lastMove = 0;
     }
 
     /**
