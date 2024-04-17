@@ -140,7 +140,7 @@ public class SnakeView extends View {
         }
         unoccupied.removeIf(this::occupiedBySnake);
         int l= 0;
-        while (l<2){
+        while (l<3){
             spawnFood();
             l++;
         }
@@ -407,7 +407,6 @@ public class SnakeView extends View {
                     headOrientation = Direction.LEFT;
                 }
             }
-            case TICK -> incrementTimer();
         }
     }
 
