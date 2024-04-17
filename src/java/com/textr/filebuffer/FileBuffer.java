@@ -157,6 +157,14 @@ public final class FileBuffer {
                 file, text, state);
     }
 
+    public boolean addTextListener(TextListener listener) {
+        return this.text.addListener(listener);
+    }
+
+    public boolean removeTextListener(TextListener listener) {
+        return this.text.removeListener(listener);
+    }
+
     // TODO: DELETE
 //    public FileBuffer copy(){
 //        return new FileBuffer(this.file, this.text, this.state);
