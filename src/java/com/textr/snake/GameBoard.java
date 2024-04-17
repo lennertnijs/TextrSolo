@@ -1,7 +1,6 @@
 package com.textr.snake;
 
 import com.textr.util.Dimension2D;
-import com.textr.util.Point;
 
 import java.util.Objects;
 
@@ -26,8 +25,12 @@ public final class GameBoard {
         return new GameBoard(dimensions, snakeManager, foodManager, 0);
     }
 
+    public int getScore(){
+        return score;
+    }
+
     public void moveSnake(){
-        Point next = snakeManager.getNextHeadPosition();
+        GamePoint next = snakeManager.getNextHeadPosition();
         if(isOutOfBounds(next) || snakeManager.isSnake(next))
             throw new IllegalStateException();
         if(foodManager.isFood(next)) {
@@ -38,24 +41,49 @@ public final class GameBoard {
         snakeManager.move();
     }
 
-    private Point generateRandomEmptyPoint(){
-        Point random = generateRandomPoint();
+    private GamePoint generateRandomEmptyPoint(){
+        GamePoint random = generateRandomPoint();
         while(foodManager.isFood(random) || snakeManager.isSnake(random))
             random = generateRandomPoint();
         return random;
     }
 
-    private Point generateRandomPoint(){
+    private GamePoint generateRandomPoint(){
         int randomX = (int) (Math.random() * dimensions.getWidth());
         int randomY = (int) (Math.random() * dimensions.getHeight());
-        return Point.create(randomX, randomY);
+        return new GamePoint(randomX, randomY);
     }
 
-    private boolean isOutOfBounds(Point p){
+    private boolean isOutOfBounds(GamePoint p){
         return p.getX() < 0 || p.getY() < 0 || p.getX() >= dimensions.getWidth() || p.getY() >= dimensions.getHeight();
     }
 
     public void resizeBoard(Dimension2D dimensions){
         Objects.requireNonNull(dimensions, "Dimensions is null.");
+        GamePoint oldMiddle = findMiddle(this.dimensions);
+        GamePoint newMiddle = findMiddle(dimensions);
+        Vector translationVector = new Vector(oldMiddle.getX() - newMiddle.getX(), oldMiddle.getY() - newMiddle.getY());
+        for(GamePoint p : snakeManager.getSnake()){
+            GamePoint gamePoint = p.translate(translationVector);
+            if(isOutOfBounds(gamePoint)){
+                snakeManager.cut(p);
+                break;
+            }
+            snakeManager.replace(p, gamePoint);
+        }
+        for(GamePoint p : foodManager.getFoods()){
+            GamePoint gamePoint = p.translate(translationVector);
+            if(isOutOfBounds(gamePoint))
+                foodManager.remove(p);
+            else
+                foodManager.replace(p, gamePoint);
+        }
+
+    }
+
+    private GamePoint findMiddle(Dimension2D dimensions){
+        int middleX = dimensions.getWidth()/2;
+        int middleY = dimensions.getHeight()/2;
+        return new GamePoint(middleX, middleY);
     }
 }

@@ -1,37 +1,49 @@
 package com.textr.snake;
 
-import com.textr.util.Point;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public final class FoodManager {
 
-    private final List<Point> foods;
+    private final List<GamePoint> foods;
 
     public FoodManager(){
         foods = new ArrayList<>();
     }
 
-    public List<Point> getFoods(){
+    public List<GamePoint> getFoods(){
         return foods;
     }
 
-    public boolean isFood(Point p){
+    public boolean isFood(GamePoint p){
         Objects.requireNonNull(p, "Point is null.");
         return foods.stream().anyMatch(food -> food.equals(p));
     }
 
-    public void add(Point p){
+    public void add(GamePoint p){
         Objects.requireNonNull(p, "Point is null.");
         if(foods.stream().anyMatch(food -> food.equals(p)))
             throw new IllegalStateException("Duplicate Food detected.");
         foods.add(p);
     }
 
-    public void remove(Point p){
+    public void remove(GamePoint p){
         Objects.requireNonNull(p, "Point is null.");
         foods.remove(p);
+    }
+
+    public void replace(GamePoint old, GamePoint p){
+        Objects.requireNonNull(old, "Old GamePoint is null.");
+        Objects.requireNonNull(p, "New GamePoint is null.");
+        if(!foods.contains(old))
+            throw new NoSuchElementException("The old GamePoint was not in the snake.");
+        for(int i = 0; i < foods.size(); i++){
+            if(foods.get(i).equals(old)) {
+                foods.set(i, p);
+                break;
+            }
+        }
     }
 }
