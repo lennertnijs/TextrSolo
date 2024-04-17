@@ -87,14 +87,6 @@ public final class BufferView extends View {
     public void moveCursor(Direction direction){
         Validator.notNull(direction, "Cannot move the cursor in the null direction.");
         cursor.move(direction, buffer.getText().getSkeleton());
-        updateAnchor();
-    }
-
-
-    /**
-     * Updates the anchor point of the active buffer to adjust it to possible changes to the cursor point.
-     */
-    private void updateAnchor(){
         AnchorUpdater.updateAnchor(getAnchor(), cursor.getInsertPoint(), getDimensions());
     }
 
