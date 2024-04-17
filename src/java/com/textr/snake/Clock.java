@@ -2,21 +2,23 @@ package com.textr.snake;
 
 public final class Clock {
 
-    private float lastMove;
+    private final TimeProvider timeProvider;
+    private long lastMove;
     private float timeBetweenMoves;
 
-    public Clock(float timeBetweenMoves){
-        lastMove = System.currentTimeMillis();
+    public Clock(TimeProvider timeProvider, float timeBetweenMoves){
+        this.timeProvider = timeProvider;
+        lastMove = timeProvider.getTimeInMillis();
         this.timeBetweenMoves = timeBetweenMoves;
     }
 
 
     public boolean shouldMove(){
-        return System.currentTimeMillis() - lastMove > timeBetweenMoves;
+        return timeProvider.getTimeInMillis() - lastMove > timeBetweenMoves;
     }
 
     public void reset(){
-        lastMove = System.currentTimeMillis();
+        lastMove = timeProvider.getTimeInMillis();
     }
 
     public void decreaseTimeBetweenMoves(){
