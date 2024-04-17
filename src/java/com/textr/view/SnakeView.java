@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
-import static java.lang.Integer.max;
-
 public class SnakeView extends View {
 
     /**
@@ -54,12 +52,15 @@ public class SnakeView extends View {
      * A random seed to allow for quasi-randomised food spawning.
      */
     private final Random randomSeed;
+    /**
+     * The current score.
+     */
     private int score;
 
     /**
      * Constructor.
-     * @param position
-     * @param dimensions
+     * @param position : the initial position of the view
+     * @param dimensions : the initial dimensions of the view
      */
     public SnakeView(Point position, Dimension2D dimensions) {
         super(position, dimensions);
@@ -67,6 +68,10 @@ public class SnakeView extends View {
         initializeGame();
     }
 
+    /**
+     * Gets the snake.
+     * @return : the cells the snake occupies, in order, first is the head, rest is the body.
+     */
     public ArrayList<Point> getSnake() {
         ArrayList<Point> result = new ArrayList<>();
         for (Point point : snake){
@@ -74,6 +79,10 @@ public class SnakeView extends View {
         }
         return result;
     }
+    /**
+     * Gets the foods.
+     * @return : the cells the food occupies.
+     */
     public ArrayList<Point> getFoods() {
         ArrayList<Point> result = new ArrayList<>();
         for (Point point : foods){
@@ -81,8 +90,22 @@ public class SnakeView extends View {
         }
         return result;
     }
+
+    /**
+     * Gets the direction the head is oriented to. Can be up, down, left or right.
+     * @return orientation of the head.
+     */
     public Direction getHeadOrientation() {
         return headOrientation;
+    }
+
+    /**
+     * generate the statusbar of this view (only the score is displayed).
+     * @return : the status bar
+     */
+    @Override
+    public String generateStatusBar() {
+        return "Score : "+ score;
     }
 
     /**
@@ -135,8 +158,8 @@ public class SnakeView extends View {
 
     /**
      * Checks whether a cell is occupied by a part of the snake. Returns true if it is.
-     * @param tocheck
-     * @return
+     * @param tocheck : the cell to check
+     * @return : true if it is occupied by a part of the snake
      */
     private boolean occupiedBySnake(Point tocheck){
         for(Point segment : snake ){
@@ -147,8 +170,8 @@ public class SnakeView extends View {
     }
     /**
      * Checks whether a cell is occupied by food. Returns true if it is.
-     * @param tocheck
-     * @return
+     * @param tocheck : the cell to check
+     * @return : true if it is occupied by food
      */
     private boolean occupiedByFood(Point tocheck){
         for(Point food : foods){
@@ -160,14 +183,13 @@ public class SnakeView extends View {
 
     /**
      * checks whether a cell is out of bounds.
-     * @param cell
-     * @return
+     * @param cell : the cell to check.
+     * @return : true if the cell is out of bounds
      */
     private boolean outOfBounds(Point cell){
         return cell.getX()<0 || cell.getX()>= getDimensions().getWidth()-1 ||
                 cell.getY()<0 || cell.getY()>= getDimensions().getHeight()-1;
     }
-
 
     /**
      * Increment the timer. Move the snake if it is time to do so.
@@ -229,7 +251,7 @@ public class SnakeView extends View {
 
     /**
      * Gets the direction from the head to the first part of the body.
-     * @return
+     * @return : the direction from the head cell to the first body cell.
      */
     private Direction intoBody() {
         Point head= snake.getFirst();
@@ -248,7 +270,7 @@ public class SnakeView extends View {
     }
 
     /**
-     * Resizes the gamefield to fit in the current view dimensions.
+     * Resizes the game field to fit in the current view dimensions.
      */
     public void resize(Dimension2D newdimensions){
         //cut down or add to the size in both dimensions where necessary
@@ -294,16 +316,31 @@ public class SnakeView extends View {
         }
     }
 
+    /**
+     * Adds to the game field (extra rows) when resizing, should only be called when the new height is bigger than the old.
+     * @param newHeight : the new height of the view.
+     */
     private void addHeight(int newHeight) {
         int heightDiff = newHeight - getDimensions().getHeight();
         snake.forEach((point)->point.addOtherToThis(Point.create(0, heightDiff/2)));
         foods.forEach((point)->point.addOtherToThis(Point.create(0, heightDiff/2)));
     }
+
+    /**
+     * Adds to the game field (extra columns) when resizing, should only be called when the new width is bigger than the old.
+     * @param newWidth : the new width of the view.
+     */
     private void addWidth(int newWidth) {
         int widthDiff = newWidth - getDimensions().getWidth();
         snake.forEach((point)->point.addOtherToThis(Point.create(widthDiff/2,0)));
         foods.forEach((point)->point.addOtherToThis(Point.create( widthDiff/2,0)));
     }
+
+    /**
+     * Cuts part of the game field (some rows) when resizing, should only be called when the new height is smaller than the old,
+     * may cut of part of the snake and move foods.
+     * @param newHeight : the new height of the snake
+     */
     private void cutHeight(int newHeight) {
         int heightDiff = getDimensions().getHeight()- newHeight;
         Point oldHead = snake.getFirst();
@@ -317,6 +354,12 @@ public class SnakeView extends View {
             foods.forEach((point) -> point.subtractOtherFromThis(Point.create(0, moveBy)));
         }
     }
+
+    /**
+     * Cuts part of the game field (some columns) when resizing, should only be called when the new width is smaller than the old,
+     * may cut of part of the snake and move foods.
+     * @param newWidth : the new width of the snake
+     */
     private void cutWidth(int newWidth) {
         int widthDiff = getDimensions().getWidth()- newWidth;
         Point oldHead = snake.getFirst();
@@ -368,6 +411,10 @@ public class SnakeView extends View {
         }
     }
 
+    /**
+     * get the current state of the game, either running or game over.
+     * @return : true if the game is running
+     */
     public boolean getRunning() {
         return running;
     }
