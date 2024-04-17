@@ -62,12 +62,9 @@ public final class SnakeManager {
         Objects.requireNonNull(p, "New GamePoint is null.");
         if(!body.contains(old))
             throw new NoSuchElementException("The old GamePoint was not in the snake.");
-        for(int i = 0; i < body.size(); i++){
-            if(body.get(i).equals(old)) {
-                body.set(i, p);
-                break;
-            }
-        }
+        int index = body.indexOf(old);
+        body.remove(index);
+        body.add(index, p);
     }
 
     public void cut(GamePoint p){

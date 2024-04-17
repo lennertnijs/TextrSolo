@@ -39,11 +39,8 @@ public final class FoodManager {
         Objects.requireNonNull(p, "New GamePoint is null.");
         if(!foods.contains(old))
             throw new NoSuchElementException("The old GamePoint was not in the snake.");
-        for(int i = 0; i < foods.size(); i++){
-            if(foods.get(i).equals(old)) {
-                foods.set(i, p);
-                break;
-            }
-        }
+        int index = foods.indexOf(old);
+        foods.remove(index);
+        foods.add(index, p);
     }
 }
