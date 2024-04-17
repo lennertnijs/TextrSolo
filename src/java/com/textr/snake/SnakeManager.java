@@ -60,9 +60,9 @@ public final class SnakeManager {
     public void replace(GamePoint old, GamePoint p){
         Objects.requireNonNull(old, "Old GamePoint is null.");
         Objects.requireNonNull(p, "New GamePoint is null.");
-        if(!body.contains(old))
+        int index;
+        if((index = body.indexOf(old)) == -1)
             throw new NoSuchElementException("The old GamePoint was not in the snake.");
-        int index = body.indexOf(old);
         body.remove(index);
         body.add(index, p);
     }

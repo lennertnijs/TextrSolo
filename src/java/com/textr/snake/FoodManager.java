@@ -13,6 +13,9 @@ public final class FoodManager {
         foods = new ArrayList<>();
     }
 
+    public int getFoodCount(){
+        return foods.size();
+    }
     public List<GamePoint> getFoods(){
         return foods;
     }
@@ -37,9 +40,9 @@ public final class FoodManager {
     public void replace(GamePoint old, GamePoint p){
         Objects.requireNonNull(old, "Old GamePoint is null.");
         Objects.requireNonNull(p, "New GamePoint is null.");
-        if(!foods.contains(old))
+        int index;
+        if((index = foods.indexOf(old)) == -1)
             throw new NoSuchElementException("The old GamePoint was not in the snake.");
-        int index = foods.indexOf(old);
         foods.remove(index);
         foods.add(index, p);
     }
