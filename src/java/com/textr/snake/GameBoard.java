@@ -9,22 +9,22 @@ import java.util.Objects;
 public final class GameBoard {
 
     private final Dimension2D dimensions;
-    private final SnakeManager snakeManager;
+    private final Snake snake;
     private final FoodManager foodManager;
     private int score;
 
-    private GameBoard(Dimension2D dimensions, SnakeManager snakeManager, FoodManager foodManager, int score){
-        this.snakeManager = snakeManager;
+    private GameBoard(Dimension2D dimensions, Snake snake, FoodManager foodManager, int score){
+        this.snake = snake;
         this.foodManager = foodManager;
         this.score = score;
         this.dimensions = dimensions;
     }
 
-    public static GameBoard createWithZeroScore(Dimension2D dimensions, SnakeManager snakeManager, FoodManager foodManager){
+    public static GameBoard createWithZeroScore(Dimension2D dimensions, Snake snake, FoodManager foodManager){
         Objects.requireNonNull(dimensions, "Dimensions is null.");
-        Objects.requireNonNull(snakeManager, "SnakeManager is null.");
+        Objects.requireNonNull(snake, "SnakeManager is null.");
         Objects.requireNonNull(foodManager, "FoodManager is null.");
-        return new GameBoard(dimensions, snakeManager, foodManager, 0);
+        return new GameBoard(dimensions, snake, foodManager, 0);
     }
 
     public int getScore(){
@@ -32,20 +32,20 @@ public final class GameBoard {
     }
 
     public void moveSnake(){
-        GamePoint next = snakeManager.getNextHeadPosition();
-        if(isOutOfBounds(next) || snakeManager.isSnake(next))
+        GamePoint next = snake.getNextHeadPosition();
+        if(isOutOfBounds(next) || snake.isSnake(next))
             throw new IllegalStateException();
         if(foodManager.isFood(next)) {
             foodManager.remove(next);
             foodManager.add(generateRandomEmptyPoint());
             score += 1;
         }
-        snakeManager.move();
+        snake.move();
     }
 
     private GamePoint generateRandomEmptyPoint(){
         GamePoint random = generateRandomPoint();
-        while(foodManager.isFood(random) || snakeManager.isSnake(random))
+        while(foodManager.isFood(random) || snake.isSnake(random))
             random = generateRandomPoint();
         return random;
     }
@@ -62,7 +62,7 @@ public final class GameBoard {
 
     public void resizeBoard(Dimension2D dimensions){
         Objects.requireNonNull(dimensions, "Dimensions is null.");
-        GamePoint snakeHead = snakeManager.getHead();
+        GamePoint snakeHead = snake.getHead();
         GamePoint newMiddle = findMiddle(dimensions);
         Vector2D translationVector = new Vector2D(Math.abs(snakeHead.x() - newMiddle.x()), Math.abs(snakeHead.y() - newMiddle.y()));
         translateSnake(translationVector);
@@ -70,13 +70,13 @@ public final class GameBoard {
     }
 
     private void translateSnake(Vector2D vector){
-        List<GamePoint> oldSnake = snakeManager.getSnake();
-        snakeManager.clearSnake();
+        List<GamePoint> oldSnake = snake.getSnake();
+        snake.clearSnake();
         for(GamePoint p : oldSnake){
             GamePoint gamePoint = p.translate(vector);
             if(isOutOfBounds(gamePoint))
                 break;
-            snakeManager.add(gamePoint);
+            snake.add(gamePoint);
         }
     }
 
@@ -97,6 +97,6 @@ public final class GameBoard {
     }
 
     public void changeDirection(Direction direction){
-        snakeManager.changeDirection(direction);
+        snake.changeDirection(direction);
     }
 }

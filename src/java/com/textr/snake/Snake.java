@@ -4,12 +4,12 @@ import com.textr.util.Direction;
 
 import java.util.*;
 
-public final class SnakeManager {
+public final class Snake {
 
     private final List<GamePoint> body;
     private Direction headDirection;
 
-    public SnakeManager(Direction direction){
+    public Snake(Direction direction){
         body = new LinkedList<>();
         this.headDirection = direction;
     }
