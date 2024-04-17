@@ -56,14 +56,14 @@ public final class GameBoard {
     }
 
     private boolean isOutOfBounds(GamePoint p){
-        return p.getX() < 0 || p.getY() < 0 || p.getX() >= dimensions.getWidth() || p.getY() >= dimensions.getHeight();
+        return p.x() < 0 || p.y() < 0 || p.x() >= dimensions.getWidth() || p.y() >= dimensions.getHeight();
     }
 
     public void resizeBoard(Dimension2D dimensions){
         Objects.requireNonNull(dimensions, "Dimensions is null.");
         GamePoint snakeHead = snakeManager.getHead();
         GamePoint newMiddle = findMiddle(dimensions);
-        Vector translationVector = new Vector(Math.abs(snakeHead.getX() - newMiddle.getX()), Math.abs(snakeHead.getY() - newMiddle.getY()));
+        Vector translationVector = new Vector(Math.abs(snakeHead.x() - newMiddle.x()), Math.abs(snakeHead.y() - newMiddle.y()));
         for(GamePoint p : snakeManager.getSnake()){
             GamePoint gamePoint = p.translate(translationVector);
             if(isOutOfBounds(gamePoint)){

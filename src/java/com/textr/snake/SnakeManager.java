@@ -17,7 +17,7 @@ public final class SnakeManager {
     public GamePoint getHead(){
         if(body.size() == 0)
             throw new NoSuchElementException("Snake is of length 0.");
-        return body.getFirst();
+        return body.get(0);
     }
 
     public Direction getDirection(){
@@ -41,20 +41,20 @@ public final class SnakeManager {
     }
 
     public GamePoint getNextHeadPosition(){
-        GamePoint head = body.getFirst();
+        GamePoint head = body.get(0);
         switch(headDirection){
-            case UP -> {return new GamePoint(head.getX(), head.getY() + 1);}
-            case RIGHT -> {return new GamePoint(head.getX() + 1, head.getY());}
-            case DOWN -> {return new GamePoint(head.getX(), head.getY() - 1);}
-            case LEFT -> {return new GamePoint(head.getX() - 1, head.getY());}
+            case UP -> {return new GamePoint(head.x(), head.y() + 1);}
+            case RIGHT -> {return new GamePoint(head.x() + 1, head.y());}
+            case DOWN -> {return new GamePoint(head.x(), head.y() - 1);}
+            case LEFT -> {return new GamePoint(head.x() - 1, head.y());}
         }
         throw new NoSuchElementException("Direction does not exist.");
     }
 
     public void move(){
         GamePoint nextHead = getNextHeadPosition();
-        body.addFirst(nextHead);
-        body.removeLast();
+        body.add(0, nextHead);
+        body.remove(body.size() - 1);
     }
 
     public void replace(GamePoint old, GamePoint p){
