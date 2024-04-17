@@ -10,15 +10,15 @@ import java.util.Objects;
 public record GamePoint(int x, int y) {
 
     /**
-     * Adds the given {@link Vector} to this {@link GamePoint} and returns the result.
+     * Adds the given {@link Vector2D} to this {@link GamePoint} and returns the result.
      * Does not change the original {@link GamePoint}.
-     * @param vector The translation {@link Vector}. Cannot be null.
+     * @param vector2D The translation {@link Vector2D}. Cannot be null.
      *
      * @return The translated {@link GamePoint}.
      */
-    public GamePoint translate(Vector vector) {
-        Objects.requireNonNull(vector, "Vector is null.");
-        return new GamePoint(x + vector.getX(), y + vector.getY());
+    public GamePoint translate(Vector2D vector2D) {
+        Objects.requireNonNull(vector2D, "Vector is null.");
+        return new GamePoint(x + vector2D.getX(), y + vector2D.getY());
     }
 
     /**

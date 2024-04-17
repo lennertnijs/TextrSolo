@@ -34,8 +34,8 @@ public class GamePointTest {
 
     @Test
     public void testTranslate(){
-        Vector v1 = new Vector(15, 10);
-        Vector v2 = new Vector(-5, -10);
+        Vector2D v1 = new Vector2D(15, 10);
+        Vector2D v2 = new Vector2D(-5, -10);
         assertEquals(point1.translate(v1), new GamePoint(1 + 15, 2 + 10));
         assertEquals(point1.translate(v2), new GamePoint(1 - 5, 2 - 10));
     }

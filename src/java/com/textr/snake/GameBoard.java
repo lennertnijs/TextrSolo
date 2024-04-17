@@ -63,9 +63,9 @@ public final class GameBoard {
         Objects.requireNonNull(dimensions, "Dimensions is null.");
         GamePoint snakeHead = snakeManager.getHead();
         GamePoint newMiddle = findMiddle(dimensions);
-        Vector translationVector = new Vector(Math.abs(snakeHead.x() - newMiddle.x()), Math.abs(snakeHead.y() - newMiddle.y()));
+        Vector2D translationVector2D = new Vector2D(Math.abs(snakeHead.x() - newMiddle.x()), Math.abs(snakeHead.y() - newMiddle.y()));
         for(GamePoint p : snakeManager.getSnake()){
-            GamePoint gamePoint = p.translate(translationVector);
+            GamePoint gamePoint = p.translate(translationVector2D);
             if(isOutOfBounds(gamePoint)){
                 snakeManager.cut(p);
                 break;
@@ -73,7 +73,7 @@ public final class GameBoard {
             snakeManager.replace(p, gamePoint);
         }
         for(GamePoint p : foodManager.getFoods()){
-            GamePoint gamePoint = p.translate(translationVector);
+            GamePoint gamePoint = p.translate(translationVector2D);
             if(isOutOfBounds(gamePoint))
                 foodManager.remove(p);
             else
