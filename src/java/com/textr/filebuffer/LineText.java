@@ -1,8 +1,5 @@
 package com.textr.filebuffer;
 
-import com.textr.util.FixedPoint;
-import com.textr.util.Point;
-
 import java.util.*;
 
 public final class LineText implements IText{
