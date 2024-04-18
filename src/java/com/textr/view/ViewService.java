@@ -181,6 +181,7 @@ public final class ViewService {
             case CTRL_T -> rotateView(true);
             case  F4-> attemptDeleteView();
             case CTRL_G -> addGame();
+            case CTRL_D -> duplicateView();
             case TICK -> {
                 if(!getActiveView().wasUpdated())
                     return;
@@ -188,6 +189,10 @@ public final class ViewService {
             default -> getActiveView().handleInput(input);
         }
         drawAll();
+    }
+
+    private void duplicateView() {
+        communicator.sendMessage("CTRL+D: View Duplication W.I.P.");
     }
 
     private void addGame() {
