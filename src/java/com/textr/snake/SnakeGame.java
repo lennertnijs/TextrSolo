@@ -37,7 +37,7 @@ public final class SnakeGame {
      * @return Whether the game is active.
      */
     public boolean isRunning(){
-        return clock.isRunning();
+        return clock.isActive();
     }
 
     /**
@@ -82,10 +82,10 @@ public final class SnakeGame {
     public boolean update(int delta){
         if(delta < 0)
             throw new IllegalArgumentException("Millis is negative.");
-        if(!clock.isRunning())
+        if(!clock.isActive())
             return false;
-        clock.increase(delta);
-        if(!clock.shouldMove())
+        clock.increaseTime(delta);
+        if(!clock.shouldUpdate())
             return false;
         handleMove();
         return true;
@@ -96,9 +96,9 @@ public final class SnakeGame {
      * Appropriately updates the clock.
      */
     private void handleMove(){
-        clock.reset();
+        clock.subtractThreshHold();
         if(board.willEatOnMove())
-            clock.changeSecondsBetweenMove(0.9f);
+            clock.decreaseThreshold(0.9f);
         try{
             board.moveSnake();
         }catch(IllegalStateException e){

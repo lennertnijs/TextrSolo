@@ -5,79 +5,136 @@ package com.textr.snake;
  */
 public final class GameClock implements IClock{
 
-    private float secondsBetweenMove;
-    private long lastMove;
+    /**
+     * The elapsed time. (in seconds)
+     */
+    private float elapsedTimeInSeconds;
+    /**
+     * The threshold (in seconds) over which the elapsedTime has to go for an update to happen.
+     */
+    private float threshHoldInSeconds;
+    /**
+     * Indicates whether the {@link GameClock} is active or not.
+     */
     private boolean running;
 
     /**
-     * Creates a new {@link GameClock}
-     * @param secondsBetweenMove The seconds between each move. Cannot be negative or 0.
+     * Creates a new {@link GameClock}.
+     * @param threshHoldInSeconds The threshold (in seconds). Cannot be negative or 0.
      */
-    public GameClock(float secondsBetweenMove){
-        if(secondsBetweenMove <= 0)
-            throw new IllegalArgumentException("Seconds between move is negative or 0.");
-        this.secondsBetweenMove = secondsBetweenMove;
-        lastMove = 0;
+    public GameClock(float threshHoldInSeconds){
+        elapsedTimeInSeconds = 0;
+        if(threshHoldInSeconds <= 0)
+            throw new IllegalArgumentException("Threshold has to be strictly positive.");
+        this.threshHoldInSeconds = threshHoldInSeconds;
         running = false;
     }
 
-    private GameClock(float secondsBetweenMove, long lastMove, boolean running){
-        this.secondsBetweenMove = secondsBetweenMove;
-        this.lastMove = lastMove;
+    /**
+     * Creates a new {@link GameClock}.
+     * @param elapsedTimeInSeconds The elapsed time (in seconds).
+     * @param threshHoldInSeconds The threshold (in seconds). Cannot be negative or 0.
+     * @param running Indicates whether the clock is active or not.
+     */
+    private GameClock(float elapsedTimeInSeconds, float threshHoldInSeconds, boolean running){
+        this.elapsedTimeInSeconds = elapsedTimeInSeconds;
+        this.threshHoldInSeconds = threshHoldInSeconds;
         this.running = running;
     }
 
+    /**
+     * @return Whether the {@link GameClock} is active or not.
+     */
+    public boolean isActive(){
+        return running;
+    }
 
+    /**
+     * Sets the {@link GameClock} to active.
+     */
+    public void start(){
+        this.running = true;
+    }
 
-    public void increase(int increaseInMillis){
-        if(increaseInMillis < 0)
-            throw new IllegalArgumentException("Increase is negative.");
-        lastMove += increaseInMillis;
+    /**
+     * Sets the {@link GameClock} to inactive.
+     */
+    public void stop(){
+        this.running = false;
     }
 
     /**
      * Checks whether a move should happen.
      * @return True if a move should happen. False otherwise.
      */
-    public boolean shouldMove(){
-        return (float) lastMove / 1000 > secondsBetweenMove;
+    public boolean shouldUpdate(){
+        return elapsedTimeInSeconds > threshHoldInSeconds;
     }
 
     /**
-     * Resets the clock.
-     * Use when a move is executed.
+     * Increases the elapsed time with the given time (in millis).
+     * @param increaseInMillis The time to add (in millis). Cannot be negative.
      */
-    public void reset(){
-        lastMove -= (secondsBetweenMove * 1000);
+    public void increaseTime(int increaseInMillis){
+        if(increaseInMillis < 0)
+            throw new IllegalArgumentException("Increase is negative.");
+        elapsedTimeInSeconds += ((float) increaseInMillis / 1000L);
     }
 
     /**
-     * Changes the time between moves (in seconds).
-     * @param f The factor of change.
+     * Subtracts the threshold from the elapsed time.
+     * Use when an update happened.
      */
-    public void changeSecondsBetweenMove(float f){
-        if(f <= 0)
-            throw new IllegalArgumentException("Factor has to be strictly positive.");
-        secondsBetweenMove *= f;
-    }
-    public boolean isRunning(){
-        return running;
+    public void subtractThreshHold(){
+        elapsedTimeInSeconds -= threshHoldInSeconds;
     }
 
-    public void start(){
-        this.running = true;
+    /**
+     * Changes the threshold by multiplication with the given factor.
+     * @param factor The factor. Has to be 0 < factor < 1.
+     */
+    public void decreaseThreshold(float factor){
+        if(factor <= 0 || factor >= 1)
+            throw new IllegalArgumentException("Factor has to be strictly positive, and smaller than 1.");
+        threshHoldInSeconds *= factor;
     }
 
-    public void stop(){
-        this.running = false;
-    }
-
+    /**
+     * @return A copy of this {@link GameClock}.
+     */
     public GameClock copy(){
-        return new GameClock(secondsBetweenMove, lastMove, running);
+        return new GameClock(elapsedTimeInSeconds, threshHoldInSeconds, running);
     }
 
+    /**
+     * @return True if the two objects are equal. False otherwise.
+     */
+    @Override
+    public boolean equals(Object other){
+        if(!(other instanceof GameClock clock))
+            return false;
+        return elapsedTimeInSeconds == clock.elapsedTimeInSeconds &&
+                threshHoldInSeconds == clock.threshHoldInSeconds &&
+                running == clock.running;
+    }
+
+    /**
+     * @return The hash code for this {@link GameClock}.
+     */
+    @Override
+    public int hashCode(){
+        int result = Float.hashCode(elapsedTimeInSeconds);
+        result = result * 31 + Float.hashCode(threshHoldInSeconds);
+        result = result * 31 + Boolean.hashCode(running);
+        return result;
+    }
+
+    /**
+     * @return A string representation of this {@link GameClock}.
+     */
     @Override
     public String toString(){
-        return String.format("GameClock[secondsBetweenMove=%f, lastMove=%s, running=%b]", secondsBetweenMove, lastMove, running);
+        return String.format("GameClock[elapsedTimeInSeconds=%f, threshHoldInSeconds=%f, running=%b]",
+                elapsedTimeInSeconds,threshHoldInSeconds, running);
     }
 }

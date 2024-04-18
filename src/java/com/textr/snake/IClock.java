@@ -2,12 +2,12 @@ package com.textr.snake;
 
 public interface IClock {
 
-    void increase(int increaseInMillis);
-    boolean shouldMove();
-    void reset();
-    void changeSecondsBetweenMove(float f);
+    boolean isActive();
     void start();
     void stop();
-    boolean isRunning();
+    boolean shouldUpdate();
+    void increaseTime(int increaseInMillis);
+    void subtractThreshHold();
+    void decreaseThreshold(float f);
     IClock copy();
 }
