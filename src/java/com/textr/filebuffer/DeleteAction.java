@@ -11,9 +11,12 @@ public final class DeleteAction implements Action {
 
     /**
      * Creates a new {@link DeleteAction}.
-     * Stores the 1D index and the deleted character.
-     * @param index The index.
+     * @param index The index. Cannot be negative or bigger/equal than the length of the text.
      * @param character The character.
+     * @param text The text. Cannot be null.
+     * @param side The {@link Side} on which to remove. Cannot be null.
+     *
+     * @throws IllegalArgumentException If the index/side combination are before the first or after the last character.
      */
     public DeleteAction(int index, char character, IText text, Side side){
         Objects.requireNonNull(text, "Text is null.");
@@ -30,6 +33,7 @@ public final class DeleteAction implements Action {
 
     /**
      * Executes this {@link DeleteAction}.
+     * @param cursor The cursor. Cannot be null.
      */
     public void execute(ICursor cursor){
         Objects.requireNonNull(cursor, "Cursor is null.");
@@ -44,6 +48,7 @@ public final class DeleteAction implements Action {
 
     /**
      * Undoes this {@link DeleteAction}.
+     * @param cursor The cursor. Cannot be null.
      */
     public void undo(ICursor cursor){
         Objects.requireNonNull(cursor, "Cursor is null.");
