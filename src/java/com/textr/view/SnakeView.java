@@ -7,10 +7,6 @@ import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
 import com.textr.util.Point;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Random;
-
 public class SnakeView extends View {
 
     private SnakeGame snakeGame;
