@@ -15,7 +15,14 @@ public final class SnakeGame {
         running = false;
     }
 
-    public void update(){
+    public void initialiseGame(){
+
+    }
+
+    public void update(int timeInMillis){
+        if(!running)
+            return;
+        clock.increase(timeInMillis);
         if(clock.shouldMove()){
             clock.reset();
             board.moveSnake();
@@ -26,11 +33,15 @@ public final class SnakeGame {
         board.resize(dimensions);
     }
 
-    public void changeDirection(Direction direction){
+    public void changeSnakeDirection(Direction direction){
         board.changeSnakeDirection(direction);
     }
 
-    public void setRunning(boolean b){
-        this.running = b;
+    public void start(){
+        this.running = true;
+    }
+
+    public void pause(){
+        this.running = false;
     }
 }
