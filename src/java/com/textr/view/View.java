@@ -71,4 +71,12 @@ public class View {
     public String generateStatusBar() {
         return "";
     }
+
+    /**
+     * Marks this View for deletion, and allows the internal data of the view to adapt if necessary.
+     * @return true if the view was successfully marked for deletion, false if the internal data prevents deletion.
+     */
+    public boolean markForDeletion() {
+        return true;
+    }
 }
