@@ -67,6 +67,19 @@ public class GameBoardTest {
     }
 
     @Test
+    public void testCreateWithSnakePointsOutsideBoard(){
+        Snake snake1 = new Snake(Direction.UP);
+        snake1.add(new GamePoint(55, 55));
+        assertThrows(IllegalArgumentException.class, () -> GameBoard.createNew(dimensions, snake1, foodManager));
+    }
+
+    @Test
+    public void testCreateWithFoodOutsideBoard(){
+        foodManager.add(new GamePoint(55, 55));
+        assertThrows(IllegalArgumentException.class, () -> GameBoard.createNew(dimensions, snake, foodManager));
+    }
+
+    @Test
     public void testMoveSnakeNoFood(){
         board.moveSnake();
         GamePoint newHead = new GamePoint(0, 1);
@@ -93,11 +106,6 @@ public class GameBoardTest {
     public void testMoveSnakeOutsideDimensions(){
         board.changeDirection(Direction.LEFT);
         assertThrows(IllegalStateException.class, () -> board.moveSnake());
-    }
-
-    @Test
-    public void testChangeBothDimensions(){
-        assertThrows(IllegalStateException.class, () -> board.resize(Dimension2D.create(5,5)));
     }
 
     @Test
@@ -203,6 +211,24 @@ public class GameBoardTest {
         GamePoint snakeHead = new GamePoint(0, 0);
         GamePoint snakeMiddle = new GamePoint(1, 0);
         assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle)));
+    }
+
+    @Test
+    public void resizeBothDimensionsPartly(){
+        board.resize(Dimension2D.create(30, 15));
+        GamePoint snakeHead = new GamePoint(10, 5);
+        GamePoint snakeMiddle = new GamePoint(11, 5);
+        GamePoint snakeTail = new GamePoint(12, 5);
+        assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
+    }
+
+    @Test
+    public void resizeBothDimensionsImmensely(){
+        board.resize(Dimension2D.create(70, 50));
+        GamePoint snakeHead = new GamePoint(35, 25);
+        GamePoint snakeMiddle = new GamePoint(36, 25);
+        GamePoint snakeTail = new GamePoint(37, 25);
+        assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
     }
 
 

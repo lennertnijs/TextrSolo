@@ -78,7 +78,7 @@ public final class Snake {
         if(alreadyPartOfSnake)
             throw new IllegalStateException("GamePoint is already part of the snake.");
         if(notNextToHead)
-            throw new IllegalStateException("GamePoint is not next to the snake's head.");
+            throw new IllegalStateException("GamePoint is not next to the snake's last segment.");
         if(isNextHeadPosition)
             throw new IllegalStateException("GamePoint is the snake's next position. Invalidates the Direction.");
         body.add(p);
