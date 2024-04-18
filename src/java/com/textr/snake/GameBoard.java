@@ -259,7 +259,7 @@ public final class GameBoard implements IGameBoard{
      * Changes the direction of the snake to the given {@link Direction}.
      * @param direction The direction. Cannot be null.
      */
-    public void changeDirection(Direction direction){
+    public void changeSnakeDirection(Direction direction){
         Objects.requireNonNull(direction, "Direction is null.");
         snake.changeDirection(direction);
     }

@@ -27,7 +27,7 @@ public final class SnakeGame {
     }
 
     public void changeDirection(Direction direction){
-        board.changeDirection(direction);
+        board.changeSnakeDirection(direction);
     }
 
     public void setRunning(boolean b){

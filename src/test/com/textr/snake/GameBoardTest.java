@@ -104,7 +104,7 @@ public class GameBoardTest {
 
     @Test
     public void testMoveSnakeOutsideDimensions(){
-        board.changeDirection(Direction.LEFT);
+        board.changeSnakeDirection(Direction.LEFT);
         assertThrows(IllegalStateException.class, () -> board.moveSnake());
     }
 
@@ -164,7 +164,7 @@ public class GameBoardTest {
     @Test
     public void testCutWidthSnakeRight(){
         board.moveSnake();
-        board.changeDirection(Direction.RIGHT);
+        board.changeSnakeDirection(Direction.RIGHT);
         for(int i = 0; i < 15; i++)
             board.moveSnake(); // sets snake head at (15, 1)
         board.resize(Dimension2D.create(10, 10));
@@ -177,7 +177,7 @@ public class GameBoardTest {
     @Test
     public void testCutWidthSnakeMiddle(){
         board.moveSnake();
-        board.changeDirection(Direction.RIGHT);
+        board.changeSnakeDirection(Direction.RIGHT);
         for(int i = 0; i < 10; i++)
             board.moveSnake(); // sets snake head at (10, 1)
         board.resize(Dimension2D.create(10, 10));

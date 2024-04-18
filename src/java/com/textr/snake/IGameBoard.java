@@ -8,5 +8,5 @@ public interface IGameBoard {
     int getScore();
     void moveSnake();
     void resize(Dimension2D dimensions);
-    void changeDirection(Direction direction);
+    void changeSnakeDirection(Direction direction);
 }
