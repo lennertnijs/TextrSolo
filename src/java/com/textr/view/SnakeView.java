@@ -7,8 +7,6 @@ import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
 import com.textr.util.Point;
 
-import java.util.List;
-
 public class SnakeView extends View {
 
 
@@ -16,43 +14,34 @@ public class SnakeView extends View {
 
     public SnakeView(Point pos, Dimension2D dimensions){
         super(pos, dimensions);
-        snakeGame = new SnakeGame(GameBoard.createNew(getDimensions(), new Snake(Direction.UP), new FoodManager()), new GameClock(5f));
+        snakeGame = initializeGame();
     }
 
     public boolean gameIsRunning(){
         return snakeGame.isRunning();
     }
 
-    public Direction getSnakeDirection(){
-        return snakeGame.getDirection();
-    }
 
-    public List<GamePoint> getSnake(){
-        return snakeGame.getSnake();
-    }
-
-    public List<GamePoint> getFoods(){
-        return snakeGame.getFoods();
+    public IGameBoard getGameBoard(){
+        return snakeGame.getBoard();
     }
 
     @Override
     public void resize(Dimension2D dimensions){
         this.setDimensions(dimensions);
+        snakeGame.resize(dimensions);
     }
 
     @Override
     public boolean incrementTimer(){
-        return hasChanged();
+        return snakeGame.update(10);
     }
 
-
-    public void startGame(){
-        snakeGame.start();
+    public void restartGame(){
+        this.snakeGame = initializeGame();
     }
 
-
-
-    public void initializeGame(){
+    public SnakeGame initializeGame(){
         Snake snake = new Snake(Direction.RIGHT);
         for(int i = 0; i < 4; i++) {
             GamePoint snakeSegment = new GamePoint(getDimensions().getWidth() / 2 - i, getDimensions().getHeight() / 2);
@@ -64,17 +53,14 @@ public class SnakeView extends View {
         for(int i = 0; i < 50; i++)
             board.spawnFood();
         IClock clock = new GameClock(0.3f);
-        this.snakeGame = new SnakeGame(board, clock);
+        SnakeGame snakeGame1 = new SnakeGame(board, clock);
+        snakeGame1.start();
+        return snakeGame1;
     }
 
     private boolean isWithinBoundaries(GamePoint p){
         return p.x() >= 0 && p.y() >= 0 && p.x() < getDimensions().getWidth() && p.y() < getDimensions().getHeight();
     }
-
-    public boolean hasChanged(){
-        return snakeGame.update(10);
-    }
-
 
 
     /**

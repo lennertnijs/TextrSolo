@@ -17,6 +17,10 @@ public final class SnakeGame {
         running = false;
     }
 
+    public IGameBoard getBoard(){
+        return board;
+    }
+
     public boolean hasChanged(){
         return clock.shouldMove();
     }

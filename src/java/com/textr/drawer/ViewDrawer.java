@@ -1,6 +1,7 @@
 package com.textr.drawer;
 
 import com.textr.snake.GamePoint;
+import com.textr.snake.IGameBoard;
 import com.textr.terminal.TerminalService;
 import com.textr.util.Validator;
 import com.textr.view.BufferView;
@@ -63,9 +64,10 @@ public final class ViewDrawer{
         int baseY = view.getPosition().getY()+ height - 2;
         int maxY = view.getPosition().getY() + height - 1;
         if(view.gameIsRunning()){
-            List<GamePoint> snake = view.getSnake();
+            IGameBoard gameBoard = view.getGameBoard();
+            List<GamePoint> snake = gameBoard.getSnakePoints();
             GamePoint head = snake.remove(0);
-            switch (view.getSnakeDirection()){
+            switch (gameBoard.getDirection()){
                 case RIGHT -> terminal.printText(x + head.x()+ 1, baseY- head.y()+ 1, ">");
                 case LEFT ->  terminal.printText(x+ head.x()+ 1, baseY- head.y()+ 1, "<");
                 case UP -> terminal.printText(x+ head.x()+ 1, baseY- head.y()+ 1, "^");
@@ -74,7 +76,7 @@ public final class ViewDrawer{
             for(GamePoint point : snake){
                 terminal.printText(x+ point.x() + 1, baseY- point.y()+ 1, "o");
             }
-            List<GamePoint> foods = view.getFoods();
+            List<GamePoint> foods = gameBoard.getFoods();
             for(GamePoint point : foods){
                 terminal.printText(x + point.x() + 1, baseY- point.y() + 1, "f");
             }

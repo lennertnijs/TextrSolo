@@ -188,8 +188,7 @@ public final class ViewService {
         SnakeView newGame = new SnakeView(Point.create(0,0), Dimension2D.create(10,10));
         viewRepo.addNextTo(newGame, getActiveView());
         generateViewPositionsAndDimensions();
-        newGame.initializeGame();
-        newGame.startGame();
         setActiveViewToNext();
+        ((SnakeView)getActiveView()).restartGame();
     }
 }
