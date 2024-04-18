@@ -5,6 +5,7 @@ public enum InputType {
     CTRL_Z, // -1
     CHARACTER, // b >= 32 && b <= 126
     ENTER, // 13
+    CTRL_D, // 4
     CTRL_N, // 14
     CTRL_P, // 16
     CTRL_R, // 18
