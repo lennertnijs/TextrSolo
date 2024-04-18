@@ -145,6 +145,10 @@ public final class FileBuffer {
         this.text.removeListener(listener);
     }
 
+    public int getReferenceCount() {
+        return this.text.getListenerCount();
+    }
+
     // TODO: DELETE
 //    public FileBuffer copy(){
 //        return new FileBuffer(this.file, this.text, this.state);
