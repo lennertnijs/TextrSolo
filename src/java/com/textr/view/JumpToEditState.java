@@ -3,9 +3,7 @@ package com.textr.view;
 import com.textr.filebuffer.ICursor;
 import com.textr.filebuffer.ITextSkeleton;
 import com.textr.filebuffer.TextUpdateReference;
-import com.textr.filebuffer.TextUpdateType;
 import com.textr.util.Dimension2D;
-import com.textr.util.FixedPoint;
 import com.textr.util.Point;
 
 import java.util.Objects;
@@ -31,7 +29,7 @@ public class JumpToEditState implements UpdateState {
         Objects.requireNonNull(textStructure, "A state cannot update a view using a null text structure");
         updateCursor(view.getCursor(), update, textStructure);
         updateAnchor(view.getAnchor(), view.getCursor(), view.getDimensions());
-        view.setUpdateState(new GenericState());
+        view.setUpdateState(new RemainOnContentState());
     }
 
     private void updateCursor(ICursor cursor, TextUpdateReference update, ITextSkeleton skeleton) {

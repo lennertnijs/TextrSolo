@@ -39,7 +39,7 @@ public final class BufferView extends View implements TextListener {
         this.cursor = cursor;
         this.anchor = anchor;
         this.communicator = Objects.requireNonNull(communicator, "BufferView's communicator cannot be null");
-        this.updater = new GenericState();
+        this.updater = new RemainOnContentState();
         buffer.addTextListener(this);
     }
 

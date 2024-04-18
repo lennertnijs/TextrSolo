@@ -8,11 +8,12 @@ import com.textr.util.*;
 /**
  * {@inheritDoc}
  *
- * A {@link GenericState} updates the cursor only when necessary, such as when adding a new character on the same line
- * before or on the cursor, or when adding a new line before or on the same line as the cursor. If the cursor stands on
- * the position of the edit, it should act as if it was the cursor responsible for the edit, and move accordingly.
+ * A {@link RemainOnContentState} updates the cursor only when necessary, such as when adding a new character on the
+ * same line before or on the cursor, or when adding a new line before or on the same line as the cursor. If the cursor
+ * stands on the position of the edit, it should act as if it was the cursor responsible for the edit, and move
+ * accordingly.
  */
-public class GenericState implements UpdateState {
+public class RemainOnContentState implements UpdateState {
 
     /**
      * {@inheritDoc}
