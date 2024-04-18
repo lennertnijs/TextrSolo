@@ -15,9 +15,6 @@ public final class SnakeGame {
         running = false;
     }
 
-    public void initialiseGame(){
-
-    }
 
     public void update(int timeInMillis){
         if(!running)
