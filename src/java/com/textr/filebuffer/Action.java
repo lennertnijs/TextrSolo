@@ -4,13 +4,11 @@ public interface Action {
 
     /**
      * Executes the {@link Action}.
-     * @param cursor The active {@link ICursor}. Cannot be null.
      */
-    void execute(ICursor cursor);
+    void execute();
 
     /**
      * Undoes the {@link Action}.
-     * @param cursor The active {@link ICursor}. Cannot be null.
      */
-    void undo(ICursor cursor);
+    void undo();
 }

@@ -47,8 +47,8 @@ public class CursorTest {
 
     @Test
     public void testSetInsertIndexIllegal(){
-        assertThrows(IllegalArgumentException.class, () -> cursor.setInsertIndex(-1, skeleton));
-        assertThrows(IllegalArgumentException.class, () -> cursor.setInsertIndex(12, skeleton));
+        assertThrows(IndexOutOfBoundsException.class, () -> cursor.setInsertIndex(-1, skeleton));
+        assertThrows(IndexOutOfBoundsException.class, () -> cursor.setInsertIndex(12, skeleton));
     }
 
     @Test

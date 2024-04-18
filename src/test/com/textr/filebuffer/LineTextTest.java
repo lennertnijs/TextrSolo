@@ -56,8 +56,8 @@ public class LineTextTest {
 
     @Test
     public void testGetLineIllegal(){
-        assertThrows(IllegalArgumentException.class, () -> text1.getLine(-1));
-        assertThrows(IllegalArgumentException.class, () -> text1.getLine(3));
+        assertThrows(IndexOutOfBoundsException.class, () -> text1.getLine(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> text1.getLine(3));
     }
 
     @Test

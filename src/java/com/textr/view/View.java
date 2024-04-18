@@ -79,4 +79,13 @@ public abstract class View {
     public boolean markForDeletion() {
         return true;
     }
+
+    /**
+     * Creates a duplicate version of this view. (optional operation)
+     * @return A duplicate version of this view
+     * @throws UnsupportedOperationException if duplication isn't supported by this view type
+     */
+    public View duplicate() {
+        throw new UnsupportedOperationException();
+    }
 }

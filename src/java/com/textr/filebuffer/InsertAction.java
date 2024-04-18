@@ -28,19 +28,15 @@ public final class InsertAction implements Action{
      * Executes this {@link InsertAction}.
      * @param cursor The cursor. Cannot be null.
      */
-    public void execute(ICursor cursor){
-        Objects.requireNonNull(cursor, "Cursor is null.");
+    public void execute(){
         text.insert(index, character);
-        cursor.setInsertIndex(index + 1, text.getSkeleton());
     }
 
     /**
      * Undoes this {@link InsertAction}.
      * @param cursor The cursor. Cannot be null.
      */
-    public void undo(ICursor cursor){
-        Objects.requireNonNull(cursor, "Cursor is null.");
+    public void undo(){
         text.remove(index);
-        cursor.setInsertIndex(index, text.getSkeleton());
     }
 }
