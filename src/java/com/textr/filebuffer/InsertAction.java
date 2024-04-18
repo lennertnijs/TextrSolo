@@ -16,9 +16,9 @@ public final class InsertAction implements Action{
      * @param text The text. Cannot be null.
      */
     public InsertAction(int index, char character, IText text){
+        Objects.requireNonNull(text, "Text is null.");
         if(index < 0 || index > text.getCharAmount())
             throw new IllegalArgumentException("Index outside the text's legal values.");
-        Objects.requireNonNull(text, "Text is null.");
         this.index = index;
         this.character = character;
         this.text = text;

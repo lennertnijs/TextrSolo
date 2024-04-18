@@ -144,7 +144,7 @@ public final class BufferView extends View {
             case BACKSPACE -> {
                 if(cursor.getInsertIndex() == 0)
                     return;
-                Action deleteAction = new DeleteAction(cursor.getInsertIndex() - 1,
+                Action deleteAction = new DeleteAction(cursor.getInsertIndex(),
                         buffer.getText().getCharacter(cursor.getInsertIndex() - 1),
                         buffer.getText(), Side.BEFORE);
                 buffer.executeAndStore(deleteAction, cursor);
