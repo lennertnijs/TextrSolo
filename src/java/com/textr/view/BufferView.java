@@ -177,42 +177,6 @@ public final class BufferView extends View implements TextListener {
         }
     }
 
-
-    /**
-     * Compares this view to the given object and returns True if they're equal. Returns False otherwise.
-     * @param o The other object
-     *
-     * @return True if they're equal, false otherwise.
-     */
-    @Override
-    public boolean equals(Object o){
-        if(this == o){
-            return true;
-        }
-        if(!(o instanceof BufferView view)){
-            return false;
-        }
-        return this.buffer.equals(view.buffer) &&
-                this.getDimensions().equals(view.getDimensions()) &&
-                this.getPosition().equals(view.getPosition()) &&
-                this.anchor.equals(view.anchor);
-    }
-
-    /**
-     * Generates and returns a hash code for this view.
-     *
-     * @return The hash code.
-     */
-    @Override
-    public int hashCode(){
-        int result = buffer.hashCode();
-        result = result * 31 + getDimensions().hashCode();
-        result = result * 31 + getPosition().hashCode();
-        result = result * 31 + anchor.hashCode();
-        return result;
-    }
-
-
     /**
      * Creates and returns a {@link String} representation of this view.
      *
