@@ -231,5 +231,24 @@ public class GameBoardTest {
         assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
     }
 
+    @Test
+    public void resizeBothDimensionsExtra(){
+        snake.move();
+        snake.changeDirection(Direction.RIGHT);
+        for(int i = 0; i < 13; i++)
+            snake.move(); // head at (13, 1)
+        board.resize(Dimension2D.create(10, 20)); // was (20, 10)
+        GamePoint snakeHead = new GamePoint(5, 10);
+        GamePoint snakeMiddle = new GamePoint(4, 10);
+        GamePoint snakeTail = new GamePoint(3, 10);
+        assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
 
+
+        board.resize(Dimension2D.create(20, 10));
+        GamePoint snakeHead2 = new GamePoint(10, 5);
+        GamePoint snakeMiddle2 = new GamePoint(9, 5);
+        GamePoint snakeTail2 = new GamePoint(8, 5);
+        assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead2, snakeMiddle2, snakeTail2)));
+
+    }
 }

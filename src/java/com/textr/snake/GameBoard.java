@@ -183,7 +183,7 @@ public final class GameBoard implements IGameBoard{
             translationVector = new Vector2D(0, -adjustedForBothEdges);
         }else{
             int adjustForTopEdge =  Math.min(newHeight / 2, newHeight - oldHeight);
-            translationVector = new Vector2D(0, adjustForTopEdge);
+            translationVector = new Vector2D(0, adjustForTopEdge - snake.getHead().y());
         }
         this.dimensions = Dimension2D.create(this.dimensions.getWidth(), newHeight);
         translateSnake(translationVector);
@@ -213,7 +213,7 @@ public final class GameBoard implements IGameBoard{
             translationVector = new Vector2D(-adjustedForBothEdges, 0);
         }else{
             int adjustedForRightEdge =  Math.min(newWidth / 2, newWidth - oldWidth);
-            translationVector = new Vector2D(adjustedForRightEdge, 0);
+            translationVector = new Vector2D(adjustedForRightEdge - snake.getHead().x(), 0);
         }
         this.dimensions = Dimension2D.create(newWidth, this.dimensions.getHeight());
         translateSnake(translationVector);
