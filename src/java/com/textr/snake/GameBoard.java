@@ -55,7 +55,7 @@ public final class GameBoard implements IGameBoard{
         for(GamePoint p : foodManager.getFoods())
             if(p.x() < 0 || p.y() < 0 || p.x() >= dimensions.getWidth() || p.y() >= dimensions.getHeight())
                 throw new IllegalArgumentException("FoodManager has food outside the GameBoard.");
-        return new GameBoard(dimensions, snake, foodManager.copy(), 0);
+        return new GameBoard(dimensions, snake.copy(), foodManager.copy(), 0);
     }
 
     /**
