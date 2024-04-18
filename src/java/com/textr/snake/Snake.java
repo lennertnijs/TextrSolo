@@ -28,6 +28,12 @@ public final class Snake {
         atePoints = new ArrayList<>();
     }
 
+    /**
+     * Creates a new {@link Snake}.
+     * @param body The body of the snake. Cannot be null, contain null, or not be connected.
+     * @param direction The direction. Cannot be null, or be into its own body.
+     * @param atePoints The points where the snake ate. Cannot be null or contain null.
+     */
     private Snake(List<GamePoint> body, Direction direction, List<GamePoint> atePoints){
         this.body = body;
         this.headDirection = direction;
@@ -163,6 +169,7 @@ public final class Snake {
 
     /**
      * Moves the snake one unit in it's {@link Direction}.
+     * If the snake's tail is part of the ate points, does not remove the tail, but removes the ate point.
      */
     public void move(){
         GamePoint nextHead = getNextHeadPosition();
@@ -174,10 +181,16 @@ public final class Snake {
         }
     }
 
+    /**
+     * @return A deep copy of this {@link Snake}.
+     */
     public Snake copy(){
         return new Snake(new ArrayList<>(body), headDirection, new ArrayList<>(atePoints));
     }
 
+    /**
+     * @return True if the two objects are equal. False otherwise.
+     */
     @Override
     public boolean equals(Object other){
         if(!(other instanceof Snake snake))
@@ -187,11 +200,22 @@ public final class Snake {
                 atePoints.equals(snake.atePoints);
     }
 
+    /**
+     * @return The hash code for this {@link Snake}.
+     */
     @Override
     public int hashCode(){
         int result = body.hashCode();
         result = result * 31 + headDirection.hashCode();
         result = result * 31 + atePoints.hashCode();
         return result;
+    }
+
+    /**
+     * @return The string representation of this {@link Snake}.
+     */
+    @Override
+    public String toString(){
+        return String.format("Snake[body=%s, headDirection=%s, atePoints=%s]", body, headDirection, atePoints);
     }
 }

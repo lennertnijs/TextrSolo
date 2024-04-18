@@ -17,6 +17,8 @@ public class SnakeTest {
     private GamePoint point3;
     private GamePoint duplicatePoint;
     private Snake snake;
+    private Snake snake2;
+    private Snake snake3;
     @BeforeEach
     public void initialise(){
         point1 = new GamePoint(0,0);
@@ -24,6 +26,8 @@ public class SnakeTest {
         point3 = new GamePoint(2, 0);
         duplicatePoint = new GamePoint(0, 0);
         snake = new Snake(Direction.UP);
+        snake2 = new Snake(Direction.RIGHT);
+        snake3 = new Snake(Direction.UP);
     }
 
     @Test
@@ -227,5 +231,26 @@ public class SnakeTest {
         snake.move();
         GamePoint head3 = new GamePoint(2, 1);
         assertEquals(snake.getBody(), new ArrayList<>(List.of(head3, head2, head1)));
+    }
+
+    @Test
+    public void testEquals(){
+        snake.add(point1);
+        snake3.add(point1);
+        assertEquals(snake, snake3);
+        assertNotEquals(snake, snake2);
+        assertNotEquals(snake, new Object());
+    }
+
+    @Test
+    public void testHashCode(){
+        assertEquals(snake.hashCode(), snake3.hashCode());
+        assertNotEquals(snake.hashCode(), snake2.hashCode());
+    }
+
+    @Test
+    public void testToString(){
+        String expectedString = "Snake[body=[], headDirection=UP, atePoints=[]]";
+        assertEquals(snake.toString(), expectedString);
     }
 }
