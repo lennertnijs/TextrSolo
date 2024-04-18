@@ -65,6 +65,16 @@ public final class Snake {
     }
 
     /**
+     * @return The {@link GamePoint} representing the final segment of the snake.
+     * @throws NoSuchElementException If the snake has no tail. (length 0)
+     */
+    public GamePoint getTail(){
+        if(body.size() == 0)
+            throw new NoSuchElementException("Snake does not have a tail, because it is length 0.");
+        return body.get(body.size() - 1);
+    }
+
+    /**
      * Checks whether the given {@link GamePoint} is part of the snake.
      * @param p The {@link GamePoint}. Cannot be null.
      *

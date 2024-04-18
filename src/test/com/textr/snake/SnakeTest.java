@@ -112,6 +112,19 @@ public class SnakeTest {
     }
 
     @Test
+    public void testGetTail(){
+        snake.add(point1);
+        assertEquals(snake.getTail(), point1);
+        snake.add(point2);
+        assertEquals(snake.getTail(), point2);
+    }
+
+    @Test
+    public void testGetTailEmptySnake(){
+        assertThrows(NoSuchElementException.class, () -> snake.getTail());
+    }
+
+    @Test
     public void testClear(){
         snake.add(point1);
         snake.add(point2);

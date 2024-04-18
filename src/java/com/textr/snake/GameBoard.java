@@ -97,7 +97,7 @@ public final class GameBoard implements IGameBoard{
      */
     public void moveSnake(){
         GamePoint nextHeadPosition = snake.getNextHeadPosition();
-        if(isOutOfBounds(nextHeadPosition) || snake.isSnake(nextHeadPosition))
+        if(isOutOfBounds(nextHeadPosition) || (snake.isSnake(nextHeadPosition) && !snake.getTail().equals(nextHeadPosition)))
             throw new IllegalStateException("Snake ate itself or went outside game borders.");
         if(foodManager.isFood(nextHeadPosition)) {
             foodManager.remove(nextHeadPosition);
@@ -108,6 +108,9 @@ public final class GameBoard implements IGameBoard{
         snake.move();
     }
 
+    /**
+     * @return True if the snake will eat on the next move.
+     */
     public boolean willEatOnMove(){
         return foodManager.isFood(snake.getNextHeadPosition());
     }

@@ -42,7 +42,7 @@ public class SnakeView extends View {
         GameBoard board = GameBoard.createNew(getDimensions(), snake, foodManager);
         for(int i = 0; i < 200; i++)
             board.spawnFood();
-        IClock clock = new GameClock(0.3f);
+        IClock clock = new GameClock(0.9f);
         return new SnakeGame(board, clock);
     }
 
