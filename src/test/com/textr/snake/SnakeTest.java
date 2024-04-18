@@ -232,16 +232,16 @@ public class SnakeTest {
         snake.add(point2);
         snake.add(point3);
 
-        snake.move();
+        snake.move(false);
         GamePoint head1 = new GamePoint(0, 1);
         assertEquals(snake.getBody(), new ArrayList<>(List.of(head1, point1, point2)));
 
         snake.changeDirection(Direction.RIGHT);
-        snake.move();
+        snake.move(false);
         GamePoint head2 = new GamePoint(1, 1);
         assertEquals(snake.getBody(), new ArrayList<>(List.of(head2, head1, point1)));
 
-        snake.move();
+        snake.move(false);
         GamePoint head3 = new GamePoint(2, 1);
         assertEquals(snake.getBody(), new ArrayList<>(List.of(head3, head2, head1)));
     }
@@ -263,7 +263,7 @@ public class SnakeTest {
 
     @Test
     public void testToString(){
-        String expectedString = "Snake[body=[], headDirection=UP, atePoints=[]]";
+        String expectedString = "Snake[body=[], headDirection=UP, toGrow=0]";
         assertEquals(snake.toString(), expectedString);
     }
 }

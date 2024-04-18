@@ -15,7 +15,7 @@ public final class Snake {
      * The {@link Direction} in which the snake is going to move.
      */
     private Direction headDirection;
-    private final List<GamePoint> atePoints;
+    private int toGrow ;
 
     /**
      * Creates a new snake. The snake has length 0 at creation.
@@ -25,19 +25,19 @@ public final class Snake {
         Objects.requireNonNull(direction, "Direction is null.");
         body = new LinkedList<>();
         this.headDirection = direction;
-        atePoints = new ArrayList<>();
+        toGrow = 0;
     }
 
     /**
      * Creates a new {@link Snake}.
      * @param body The body of the snake. Cannot be null, contain null, or not be connected.
      * @param direction The direction. Cannot be null, or be into its own body.
-     * @param atePoints The points where the snake ate. Cannot be null or contain null.
+     * @param toGrow How much more the snake will grow until it eats the next  food.
      */
-    private Snake(List<GamePoint> body, Direction direction, List<GamePoint> atePoints){
+    private Snake(List<GamePoint> body, Direction direction, int toGrow){
         this.body = body;
         this.headDirection = direction;
-        this.atePoints = atePoints;
+        this.toGrow = toGrow;
     }
 
     /**
@@ -83,10 +83,6 @@ public final class Snake {
     public boolean isSnake(GamePoint p){
         Objects.requireNonNull(p, "GamePoint is null.");
         return body.stream().anyMatch(segment -> segment.equals(p));
-    }
-
-    public void addAtePoint(GamePoint p){
-        atePoints.add(p);
     }
 
     /**
@@ -181,21 +177,23 @@ public final class Snake {
      * Moves the snake one unit in it's {@link Direction}.
      * If the snake's tail is part of the ate points, does not remove the tail, but removes the ate point.
      */
-    public void move(){
+    public void move(boolean ate){
         GamePoint nextHead = getNextHeadPosition();
         body.add(0, nextHead);
-        if(!atePoints.contains(body.get(body.size() - 1)))
-            body.remove(body.size() - 1);
-        else{
-            atePoints.remove(body.get(body.size() - 1));
+        if(ate){
+            toGrow=3;
         }
-    }
+        else if(toGrow==0)
+            body.remove(body.size() - 1);
+        else
+            toGrow--;
+        }
 
     /**
      * @return A deep copy of this {@link Snake}.
      */
     public Snake copy(){
-        return new Snake(new ArrayList<>(body), headDirection, new ArrayList<>(atePoints));
+        return new Snake(new ArrayList<>(body), headDirection, toGrow);
     }
 
     /**
@@ -207,7 +205,7 @@ public final class Snake {
             return false;
         return body.equals(snake.body) &&
                 headDirection.equals(snake.headDirection) &&
-                atePoints.equals(snake.atePoints);
+                toGrow == snake.toGrow;
     }
 
     /**
@@ -217,7 +215,7 @@ public final class Snake {
     public int hashCode(){
         int result = body.hashCode();
         result = result * 31 + headDirection.hashCode();
-        result = result * 31 + atePoints.hashCode();
+        result = result * 31 + toGrow;
         return result;
     }
 
@@ -226,6 +224,8 @@ public final class Snake {
      */
     @Override
     public String toString(){
-        return String.format("Snake[body=%s, headDirection=%s, atePoints=%s]", body, headDirection, atePoints);
+        return String.format("Snake[body=%s, headDirection=%s, toGrow=%s]", body, headDirection, toGrow);
     }
+
+
 }

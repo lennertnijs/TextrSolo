@@ -102,7 +102,7 @@ public class GameBoardTest {
         board.moveSnake();
         GamePoint newHead = new GamePoint(0, 2);
         GamePoint newMiddle = new GamePoint(0, 1);
-        assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(newHead, newMiddle, snakeHead)));
+        assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(newHead, newMiddle, snakeHead, snakeMiddle)));
         assertEquals(board.getFoods().size(), 1);
         assertEquals(board.getScore(), 1);
         assertTrue(board.getFoods().get(0).x() >= 0);
@@ -242,10 +242,10 @@ public class GameBoardTest {
 
     @Test
     public void resizeBothDimensionsExtra(){
-        snake.move();
+        snake.move(false);
         snake.changeDirection(Direction.RIGHT);
         for(int i = 0; i < 13; i++)
-            snake.move(); // head at (13, 1)
+            snake.move(false); // head at (13, 1)
         board.resize(Dimension2D.create(10, 20)); // was (20, 10)
         GamePoint snakeHead = new GamePoint(5, 10);
         GamePoint snakeMiddle = new GamePoint(4, 10);
@@ -275,7 +275,7 @@ public class GameBoardTest {
 
     @Test
     public void testToString(){
-        String expectedString = "GameBoard[dimensions=Dimension2D[width = 20, height = 10], snake=Snake[body=[GamePoint[x=0, y=0], GamePoint[x=1, y=0], GamePoint[x=2, y=0]], headDirection=UP, atePoints=[]], foodManager=FoodManager[foods=[GamePoint[x=0, y=2]]], score=0]";
+        String expectedString = "GameBoard[dimensions=Dimension2D[width = 20, height = 10], snake=Snake[body=[GamePoint[x=0, y=0], GamePoint[x=1, y=0], GamePoint[x=2, y=0]], headDirection=UP, toGrow=0], foodManager=FoodManager[foods=[GamePoint[x=0, y=2]]], score=0]";
         assertEquals(board.toString(), expectedString);
     }
 }

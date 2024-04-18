@@ -8,7 +8,7 @@ import com.textr.terminal.TermiosTerminalService;
 import com.textr.util.Dimension2D;
 import com.textr.util.Point;
 
-import org.junit.Ignore;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

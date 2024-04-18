@@ -102,9 +102,11 @@ public final class GameBoard implements IGameBoard{
             foodManager.remove(nextHeadPosition);
             score += 1;
             spawnFood();
-            snake.addAtePoint(nextHeadPosition);
+            snake.move(true);
         }
-        snake.move();
+        else{
+            snake.move(false);
+        }
     }
 
     /**
