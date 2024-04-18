@@ -19,12 +19,18 @@ public final class GameClock {
         this.secondsBetweenMove = secondsBetweenMove;
     }
 
+    public void increase(int increaseInMillis){
+        if(increaseInMillis < 0)
+            throw new IllegalArgumentException("Increase is negative.");
+        lastMove += increaseInMillis;
+    }
+
     /**
      * Checks whether a move should happen.
      * @return True if a move should happen. False otherwise.
      */
     public boolean shouldMove(){
-        return (float) (0 - lastMove) / 1000 > secondsBetweenMove;
+        return (float) lastMove / 1000 > secondsBetweenMove;
     }
 
     /**
