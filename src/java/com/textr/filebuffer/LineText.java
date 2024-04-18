@@ -153,9 +153,8 @@ public final class LineText implements IText{
         builder.insert(index, character);
 
         // Notify listeners
-        FixedPoint updateLocation = convertToPoint(index);
         for (TextListener listener: listeners)
-            listener.update(new TextUpdateReference(updateLocation, true, TextUpdateType.CHAR_UPDATE), getSkeleton());
+            listener.update(new TextUpdateReference(index, true, TextUpdateType.CHAR_UPDATE), getSkeleton());
     }
 
     /**
@@ -170,9 +169,8 @@ public final class LineText implements IText{
         builder.insert(index, "\n");
 
         // Notify listeners
-        FixedPoint updateLocation = convertToPoint(index);
         for (TextListener listener: listeners)
-            listener.update(new TextUpdateReference(updateLocation, true, TextUpdateType.LINE_UPDATE), getSkeleton());
+            listener.update(new TextUpdateReference(index, true, TextUpdateType.LINE_UPDATE), getSkeleton());
     }
 
     /**
@@ -188,14 +186,13 @@ public final class LineText implements IText{
         builder.deleteCharAt(index);
 
         // Notify listeners
-        FixedPoint updateLocation = convertToPoint(index);
         TextUpdateType type;
         if (deletedChar == '\n')
             type = TextUpdateType.LINE_UPDATE;
         else
             type = TextUpdateType.CHAR_UPDATE;
         for (TextListener listener: listeners)
-            listener.update(new TextUpdateReference(updateLocation, false, type), getSkeleton());
+            listener.update(new TextUpdateReference(index, false, type), getSkeleton());
     }
 
 

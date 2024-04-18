@@ -31,12 +31,14 @@ public class GenericState implements UpdateState {
     }
 
     private void updateCursor(ICursor cursor, TextUpdateReference update, ITextSkeleton skeleton) {
-        FixedPoint updatePoint = update.updateLocation();
         TextUpdateType type = update.type();
-        switch (type) {
-            case CHAR_UPDATE -> updateCursorChar(cursor, updatePoint, update.isInsertion(), skeleton);
-            case LINE_UPDATE -> updateCursorLine(cursor, updatePoint, update.isInsertion(), skeleton);
-        }
+        if (update.updateIndex() < cursor.getInsertIndex()) {
+            // Insertion/deletion before cursor must update cursor position
+            int displacement = update.isInsertion() ? 1 : -1;
+            cursor.setInsertIndex(cursor.getInsertIndex() + displacement, skeleton);
+        } else if (update.updateIndex() == cursor.getInsertIndex() && update.isInsertion())
+            // insertion on cursor must also move cursor
+            cursor.setInsertIndex(cursor.getInsertIndex() + 1, skeleton);
     }
 
     private void updateAnchor(Point anchor, ICursor cursor, Dimension2D dimensions) {
@@ -57,11 +59,46 @@ public class GenericState implements UpdateState {
     }
 
     private void updateCursorLine(ICursor cursor, FixedPoint updatePoint, boolean isInsertion, ITextSkeleton skeleton) {
-        if (updatePoint.getY() + 1 > cursor.getInsertPoint().getY())
-            return; // Line insertion/deletion only relevant to cursor if new/deleted line before/on this line
         if (isInsertion)
-            cursor.move(Direction.DOWN, skeleton);
+            updateCursorLineInsertion(cursor, updatePoint, skeleton);
         else
-            cursor.move(Direction.UP, skeleton);
+            updateCursorLineDeletion(cursor, updatePoint, skeleton);
+    }
+
+    private void updateCursorLineInsertion(ICursor cursor, FixedPoint updatePoint, ITextSkeleton skeleton) {
+        Point cursorPoint = cursor.getInsertPoint();
+        if (updatePoint.getY() > cursorPoint.getY())
+            return; // Line insertion only relevant to cursor if new line before/on this line
+        if (updatePoint.getY() == cursorPoint.getY() && updatePoint.getX() <= cursorPoint.getX()) {
+            // New line inserted before/on cursor (on same line) => Set to same position in text on new line
+            int newX = cursorPoint.getX() - updatePoint.getX();
+            int newY = updatePoint.getY() + 1;
+            cursor.setInsertPoint(Point.create(newX, newY), skeleton);
+            return;
+        }
+        if (updatePoint.getY() < cursorPoint.getY()) {
+            // Only if new line is before cursor's line, move cursor down
+            int newX = cursorPoint.getX();
+            int newY = updatePoint.getY() + 1;
+            cursor.setInsertPoint(Point.create(newX, newY), skeleton);
+        }
+    }
+
+    private void updateCursorLineDeletion(ICursor cursor, FixedPoint updatePoint, ITextSkeleton skeleton) {
+        Point cursorPoint = cursor.getInsertPoint();
+        if (updatePoint.getY() >= cursorPoint.getY())
+            return; // Line deletion only relevant to cursor if removed line before this line
+        if (updatePoint.getY() + 1 == cursorPoint.getY()) {
+            // Line right before got removed: update position to sit on same content
+            int newX = updatePoint.getX() + cursorPoint.getX();
+            int newY = updatePoint.getY();
+            cursor.setInsertPoint(Point.create(newX, newY), skeleton);
+        }
+        else {
+            // Simple move cursor up
+            int newX = cursorPoint.getX();
+            int newY = updatePoint.getY() - 1;
+            cursor.setInsertPoint(Point.create(newX, newY), skeleton);
+        }
     }
 }

@@ -35,12 +35,8 @@ public class JumpToEditState implements UpdateState {
     }
 
     private void updateCursor(ICursor cursor, TextUpdateReference update, ITextSkeleton skeleton) {
-        FixedPoint updatePoint = update.updateLocation();
-        TextUpdateType type = update.type();
-        switch (type) {
-            case CHAR_UPDATE -> updateCursorChar(cursor, updatePoint, update.isInsertion(), skeleton);
-            case LINE_UPDATE -> updateCursorLine(cursor, updatePoint, update.isInsertion(), skeleton);
-        }
+        int displacement = update.isInsertion() ? 1 : 0; // When insertion, cursor should move to point after
+        cursor.setInsertIndex(update.updateIndex() + displacement, skeleton);
     }
 
     private void updateAnchor(Point anchor, ICursor cursor, Dimension2D dimensions) {

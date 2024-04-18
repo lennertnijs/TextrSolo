@@ -1,6 +1,4 @@
 package com.textr.filebuffer;
 
-import com.textr.util.FixedPoint;
-
-public record TextUpdateReference(FixedPoint updateLocation, boolean isInsertion, TextUpdateType type) {
+public record TextUpdateReference(int updateIndex, boolean isInsertion, TextUpdateType type) {
 }
