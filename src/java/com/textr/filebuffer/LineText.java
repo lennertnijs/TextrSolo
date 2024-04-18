@@ -85,6 +85,9 @@ public final class LineText implements IText{
      */
     public String getLine(int index){
         String[] lines = builder.toString().split("\n", -1);
+        if (index < 0 || index >= lines.length)
+            throw new IndexOutOfBoundsException(
+                    String.format("Index %d out of bounds for length %d", index, lines.length));
         return lines[index];
     }
 
