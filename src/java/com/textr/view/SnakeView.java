@@ -33,13 +33,14 @@ public class SnakeView extends View {
 
     public SnakeGame initializeGame(){
         Snake snake = new Snake(Direction.RIGHT);
-        for(int i = 0; i < 4; i++) {
+        for(int i = 0; i < 6; i++) {
             GamePoint snakeSegment = new GamePoint(getDimensions().getWidth() / 2 - i, getDimensions().getHeight() / 2);
             if(isWithinBoundaries(snakeSegment))
                 snake.add(snakeSegment);
         }
         FoodManager foodManager = new FoodManager();
-        GameBoard board = GameBoard.createNew(getDimensions(), snake, foodManager);
+        Dimension2D dimensions = Dimension2D.create(getDimensions().getWidth() - 1, getDimensions().getHeight() - 1);
+        GameBoard board = GameBoard.createNew(dimensions, snake, foodManager);
         for(int i = 0; i < 200; i++)
             board.spawnFood();
         IClock clock = new GameClock(0.9f);
