@@ -141,11 +141,11 @@ public final class BufferView extends View implements TextListener {
         switch (inputType) {
             case CHARACTER -> {
                 Action insertAction = new InsertAction(cursor.getInsertIndex(), input.getCharacter(), buffer.getText());
-                buffer.executeAndStore(insertAction, cursor);
+                buffer.executeAndStore(insertAction);
             }
             case ENTER -> {
                 Action insertAction = new InsertAction(cursor.getInsertIndex(), '\n', buffer.getText());
-                buffer.executeAndStore(insertAction, cursor);
+                buffer.executeAndStore(insertAction);
             }
             case ARROW_UP -> moveCursor(Direction.UP);
             case ARROW_RIGHT -> moveCursor(Direction.RIGHT);
@@ -156,24 +156,24 @@ public final class BufferView extends View implements TextListener {
                     return;
                 Action deleteAction = new DeleteAction(cursor.getInsertIndex(),
                         buffer.getText().getCharacter(cursor.getInsertIndex()),
-                        buffer.getText(), Side.AFTER);
-                buffer.executeAndStore(deleteAction, cursor);
+                        buffer.getText());
+                buffer.executeAndStore(deleteAction);
             }
             case BACKSPACE -> {
                 if(cursor.getInsertIndex() == 0)
                     return;
                 Action deleteAction = new DeleteAction(cursor.getInsertIndex() - 1,
                         buffer.getText().getCharacter(cursor.getInsertIndex() - 1),
-                        buffer.getText(), Side.BEFORE);
-                buffer.executeAndStore(deleteAction, cursor);
+                        buffer.getText());
+                buffer.executeAndStore(deleteAction);
             }
             case CTRL_U -> {
                 setUpdateState(new JumpToEditState());
-                buffer.redo(cursor);
+                buffer.redo();
             }
             case CTRL_Z -> {
                 setUpdateState(new JumpToEditState());
-                buffer.undo(cursor);
+                buffer.undo();
             }
         }
     }

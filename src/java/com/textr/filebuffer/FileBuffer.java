@@ -76,17 +76,27 @@ public final class FileBuffer {
         this.state = state;
     }
 
-    public void undo(ICursor cursor){
-        changeHistory.undo(cursor);
+    /**
+     * Undoes the last action performed on this buffer.
+     */
+    public void undo(){
+        changeHistory.undo();
     }
 
-    public void redo(ICursor cursor){
-        changeHistory.redo(cursor);
+    /**
+     * Redoes the last action that was undone on this buffer, since last newly performed action.
+     */
+    public void redo(){
+        changeHistory.redo();
     }
 
 
-    public void executeAndStore(Action action, ICursor cursor){
-        changeHistory.executeAndAddAction(action, cursor);
+    /**
+     * Executes the given action, and saves it into this buffer's action history.
+     * @param action The action to perform on the buffer
+     */
+    public void executeAndStore(Action action){
+        changeHistory.executeAndAddAction(action);
         setState(BufferState.DIRTY);
     }
 
