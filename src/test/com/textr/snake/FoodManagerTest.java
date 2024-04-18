@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,6 +15,8 @@ public class FoodManagerTest {
     private GamePoint point3;
     private GamePoint duplicatePoint;
     private FoodManager foodManager;
+    private FoodManager foodManager2;
+    private FoodManager foodManager3;
     @BeforeEach
     public void initialise(){
         point1 = new GamePoint(1,2);
@@ -23,6 +24,8 @@ public class FoodManagerTest {
         point3 = new GamePoint(3, 4);
         duplicatePoint = new GamePoint(1, 2);
         foodManager = new FoodManager();
+        foodManager2 = new FoodManager();
+        foodManager3 = new FoodManager();
     }
 
     @Test
@@ -97,5 +100,37 @@ public class FoodManagerTest {
         foodManager.clearFoods();
         assertEquals(foodManager.getFoods(), new ArrayList<>());
     }
+
+    @Test
+    public void testEquals(){
+        foodManager.add(point1);
+        foodManager2.add(point2);
+        foodManager3.add(point1);
+        assertEquals(foodManager, foodManager3);
+        assertNotEquals(foodManager, foodManager2);
+        assertNotEquals(foodManager, new Object());
+    }
+
+    @Test
+    public void testCopy(){
+        assertEquals(foodManager.copy(), foodManager);
+    }
+
+    @Test
+    public void testHashCode(){
+        foodManager.add(point1);
+        foodManager2.add(point2);
+        foodManager3.add(point1);
+        assertEquals(foodManager.hashCode(), foodManager3.hashCode());
+        assertNotEquals(foodManager.hashCode(), foodManager2.hashCode());
+    }
+
+    @Test
+    public void testToString(){
+        String expectedString = "FoodManager[foods=[]]";
+        assertEquals(foodManager.toString(), expectedString);
+    }
+
+
 
 }

@@ -19,6 +19,10 @@ public final class FoodManager {
         foods = new LinkedList<>();
     }
 
+    /**
+     * Creates a new {@link FoodManager}.
+     * @param foods The foods. Cannot be null or contain null.
+     */
     private FoodManager(List<GamePoint> foods){
         this.foods = foods;
     }
@@ -77,10 +81,16 @@ public final class FoodManager {
         foods.clear();
     }
 
+    /**
+     * @return A deep copy of this {@link FoodManager}.
+     */
     public FoodManager copy(){
         return new FoodManager(new ArrayList<>(foods));
     }
 
+    /**
+     * @return True if the two objects are equal. False otherwise.
+     */
     @Override
     public boolean equals(Object other){
         if(!(other instanceof  FoodManager f))
@@ -88,8 +98,19 @@ public final class FoodManager {
         return foods.equals(f.foods);
     }
 
+    /**
+     * @return The hash code of this {@link FoodManager}.
+     */
     @Override
     public int hashCode(){
         return foods.hashCode();
+    }
+
+    /**
+     * @return A string representation of this {@link FoodManager}.
+     */
+    @Override
+    public String toString(){
+        return String.format("FoodManager[foods=%s]", foods);
     }
 }
