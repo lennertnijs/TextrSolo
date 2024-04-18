@@ -187,6 +187,13 @@ public final class BufferView extends View implements TextListener {
                 buffer, getPosition(), getDimensions(), anchor);
     }
 
+    /**
+     * Duplicates this BufferView by creating a new BufferView with same buffer and communicator instances.
+     * The cursor location of the duplicated view will be set to the location of the original.
+     *
+     * @return A duplicate version of this BufferView, with same buffer and communicator instances
+     */
+    @Override
     public BufferView duplicate(){
         ICursor newCursor = Cursor.createNew(); // TODO: Make clone method for cursor
         newCursor.setInsertIndex(cursor.getInsertIndex(), buffer.getText().getSkeleton());
