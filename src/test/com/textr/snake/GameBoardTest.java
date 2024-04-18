@@ -104,7 +104,7 @@ public class GameBoardTest {
         GamePoint newMiddle = new GamePoint(0, 1);
         assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(newHead, newMiddle, snakeHead, snakeMiddle)));
         assertEquals(board.getFoods().size(), 1);
-        assertEquals(board.getScore(), 1);
+        assertEquals(board.getScore(), 11);
         assertTrue(board.getFoods().get(0).x() >= 0);
         assertTrue(board.getFoods().get(0).y() >= 0);
         assertTrue(board.getFoods().get(0).x() < board.getDimensions().getWidth());

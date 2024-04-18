@@ -41,7 +41,7 @@ public class SnakeView extends View {
         FoodManager foodManager = new FoodManager();
         Dimension2D dimensions = Dimension2D.create(getDimensions().getWidth() - 1, getDimensions().getHeight() - 1);
         GameBoard board = GameBoard.createNew(dimensions, snake, foodManager);
-        for(int i = 0; i < 200; i++)
+        for(int i = 0; i < 12; i++)
             board.spawnFood();
         IClock clock = new GameClock(1f);
         return new SnakeGame(board, clock);
