@@ -242,10 +242,10 @@ public class GameBoardTest {
 
     @Test
     public void resizeBothDimensionsExtra(){
-        snake.move(false);
-        snake.changeDirection(Direction.RIGHT);
+        board.moveSnake();
+        board.changeSnakeDirection(Direction.RIGHT);
         for(int i = 0; i < 13; i++)
-            snake.move(false); // head at (13, 1)
+            board.moveSnake();; // head at (13, 1)
         board.resize(Dimension2D.create(10, 20)); // was (20, 10)
         GamePoint snakeHead = new GamePoint(5, 10);
         GamePoint snakeMiddle = new GamePoint(4, 10);

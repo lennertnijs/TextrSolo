@@ -181,9 +181,8 @@ public final class Snake {
         GamePoint nextHead = getNextHeadPosition();
         body.add(0, nextHead);
         if(ate){
-            toGrow=3;
-        }
-        else if(toGrow==0)
+            toGrow += 3;
+        }else if(toGrow == 0)
             body.remove(body.size() - 1);
         else
             toGrow--;
