@@ -22,13 +22,20 @@ public final class LineText implements IText{
     }
 
     @Override
-    public boolean addListener(TextListener newListener) {
-        return listeners.add(newListener);
+    public void addListener(TextListener newListener) {
+        if (!listeners.add(newListener))
+            throw new IllegalStateException("Listener to add already present in Text's listeners");
     }
 
     @Override
-    public boolean removeListener(TextListener oldListener) {
-        return listeners.remove(oldListener);
+    public void removeListener(TextListener oldListener) {
+        if (!listeners.remove(oldListener))
+            throw new NoSuchElementException("Listener to remove does not exist in Text's listeners");
+    }
+
+    @Override
+    public int getListenerCount() {
+        return listeners.size();
     }
 
     private FixedPoint convertToPoint(int index) {

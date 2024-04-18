@@ -11,7 +11,8 @@ public interface IText {
     void insert(int index, char character);
     void remove(int index);
     void insertLineBreak(int index);
-    boolean addListener(TextListener newListener);
-    boolean removeListener(TextListener oldListener);
+    void addListener(TextListener newListener);
+    void removeListener(TextListener oldListener);
+    int getListenerCount();
 
 }

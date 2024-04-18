@@ -16,11 +16,6 @@ public final class FileBuffer {
     private final ChangeHistory changeHistory;
     private BufferState state;
 
-    /**
-     * The amount of references to this FileBuffer.
-     */
-    private int referenceCount;
-
     private FileBuffer(File file, IText text, BufferState state){
         this.file = file;
         this.text = text;
@@ -55,14 +50,6 @@ public final class FileBuffer {
      */
     public BufferState getState(){
         return this.state;
-    }
-
-    /**
-     * Returns the amount of references to this FileBuffer.
-     * @return the amount of references to this FileBuffer
-     */
-    public int getReferenceCount() {
-        return this.referenceCount;
     }
 
     /**
@@ -109,23 +96,6 @@ public final class FileBuffer {
     }
 
     /**
-     * Adds one to the tracked reference count.
-     */
-    public void incrementReferenceCount() {
-        this.referenceCount += 1;
-    }
-
-    /**
-     * Decrements the reference count by one.
-     * @throws IllegalStateException if reference count is already at 0
-     */
-    public void decrementReferenceCount() {
-        if (this.referenceCount == 0)
-            throw new IllegalStateException("Cannot lower reference count below 0");
-        this.referenceCount -= 1;
-    }
-
-    /**
      * Compares this file buffer to the given object and returns True if they're equal.
      *
      * @return True if equal, false otherwise.
@@ -167,12 +137,12 @@ public final class FileBuffer {
                 file, text, state);
     }
 
-    public boolean addTextListener(TextListener listener) {
-        return this.text.addListener(listener);
+    public void addTextListener(TextListener listener) {
+        this.text.addListener(listener);
     }
 
-    public boolean removeTextListener(TextListener listener) {
-        return this.text.removeListener(listener);
+    public void removeTextListener(TextListener listener) {
+        this.text.removeListener(listener);
     }
 
     // TODO: DELETE

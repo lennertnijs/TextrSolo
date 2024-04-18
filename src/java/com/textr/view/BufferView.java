@@ -57,7 +57,6 @@ public final class BufferView extends View implements TextListener {
                 Point.create(0,0),
                 communicator);
         v.getBuffer().addTextListener(v);
-        b.incrementReferenceCount();
         return v;
     }
 
@@ -247,13 +246,11 @@ public final class BufferView extends View implements TextListener {
     public boolean markForDeletion() {
         if (getBuffer().getState() == BufferState.CLEAN || getBuffer().getReferenceCount() > 1) {
             getBuffer().removeTextListener(this);
-            getBuffer().decrementReferenceCount();
             return true;
         }
         if (communicator.requestPermissions(
                 "You have unsaved changes. Are you sure you want to close this FileBuffer?")) {
             getBuffer().removeTextListener(this);
-            getBuffer().decrementReferenceCount();
             return true;
         }
         return false;
