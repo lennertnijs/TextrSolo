@@ -2,7 +2,6 @@ package com.textr.snake;
 
 import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
-import org.junit.Test;
 
 import java.util.List;
 import java.util.Objects;
