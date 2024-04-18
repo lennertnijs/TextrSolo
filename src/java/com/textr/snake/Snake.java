@@ -184,10 +184,10 @@ public final class Snake {
     public void move(){
         GamePoint nextHead = getNextHeadPosition();
         body.add(0, nextHead);
-        if(!atePoints.contains(body.get(body.size() - 1)))
+        if(!atePoints.contains(getTail()))
             body.remove(body.size() - 1);
         else{
-            atePoints.remove(body.get(body.size() - 1));
+            atePoints.remove(getTail());
         }
     }
 
@@ -195,7 +195,7 @@ public final class Snake {
      * @return A deep copy of this {@link Snake}.
      */
     public Snake copy(){
-        return new Snake(new ArrayList<>(body), headDirection, new ArrayList<>(atePoints));
+        return new Snake(new LinkedList<>(body), headDirection, new LinkedList<>(atePoints));
     }
 
     /**

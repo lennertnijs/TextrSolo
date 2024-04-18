@@ -252,7 +252,6 @@ public class GameBoardTest {
         GamePoint snakeTail = new GamePoint(3, 10);
         assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
 
-
         board.resize(Dimension2D.create(20, 10));
         GamePoint snakeHead2 = new GamePoint(10, 5);
         GamePoint snakeMiddle2 = new GamePoint(9, 5);

@@ -85,7 +85,7 @@ public final class FoodManager {
      * @return A deep copy of this {@link FoodManager}.
      */
     public FoodManager copy(){
-        return new FoodManager(new ArrayList<>(foods));
+        return new FoodManager(new LinkedList<>(foods));
     }
 
     /**
