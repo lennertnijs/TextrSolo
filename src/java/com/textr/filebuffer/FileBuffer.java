@@ -99,14 +99,15 @@ public final class FileBuffer {
     }
 
     /**
-     * Adds one to the tracked reference count
+     * Adds one to the tracked reference count.
      */
     public void incrementReferenceCount() {
         this.referenceCount += 1;
     }
 
     /**
-     *
+     * Decrements the reference count by one.
+     * @throws IllegalStateException if reference count is already at 0
      */
     public void decrementReferenceCount() {
         if (this.referenceCount == 0)
