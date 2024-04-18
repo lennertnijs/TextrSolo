@@ -50,7 +50,7 @@ public class SnakeView extends View {
         }
         FoodManager foodManager = new FoodManager();
         GameBoard board = GameBoard.createNew(getDimensions(), snake, foodManager);
-        for(int i = 0; i < 50; i++)
+        for(int i = 0; i < 200; i++)
             board.spawnFood();
         IClock clock = new GameClock(0.3f);
         SnakeGame snakeGame1 = new SnakeGame(board, clock);
@@ -72,8 +72,7 @@ public class SnakeView extends View {
         switch (inputType) {
             case ENTER -> {
                 if(!snakeGame.isRunning()) {
-                    initializeGame();
-                    snakeGame.start();
+                    restartGame();
                 }
             }
             case ARROW_UP -> snakeGame.changeSnakeDirection(Direction.UP);

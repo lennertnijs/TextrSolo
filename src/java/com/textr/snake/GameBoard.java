@@ -252,8 +252,6 @@ public final class GameBoard implements IGameBoard{
             GamePoint gamePoint = p.translate(vector);
             if(!isOutOfBounds(gamePoint))
                 foodManager.add(gamePoint);
-            else
-                spawnFood();
         }
     }
 
