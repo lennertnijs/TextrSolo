@@ -16,13 +16,13 @@ import static com.textr.view.LayoutGenerator.setViewRepo;
 class LayoutGeneratorTest {
     private ViewTreeRepo repo;
 
-    private BufferView view1;
+    private View view1;
 
-    private BufferView view2;
+    private View view2;
 
-    private BufferView view3;
+    private View view3;
 
-    private BufferView view4;
+    private View view4;
 
     @BeforeEach
     public void initialise(){
@@ -30,13 +30,13 @@ class LayoutGeneratorTest {
         Point initPoint = Point.create(0,0);
         Dimension2D initDimension = Dimension2D.create(10,10);
         Settings.defaultLineSeparator = "\r\n";
-        view1 = BufferView.createFromFilePath("resources/test.txt", initPoint, initDimension);
+        view1 = new MockView(initPoint, initDimension);
         views.add(view1);
-        view2 = BufferView.createFromFilePath("resources/test2ndfile.txt", initPoint, initDimension);
+        view2 = new MockView(initPoint, initDimension);
         views.add(view2);
-        view3 = BufferView.createFromFilePath("resources/test3rdfile.txt", initPoint, initDimension);
+        view3 = new MockView(initPoint, initDimension);
         views.add(view3);
-        view4 = BufferView.createFromFilePath("resources/save.txt", initPoint, initDimension);
+        view4 = new MockView(initPoint, initDimension);
         views.add(view4);
         repo = new ViewTreeRepo();
         setViewRepo(repo);
