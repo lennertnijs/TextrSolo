@@ -101,11 +101,12 @@ public final class GameBoard implements IGameBoard{
         boolean snakeWillEat = foodManager.isFood(nextHeadPosition);
         if(snakeWillEat) {
             foodManager.remove(nextHeadPosition);
-            score += 9;
+            score += 10;
             spawnFood();
+        }else{
+            score += 1;
         }
         snake.move(snakeWillEat);
-        score+=1;
     }
 
     /**
