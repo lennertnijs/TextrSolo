@@ -15,7 +15,7 @@ public interface IGameBoard {
     void resize(Dimension2D dimensions);
     void changeSnakeDirection(Direction direction);
     void spawnFood();
-    Direction getDirection();
+    Direction getSnakeDirection();
     boolean willEatOnMove();
     IGameBoard copy();
 }

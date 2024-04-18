@@ -67,7 +67,7 @@ public final class ViewDrawer{
         if(view.gameIsRunning()){
             List<GamePoint> snake = gameBoard.getSnakePoints();
             GamePoint head = snake.remove(0);
-            switch (gameBoard.getDirection()){
+            switch (gameBoard.getSnakeDirection()){
                 case RIGHT -> terminal.printText(x + head.x(), baseY- head.y()+ 1, ">");
                 case LEFT ->  terminal.printText(x+ head.x(), baseY- head.y()+ 1, "<");
                 case UP -> terminal.printText(x+ head.x(), baseY- head.y()+ 1, "^");

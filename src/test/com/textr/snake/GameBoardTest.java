@@ -21,6 +21,8 @@ public class GameBoardTest {
     private Snake snake;
     private FoodManager foodManager;
     private GameBoard board;
+    private GameBoard board2;
+    private GameBoard board3;
 
     @BeforeEach
     public void initialise(){
@@ -37,6 +39,8 @@ public class GameBoardTest {
         snake.add(snakeTail);
         foodManager.add(food);
         board = GameBoard.createNew(dimensions, snake, foodManager);
+        board2 = GameBoard.createNew(Dimension2D.create(200, 200), snake, foodManager);
+        board3 = GameBoard.createNew(dimensions, snake, foodManager);
     }
 
     @Test
@@ -47,6 +51,11 @@ public class GameBoardTest {
     @Test
     public void testGetSnakePoints(){
         assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
+    }
+
+    @Test
+    public void testGetSnakeDirection(){
+        assertEquals(board.getSnakeDirection(), Direction.UP);
     }
 
     @Test
@@ -249,6 +258,24 @@ public class GameBoardTest {
         GamePoint snakeMiddle2 = new GamePoint(9, 5);
         GamePoint snakeTail2 = new GamePoint(8, 5);
         assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead2, snakeMiddle2, snakeTail2)));
+    }
 
+    @Test
+    public void testEquals(){
+        assertEquals(board, board3);
+        assertNotEquals(board, board2);
+        assertNotEquals(board, new Object());
+    }
+
+    @Test
+    public void testHashCode(){
+        assertEquals(board.hashCode(), board3.hashCode());
+        assertNotEquals(board.hashCode(), board2.hashCode());
+    }
+
+    @Test
+    public void testToString(){
+        String expectedString = "GameBoard[dimensions=Dimension2D[width = 20, height = 10], snake=Snake[body=[GamePoint[x=0, y=0], GamePoint[x=1, y=0], GamePoint[x=2, y=0]], headDirection=UP, atePoints=[]], foodManager=FoodManager[foods=[GamePoint[x=0, y=2]]], score=0]";
+        assertEquals(board.toString(), expectedString);
     }
 }

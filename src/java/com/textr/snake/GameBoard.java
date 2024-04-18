@@ -2,6 +2,7 @@ package com.textr.snake;
 
 import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.Objects;
@@ -264,20 +265,32 @@ public final class GameBoard implements IGameBoard{
         snake.changeDirection(direction);
     }
 
+    /**
+     * Spawns a new food, if there is space for it.
+     */
     public void spawnFood(){
         boolean entireBoardFilled = snake.getLength() + foodManager.getFoodCount() == dimensions.getHeight() * dimensions.getWidth();
         if(!entireBoardFilled)
             foodManager.add(generateRandomEmptyPoint());
     }
 
-    public Direction getDirection(){
+    /**
+     * @return The {@link Direction} the snake is moving in.
+     */
+    public Direction getSnakeDirection(){
         return snake.getDirection();
     }
 
+    /**
+     * @return A deep copy of this {@link GameBoard}.
+     */
     public IGameBoard copy(){
         return new GameBoard(dimensions, snake.copy(), foodManager.copy(), score);
     }
 
+    /**
+     * @return True if the two objects are equal. False otherwise.
+     */
     @Override
     public boolean equals(Object other){
         if(!(other instanceof GameBoard gameBoard))
@@ -288,6 +301,9 @@ public final class GameBoard implements IGameBoard{
                 score == gameBoard.score;
     }
 
+    /**
+     * @return The hash code of this {@link GameBoard}.
+     */
     @Override
     public int hashCode(){
         int result = dimensions.hashCode();
@@ -295,5 +311,14 @@ public final class GameBoard implements IGameBoard{
         result = result * 31 + foodManager.hashCode();
         result = result * 31 + score;
         return result;
+    }
+
+    /**
+     * @return The string representation of this {@link GameBoard}.
+     */
+    @Override
+    public String toString(){
+        return String.format("GameBoard[dimensions=%s, snake=%s, foodManager=%s, score=%d]",
+                dimensions, snake, foodManager, score);
     }
 }
