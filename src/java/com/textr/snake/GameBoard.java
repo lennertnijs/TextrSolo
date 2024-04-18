@@ -84,7 +84,6 @@ public final class GameBoard implements IGameBoard{
             handleHeightChange(dimensions);
         if(isWidthChange)
             handleWidthChange(dimensions);
-        this.dimensions = dimensions;
     }
 
     private void handleHeightChange(Dimension2D dimensions){
@@ -95,10 +94,11 @@ public final class GameBoard implements IGameBoard{
             int adjustedForBothEdges =  Math.min(adjustedForEdge, this.dimensions.getHeight() - dimensions.getHeight());
             translationVector = new Vector2D(0, -adjustedForBothEdges);
         }else{
-            int adjustedForEdge = Math.max(snake.getHead().y() - this.dimensions.getHeight() / 2, 0);
-            int adjustedForBothEdges =  Math.min(adjustedForEdge, dimensions.getHeight() - this.dimensions.getHeight());
-            translationVector = new Vector2D(0, adjustedForBothEdges);
+            int middle = dimensions.getHeight() / 2;
+            int adjustForTopEdge =  Math.min(middle, dimensions.getHeight() - this.dimensions.getHeight());
+            translationVector = new Vector2D(0, adjustForTopEdge);
         }
+        this.dimensions = dimensions;
         translateSnake(translationVector);
         translateFoods(translationVector);
     }
@@ -111,8 +111,11 @@ public final class GameBoard implements IGameBoard{
             int adjustedForBothEdges =  Math.min(adjustedForEdge, this.dimensions.getWidth() - dimensions.getWidth());
             translationVector = new Vector2D(-adjustedForBothEdges, 0);
         }else{
-            translationVector = new Vector2D(findMiddle(dimensions).x() - snake.getHead().x(), 0);
+            int middle = dimensions.getWidth() / 2;
+            int adjustedForRightEdge =  Math.min(middle, dimensions.getWidth() - this.dimensions.getWidth());
+            translationVector = new Vector2D(adjustedForRightEdge, 0);
         }
+        this.dimensions = dimensions;
         translateSnake(translationVector);
         translateFoods(translationVector);
     }
