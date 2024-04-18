@@ -197,5 +197,13 @@ public class GameBoardTest {
         assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
     }
 
+    @Test
+    public void testResizeLosePartOfSnake(){
+        board.resize(Dimension2D.create(2, 10));
+        GamePoint snakeHead = new GamePoint(0, 0);
+        GamePoint snakeMiddle = new GamePoint(1, 0);
+        assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle)));
+    }
+
 
 }

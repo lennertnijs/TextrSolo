@@ -143,12 +143,6 @@ public final class GameBoard implements IGameBoard{
         }
     }
 
-    private GamePoint findMiddle(Dimension2D dimensions){
-        int middleX = dimensions.getWidth()/2;
-        int middleY = dimensions.getHeight()/2;
-        return new GamePoint(middleX, middleY);
-    }
-
     public void changeDirection(Direction direction){
         snake.changeDirection(direction);
     }
