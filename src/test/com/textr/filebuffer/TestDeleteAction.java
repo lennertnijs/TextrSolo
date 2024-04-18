@@ -20,8 +20,8 @@ public class TestDeleteAction {
 
     @Test
     public void testConstructorIllegal(){
-        assertThrows(IllegalArgumentException.class, () -> new DeleteAction(-1, 's', text));
-        assertThrows(IllegalArgumentException.class, () -> new DeleteAction(text.getCharAmount() + 1, 's', text));
+        assertThrows(IndexOutOfBoundsException.class, () -> new DeleteAction(-1, 's', text));
+        assertThrows(IndexOutOfBoundsException.class, () -> new DeleteAction(text.getCharAmount() + 1, 's', text));
         assertThrows(NullPointerException.class, () -> new DeleteAction(5, 's', null));
     }
 

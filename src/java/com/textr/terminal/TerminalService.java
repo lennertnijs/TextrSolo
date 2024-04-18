@@ -1,10 +1,6 @@
 package com.textr.terminal;
 
 import com.textr.util.Dimension2D;
-import io.github.btj.termios.Terminal;
-
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
 
 public interface TerminalService {
 

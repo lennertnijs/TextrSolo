@@ -21,8 +21,8 @@ public class InsertActionTest {
 
     @Test
     public void testConstructorIllegal(){
-        assertThrows(IllegalArgumentException.class, () -> new InsertAction(-1, 's', text));
-        assertThrows(IllegalArgumentException.class, () -> new InsertAction(text.getCharAmount() + 1, 's', text));
+        assertThrows(IndexOutOfBoundsException.class, () -> new InsertAction(-1, 's', text));
+        assertThrows(IndexOutOfBoundsException.class, () -> new InsertAction(text.getCharAmount() + 1, 's', text));
         assertThrows(NullPointerException.class, () -> new InsertAction(5, 's', null));
     }
 
