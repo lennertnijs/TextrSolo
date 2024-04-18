@@ -1,14 +1,12 @@
 package com.textr.file;
 
 import com.textr.Settings;
-import com.textr.util.Validator;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.Objects;
 
 /**
- * A class for reading an actual .txt file's contents.
+ * A class for reading a file's contents.
  */
 public final class FileReader {
 
@@ -19,58 +17,83 @@ public final class FileReader {
     }
 
     /**
-     * Reads the contents of a .txt file and returns it.
-     * If any non-ASCII characters are found in the file, throws an Exception.
-     * @param path  The File to read from.
+     * Reads the contents of a file and returns it.
+     * @param file  The File to read from.
      *
-     * @return The file's contents
-     * @throws IllegalArgumentException If a non-ASCII character was found in the file's contents.
+     * @return The file's contents as a String.
+     * @throws IllegalArgumentException If a non-ASCII character was found.
+     * @throws IllegalArgumentException If a non-supported line break was found.
      */
-    public static String readContents(File path){
-        Validator.notNull(path, "Cannot read a null file's contents.");
-        try(BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(path))){
+    public static String readContents(File file){
+        Objects.requireNonNull(file, "File is null.");
+        try(FileInputStream f = new FileInputStream(file)){
+            DataInputStream data = new DataInputStream(f);
             StringBuilder stringBuilder = new StringBuilder();
-            String line;
-            while((line = bufferedReader.readLine()) != null){
-                checkForNonAscii(line);
-                stringBuilder.append(line);
-                stringBuilder.append(System.lineSeparator());
+            int b;
+            while((b = data.read()) != -1){
+                checkForNonAscii((char) b);
+                stringBuilder.append((char)b);
             }
-            return stringBuilder.toString().trim();
+            String s = stringBuilder.toString();
+            validateLineBreaks(s);
+            return s.trim();
         }catch(IOException e){
             throw new IllegalArgumentException("An error occurred during the reading of a File");
         }
     }
 
     /**
-     * Checks a string of text for non-ascii characters. Throws an error if any were found.
-     * @param text The text.
+     * Checks whether the given character is supported.
+     * @throws IllegalArgumentException If the character is not supported.
      */
-    private static void checkForNonAscii(String text){
-        for(char c : text.toCharArray()){
-            if(checkForNonAsciiWithLineSeparatorSetting(c)){
-                throw new IllegalArgumentException("A non-ASCII character was present in the File.");
+    private static void checkForNonAscii(char c){
+        if(c < 32 && c != 10 && c != 13 || 127 <= c)
+            throw new IllegalArgumentException("An unsupported character was present in the File.");
+    }
+
+    /**
+     * Checks whether the given string only contains line breaks of the type set in the Settings.
+     * @param s The string. Cannot be null.
+     *
+     * @throws IllegalStateException If the line break is fully unsupported.
+     */
+    private static void validateLineBreaks(String s){
+        switch(Settings.defaultLineSeparator){
+            case "\r\n" -> validateCRLFOnly(s);
+            case "\n" -> validateLFOnly(s);
+            default -> throw new IllegalStateException("An unsupported line break was found.");
+        }
+    }
+
+    /**
+     * Validates that the only line breaks in the string are CRLF. (\r\n)
+     * @param s The string. Cannot be null.
+     *
+     * @throws IllegalArgumentException If any other line breaks are found. (\r or \n)
+     */
+    private static void validateCRLFOnly(String s){
+        for(int i = 0; i < s.length(); i++){
+            char c = s.charAt(i);
+            if(c == '\n')
+                throw new IllegalArgumentException("An unsupported line break was found.");
+            if(c == '\r'){
+                if(i == s.length() - 1)
+                    throw new IllegalArgumentException("An unsupported line break was found.");
+                if(s.charAt(i + 1) != '\n')
+                    throw new IllegalArgumentException("An unsupported line break was found.");
+                i += 1;
             }
         }
     }
 
     /**
-     * Checks whether a character is within ASCII characters, including the set line separator.
-     * @param c The character
-     * @return True if non-ascii. False otherwise.
+     * Validates that the only line breaks in the string are LF. (\n)
+     * @param s The string. Cannot be null.
+     *
+     * @throws IllegalStateException If any \r were found.
      */
-    private static boolean checkForNonAsciiWithLineSeparatorSetting(char c){
-        switch(Settings.defaultLineSeparator){
-            case "\r" -> {
-                return (c < 32 && c != 13) || 127 <= c;
-            }
-            case "\n" -> {
-                return (c < 32 && c != 10) || 127 <= c;
-            }
-            case "\r\n" -> {
-                return (c < 32 && c != 10 && c != 13) || 127 <= c;
-            }
-        }
-        throw new IllegalStateException("This line separator is not supported.");
+    private static void validateLFOnly(String s) {
+        if(s.contains("\r"))
+            throw new IllegalArgumentException("An unsupported line break was found.");
     }
 }

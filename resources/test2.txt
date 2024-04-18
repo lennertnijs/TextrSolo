@@ -1,2 +1,1 @@
-tab\n
-not allowed
+Text

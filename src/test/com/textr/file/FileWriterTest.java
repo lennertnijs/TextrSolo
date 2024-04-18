@@ -19,13 +19,9 @@ public class FileWriterTest {
     @Test
     public void testWrite(){
         String text = "first line\r\nsecond line\r\nthird line";
-        String text2 = "first line\rsecond line";
         Assertions.assertAll(
                 () -> FileWriter.write(text, new File("resources/write1.txt")),
-                () -> Assertions.assertEquals(text, FileReader.readContents(new File("resources/write1.txt"))),
-
-                () -> FileWriter.write(text2, new File("resources/write2.txt")),
-                () -> Assertions.assertNotEquals(text2, FileReader.readContents(new File("resources/write2.txt")))
+                () -> Assertions.assertEquals(text, FileReader.readContents(new File("resources/write1.txt")))
         );
     }
 
