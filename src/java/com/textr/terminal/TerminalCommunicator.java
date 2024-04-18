@@ -35,6 +35,9 @@ public class TerminalCommunicator implements Communicator {
     @Override
     public void sendMessage(String msg) {
         terminal.clearScreen();
-        terminal.printText(1, 1, msg);
+        terminal.printText(1, 1, String.format("%s [ENTER to continue]", msg));
+        do {
+            if (translator.getNextInput().getType() == InputType.ENTER) return;
+        } while (true);
     }
 }
