@@ -38,33 +38,6 @@ public final class LineText implements IText{
         return listeners.size();
     }
 
-    private FixedPoint convertToPoint(int index) {
-        ITextSkeleton structure = getSkeleton();
-        int count = 0;
-        int row = -1;
-        for(int i = 0; i < structure.getLineAmount() ; i++){
-            if(index < count + structure.getLineLength(i)) {
-                row = i;
-                break;
-            }
-            count += structure.getLineLength(i);
-        }
-        int col = index - count;
-        return new FixedPoint(col, row);
-    }
-
-    private int convertToIndex(Point location) {
-        ITextSkeleton structure = getSkeleton();
-        if (structure.getLineAmount() >= location.getY() || structure.getLineLength(location.getY()) > location.getX())
-            throw new IllegalArgumentException("Given location does not hold a valid location in this Text");
-        int count = 0;
-        for(int i = 0; i < location.getY(); i++){
-            count += structure.getLineLength(i);
-        }
-        count += location.getX();
-        return count;
-    }
-
     /**
      * Returns the current content as a single String, with "\n" as line breaks.
      *

@@ -1,6 +1,7 @@
 package com.textr.filebuffer;
 
 import com.textr.util.Direction;
+import com.textr.util.FixedPoint;
 import com.textr.util.Point;
 
 import java.util.Objects;
@@ -63,28 +64,13 @@ public final class Cursor implements ICursor{
     }
 
     private void updateInsertPoint(ITextSkeleton skeleton){
-        if(insertIndex < 0 || insertIndex > skeleton.getCharAmount())
-            throw new IllegalArgumentException("The integer falls outside the text.");
-        int count = 0;
-        int row = -1;
-        for(int i = 0; i < skeleton.getLineAmount() ; i++){
-            if(insertIndex < count + skeleton.getLineLength(i)) {
-                row = i;
-                break;
-            }
-            count += skeleton.getLineLength(i);
-        }
-        int col = insertIndex - count;
-        this.insertPoint = Point.create(col, row);
+        FixedPoint point = skeleton.convertToPoint(this.insertIndex);
+        this.insertPoint = Point.create(point.getX(), point.getY());
     }
 
     private void updateInsertIndex(ITextSkeleton skeleton){
-        int count = 0;
-        for(int i = 0; i < insertPoint.getY(); i++){
-            count += skeleton.getLineLength(i);
-        }
-        count += insertPoint.getX();
-        this.insertIndex = count;
+        FixedPoint point = new FixedPoint(insertPoint.getX(), insertPoint.getY());
+        this.insertIndex = skeleton.convertToIndex(point);
     }
 
     /**
