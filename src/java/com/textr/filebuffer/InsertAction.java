@@ -13,10 +13,14 @@ public final class InsertAction implements Action{
     /**
      * Creates a new {@link InsertAction}.
      * Stores the 1D index and the inserted character.
-     * @param index The index.
+     * @param index The index. Cannot be outside the Text's range.
      * @param character The character.
+     * @param text The text. Cannot be null.
      */
     public InsertAction(int index, char character, IText text){
+        if(index < 0 || index > text.getCharAmount())
+            throw new IllegalArgumentException("Index outside the text's legal values.");
+        Objects.requireNonNull(text, "Text is null.");
         this.index = index;
         this.character = character;
         this.text = text;
@@ -24,6 +28,7 @@ public final class InsertAction implements Action{
 
     /**
      * Executes this {@link InsertAction}.
+     * @param cursor The cursor. Cannot be null.
      */
     public void execute(ICursor cursor){
         Objects.requireNonNull(cursor, "Cursor is null.");
@@ -33,6 +38,7 @@ public final class InsertAction implements Action{
 
     /**
      * Undoes this {@link InsertAction}.
+     * @param cursor The cursor. Cannot be null.
      */
     public void undo(ICursor cursor){
         Objects.requireNonNull(cursor, "Cursor is null.");
