@@ -15,6 +15,7 @@ public final class Snake {
      * The {@link Direction} in which the snake is going to move.
      */
     private Direction headDirection;
+    private List<GamePoint> atePoints;
 
     /**
      * Creates a new snake. The snake has length 0 at creation.
@@ -24,6 +25,7 @@ public final class Snake {
         Objects.requireNonNull(direction, "Direction is null.");
         body = new LinkedList<>();
         this.headDirection = direction;
+        atePoints = new ArrayList<>();
     }
 
     /**
@@ -59,6 +61,14 @@ public final class Snake {
     public boolean isSnake(GamePoint p){
         Objects.requireNonNull(p, "GamePoint is null.");
         return body.stream().anyMatch(segment -> segment.equals(p));
+    }
+
+    public void addAtePoint(GamePoint p){
+        atePoints.add(p);
+    }
+
+    public void removeAtePoint(GamePoint p){
+        atePoints.remove(p);
     }
 
     /**
@@ -155,6 +165,10 @@ public final class Snake {
     public void move(){
         GamePoint nextHead = getNextHeadPosition();
         body.add(0, nextHead);
-        body.remove(body.size() - 1);
+        if(!atePoints.contains(body.get(body.size() - 1)))
+            body.remove(body.size() - 1);
+        else{
+            atePoints.remove(body.get(body.size() - 1));
+        }
     }
 }
