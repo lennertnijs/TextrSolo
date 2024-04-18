@@ -42,18 +42,4 @@ public class JumpToEditState implements UpdateState {
     private void updateAnchor(Point anchor, ICursor cursor, Dimension2D dimensions) {
         AnchorUpdater.updateAnchor(anchor, cursor.getInsertPoint(), dimensions);
     }
-
-    private void updateCursorChar(ICursor cursor, FixedPoint updatePoint, boolean isInsertion, ITextSkeleton skeleton) {
-        int displacement = isInsertion ? 1 : 0;
-        cursor.setInsertPoint(Point.create(updatePoint.getX() + displacement, updatePoint.getY()), skeleton);
-    }
-
-    private void updateCursorLine(ICursor cursor, FixedPoint updatePoint, boolean isInsertion, ITextSkeleton skeleton) {
-        if (isInsertion)
-            // Set cursor to start of new line
-            cursor.setInsertPoint(Point.create(0, updatePoint.getY() + 1), skeleton);
-        else
-            // Set cursor to point of line deletion
-            cursor.setInsertPoint(Point.create(updatePoint.getX(), updatePoint.getY()), skeleton);
-    }
 }
