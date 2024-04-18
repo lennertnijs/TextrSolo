@@ -20,11 +20,23 @@ public final class GameBoard implements IGameBoard{
         this.dimensions = dimensions;
     }
 
-    public static GameBoard createWithZeroScore(Dimension2D dimensions, Snake snake, FoodManager foodManager){
+    public static GameBoard createNew(Dimension2D dimensions, Snake snake, FoodManager foodManager){
         Objects.requireNonNull(dimensions, "Dimensions is null.");
         Objects.requireNonNull(snake, "SnakeManager is null.");
         Objects.requireNonNull(foodManager, "FoodManager is null.");
         return new GameBoard(dimensions, snake, foodManager, 0);
+    }
+
+    public Dimension2D getDimensions(){
+        return dimensions;
+    }
+
+    public List<GamePoint> getSnakePoints(){
+        return snake.getBody();
+    }
+
+    public List<GamePoint> getFoods(){
+        return foodManager.getFoods();
     }
 
     public int getScore(){
@@ -34,11 +46,13 @@ public final class GameBoard implements IGameBoard{
     public void moveSnake(){
         GamePoint next = snake.getNextHeadPosition();
         if(isOutOfBounds(next) || snake.isSnake(next))
-            throw new IllegalStateException();
+            throw new IllegalStateException("Snake ate itself or went outside game borders.");
         if(foodManager.isFood(next)) {
             foodManager.remove(next);
-            foodManager.add(generateRandomEmptyPoint());
             score += 1;
+            boolean snakeFillsEntireBoard = snake.getLength() == dimensions.getHeight() * dimensions.getWidth();
+            if(!snakeFillsEntireBoard)
+                foodManager.add(generateRandomEmptyPoint());
         }
         snake.move();
     }
