@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,21 +20,21 @@ public class FileWriterTest {
 
     @Test
     public void testWrite(){
-        String text = "first line\r\nsecond line\r\nthird line";
-        Assertions.assertAll(
-                () -> FileWriter.write(text, new File("resources/write1.txt")),
-                () -> Assertions.assertEquals(text, FileReader.readContents(new File("resources/write1.txt")))
-        );
+        String text = "first line\nsecond line\nthird line";
+        String text2 = "first line\r\nsecond line\r\nthird line";
+        FileWriter.write(text, new File("resources/write1.txt"));
+        Assertions.assertEquals(text2, FileReader.readContents(new File("resources/write1.txt")));
     }
 
     @Test
     public void testWriteNullParam(){
-        assertThrows(IllegalArgumentException.class, () -> FileWriter.write(null, new File("path")));
-        assertThrows(IllegalArgumentException.class, () -> FileWriter.write("text", null));
+        assertThrows(NullPointerException.class, () -> FileWriter.write(null, new File("resources/write1.txt")));
+        assertThrows(NullPointerException.class, () -> FileWriter.write("text", null));
     }
 
     @Test
     public void testWriteInvalidPath(){
-        FileWriter.write("text", new File("invalid"));
+        Path p = Paths.get("resources");
+        FileWriter.write("text", p.toFile());
     }
 }

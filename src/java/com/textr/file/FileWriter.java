@@ -2,14 +2,14 @@ package com.textr.file;
 
 import com.textr.input.InputHandlerRepo;
 import com.textr.Settings;
-import com.textr.util.Validator;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
- * This class is responsible for writing data to a URL
+ * This class is responsible for writing data to a file.
  */
 public final class FileWriter {
 
@@ -20,16 +20,17 @@ public final class FileWriter {
     }
 
     /**
-     * Writes data to the given File. This overwrites the file with the given data.
+     * Writes the string to the given file.
+     * This overwrites the old contents of the file.
      *
-     * @param data  The String to write.
-     * @param path  The File to write to.
+     * @param s  The string to write.
+     * @param file  The file to write to.
      */
-    public static void write(String data, File path){
-        Validator.notNull(path, "File location to write to may not be null.");
-        Validator.notNull(data, "Data to write may not be null.");
-        try (BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(path))) {
-            writer.write(data.replace(System.lineSeparator(), Settings.defaultLineSeparator));
+    public static void write(String s, File file){
+        Objects.requireNonNull(s, "The text to write is null.");
+        Objects.requireNonNull(file, "File is null.");
+        try (BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(file))) {
+            writer.write(s.replace("\n", Settings.defaultLineSeparator));
         }catch(IOException e){
             InputHandlerRepo.setAnythingInputHandler();
         }
