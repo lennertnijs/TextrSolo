@@ -1,7 +1,5 @@
 package com.textr.filebuffer;
 
-import com.textr.util.Direction;
-
 import java.util.Objects;
 
 public final class InsertAction implements Action{
