@@ -40,6 +40,9 @@ public final class InputTranslator {
             case -1 -> {
                 return Input.createSpecialInput(InputType.CTRL_Z);
             }
+            case 4 -> {
+                return Input.createSpecialInput(InputType.CTRL_D);
+            }
             case 7 -> {
                 return Input.createSpecialInput(InputType.CTRL_G);
             }

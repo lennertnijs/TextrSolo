@@ -16,11 +16,6 @@ public final class FileBuffer {
     private final ChangeHistory changeHistory;
     private BufferState state;
 
-    /**
-     * The amount of references to this FileBuffer.
-     */
-    private int referenceCount;
-
     private FileBuffer(File file, IText text, BufferState state){
         this.file = file;
         this.text = text;
@@ -58,14 +53,6 @@ public final class FileBuffer {
     }
 
     /**
-     * Returns the amount of references to this FileBuffer.
-     * @return the amount of references to this FileBuffer
-     */
-    public int getReferenceCount() {
-        return this.referenceCount;
-    }
-
-    /**
      * Sets the state of this file buffer to the given state.
      * @param state The new state. Cannot be null.
      *
@@ -76,17 +63,27 @@ public final class FileBuffer {
         this.state = state;
     }
 
-    public void undo(ICursor cursor){
-        changeHistory.undo(cursor);
+    /**
+     * Undoes the last action performed on this buffer.
+     */
+    public void undo(){
+        changeHistory.undo();
     }
 
-    public void redo(ICursor cursor){
-        changeHistory.redo(cursor);
+    /**
+     * Redoes the last action that was undone on this buffer, since last newly performed action.
+     */
+    public void redo(){
+        changeHistory.redo();
     }
 
 
-    public void executeAndStore(Action action, ICursor cursor){
-        changeHistory.executeAndAddAction(action, cursor);
+    /**
+     * Executes the given action, and saves it into this buffer's action history.
+     * @param action The action to perform on the buffer
+     */
+    public void executeAndStore(Action action){
+        changeHistory.executeAndAddAction(action);
         setState(BufferState.DIRTY);
     }
 
@@ -96,23 +93,6 @@ public final class FileBuffer {
     public void writeToDisk(){
         FileWriter.write(text.getContent(), file);
         this.setState(BufferState.CLEAN);
-    }
-
-    /**
-     * Adds one to the tracked reference count.
-     */
-    public void incrementReferenceCount() {
-        this.referenceCount += 1;
-    }
-
-    /**
-     * Decrements the reference count by one.
-     * @throws IllegalStateException if reference count is already at 0
-     */
-    public void decrementReferenceCount() {
-        if (this.referenceCount == 0)
-            throw new IllegalStateException("Cannot lower reference count below 0");
-        this.referenceCount -= 1;
     }
 
     /**
@@ -157,7 +137,15 @@ public final class FileBuffer {
                 file, text, state);
     }
 
-    public FileBuffer copy(){
-        return new FileBuffer(this.file, this.text, this.state);
+    public void addTextListener(TextListener listener) {
+        this.text.addListener(listener);
+    }
+
+    public void removeTextListener(TextListener listener) {
+        this.text.removeListener(listener);
+    }
+
+    public int getReferenceCount() {
+        return this.text.getListenerCount();
     }
 }

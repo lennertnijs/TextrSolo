@@ -1,12 +1,14 @@
 package com.textr.filebuffer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import com.textr.util.FixedPoint;
+import com.textr.util.Point;
+
+import java.util.*;
 
 public final class LineText implements IText{
 
     private final StringBuilder builder;
+    private final Set<TextListener> listeners = new HashSet<>();
 
     private static final char LINEBREAK = '\n';
     private LineText(StringBuilder builder){
@@ -17,6 +19,23 @@ public final class LineText implements IText{
         Objects.requireNonNull(string, "String is null.");
         String replacedLineBreaks = string.replace("\r\n", String.valueOf(LINEBREAK)).replace('\r', LINEBREAK);
         return new LineText(new StringBuilder(replacedLineBreaks));
+    }
+
+    @Override
+    public void addListener(TextListener newListener) {
+        if (!listeners.add(newListener))
+            throw new IllegalStateException("Listener to add already present in Text's listeners");
+    }
+
+    @Override
+    public void removeListener(TextListener oldListener) {
+        if (!listeners.remove(oldListener))
+            throw new NoSuchElementException("Listener to remove does not exist in Text's listeners");
+    }
+
+    @Override
+    public int getListenerCount() {
+        return listeners.size();
     }
 
     /**
@@ -46,8 +65,9 @@ public final class LineText implements IText{
      */
     public String getLine(int index){
         String[] lines = builder.toString().split("\n", -1);
-        if(index < 0 || index >= lines.length)
-            throw new IllegalArgumentException("Index is illegal.");
+        if (index < 0 || index >= lines.length)
+            throw new IndexOutOfBoundsException(
+                    String.format("Index %d out of bounds for length %d", index, lines.length));
         return lines[index];
     }
 
@@ -104,6 +124,10 @@ public final class LineText implements IText{
         if(index < 0 || index > builder.length())
             throw new IllegalArgumentException("Index is illegal.");
         builder.insert(index, character);
+
+        // Notify listeners
+        for (TextListener listener: listeners)
+            listener.update(new TextUpdateReference(index, true, TextUpdateType.CHAR_UPDATE), getSkeleton());
     }
 
     /**
@@ -116,6 +140,10 @@ public final class LineText implements IText{
         if(index < 0 || index > builder.length())
             throw new IllegalArgumentException("Index is illegal.");
         builder.insert(index, "\n");
+
+        // Notify listeners
+        for (TextListener listener: listeners)
+            listener.update(new TextUpdateReference(index, true, TextUpdateType.LINE_UPDATE), getSkeleton());
     }
 
     /**
@@ -127,7 +155,17 @@ public final class LineText implements IText{
     public void remove(int index){
         if(index < 0 || index >= builder.length())
             throw new IllegalArgumentException("Index is illegal.");
+        char deletedChar = builder.charAt(index);
         builder.deleteCharAt(index);
+
+        // Notify listeners
+        TextUpdateType type;
+        if (deletedChar == '\n')
+            type = TextUpdateType.LINE_UPDATE;
+        else
+            type = TextUpdateType.CHAR_UPDATE;
+        for (TextListener listener: listeners)
+            listener.update(new TextUpdateReference(index, false, type), getSkeleton());
     }
 
 

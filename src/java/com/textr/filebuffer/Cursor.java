@@ -1,6 +1,7 @@
 package com.textr.filebuffer;
 
 import com.textr.util.Direction;
+import com.textr.util.FixedPoint;
 import com.textr.util.Point;
 
 import java.util.Objects;
@@ -8,9 +9,9 @@ import java.util.Objects;
 public final class Cursor implements ICursor{
 
     private int insertIndex;
-    private Point insertPoint;
+    private FixedPoint insertPoint;
 
-    private Cursor(int insertIndex, Point insertPoint){
+    private Cursor(int insertIndex, FixedPoint insertPoint){
         this.insertIndex = insertIndex;
         this.insertPoint = insertPoint;
     }
@@ -21,7 +22,7 @@ public final class Cursor implements ICursor{
      * @return The cursor.
      */
     public static Cursor createNew(){
-        return new Cursor(0, Point.create(0, 0));
+        return new Cursor(0, new FixedPoint(0, 0));
     }
 
     /**
@@ -35,43 +36,30 @@ public final class Cursor implements ICursor{
      * @return The 2-dimensional index of this {@link Cursor}.
      */
     public Point getInsertPoint(){
-        return insertPoint;
+        return Point.create(insertPoint.getX(), insertPoint.getY());
     }
 
     /**
-     * Sets the 1D index of this {@link Cursor} to the given index.
-     * Updates the 2D Point after wards.
+     * Sets the location of this {@link Cursor} to the given 1D index, using the given skeleton structure.
      * @param index The new index.
      * @param skeleton The skeleton used to update the 2D Point.
      */
     public void setInsertIndex(int index, ITextSkeleton skeleton){
         this.insertIndex = index;
-        updateInsertPoint(skeleton);
+        this.insertPoint = skeleton.convertToPoint(index);
     }
 
-    private void updateInsertPoint(ITextSkeleton skeleton){
-        if(insertIndex < 0 || insertIndex > skeleton.getCharAmount())
-            throw new IllegalArgumentException("The integer falls outside the text.");
-        int count = 0;
-        int row = -1;
-        for(int i = 0; i < skeleton.getLineAmount() ; i++){
-            if(insertIndex < count + skeleton.getLineLength(i)) {
-                row = i;
-                break;
-            }
-            count += skeleton.getLineLength(i);
-        }
-        int col = insertIndex - count;
-        this.insertPoint = Point.create(col, row);
-    }
-
-    private void updateInsertIndex(ITextSkeleton skeleton){
-        int count = 0;
-        for(int i = 0; i < insertPoint.getY(); i++){
-            count += skeleton.getLineLength(i);
-        }
-        count += insertPoint.getX();
-        this.insertIndex = count;
+    /**
+     * Sets the 2D point of this {@link Cursor} to the given point.
+     * Updates the insert index afterwards.
+     * @param point A Point object holding the new insertion location.
+     * @param skeleton The current text skeleton
+     */
+    public void setInsertPoint(Point point, ITextSkeleton skeleton) {
+        if (point == null)
+            throw new NullPointerException("Given insertion point cannot be null");
+        this.insertPoint = new FixedPoint(point.getX(), point.getY());
+        this.insertIndex = skeleton.convertToIndex(new FixedPoint(point.getX(), point.getY()));
     }
 
     /**
@@ -94,35 +82,39 @@ public final class Cursor implements ICursor{
         int incrementedIndex = insertIndex + 1;
         if(incrementedIndex < skeleton.getCharAmount()) {
             this.insertIndex = incrementedIndex;
-            updateInsertPoint(skeleton);
         }
+        this.insertPoint = skeleton.convertToPoint(this.insertIndex);
     }
 
     private void moveLeft(ITextSkeleton skeleton){
         int decrementedIndex = insertIndex - 1;
         if(decrementedIndex >= 0) {
             this.insertIndex = decrementedIndex;
-            updateInsertPoint(skeleton);
         }
+        this.insertPoint = skeleton.convertToPoint(this.insertIndex);
     }
 
     private void moveUp(ITextSkeleton skeleton){
-        if(insertPoint.getY() == 0)
+        if(this.insertPoint.getY() == 0)
             return;
-        insertPoint.decrementY();
-        int newLineLength = Math.max(skeleton.getLineLength(insertPoint.getY()) - 1, 0);
-        int newX = Math.min(newLineLength, insertPoint.getX());
-        insertPoint.setX(newX);
-        updateInsertIndex(skeleton);
+        int newY = this.insertPoint.getY() - 1;
+        int newLineLength = skeleton.getLineLength(newY);
+        int maxX = Math.max(0, newLineLength - 1);
+        int newX = Math.min(maxX, this.insertPoint.getX());
+        FixedPoint newPoint = new FixedPoint(newX, newY);
+        this.insertIndex = skeleton.convertToIndex(newPoint);
+        this.insertPoint = newPoint;
     }
 
     private void moveDown(ITextSkeleton skeleton){
-        if(insertPoint.getY() == skeleton.getLineAmount() - 1)
+        if(this.insertPoint.getY() == skeleton.getLineAmount() - 1)
             return;
-        insertPoint.incrementY();
-        int newLineLength = Math.max(skeleton.getLineLength(insertPoint.getY()) - 1, 0);
-        int newX = Math.min(newLineLength, insertPoint.getX());
-        insertPoint.setX(newX);
-        updateInsertIndex(skeleton);
+        int newY = this.insertPoint.getY() + 1;
+        int newLineLength = skeleton.getLineLength(newY);
+        int maxX = Math.max(0, newLineLength - 1);
+        int newX = Math.min(maxX, this.insertPoint.getX());
+        FixedPoint newPoint = new FixedPoint(newX, newY);
+        this.insertIndex = skeleton.convertToIndex(newPoint);
+        this.insertPoint = newPoint;
     }
 }

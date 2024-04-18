@@ -181,12 +181,25 @@ public final class ViewService {
             case CTRL_T -> rotateView(true);
             case  F4-> attemptDeleteView();
             case CTRL_G -> addGame();
+            case CTRL_D -> duplicateView();
             case TICK -> {
                 if(!getActiveView().wasUpdated())
                     return;
             }
             default -> getActiveView().handleInput(input);
         }
+        drawAll();
+    }
+
+    private void duplicateView() {
+        View dupeView;
+        try {
+            dupeView = getActiveView().duplicate();
+        } catch (UnsupportedOperationException e) {
+            return;
+        }
+        viewRepo.addNextTo(dupeView, getActiveView());
+        generateViewPositionsAndDimensions();
         drawAll();
     }
 

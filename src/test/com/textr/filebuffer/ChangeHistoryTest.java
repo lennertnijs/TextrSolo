@@ -23,7 +23,6 @@ class ChangeHistoryTest {
 
     @Test
     void executeAndAddAction() {
-        Cursor dummyCursor = Cursor.createNew(); // WHY IS THIS STATIC METHOD NEEDED??
         MockAction action1 = new MockAction();
         MockAction action2 = new MockAction();
         MockAction action3 = new MockAction();
@@ -33,31 +32,31 @@ class ChangeHistoryTest {
 
         // Add some actions and execute
         ChangeHistory history = new ChangeHistory();
-        history.executeAndAddAction(action1, dummyCursor);
+        history.executeAndAddAction(action1);
         assertTrue(action1.wasExecuted, "Action added to ChangeHistory was not executed");
         done.push(action1);
-        history.executeAndAddAction(action2, dummyCursor);
+        history.executeAndAddAction(action2);
         assertTrue(action2.wasExecuted, "Action added to ChangeHistory was not executed");
         done.push(action2);
-        history.executeAndAddAction(action3, dummyCursor);
+        history.executeAndAddAction(action3);
         assertTrue(action3.wasExecuted, "Action added to ChangeHistory was not executed");
         done.push(action3);
-        history.executeAndAddAction(action4, dummyCursor);
+        history.executeAndAddAction(action4);
         assertTrue(action4.wasExecuted, "Action added to ChangeHistory was not executed");
         done.push(action4);
 
         // Undo a few operations
-        history.undo(dummyCursor);
+        history.undo();
         done.pop();
         toDo.push(action4);
         assertFalse(action4.wasExecuted);
-        history.undo(dummyCursor);
+        history.undo();
         done.pop();
         toDo.push(action3);
         assertFalse(action3.wasExecuted);
 
         // Add a new action
-        history.executeAndAddAction(altAction3, dummyCursor);
+        history.executeAndAddAction(altAction3);
         assertTrue(altAction3.wasExecuted, "Action added to ChangeHistory was not executed");
         removed = new LinkedList<>(toDo);
         toDo.clear();
@@ -65,7 +64,7 @@ class ChangeHistoryTest {
 
         checkActionExecution();
         // Redoing should have no effect
-        history.redo(dummyCursor);
+        history.redo();
         checkActionExecution();
     }
 
@@ -77,19 +76,19 @@ class ChangeHistoryTest {
 
         // Add some actions and execute
         ChangeHistory history = new ChangeHistory();
-        history.executeAndAddAction(action1, dummyCursor);
+        history.executeAndAddAction(action1);
         done.push(action1);
         checkActionExecution();
-        history.executeAndAddAction(action2, dummyCursor);
+        history.executeAndAddAction(action2);
         done.push(action2);
         checkActionExecution();
 
         // Undo actions
-        history.undo(dummyCursor);
+        history.undo();
         done.pop();
         toDo.push(action2);
         checkActionExecution();
-        history.undo(dummyCursor);
+        history.undo();
         done.pop();
         toDo.push(action1);
         checkActionExecution();
@@ -103,29 +102,29 @@ class ChangeHistoryTest {
 
         // Add some actions and execute
         ChangeHistory history = new ChangeHistory();
-        history.executeAndAddAction(action1, dummyCursor);
+        history.executeAndAddAction(action1);
         done.push(action1);
         checkActionExecution();
-        history.executeAndAddAction(action2, dummyCursor);
+        history.executeAndAddAction(action2);
         done.push(action2);
         checkActionExecution();
 
         // Undo actions
-        history.undo(dummyCursor);
+        history.undo();
         done.pop();
         toDo.push(action2);
         checkActionExecution();
-        history.undo(dummyCursor);
+        history.undo();
         done.pop();
         toDo.push(action1);
         checkActionExecution();
 
         // Redo actions
-        history.redo(dummyCursor);
+        history.redo();
         toDo.pop();
         done.push(action1);
         checkActionExecution();
-        history.redo(dummyCursor);
+        history.redo();
         toDo.pop();
         done.push(action2);
         checkActionExecution();
@@ -149,14 +148,14 @@ class MockAction implements Action {
     boolean wasExecuted = false;
 
     @Override
-    public void execute(ICursor cursor) {
+    public void execute() {
         if (wasExecuted)
             throw new IllegalStateException("Action executed twice");
         wasExecuted = true;
     }
 
     @Override
-    public void undo(ICursor cursor) {
+    public void undo() {
         if (!wasExecuted)
             throw new IllegalStateException("Un-executed action undone");
         wasExecuted = false;

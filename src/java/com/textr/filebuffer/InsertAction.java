@@ -1,9 +1,5 @@
 package com.textr.filebuffer;
 
-import com.textr.util.Direction;
-
-import java.util.Objects;
-
 public final class InsertAction implements Action{
 
     private final char character;
@@ -25,18 +21,14 @@ public final class InsertAction implements Action{
     /**
      * Executes this {@link InsertAction}.
      */
-    public void execute(ICursor cursor){
-        Objects.requireNonNull(cursor, "Cursor is null.");
+    public void execute(){
         text.insert(index, character);
-        cursor.setInsertIndex(index + 1, text.getSkeleton());
     }
 
     /**
      * Undoes this {@link InsertAction}.
      */
-    public void undo(ICursor cursor){
-        Objects.requireNonNull(cursor, "Cursor is null.");
+    public void undo(){
         text.remove(index);
-        cursor.setInsertIndex(index, text.getSkeleton());
     }
 }

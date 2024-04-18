@@ -56,8 +56,8 @@ public class LineTextTest {
 
     @Test
     public void testGetLineIllegal(){
-        assertThrows(IllegalArgumentException.class, () -> text1.getLine(-1));
-        assertThrows(IllegalArgumentException.class, () -> text1.getLine(3));
+        assertThrows(IndexOutOfBoundsException.class, () -> text1.getLine(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> text1.getLine(3));
     }
 
     @Test
@@ -168,8 +168,8 @@ public class LineTextTest {
 
     @Test
     public void getSkeleton(){
-        assertEquals(text1.getSkeleton(), new TextSkeleton(new ArrayList<>(Arrays.asList(7, 7, 6))));
-        assertEquals(text2.getSkeleton(), new TextSkeleton(new ArrayList<>(List.of(7, 0))));
+        assertEquals(text1.getSkeleton(), new TextSkeleton(new ArrayList<>(Arrays.asList(7, 7, 7))));
+        assertEquals(text2.getSkeleton(), new TextSkeleton(new ArrayList<>(List.of(7, 1))));
     }
 
     @Test

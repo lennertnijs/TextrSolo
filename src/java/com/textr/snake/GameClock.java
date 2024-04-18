@@ -1,5 +1,7 @@
 package com.textr.snake;
 
+import java.util.Locale;
+
 /**
  * Represents the clock for a game.
  */
@@ -134,7 +136,9 @@ public final class GameClock implements IClock{
      */
     @Override
     public String toString(){
-        return String.format("GameClock[elapsedTimeInSeconds=%f, threshHoldInSeconds=%f, running=%b]",
+        // Locale.US to ensure decimal separator is '.'
+        // Tests fail on my machine, even if I check for the default Locale's decimal separator, for some reason...
+        return String.format(Locale.US, "GameClock[elapsedTimeInSeconds=%f, threshHoldInSeconds=%f, running=%b]",
                 elapsedTimeInSeconds,threshHoldInSeconds, running);
     }
 }
