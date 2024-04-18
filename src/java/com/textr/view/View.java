@@ -61,7 +61,7 @@ public class View {
      * Resizes this view to the new dimensions.
      * @param dimensions the new dimensions of the view.
      */
-    public void resize(Dimension2D dimensions) {
+    public void resize(Dimension2D dimensions){
     }
 
     /**

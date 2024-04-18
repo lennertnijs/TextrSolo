@@ -5,5 +5,5 @@ public interface IClock {
     void increase(int increaseInMillis);
     boolean shouldMove();
     void reset();
-    void decreaseTimeBetweenMoves();
+    void changeSecondsBetweenMove(float f);
 }

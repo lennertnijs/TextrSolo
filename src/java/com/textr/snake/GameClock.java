@@ -3,7 +3,7 @@ package com.textr.snake;
 /**
  * Represents the clock for a game.
  */
-public final class GameClock {
+public final class GameClock implements IClock{
 
     private long lastMove;
     private float secondsBetweenMove;

@@ -101,9 +101,7 @@ public final class GameBoard implements IGameBoard{
         if(foodManager.isFood(nextHeadPosition)) {
             foodManager.remove(nextHeadPosition);
             score += 1;
-            boolean entireBoardFilled = snake.getLength() + foodManager.getFoodCount() == dimensions.getHeight() * dimensions.getWidth();
-            if(!entireBoardFilled)
-                foodManager.add(generateRandomEmptyPoint());
+            spawnFood();
             // GROW SNAKE LOGIC!!!
         }
         snake.move();
@@ -251,7 +249,7 @@ public final class GameBoard implements IGameBoard{
             if(!isOutOfBounds(gamePoint))
                 foodManager.add(gamePoint);
             else
-                foodManager.add(generateRandomEmptyPoint());
+                spawnFood();
         }
     }
 
@@ -262,5 +260,15 @@ public final class GameBoard implements IGameBoard{
     public void changeSnakeDirection(Direction direction){
         Objects.requireNonNull(direction, "Direction is null.");
         snake.changeDirection(direction);
+    }
+
+    public void spawnFood(){
+        boolean entireBoardFilled = snake.getLength() + foodManager.getFoodCount() == dimensions.getHeight() * dimensions.getWidth();
+        if(!entireBoardFilled)
+            foodManager.add(generateRandomEmptyPoint());
+    }
+
+    public Direction getDirection(){
+        return snake.getDirection();
     }
 }

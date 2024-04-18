@@ -48,7 +48,7 @@ public class ClockTest {
     @Test
     public void testChangeSecondsBetweenMoves(){
         clock.increase(2000);
-        clock.changeSecondsBetweenMove(0.6f);
+        clock.changeSecondsBetweenMove(0.2f);
         assertTrue(clock.shouldMove());
     }
 }
