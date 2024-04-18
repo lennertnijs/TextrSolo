@@ -17,4 +17,5 @@ public interface IGameBoard {
     void spawnFood();
     Direction getDirection();
     boolean willEatOnMove();
+    IGameBoard copy();
 }

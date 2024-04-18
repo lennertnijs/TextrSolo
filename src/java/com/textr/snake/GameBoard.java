@@ -135,7 +135,7 @@ public final class GameBoard implements IGameBoard{
     }
 
     /**
-     * Checks whether the given {@link GamePoint} is within the {@link GameBoard}'s contraints.
+     * Checks whether the given {@link GamePoint} is within the {@link GameBoard}'s constraints.
      * @param p The {@link GamePoint}. Cannot be null.
      *
      * @return True if within boundaries. False otherwise.
@@ -272,5 +272,9 @@ public final class GameBoard implements IGameBoard{
 
     public Direction getDirection(){
         return snake.getDirection();
+    }
+
+    public IGameBoard copy(){
+        return new GameBoard(dimensions, snake.copy(), foodManager.copy(), score);
     }
 }

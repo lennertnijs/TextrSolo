@@ -1,5 +1,6 @@
 package com.textr.snake;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -16,6 +17,10 @@ public final class FoodManager {
      */
     public FoodManager(){
         foods = new LinkedList<>();
+    }
+
+    private FoodManager(List<GamePoint> foods){
+        this.foods = foods;
     }
 
     /**
@@ -70,5 +75,9 @@ public final class FoodManager {
      */
     public void clearFoods(){
         foods.clear();
+    }
+
+    public FoodManager copy(){
+        return new FoodManager(new ArrayList<>(foods));
     }
 }

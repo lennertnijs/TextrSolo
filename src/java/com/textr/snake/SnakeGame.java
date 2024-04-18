@@ -16,7 +16,7 @@ public final class SnakeGame {
     }
 
     public IGameBoard getBoard(){
-        return board;
+        return board.copy();
     }
 
 

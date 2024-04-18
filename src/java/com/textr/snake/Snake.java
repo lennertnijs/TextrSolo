@@ -28,6 +28,12 @@ public final class Snake {
         atePoints = new ArrayList<>();
     }
 
+    private Snake(List<GamePoint> body, Direction direction, List<GamePoint> atePoints){
+        this.body = body;
+        this.headDirection = direction;
+        this.atePoints = atePoints;
+    }
+
     /**
      * @return The length of the snake. Includes the head.
      */
@@ -170,5 +176,9 @@ public final class Snake {
         else{
             atePoints.remove(body.get(body.size() - 1));
         }
+    }
+
+    public Snake copy(){
+        return new Snake(new ArrayList<>(body), headDirection, new ArrayList<>(atePoints));
     }
 }
