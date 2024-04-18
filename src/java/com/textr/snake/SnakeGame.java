@@ -36,7 +36,7 @@ public final class SnakeGame {
     /**
      * @return Whether the game is active.
      */
-    public boolean isActive(){
+    public boolean isRunning(){
         return clock.isRunning();
     }
 

@@ -46,11 +46,11 @@ public class SnakeGameTest {
 
     @Test
     public void testIsActive(){
-        assertFalse(snakeGame.isActive());
+        assertFalse(snakeGame.isRunning());
         snakeGame.start();
-        assertTrue(snakeGame.isActive());
+        assertTrue(snakeGame.isRunning());
         snakeGame.pause();
-        assertFalse(snakeGame.isActive());
+        assertFalse(snakeGame.isRunning());
     }
 
 
@@ -91,7 +91,7 @@ public class SnakeGameTest {
         assertFalse(snakeGame.update(750));
         assertTrue(snakeGame.update(1000));
         assertTrue(snakeGame.update(300));
-        assertFalse(snakeGame.isActive());
+        assertFalse(snakeGame.isRunning());
     }
 
 }
