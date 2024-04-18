@@ -145,7 +145,7 @@ public final class LineText implements IText{
         // Notify listeners
         FixedPoint updateLocation = convertToPoint(index);
         for (TextListener listener: listeners)
-            listener.update(updateLocation, true, TextUpdateType.CHAR_UPDATE, getSkeleton());
+            listener.update(new TextUpdateReference(updateLocation, true, TextUpdateType.CHAR_UPDATE), getSkeleton());
     }
 
     /**
@@ -162,7 +162,7 @@ public final class LineText implements IText{
         // Notify listeners
         FixedPoint updateLocation = convertToPoint(index);
         for (TextListener listener: listeners)
-            listener.update(updateLocation, true, TextUpdateType.LINE_UPDATE, getSkeleton());
+            listener.update(new TextUpdateReference(updateLocation, true, TextUpdateType.LINE_UPDATE), getSkeleton());
     }
 
     /**
@@ -185,7 +185,7 @@ public final class LineText implements IText{
         else
             type = TextUpdateType.CHAR_UPDATE;
         for (TextListener listener: listeners)
-            listener.update(updateLocation, false, type, getSkeleton());
+            listener.update(new TextUpdateReference(updateLocation, false, type), getSkeleton());
     }
 
 
