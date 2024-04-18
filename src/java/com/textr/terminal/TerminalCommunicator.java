@@ -23,9 +23,10 @@ public class TerminalCommunicator implements Communicator {
         do {
             Input response = translator.getNextInput();
             if (response.getType() == InputType.CHARACTER) {
-                if (response.getCharacter() == 'Y' || response.getCharacter() == 'y')
+                char inputChar = Character.toLowerCase(response.getCharacter());
+                if (inputChar == 'y')
                     return true;
-                if (response.getCharacter() == 'N' || response.getCharacter() == 'n')
+                if (inputChar == 'n')
                     return false;
             }
         } while (true); // Repeat until Y/N was given
