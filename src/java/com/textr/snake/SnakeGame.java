@@ -27,9 +27,14 @@ public final class SnakeGame {
         clock.increase(timeInMillis);
         if(clock.shouldMove()){
             if(board.willEatOnMove())
-                clock.changeSecondsBetweenMove(0.5f);
+                clock.changeSecondsBetweenMove(0.9f);
             clock.reset();
-            board.moveSnake();
+            try{
+                board.moveSnake();
+            }catch(IllegalStateException e){
+                this.running = false;
+            }
+
             return true;
         }
         return false;

@@ -66,17 +66,17 @@ public final class ViewDrawer{
             List<GamePoint> snake = view.getSnake();
             GamePoint head = snake.remove(0);
             switch (view.getSnakeDirection()){
-                case RIGHT -> terminal.printText(x+ head.x(), baseY- head.y(), ">");
-                case LEFT ->  terminal.printText(x+ head.x(), baseY- head.y(), "<");
-                case UP -> terminal.printText(x+ head.x(), baseY- head.y(), "^");
-                case DOWN -> terminal.printText(x+ head.x(), baseY- head.y(), "v");
+                case RIGHT -> terminal.printText(x + head.x()+ 1, baseY- head.y()+ 1, ">");
+                case LEFT ->  terminal.printText(x+ head.x()+ 1, baseY- head.y()+ 1, "<");
+                case UP -> terminal.printText(x+ head.x()+ 1, baseY- head.y()+ 1, "^");
+                case DOWN -> terminal.printText(x+ head.x()+ 1, baseY- head.y()+ 1, "v");
             }
             for(GamePoint point : snake){
-                terminal.printText(x+ point.x(), baseY- point.y(), "o");
+                terminal.printText(x+ point.x() + 1, baseY- point.y()+ 1, "o");
             }
             List<GamePoint> foods = view.getFoods();
             for(GamePoint point : foods){
-                terminal.printText(x+ point.x(), baseY- point.y(), "f");
+                terminal.printText(x + point.x() + 1, baseY- point.y() + 1, "f");
             }
         }
         else

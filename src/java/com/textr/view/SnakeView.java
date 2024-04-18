@@ -12,11 +12,11 @@ import java.util.List;
 public class SnakeView extends View {
 
 
-    private final SnakeGame snakeGame;
+    private SnakeGame snakeGame;
 
     public SnakeView(Point pos, Dimension2D dimensions){
         super(pos, dimensions);
-        snakeGame = initializeGame();
+        snakeGame = new SnakeGame(GameBoard.createNew(getDimensions(), new Snake(Direction.UP), new FoodManager()), new GameClock(5f));
     }
 
     public boolean gameIsRunning(){
@@ -35,11 +35,9 @@ public class SnakeView extends View {
         return snakeGame.getFoods();
     }
 
-
     @Override
     public void resize(Dimension2D dimensions){
         this.setDimensions(dimensions);
-        snakeGame.resize(dimensions);
     }
 
     @Override
@@ -54,7 +52,7 @@ public class SnakeView extends View {
 
 
 
-    private SnakeGame initializeGame(){
+    public void initializeGame(){
         Snake snake = new Snake(Direction.RIGHT);
         for(int i = 0; i < 4; i++) {
             GamePoint snakeSegment = new GamePoint(getDimensions().getWidth() / 2 - i, getDimensions().getHeight() / 2);
@@ -63,10 +61,10 @@ public class SnakeView extends View {
         }
         FoodManager foodManager = new FoodManager();
         GameBoard board = GameBoard.createNew(getDimensions(), snake, foodManager);
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < 50; i++)
             board.spawnFood();
-        IClock clock = new GameClock(1f);
-        return new SnakeGame(board, clock);
+        IClock clock = new GameClock(0.3f);
+        this.snakeGame = new SnakeGame(board, clock);
     }
 
     private boolean isWithinBoundaries(GamePoint p){
@@ -87,8 +85,10 @@ public class SnakeView extends View {
         InputType inputType = input.getType();
         switch (inputType) {
             case ENTER -> {
-                if(!snakeGame.isRunning())
+                if(!snakeGame.isRunning()) {
                     initializeGame();
+                    snakeGame.start();
+                }
             }
             case ARROW_UP -> snakeGame.changeSnakeDirection(Direction.UP);
             case ARROW_RIGHT -> snakeGame.changeSnakeDirection(Direction.RIGHT);
