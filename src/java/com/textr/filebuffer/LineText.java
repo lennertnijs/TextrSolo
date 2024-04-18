@@ -89,7 +89,7 @@ public final class LineText implements IText{
             lineLengths.add(line.length() + 1);
         }
         int lastIndex = lineLengths.size() - 1;
-        lineLengths.set(lastIndex, lineLengths.get(lastIndex) - 1);
+        lineLengths.set(lastIndex, lineLengths.get(lastIndex));
         return new TextSkeleton(lineLengths);
     }
 

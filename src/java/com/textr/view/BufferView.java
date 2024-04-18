@@ -4,7 +4,6 @@ import com.textr.filebuffer.*;
 import com.textr.input.Input;
 import com.textr.input.InputType;
 import com.textr.terminal.Communicator;
-import com.textr.terminal.TermiosTerminalService;
 import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
 import com.textr.util.Point;
@@ -135,6 +134,8 @@ public final class BufferView extends View {
             case ARROW_DOWN -> moveCursor(Direction.DOWN);
             case ARROW_LEFT -> moveCursor(Direction.LEFT);
             case DELETE -> {
+                if(cursor.getInsertIndex() == buffer.getText().getCharAmount())
+                    return;
                 Action deleteAction = new DeleteAction(cursor.getInsertIndex(),
                         buffer.getText().getCharacter(cursor.getInsertIndex()),
                         buffer.getText(), Side.AFTER);
