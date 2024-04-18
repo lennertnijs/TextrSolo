@@ -20,10 +20,14 @@ public final class SnakeGame {
     }
 
 
+    public boolean hasChanged(){
+        return clock.shouldMove();
+    }
+
+
     public boolean update(int timeInMillis){
         if(!running)
             return false;
-        clock.increase(timeInMillis);
         if(clock.shouldMove()){
             if(board.willEatOnMove())
                 clock.changeSecondsBetweenMove(0.9f);
@@ -33,9 +37,9 @@ public final class SnakeGame {
             }catch(IllegalStateException e){
                 this.running = false;
             }
-
             return true;
         }
+        clock.increase(timeInMillis);
         return false;
     }
 

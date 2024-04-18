@@ -176,7 +176,7 @@ public final class ViewService {
             case  F4-> attemptDeleteView();
             case CTRL_G -> addGame();
             case TICK -> {
-                if(!getActiveView().incrementTimer())
+                if(!getActiveView().wasUpdated())
                     return;
             }
             default -> getActiveView().handleInput(input);

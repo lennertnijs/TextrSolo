@@ -53,7 +53,7 @@ public class View {
     /**
      * Increments the timer of the view if relevant, and returns whether that changed something requiring a redraw.
      */
-    public boolean incrementTimer() {
+    public boolean wasUpdated() {
         return false;
     }
 

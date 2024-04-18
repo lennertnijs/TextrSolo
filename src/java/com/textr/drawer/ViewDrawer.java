@@ -84,7 +84,7 @@ public final class ViewDrawer{
         else
             terminal.printText(x, baseY, "GAME OVER - Press Enter to restart");
         int maxStatusBarIndex = Math.min(view.getDimensions().getWidth(), statusBar.length());
-        terminal.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex) + "Score: " + gameBoard.getScore());
+        terminal.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
     }
   
     private void drawScrollBar(BufferView view){

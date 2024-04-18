@@ -26,17 +26,6 @@ public class SnakeView extends View {
         return snakeGame.getBoard();
     }
 
-    @Override
-    public void resize(Dimension2D dimensions){
-        this.setDimensions(dimensions);
-        snakeGame.resize(dimensions);
-    }
-
-    @Override
-    public boolean incrementTimer(){
-        return snakeGame.update(10);
-    }
-
     public void restartGame(){
         this.snakeGame = initializeGame();
     }
@@ -68,15 +57,28 @@ public class SnakeView extends View {
     public void handleInput(Input input){
         InputType inputType = input.getType();
         switch (inputType) {
-            case ENTER -> {
-                if(!snakeGame.isRunning()) {
-                    restartGame();
-                }
-            }
+            case ENTER -> {if(!snakeGame.isRunning()) restartGame();}
             case ARROW_UP -> snakeGame.changeSnakeDirection(Direction.UP);
             case ARROW_RIGHT -> snakeGame.changeSnakeDirection(Direction.RIGHT);
             case ARROW_DOWN -> snakeGame.changeSnakeDirection(Direction.DOWN);
             case ARROW_LEFT -> snakeGame.changeSnakeDirection(Direction.LEFT);
         }
     }
+
+    @Override
+    public String generateStatusBar(){
+        return String.format("Score: %d", snakeGame.getBoard().getScore());
+    }
+
+    @Override
+    public void resize(Dimension2D dimensions){
+        this.setDimensions(dimensions);
+        snakeGame.resize(dimensions);
+    }
+
+    @Override
+    public boolean wasUpdated(){
+        return snakeGame.update(10);
+    }
+
 }
