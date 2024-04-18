@@ -192,7 +192,15 @@ public final class ViewService {
     }
 
     private void duplicateView() {
-        communicator.sendMessage("CTRL+D: View Duplication W.I.P.");
+        View dupeView;
+        try {
+            dupeView = getActiveView().duplicate();
+        } catch (UnsupportedOperationException e) {
+            return;
+        }
+        viewRepo.addNextTo(dupeView, getActiveView());
+        generateViewPositionsAndDimensions();
+        drawAll();
     }
 
     private void addGame() {
