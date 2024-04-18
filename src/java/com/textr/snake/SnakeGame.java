@@ -3,8 +3,6 @@ package com.textr.snake;
 import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
 
-import java.util.List;
-
 public final class SnakeGame {
 
     private boolean running;
@@ -14,16 +12,13 @@ public final class SnakeGame {
     public SnakeGame(IGameBoard board, IClock clock){
         this.board = board;
         this.clock = clock;
-        running = false;
+        running = true;
     }
 
     public IGameBoard getBoard(){
         return board;
     }
 
-    public boolean hasChanged(){
-        return clock.shouldMove();
-    }
 
     public boolean update(int timeInMillis){
         if(!running)
@@ -54,25 +49,5 @@ public final class SnakeGame {
 
     public boolean isRunning(){
         return running;
-    }
-
-    public void start(){
-        this.running = true;
-    }
-
-    public void pause(){
-        this.running = false;
-    }
-
-    public Direction getDirection(){
-        return board.getDirection();
-    }
-
-    public List<GamePoint> getSnake(){
-        return board.getSnakePoints();
-    }
-
-    public List<GamePoint> getFoods(){
-        return board.getFoods();
     }
 }

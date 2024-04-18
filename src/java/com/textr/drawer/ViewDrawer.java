@@ -63,8 +63,8 @@ public final class ViewDrawer{
         int x = view.getPosition().getX();
         int baseY = view.getPosition().getY()+ height - 2;
         int maxY = view.getPosition().getY() + height - 1;
+        IGameBoard gameBoard = view.getGameBoard();
         if(view.gameIsRunning()){
-            IGameBoard gameBoard = view.getGameBoard();
             List<GamePoint> snake = gameBoard.getSnakePoints();
             GamePoint head = snake.remove(0);
             switch (gameBoard.getDirection()){
@@ -84,7 +84,7 @@ public final class ViewDrawer{
         else
             terminal.printText(x, baseY, "GAME OVER - Press Enter to restart");
         int maxStatusBarIndex = Math.min(view.getDimensions().getWidth(), statusBar.length());
-        terminal.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
+        terminal.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex) + "Score: " + gameBoard.getScore());
     }
   
     private void drawScrollBar(BufferView view){

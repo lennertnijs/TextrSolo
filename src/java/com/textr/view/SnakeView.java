@@ -53,9 +53,7 @@ public class SnakeView extends View {
         for(int i = 0; i < 200; i++)
             board.spawnFood();
         IClock clock = new GameClock(0.3f);
-        SnakeGame snakeGame1 = new SnakeGame(board, clock);
-        snakeGame1.start();
-        return snakeGame1;
+        return new SnakeGame(board, clock);
     }
 
     private boolean isWithinBoundaries(GamePoint p){
