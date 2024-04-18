@@ -4,10 +4,7 @@ import com.textr.filebuffer.*;
 import com.textr.input.Input;
 import com.textr.input.InputType;
 import com.textr.terminal.Communicator;
-import com.textr.util.Dimension2D;
-import com.textr.util.Direction;
-import com.textr.util.Point;
-import com.textr.util.Validator;
+import com.textr.util.*;
 
 import java.util.Objects;
 
@@ -17,7 +14,7 @@ import java.util.Objects;
  * represent the anchor of the view, i.e. the top left location of the rectangular section of test that is visible of
  * the file buffer within the view.
  */
-public final class BufferView extends View {
+public final class BufferView extends View implements TextListener {
 
     private final FileBuffer buffer;
     private final ICursor cursor;
@@ -53,13 +50,15 @@ public final class BufferView extends View {
         Validator.notNull(position, "The global position of the BufferView in the Terminal cannot be null.");
         Validator.notNull(dimensions, "The dimensions of the BufferView cannot be null.");
         FileBuffer b = FileBuffer.createFromFilePath(url);
-        b.incrementReferenceCount();
-        return new BufferView(b,
+        BufferView v = new BufferView(b,
                 Cursor.createNew(),
                 position.copy(),
                 dimensions.copy(),
                 Point.create(0,0),
                 communicator);
+        v.getBuffer().addTextListener(v);
+        b.incrementReferenceCount();
+        return v;
     }
 
     public FileBuffer getBuffer(){
@@ -229,12 +228,19 @@ public final class BufferView extends View {
     public BufferView duplicate(){
         ICursor newCursor = Cursor.createNew(); // TODO: Make clone method for cursor
         newCursor.setInsertIndex(cursor.getInsertIndex(), buffer.getText().getSkeleton());
-        return new BufferView(this.buffer.copy(),
+        BufferView newView = new BufferView(this.buffer,
                 newCursor,
                 getPosition().copy(),
                 getDimensions().copy(),
                 this.anchor.copy(),
                 this.communicator);
+        newView.getBuffer().addTextListener(newView);
+        return newView;
+    }
+
+    @Override
+    public void update(TextUpdateReference update, ITextSkeleton structure) {
+        updater.update(this, update, structure);
     }
 
     @Override
