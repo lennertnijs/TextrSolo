@@ -26,6 +26,8 @@ public final class SnakeGame {
             return false;
         clock.increase(timeInMillis);
         if(clock.shouldMove()){
+            if(board.willEatOnMove())
+                clock.changeSecondsBetweenMove(0.5f);
             clock.reset();
             board.moveSnake();
             return true;

@@ -107,6 +107,10 @@ public final class GameBoard implements IGameBoard{
         snake.move();
     }
 
+    public boolean willEatOnMove(){
+        return foodManager.isFood(snake.getNextHeadPosition());
+    }
+
     /**
      * Generates a random {@link GamePoint} within this {@link GameBoard}'s dimensions that is empty.
      *
