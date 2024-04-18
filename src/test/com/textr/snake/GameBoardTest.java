@@ -94,4 +94,78 @@ public class GameBoardTest {
         board.changeDirection(Direction.LEFT);
         assertThrows(IllegalStateException.class, () -> board.moveSnake());
     }
+
+    @Test
+    public void testCutHeightSnakeBottom(){
+        board.resize(Dimension2D.create(20, 5));
+        assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
+    }
+
+
+    @Test
+    public void testCutHeightSnakeTop(){
+        for(int i = 0; i < 7; i++)
+            board.moveSnake(); // sets snake head at (0,7)
+        board.resize(Dimension2D.create(20, 5));
+        GamePoint snakeHead = new GamePoint(0, 2);
+        GamePoint snakeMiddle = new GamePoint(0, 1);
+        GamePoint snakeTail = new GamePoint(0, 0);
+        assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
+    }
+
+    @Test
+    public void testCutHeightSnakeMiddle(){
+        for(int i = 0; i < 5; i++)
+            board.moveSnake(); // sets snake head at (0,5)
+        board.resize(Dimension2D.create(20, 5));
+        GamePoint snakeHead = new GamePoint(0, 2);
+        GamePoint snakeMiddle = new GamePoint(0, 1);
+        GamePoint snakeTail = new GamePoint(0, 0);
+        assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
+    }
+
+
+
+//    @Test
+//    public void testIncreaseHeight(){
+//        board.resize(Dimension2D.create(20, 12));
+//        GamePoint snakeHead = new GamePoint(0, 3);
+//        GamePoint snakeMiddle = new GamePoint(0, 2);
+//        GamePoint snakeTail = new GamePoint(0, 1);
+//        assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
+//    }
+
+    @Test
+    public void testCutWidthSnakeLeft(){
+        board.resize(Dimension2D.create(10, 10));
+        assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
+    }
+
+    @Test
+    public void testCutWidthSnakeRight(){
+        board.moveSnake();
+        board.changeDirection(Direction.RIGHT);
+        for(int i = 0; i < 15; i++)
+            board.moveSnake(); // sets snake head at (15, 1)
+        board.resize(Dimension2D.create(10, 10));
+        GamePoint snakeHead = new GamePoint(5, 1);
+        GamePoint snakeMiddle = new GamePoint(4, 1);
+        GamePoint snakeTail = new GamePoint(3, 1);
+        assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
+    }
+
+    @Test
+    public void testCutWidthSnakeMiddle(){
+        board.moveSnake();
+        board.changeDirection(Direction.RIGHT);
+        for(int i = 0; i < 10; i++)
+            board.moveSnake(); // sets snake head at (10, 1)
+        board.resize(Dimension2D.create(10, 10));
+        GamePoint snakeHead = new GamePoint(5, 1);
+        GamePoint snakeMiddle = new GamePoint(4, 1);
+        GamePoint snakeTail = new GamePoint(3, 1);
+        assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
+    }
+
+
 }
