@@ -15,7 +15,7 @@ public final class Snake {
      * The {@link Direction} in which the snake is going to move.
      */
     private Direction headDirection;
-    private List<GamePoint> atePoints;
+    private final List<GamePoint> atePoints;
 
     /**
      * Creates a new snake. The snake has length 0 at creation.
@@ -71,10 +71,6 @@ public final class Snake {
 
     public void addAtePoint(GamePoint p){
         atePoints.add(p);
-    }
-
-    public void removeAtePoint(GamePoint p){
-        atePoints.remove(p);
     }
 
     /**
