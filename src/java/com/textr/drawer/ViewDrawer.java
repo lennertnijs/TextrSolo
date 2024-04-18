@@ -93,7 +93,7 @@ public final class ViewDrawer{
                                                             yBar + view.getPosition().getY(), "|");
     }
 
-    private static void drawBordersGame(SnakeView view){
+    private void drawBordersGame(SnakeView view){
         for(int i = 0; i<view.getDimensions().getHeight(); i++) {
             terminal.printText(view.getPosition().getX() + view.getDimensions().getWidth() - 1,
                     view.getPosition().getY() + i, "|");

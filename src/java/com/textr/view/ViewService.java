@@ -6,6 +6,7 @@ import com.textr.input.Input;
 import com.textr.input.InputHandlerRepo;
 import com.textr.Settings;
 import com.textr.input.InputType;
+import com.textr.terminal.Communicator;
 import com.textr.terminal.TerminalService;
 import com.textr.util.Dimension2D;
 import com.textr.util.Point;
@@ -13,19 +14,28 @@ import com.textr.util.Validator;
 import com.textr.drawer.CursorDrawer;
 import com.textr.drawer.ViewDrawer;
 
+import java.util.Objects;
+
 public final class ViewService {
 
     private final IViewRepo viewRepo;
     private final TerminalService terminal; // FIXME: ViewService shouldn't be coupled to Terminal, only to Drawer(s)
     private final ViewDrawer viewDrawer;
 
-    public ViewService(IViewRepo viewRepo, ViewDrawer viewDrawer, TerminalService terminal){
+    /**
+     * The object used for communication with an external source
+     */
+    private final Communicator communicator;
+
+    public ViewService(IViewRepo viewRepo, ViewDrawer viewDrawer, TerminalService terminal, Communicator communicator){
         Validator.notNull(viewRepo, "Cannot initiate a ViewService with a null IViewRepo");
         Validator.notNull(viewDrawer, "Cannot initiate a ViewService with a null ViewDrawer");
         Validator.notNull(terminal, "Cannot initiate a ViewService with a null TerminalService");
         this.viewRepo = viewRepo;
         this.viewDrawer = viewDrawer;
         this.terminal = terminal;
+        this.communicator = Objects.requireNonNull(communicator,
+                "Cannot initiate a ViewService with a null Communicator");
         LayoutGenerator.setViewRepo(viewRepo);
     }
 
@@ -40,7 +50,7 @@ public final class ViewService {
         for(String url : filePaths){
             Point dummyPosition = Point.create(0, 0);
             Dimension2D dummyDimensions = Dimension2D.create(1,1);
-            BufferView view = BufferView.createFromFilePath(url, dummyPosition, dummyDimensions);
+            BufferView view = BufferView.createFromFilePath(url, dummyPosition, dummyDimensions, communicator);
             viewRepo.add(view);
         }
         viewRepo.setActive(viewRepo.get(0));
@@ -95,14 +105,10 @@ public final class ViewService {
     /**
      * Attempts to delete the active BufferView. If this BufferView's buffer is Dirty, show user a warning. If it is clean, delete.
      */
-    public void attemptDeleteView(){ // TODO: call canDelete() on View, use returned boolean to decide on deletion
-        if( getActiveView() instanceof SnakeView || getActiveBuffer().getState() == BufferState.CLEAN){
+    public void attemptDeleteView(){
+        if(getActiveView().markForDeletion()){
             deleteView();
-            return;
         }
-        terminal.clearScreen(); // FIXME: Use PermissionRequester, saved in BufferView, instead
-        terminal.printText(1, 1, "The buffer is dirty. Are you sure you want to delete it? [Y | N]");
-        InputHandlerRepo.setCloseDirtyBufferInputHandler();
     }
 
     /**

@@ -16,6 +16,11 @@ public final class FileBuffer {
     private final ChangeHistory changeHistory;
     private BufferState state;
 
+    /**
+     * The amount of references to this FileBuffer.
+     */
+    private int referenceCount;
+
     private FileBuffer(File file, IText text, BufferState state){
         this.file = file;
         this.text = text;
@@ -53,6 +58,14 @@ public final class FileBuffer {
     }
 
     /**
+     * Returns the amount of references to this FileBuffer.
+     * @return the amount of references to this FileBuffer
+     */
+    public int getReferenceCount() {
+        return this.referenceCount;
+    }
+
+    /**
      * Sets the state of this file buffer to the given state.
      * @param state The new state. Cannot be null.
      *
@@ -74,6 +87,7 @@ public final class FileBuffer {
 
     public void executeAndStore(Action action, ICursor cursor){
         changeHistory.executeAndAddAction(action, cursor);
+        setState(BufferState.DIRTY);
     }
 
     /**
@@ -82,6 +96,23 @@ public final class FileBuffer {
     public void writeToDisk(){
         FileWriter.write(text.getContent(), file);
         this.setState(BufferState.CLEAN);
+    }
+
+    /**
+     * Adds one to the tracked reference count.
+     */
+    public void incrementReferenceCount() {
+        this.referenceCount += 1;
+    }
+
+    /**
+     * Decrements the reference count by one.
+     * @throws IllegalStateException if reference count is already at 0
+     */
+    public void decrementReferenceCount() {
+        if (this.referenceCount == 0)
+            throw new IllegalStateException("Cannot lower reference count below 0");
+        this.referenceCount -= 1;
     }
 
     /**
