@@ -68,23 +68,25 @@ public final class ViewDrawer{
             List<GamePoint> snake = gameBoard.getSnakePoints();
             GamePoint head = snake.remove(0);
             switch (gameBoard.getSnakeDirection()){
-                case RIGHT -> terminal.printText(x + head.x(), baseY- head.y()+ 1, ">");
-                case LEFT ->  terminal.printText(x+ head.x(), baseY- head.y()+ 1, "<");
-                case UP -> terminal.printText(x+ head.x(), baseY- head.y()+ 1, "^");
-                case DOWN -> terminal.printText(x+ head.x(), baseY- head.y()+ 1, "v");
+                case RIGHT -> terminal.printText(x + head.x(), baseY- head.y(), ">");
+                case LEFT ->  terminal.printText(x+ head.x(), baseY- head.y() , "<");
+                case UP -> terminal.printText(x+ head.x(), baseY- head.y(), "^");
+                case DOWN -> terminal.printText(x+ head.x(), baseY- head.y(), "v");
             }
             for(GamePoint point : snake){
-                terminal.printText(x+ point.x(), baseY- point.y()+ 1, "o");
+                terminal.printText(x+ point.x(), baseY- point.y(), "o");
             }
             List<GamePoint> foods = gameBoard.getFoods();
             for(GamePoint point : foods){
-                terminal.printText(x + point.x(), baseY- point.y() + 1, "f");
+                terminal.printText(x + point.x(), baseY- point.y() , "f");
             }
         }
         else
             terminal.printText(x, baseY, "GAME OVER - Press Enter to restart");
         int maxStatusBarIndex = Math.min(view.getDimensions().getWidth(), statusBar.length());
+        drawBordersGame(view);
         terminal.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
+
     }
   
     private void drawScrollBar(BufferView view){
@@ -93,6 +95,16 @@ public final class ViewDrawer{
         int yBar = Math.round(((float)currentY / (float)maxY) * (view.getDimensions().getHeight() - 1));
         terminal.printText(view.getPosition().getX() + view.getDimensions().getWidth() - 1,
                                                             yBar + view.getPosition().getY(), "|");
+    }
+    private void drawBordersGame(SnakeView view){
+        for(int i = 0; i<view.getDimensions().getHeight(); i++) {
+            terminal.printText(view.getPosition().getX() + view.getDimensions().getWidth() - 1,
+                    view.getPosition().getY() + i, "|");
+        }
+        for (int j= 0; j<view.getDimensions().getWidth(); j++){
+            terminal.printText(view.getPosition().getX()+j,view.getPosition().getY() + view.getDimensions().getHeight() - 1, "_");
+        }
+
     }
 
 

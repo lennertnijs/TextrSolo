@@ -41,14 +41,14 @@ public class SnakeView extends View {
         FoodManager foodManager = new FoodManager();
         Dimension2D dimensions = Dimension2D.create(getDimensions().getWidth() - 1, getDimensions().getHeight() - 1);
         GameBoard board = GameBoard.createNew(dimensions, snake, foodManager);
-        for(int i = 0; i < 200; i++)
+        for(int i = 0; i < 3; i++)
             board.spawnFood();
         IClock clock = new GameClock(0.9f);
         return new SnakeGame(board, clock);
     }
 
     private boolean isWithinBoundaries(GamePoint p){
-        return p.x() >= 0 && p.y() >= 0 && p.x() < getDimensions().getWidth() && p.y() < getDimensions().getHeight();
+        return p.x() >= 0 && p.y() >= 0 && p.x() < getDimensions().getWidth()-1 && p.y() < getDimensions().getHeight()-1;
     }
 
 
@@ -75,7 +75,8 @@ public class SnakeView extends View {
     @Override
     public void resize(Dimension2D dimensions){
         this.setDimensions(dimensions);
-        snakeGame.resizeBoard(dimensions);
+        Dimension2D boardDimensions = Dimension2D.create(dimensions.getWidth()-1, dimensions.getHeight()-1);
+        snakeGame.resizeBoard(boardDimensions);
     }
 
     @Override
