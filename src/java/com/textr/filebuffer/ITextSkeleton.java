@@ -39,7 +39,7 @@ public interface ITextSkeleton {
      * @throws IllegalArgumentException if the given point is not a valid point in the text structure
      */
     default int convertToIndex(FixedPoint point) {
-        if (this.getLineAmount() >= point.getY() || this.getLineLength(point.getY()) > point.getX())
+        if (this.getLineAmount() >= point.getY() || this.getLineLength(point.getY()) < point.getX())
             throw new IllegalArgumentException("Given point does not hold a valid location in this TextSkeleton");
         int count = 0;
         for(int i = 0; i < point.getY(); i++){
