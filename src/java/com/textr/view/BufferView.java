@@ -40,6 +40,7 @@ public final class BufferView extends View implements TextListener {
         this.anchor = anchor;
         this.communicator = Objects.requireNonNull(communicator, "BufferView's communicator cannot be null");
         this.updater = new GenericState();
+        buffer.addTextListener(this);
     }
 
     public static BufferView createFromFilePath(String url,
@@ -50,14 +51,12 @@ public final class BufferView extends View implements TextListener {
         Validator.notNull(position, "The global position of the BufferView in the Terminal cannot be null.");
         Validator.notNull(dimensions, "The dimensions of the BufferView cannot be null.");
         FileBuffer b = FileBuffer.createFromFilePath(url);
-        BufferView v = new BufferView(b,
+        return new BufferView(b,
                 Cursor.createNew(),
                 position.copy(),
                 dimensions.copy(),
                 Point.create(0,0),
                 communicator);
-        v.getBuffer().addTextListener(v);
-        return v;
     }
 
     public FileBuffer getBuffer(){
@@ -191,14 +190,12 @@ public final class BufferView extends View implements TextListener {
     public BufferView duplicate(){
         ICursor newCursor = Cursor.createNew(); // TODO: Make clone method for cursor
         newCursor.setInsertIndex(cursor.getInsertIndex(), buffer.getText().getSkeleton());
-        BufferView newView = new BufferView(this.buffer,
+        return new BufferView(this.buffer,
                 newCursor,
                 getPosition().copy(),
                 getDimensions().copy(),
                 this.anchor.copy(),
                 this.communicator);
-        newView.getBuffer().addTextListener(newView);
-        return newView;
     }
 
     @Override
