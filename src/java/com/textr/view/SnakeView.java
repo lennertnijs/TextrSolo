@@ -2,6 +2,7 @@ package com.textr.view;
 
 import com.textr.input.Input;
 import com.textr.input.InputType;
+import com.textr.snake.*;
 import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
 import com.textr.util.Point;
@@ -12,368 +13,49 @@ import java.util.Random;
 
 public class SnakeView extends View {
 
-    /**
-     * The direction the head of the snake looks at, and the direction the snake will move next.
-     */
-    private Direction headOrientation;
-    /**
-     * The positions occupied by the snake, in order from head to tail.
-     */
-    private LinkedList<Point> snake;
-    /**
-     * The positions of the food items in the game.
-     * There are always 3, except when the snake (nearly) fills the gamefield,
-     * leaving less than 3 spaces.
-     */
-    private ArrayList<Point> foods;
-    /**
-     * The unoccupied places on the field.
-     */
-    private ArrayList<Point> unoccupied;
-    /**
-     * Time since the snake last moved.
-     */
-    private int timeSinceMove;
-    /**
-     * Delay between moves. Gets shorter when the snake eats food items.
-     */
-    private int moveDelay;
-    /**
-     * The moves the snake will still grow. When eating a food item, the snake will grow for that move and two more.
-     */
-    private int stillToGrow;
-    /**
-     * The state of the game. True when it is running, false when it is game over. Does NOT signify whether
-     * the view is active/inactive.
-     */
-    private boolean running;
+    private SnakeGame snakeGame;
 
-    /**
-     * A random seed to allow for quasi-randomised food spawning.
-     */
-    private final Random randomSeed;
-    /**
-     * The current score.
-     */
-    private int score;
-
-    /**
-     * Constructor.
-     * @param position : the initial position of the view
-     * @param dimensions : the initial dimensions of the view
-     */
-    public SnakeView(Point position, Dimension2D dimensions) {
-        super(position, dimensions);
-        this.randomSeed = new Random();
-        initializeGame();
+    public SnakeView(Point pos, Dimension2D dimensions){
+        super(pos, dimensions);
+        snakeGame = initializeGame();
     }
 
-    /**
-     * Gets the snake.
-     * @return : the cells the snake occupies, in order, first is the head, rest is the body.
-     */
-    public ArrayList<Point> getSnake() {
-        ArrayList<Point> result = new ArrayList<>();
-        for (Point point : snake){
-            result.add(Point.create(point.getX(),point.getY()));
-        }
-        return result;
-    }
-    /**
-     * Gets the foods.
-     * @return : the cells the food occupies.
-     */
-    public ArrayList<Point> getFoods() {
-        ArrayList<Point> result = new ArrayList<>();
-        for (Point point : foods){
-            result.add(Point.create(point.getX(),point.getY()));
-        }
-        return result;
+    public boolean gameIsRunning(){
+        return snakeGame.isRunning();
     }
 
-    /**
-     * Gets the direction the head is oriented to. Can be up, down, left or right.
-     * @return orientation of the head.
-     */
-    public Direction getHeadOrientation() {
-        return headOrientation;
+
+    public IGameBoard getGameBoard(){
+        return snakeGame.getBoard();
+
     }
 
-    /**
-     * generate the statusbar of this view (only the score is displayed).
-     * @return : the status bar
-     */
-    @Override
-    public String generateStatusBar() {
-        return "Score : "+ score;
+    public void restartGame(){
+        this.snakeGame = initializeGame();
+        snakeGame.start();
     }
 
-    /**
-     * Initializes the game. Allows restart of the game within the same view.
-     */
-    public void initializeGame(){
-        this.snake = new LinkedList<>();
-        this.foods = new ArrayList<>();
-        this.unoccupied = new ArrayList<>();
-        this.headOrientation = Direction.RIGHT;
-        this.timeSinceMove = 0;
-        this.moveDelay = 1000;
-        this.stillToGrow = 0;
-        this.running = true;
-        this.score = 0;
-        int xhead = getDimensions().getWidth()/2;
-        int yhead = getDimensions().getHeight()/2;
-        int i = 0;
-        while(i<getDimensions().getWidth()-1){
-            int j=0;
-            while(j<getDimensions().getHeight()-1){
-                unoccupied.add(Point.create(i,j));
-                j++;
-            }
-            i++;
+    public SnakeGame initializeGame(){
+        Snake snake = new Snake(Direction.RIGHT);
+        for(int i = 0; i < 6; i++) {
+            GamePoint snakeSegment = new GamePoint(getDimensions().getWidth() / 2 - i, getDimensions().getHeight() / 2);
+            if(isWithinBoundaries(snakeSegment))
+                snake.add(snakeSegment);
         }
-        snake.add(Point.create(xhead, yhead));
-        int k = 1;
-        while(k<6){
-            snake.add(Point.create(xhead-k, yhead));
-            k++;
-        }
-        unoccupied.removeIf(this::occupiedBySnake);
-        int l= 0;
-        while (l<3){
-            spawnFood();
-            l++;
-        }
-    }
-    /**
-     * Spawns a food item in an unoccupied cell.
-     */
-    private void spawnFood(){
-        if(unoccupied.isEmpty()){return;}
-        int index = randomSeed.nextInt(unoccupied.size());
-        Point food = unoccupied.get(index);
-        unoccupied.remove(food);
-        foods.add(food);
+        FoodManager foodManager = new FoodManager();
+        Dimension2D dimensions = Dimension2D.create(getDimensions().getWidth() - 1, getDimensions().getHeight() - 1);
+        GameBoard board = GameBoard.createNew(dimensions, snake, foodManager);
+        for(int i = 0; i < 12; i++)
+            board.spawnFood();
+        IClock clock = new GameClock(1f);
+        return new SnakeGame(board, clock);
     }
 
-    /**
-     * Checks whether a cell is occupied by a part of the snake. Returns true if it is.
-     * @param tocheck : the cell to check
-     * @return : true if it is occupied by a part of the snake
-     */
-    private boolean occupiedBySnake(Point tocheck){
-        for(Point segment : snake ){
-            if(tocheck.equals(segment))
-                return true;
-        }
-        return false;
-    }
-    /**
-     * Checks whether a cell is occupied by food. Returns true if it is.
-     * @param tocheck : the cell to check
-     * @return : true if it is occupied by food
-     */
-    private boolean occupiedByFood(Point tocheck){
-        for(Point food : foods){
-            if (tocheck.equals(food))
-                return true;
-        }
-        return false;
+    private boolean isWithinBoundaries(GamePoint p){
+        return p.x() >= 0 && p.y() >= 0 && p.x() < getDimensions().getWidth()-1 && p.y() < getDimensions().getHeight()-1;
     }
 
-    /**
-     * checks whether a cell is out of bounds.
-     * @param cell : the cell to check.
-     * @return : true if the cell is out of bounds
-     */
-    private boolean outOfBounds(Point cell){
-        return cell.getX()<0 || cell.getX()>= getDimensions().getWidth()-1 ||
-                cell.getY()<0 || cell.getY()>= getDimensions().getHeight()-1;
-    }
 
-    /**
-     * Increment the timer. Move the snake if it is time to do so.
-     */
-    public boolean incrementTimer(){
-        timeSinceMove+=10;
-        if(timeSinceMove >= moveDelay && running){
-            timeSinceMove=0;
-            moveSnake();
-            return true;
-        }
-        else
-            return false;
-    }
-
-    /**
-     * Move the snake in the direction of the head. End the game if it collides. Do things if it eats food.
-     */
-    private void moveSnake() {
-        Point headpos = snake.getFirst();
-        Point nextcell;
-        switch (headOrientation){
-            case LEFT -> nextcell = Point.create(headpos.getX()-1, headpos.getY());
-            case RIGHT -> nextcell = Point.create(headpos.getX()+1, headpos.getY());
-            case DOWN -> nextcell = Point.create(headpos.getX(), headpos.getY()-1);
-            case UP -> nextcell = Point.create(headpos.getX(), headpos.getY()+1);
-            default -> nextcell = Point.create(headpos.getX(), headpos.getY());
-        }
-        if(outOfBounds(nextcell) || occupiedBySnake(nextcell)){
-            //end the game
-            this.running = false;
-        }
-        else if(occupiedByFood(nextcell)){
-            //allow snake to grow
-            foods.removeIf((point)->point.equals(nextcell));
-            unoccupied.removeIf(nextcell::equals);
-            snake.addFirst(nextcell);
-            stillToGrow= 2;
-            spawnFood();
-            moveDelay= (moveDelay*8)/10;
-            score+=10;
-        }
-        else if(stillToGrow>0){
-            //allow the snake to grow
-            stillToGrow--;
-            unoccupied.removeIf(nextcell::equals);
-            snake.addFirst(nextcell);
-            score++;
-        }
-        else {
-            //move the snake
-            unoccupied.removeIf(nextcell::equals);
-            snake.addFirst(nextcell);
-            Point behindTail = snake.removeLast();
-            unoccupied.add(behindTail);
-            score++;
-        }
-    }
-
-    /**
-     * Gets the direction from the head to the first part of the body.
-     * @return : the direction from the head cell to the first body cell.
-     */
-    private Direction intoBody() {
-        Point head= snake.getFirst();
-        Point startBody = snake.get(1);
-        if(head.getX()== startBody.getX()){
-            if (head.getY()>startBody.getY()){
-                return Direction.DOWN;
-            }
-            else
-                return Direction.UP;
-        } else if (head.getX()<startBody.getX()) {
-            return Direction.RIGHT;
-        }
-        else
-            return Direction.LEFT;
-    }
-
-    /**
-     * Resizes the game field to fit in the current view dimensions.
-     */
-    public void resize(Dimension2D newdimensions){
-        //cut down or add to the size in both dimensions where necessary
-        if(newdimensions.getWidth()< getDimensions().getWidth()){
-            cutWidth(newdimensions.getWidth());
-        }
-        if (newdimensions.getHeight()<getDimensions().getHeight()){
-            cutHeight(newdimensions.getHeight());
-        }
-        if (newdimensions.getWidth()> getDimensions().getWidth()){
-            addWidth(newdimensions.getWidth());
-        }
-        if (newdimensions.getHeight()>getDimensions().getHeight()){
-            addHeight(newdimensions.getHeight());
-        }
-        //set the new dimensions
-        setDimensions(newdimensions);
-        //remove all objects now outside the gamefield
-        LinkedList<Point> newSnake = new LinkedList<>();
-        for(Point point : snake){
-            if (outOfBounds(point)){
-                break;
-            }
-            newSnake.add(point);
-        }
-        snake = newSnake;
-        foods.removeIf(this::outOfBounds);
-        //restore unoccupied
-        this.unoccupied= new ArrayList<>();
-        int i = 0;
-        while(i<newdimensions.getWidth()-1){
-            int j=0;
-            while(j<newdimensions.getHeight()-1){
-                unoccupied.add(Point.create(i,j));
-                j++;
-            }
-            i++;
-        }
-        unoccupied.removeIf((point)->(occupiedBySnake(point)||occupiedByFood(point)));
-        //spawn extra food until 3 are available or game field is full
-        while (foods.size()<3&& !unoccupied.isEmpty()){
-            spawnFood();
-        }
-    }
-
-    /**
-     * Adds to the game field (extra rows) when resizing, should only be called when the new height is bigger than the old.
-     * @param newHeight : the new height of the view.
-     */
-    private void addHeight(int newHeight) {
-        int heightDiff = newHeight - getDimensions().getHeight();
-        snake.forEach((point)->point.addOtherToThis(Point.create(0, heightDiff/2)));
-        foods.forEach((point)->point.addOtherToThis(Point.create(0, heightDiff/2)));
-    }
-
-    /**
-     * Adds to the game field (extra columns) when resizing, should only be called when the new width is bigger than the old.
-     * @param newWidth : the new width of the view.
-     */
-    private void addWidth(int newWidth) {
-        int widthDiff = newWidth - getDimensions().getWidth();
-        snake.forEach((point)->point.addOtherToThis(Point.create(widthDiff/2,0)));
-        foods.forEach((point)->point.addOtherToThis(Point.create( widthDiff/2,0)));
-    }
-
-    /**
-     * Cuts part of the game field (some rows) when resizing, should only be called when the new height is smaller than the old,
-     * may cut of part of the snake and move foods.
-     * @param newHeight : the new height of the snake
-     */
-    private void cutHeight(int newHeight) {
-        int heightDiff = getDimensions().getHeight()- newHeight;
-        Point oldHead = snake.getFirst();
-        if (getDimensions().getHeight()-oldHead.getY()-newHeight/2<0){
-            snake.forEach((point)->point.subtractOtherFromThis(Point.create(0, heightDiff)));
-            foods.forEach((point)->point.subtractOtherFromThis(Point.create(0, heightDiff)));
-        }
-        else if(oldHead.getY()- newHeight/2>0) {
-            int moveBy = oldHead.getY()- newHeight / 2 ;
-            snake.forEach((point) -> point.subtractOtherFromThis(Point.create(0, moveBy)));
-            foods.forEach((point) -> point.subtractOtherFromThis(Point.create(0, moveBy)));
-        }
-    }
-
-    /**
-     * Cuts part of the game field (some columns) when resizing, should only be called when the new width is smaller than the old,
-     * may cut of part of the snake and move foods.
-     * @param newWidth : the new width of the snake
-     */
-    private void cutWidth(int newWidth) {
-        int widthDiff = getDimensions().getWidth()- newWidth;
-        Point oldHead = snake.getFirst();
-        if (getDimensions().getWidth()-oldHead.getX()-newWidth/2<0){
-            int opposite = -widthDiff;
-            snake.forEach((point)->point.addOtherToThis(Point.create(opposite, 0)));
-            foods.forEach((point)->point.addOtherToThis(Point.create(-widthDiff, 0)));
-        }
-        else if(oldHead.getX()- newWidth/2>0){
-            int moveBy = newWidth/2- oldHead.getX();
-            snake.forEach((point)->point.addOtherToThis(Point.create(moveBy, 0)));
-            foods.forEach((point)->point.addOtherToThis(Point.create(moveBy, 0)));
-        }
-    }
 
     /**
      * Handle input at the view level. Only view specific operations happen here, and nothing flows to a deeper level in the chain.
@@ -382,39 +64,29 @@ public class SnakeView extends View {
     public void handleInput(Input input){
         InputType inputType = input.getType();
         switch (inputType) {
-            case ENTER -> {
-                if(!running){
-                    initializeGame();
-                }
-            }
-            case ARROW_UP -> {
-                if(!intoBody().equals(Direction.UP)){
-                    headOrientation = Direction.UP;
-                }
-            }
-            case ARROW_RIGHT -> {
-                if(!intoBody().equals(Direction.RIGHT)){
-                    headOrientation = Direction.RIGHT;
-                }
-            }
-            case ARROW_DOWN -> {
-                if(!intoBody().equals(Direction.DOWN)){
-                headOrientation = Direction.DOWN;
-                }
-            }
-            case ARROW_LEFT -> {
-                if(!intoBody().equals(Direction.LEFT)){
-                    headOrientation = Direction.LEFT;
-                }
-            }
+            case ENTER -> {if(!snakeGame.isRunning()) restartGame();}
+            case ARROW_UP -> snakeGame.changeSnakeDirection(Direction.UP);
+            case ARROW_RIGHT -> snakeGame.changeSnakeDirection(Direction.RIGHT);
+            case ARROW_DOWN -> snakeGame.changeSnakeDirection(Direction.DOWN);
+            case ARROW_LEFT -> snakeGame.changeSnakeDirection(Direction.LEFT);
         }
     }
 
-    /**
-     * get the current state of the game, either running or game over.
-     * @return : true if the game is running
-     */
-    public boolean getRunning() {
-        return running;
+    @Override
+    public String generateStatusBar(){
+        return String.format("Score: %d", snakeGame.getBoard().getScore());
     }
+
+    @Override
+    public void resize(Dimension2D dimensions){
+        this.setDimensions(dimensions);
+        Dimension2D boardDimensions = Dimension2D.create(dimensions.getWidth()-1, dimensions.getHeight()-1);
+        snakeGame.resizeBoard(boardDimensions);
+    }
+
+    @Override
+    public boolean wasUpdated(){
+        return snakeGame.update(10);
+    }
+
 }

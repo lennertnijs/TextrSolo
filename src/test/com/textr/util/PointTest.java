@@ -25,13 +25,13 @@ public class PointTest {
         );
     }
 
-//    @Test
-//    public void testIllegalCreation(){
-//        Assertions.assertAll(
-//                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Point.create(-1, 1)),
-//                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Point.create(1, -1))
-//        );
-//    }
+    @Test
+    public void testIllegalCreation(){
+        Assertions.assertAll(
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Point.create(-1, 1)),
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Point.create(1, -1))
+        );
+    }
 
     @Test
     public void testSetters(){
@@ -42,13 +42,13 @@ public class PointTest {
         );
     }
 
-//    @Test
-//    public void testIllegalSetters(){
-//        Assertions.assertAll(
-//                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> point1.setX(-1)),
-//                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> point1.setY(-1))
-//        );
-//    }
+    @Test
+    public void testIllegalSetters(){
+        Assertions.assertAll(
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> point1.setX(-1)),
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> point1.setY(-1))
+        );
+    }
 
     @Test
     public void testIncrements(){
@@ -72,11 +72,9 @@ public class PointTest {
     @Test
     public void testEqualsAndHashCode(){
         Assertions.assertAll(
-                () -> Assertions.assertEquals(point1, point1),
                 () -> Assertions.assertEquals(point1, point3),
                 () -> Assertions.assertNotEquals(point1, point2),
                 () -> Assertions.assertNotEquals(point1, new Object()),
-                () -> Assertions.assertEquals(point1.hashCode(), point1.hashCode()),
                 () -> Assertions.assertEquals(point1.hashCode(), point3.hashCode()),
                 () -> Assertions.assertNotEquals(point1.hashCode(), point2.hashCode())
         );

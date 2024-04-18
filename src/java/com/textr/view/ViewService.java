@@ -182,7 +182,7 @@ public final class ViewService {
             case  F4-> attemptDeleteView();
             case CTRL_G -> addGame();
             case TICK -> {
-                if(!getActiveView().incrementTimer())
+                if(!getActiveView().wasUpdated())
                     return;
             }
             default -> getActiveView().handleInput(input);
@@ -194,7 +194,7 @@ public final class ViewService {
         SnakeView newGame = new SnakeView(Point.create(0,0), Dimension2D.create(10,10));
         viewRepo.addNextTo(newGame, getActiveView());
         generateViewPositionsAndDimensions();
-        newGame.initializeGame();
         setActiveViewToNext();
+        ((SnakeView)getActiveView()).restartGame();
     }
 }

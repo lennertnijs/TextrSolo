@@ -53,7 +53,7 @@ public abstract class View {
     /**
      * Increments the timer of the view if relevant, and returns whether that changed something requiring a redraw.
      */
-    public boolean incrementTimer() {
+    public boolean wasUpdated() {
         return false;
     }
 
@@ -61,8 +61,7 @@ public abstract class View {
      * Resizes this view to the new dimensions.
      * @param dimensions the new dimensions of the view.
      */
-    public void resize(Dimension2D dimensions) {
-        setDimensions(dimensions);
+    public void resize(Dimension2D dimensions){
     }
 
     /**
