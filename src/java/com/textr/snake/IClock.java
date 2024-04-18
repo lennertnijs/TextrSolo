@@ -9,4 +9,5 @@ public interface IClock {
     void start();
     void stop();
     boolean isRunning();
+    IClock copy();
 }

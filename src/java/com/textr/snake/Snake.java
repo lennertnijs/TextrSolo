@@ -177,4 +177,21 @@ public final class Snake {
     public Snake copy(){
         return new Snake(new ArrayList<>(body), headDirection, new ArrayList<>(atePoints));
     }
+
+    @Override
+    public boolean equals(Object other){
+        if(!(other instanceof Snake snake))
+            return false;
+        return body.equals(snake.body) &&
+                headDirection.equals(snake.headDirection) &&
+                atePoints.equals(snake.atePoints);
+    }
+
+    @Override
+    public int hashCode(){
+        int result = body.hashCode();
+        result = result * 31 + headDirection.hashCode();
+        result = result * 31 + atePoints.hashCode();
+        return result;
+    }
 }

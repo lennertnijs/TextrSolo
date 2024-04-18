@@ -28,6 +28,7 @@ public class SnakeView extends View {
 
     public void restartGame(){
         this.snakeGame = initializeGame();
+        snakeGame.start();
     }
 
     public SnakeGame initializeGame(){
@@ -73,12 +74,12 @@ public class SnakeView extends View {
     @Override
     public void resize(Dimension2D dimensions){
         this.setDimensions(dimensions);
-        snakeGame.resize(dimensions);
+        snakeGame.resizeBoard(dimensions);
     }
 
     @Override
     public boolean wasUpdated(){
-        return snakeGame.update();
+        return snakeGame.update(10);
     }
 
 }

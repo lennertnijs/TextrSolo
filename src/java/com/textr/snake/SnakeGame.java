@@ -22,8 +22,8 @@ public final class SnakeGame {
     public SnakeGame(IGameBoard board, IClock clock){
         Objects.requireNonNull(board, "GameBoard is null.");
         Objects.requireNonNull(clock, "Clock is null.");
-        this.board = board;
-        this.clock = clock;
+        this.board = board.copy();
+        this.clock = clock.copy();
     }
 
     /**
@@ -41,12 +41,17 @@ public final class SnakeGame {
     }
 
     /**
-     * Resizes the {@link IGameBoard} to the given {@link Dimension2D}.
-     * @param dimensions The new dimensions. Cannot be null.
+     * Resumes the game.
      */
-    public void resize(Dimension2D dimensions){
-        Objects.requireNonNull(dimensions, "Dimensions is null.");
-        board.resize(dimensions);
+    public void start(){
+        clock.start();
+    }
+
+    /**
+     * Pauses the game.
+     */
+    public void pause(){
+        clock.stop();
     }
 
     /**
@@ -59,28 +64,45 @@ public final class SnakeGame {
     }
 
     /**
+     * Resizes the {@link IGameBoard} to the given {@link Dimension2D}.
+     * @param dimensions The new dimensions. Cannot be null.
+     */
+    public void resizeBoard(Dimension2D dimensions){
+        Objects.requireNonNull(dimensions, "Dimensions is null.");
+        board.resize(dimensions);
+    }
+
+    /**
      * Updates the snake game.
      * If the snake moved at all during the update, returns True. Returns False otherwise.
+     * @param delta The delta (in milliseconds) to add to the clock. Cannot be negative.
      *
      * @return True if the snake moved. False otherwise.
      */
-    public boolean update(){
+    public boolean update(int delta){
+        if(delta < 0)
+            throw new IllegalArgumentException("Millis is negative.");
         if(!clock.isRunning())
             return false;
-        if(!clock.shouldMove()){
-            clock.increase(10);
+        clock.increase(delta);
+        if(!clock.shouldMove())
             return false;
-        }
+        handleMove();
+        return true;
+    }
 
+    /**
+     * Handles the movement of the snake.
+     * Appropriately updates the clock.
+     */
+    private void handleMove(){
+        clock.reset();
         if(board.willEatOnMove())
             clock.changeSecondsBetweenMove(0.9f);
-        clock.reset();
         try{
             board.moveSnake();
         }catch(IllegalStateException e){
             clock.stop();
         }
-        clock.increase(10);
-        return true;
     }
 }

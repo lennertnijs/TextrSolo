@@ -277,4 +277,23 @@ public final class GameBoard implements IGameBoard{
     public IGameBoard copy(){
         return new GameBoard(dimensions, snake.copy(), foodManager.copy(), score);
     }
+
+    @Override
+    public boolean equals(Object other){
+        if(!(other instanceof GameBoard gameBoard))
+            return false;
+        return dimensions.equals(gameBoard.dimensions) &&
+                snake.equals(gameBoard.snake) &&
+                foodManager.equals(gameBoard.foodManager) &&
+                score == gameBoard.score;
+    }
+
+    @Override
+    public int hashCode(){
+        int result = dimensions.hashCode();
+        result = result * 31 + snake.hashCode();
+        result = result * 31 + foodManager.hashCode();
+        result = result * 31 + score;
+        return result;
+    }
 }

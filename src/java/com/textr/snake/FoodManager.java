@@ -80,4 +80,16 @@ public final class FoodManager {
     public FoodManager copy(){
         return new FoodManager(new ArrayList<>(foods));
     }
+
+    @Override
+    public boolean equals(Object other){
+        if(!(other instanceof  FoodManager f))
+            return false;
+        return foods.equals(f.foods);
+    }
+
+    @Override
+    public int hashCode(){
+        return foods.hashCode();
+    }
 }

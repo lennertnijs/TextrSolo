@@ -21,6 +21,12 @@ public final class GameClock implements IClock{
         running = false;
     }
 
+    private GameClock(float secondsBetweenMove, long lastMove, boolean running){
+        this.secondsBetweenMove = secondsBetweenMove;
+        this.lastMove = lastMove;
+        this.running = running;
+    }
+
 
 
     public void increase(int increaseInMillis){
@@ -42,7 +48,7 @@ public final class GameClock implements IClock{
      * Use when a move is executed.
      */
     public void reset(){
-        lastMove = 0;
+        lastMove -= (secondsBetweenMove * 1000);
     }
 
     /**
@@ -66,4 +72,12 @@ public final class GameClock implements IClock{
         this.running = false;
     }
 
+    public GameClock copy(){
+        return new GameClock(secondsBetweenMove, lastMove, running);
+    }
+
+    @Override
+    public String toString(){
+        return String.format("GameClock[secondsBetweenMove=%f, lastMove=%s, running=%b]", secondsBetweenMove, lastMove, running);
+    }
 }
