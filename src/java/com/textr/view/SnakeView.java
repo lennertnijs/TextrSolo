@@ -7,8 +7,11 @@ import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
 import com.textr.util.Point;
 
-public class SnakeView extends View {
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Random;
 
+public class SnakeView extends View {
 
     private SnakeGame snakeGame;
 
@@ -24,6 +27,7 @@ public class SnakeView extends View {
 
     public IGameBoard getGameBoard(){
         return snakeGame.getBoard();
+
     }
 
     public void restartGame(){
@@ -50,6 +54,7 @@ public class SnakeView extends View {
     private boolean isWithinBoundaries(GamePoint p){
         return p.x() >= 0 && p.y() >= 0 && p.x() < getDimensions().getWidth()-1 && p.y() < getDimensions().getHeight()-1;
     }
+
 
 
     /**

@@ -107,5 +107,14 @@ public final class ViewDrawer{
 
     }
 
+    private void drawBordersGame(SnakeView view){
+        for(int i = 0; i<view.getDimensions().getHeight(); i++) {
+            terminal.printText(view.getPosition().getX() + view.getDimensions().getWidth() - 1,
+                    view.getPosition().getY() + i, "|");
+        }
+        for (int j= 0; j<view.getDimensions().getWidth(); j++){
+            terminal.printText(view.getPosition().getX()+j,view.getPosition().getY() + view.getDimensions().getHeight() - 1, "_");
+        }
 
+    }
 }

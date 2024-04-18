@@ -3,10 +3,14 @@ package com.textr.view;
 import com.textr.filebuffer.*;
 import com.textr.input.Input;
 import com.textr.input.InputType;
+import com.textr.terminal.Communicator;
+import com.textr.terminal.TermiosTerminalService;
 import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
 import com.textr.util.Point;
 import com.textr.util.Validator;
+
+import java.util.Objects;
 
 /**
  * Class to represent a view.
@@ -17,21 +21,36 @@ public final class BufferView extends View {
     private final ICursor cursor;
     private final Point anchor;
 
+    private final Communicator communicator;
 
-    private BufferView(FileBuffer buffer, ICursor cursor, Point position, Dimension2D dimensions, Point anchor){
+    private BufferView(FileBuffer buffer,
+                       ICursor cursor,
+                       Point position,
+                       Dimension2D dimensions,
+                       Point anchor,
+                       Communicator communicator){
         super(position, dimensions);
         this.buffer = buffer;
         this.cursor = cursor;
         this.anchor = anchor;
-
+        this.communicator = Objects.requireNonNull(communicator, "BufferView's communicator cannot be null");
     }
 
-    public static BufferView createFromFilePath(String url, Point position, Dimension2D dimensions){
+    public static BufferView createFromFilePath(String url,
+                                                Point position,
+                                                Dimension2D dimensions,
+                                                Communicator communicator){
         Validator.notNull(url, "The url of a file buffer cannot be null.");
         Validator.notNull(position, "The global position of the BufferView in the Terminal cannot be null.");
         Validator.notNull(dimensions, "The dimensions of the BufferView cannot be null.");
         FileBuffer b = FileBuffer.createFromFilePath(url);
-        return new BufferView(b, Cursor.createNew(), position.copy(), dimensions.copy(), Point.create(0,0));
+        b.incrementReferenceCount();
+        return new BufferView(b,
+                Cursor.createNew(),
+                position.copy(),
+                dimensions.copy(),
+                Point.create(0,0),
+                communicator);
     }
 
     public FileBuffer getBuffer(){
@@ -182,6 +201,25 @@ public final class BufferView extends View {
     }
 
     public BufferView copy(){
-        return new BufferView(this.buffer.copy(), this.cursor, getPosition().copy(), getDimensions().copy(), this.anchor.copy());
+        return new BufferView(this.buffer.copy(),
+                this.cursor,
+                getPosition().copy(),
+                getDimensions().copy(),
+                this.anchor.copy(),
+                this.communicator);
+    }
+
+    @Override
+    public boolean markForDeletion() {
+        if (getBuffer().getState() == BufferState.CLEAN || getBuffer().getReferenceCount() > 1) {
+            getBuffer().decrementReferenceCount();
+            return true;
+        }
+        if (communicator.requestPermissions(
+                "You have unsaved changes. Are you sure you want to close this FileBuffer?")) {
+            getBuffer().decrementReferenceCount();
+            return true;
+        }
+        return false;
     }
 }

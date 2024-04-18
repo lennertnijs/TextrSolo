@@ -15,17 +15,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ViewTreeRepoTest {
 
-    private BufferView view1;
+    private View view1;
 
-    private BufferView view2;
+    private View view2;
 
-    private BufferView view3;
+    private View view3;
 
-    private BufferView view4;
+    private View view4;
 
-    private BufferView view5;
+    private View view5;
 
-    private BufferView view6;
+    private View view6;
 
     private Dimension2D terminalDimensions;
     private ViewTreeRepo repo;
@@ -39,17 +39,17 @@ class ViewTreeRepoTest {
         Point initPoint = Point.create(0,0);
         Dimension2D initDimension = Dimension2D.create(10,10);
         Settings.defaultLineSeparator = "\r\n";
-        view1 = BufferView.createFromFilePath("resources/test.txt", initPoint, initDimension);
+        view1 = new MockView(initPoint, initDimension);
         views.add(view1);
-        view2 = BufferView.createFromFilePath("resources/test2ndfile.txt", initPoint, initDimension);
+        view2 = new MockView(initPoint, initDimension);
         views.add(view2);
-        view3 = BufferView.createFromFilePath("resources/test3rdfile.txt", initPoint, initDimension);
+        view3 = new MockView(initPoint, initDimension);
         views.add(view3);
-        view4 = BufferView.createFromFilePath("resources/save.txt", initPoint, initDimension);
+        view4 = new MockView(initPoint, initDimension);
         views.add(view4);
-        view5 = BufferView.createFromFilePath("resources/test2.txt", initPoint, initDimension);
+        view5 = new MockView(initPoint, initDimension);
         views.add(view5);
-        view6 = BufferView.createFromFilePath("resources/write1.txt", initPoint, initDimension);
+        view6 = new MockView(initPoint, initDimension);
         views.add(view6);
         repo = new ViewTreeRepo();
         setViewRepo(repo);
@@ -106,7 +106,7 @@ class ViewTreeRepoTest {
         assertAll(
                 () -> assertEquals(repo.getSize(), 6),
                 () -> {
-                    List<BufferView> actual = new ArrayList<>();
+                    List<View> actual = new ArrayList<>();
                     actual.add(view1);
                     actual.add(null);
                     actual.add(view4);
@@ -121,7 +121,7 @@ class ViewTreeRepoTest {
         repo.rotate(true);
         assertAll(
                 () -> {
-                    List<BufferView> actual = new ArrayList<>();
+                    List<View> actual = new ArrayList<>();
                     actual.add(view1);
                     actual.add(view3);
                     actual.add(view2);
@@ -136,7 +136,7 @@ class ViewTreeRepoTest {
         repo.rotate(false);
         assertAll(
                 () -> {
-                    List<BufferView> actual = new ArrayList<>();
+                    List<View> actual = new ArrayList<>();
                     actual.add(view1);
                     actual.add(view3);
                     actual.add(null);
@@ -151,7 +151,7 @@ class ViewTreeRepoTest {
         repo.rotate(true);
         assertAll(
                 () -> {
-                    List<BufferView> actual = new ArrayList<>();
+                    List<View> actual = new ArrayList<>();
                     actual.add(view1);
                     actual.add(view3);
                     actual.add(null);
@@ -165,7 +165,7 @@ class ViewTreeRepoTest {
         repo.rotate(false);
         assertAll(
                 () -> {
-                    List<BufferView> actual = new ArrayList<>();
+                    List<View> actual = new ArrayList<>();
                     actual.add(view1);
                     actual.add(view3);
                     actual.add(null);
@@ -179,7 +179,7 @@ class ViewTreeRepoTest {
         repo.rotate(false);
         assertAll(
                 () -> {
-                    List<BufferView> actual = new ArrayList<>();
+                    List<View> actual = new ArrayList<>();
                     actual.add(view1);
                     actual.add(view3);
                     actual.add(view2);
@@ -194,7 +194,7 @@ class ViewTreeRepoTest {
         repo.rotate(true);
         assertAll(
                 () -> {
-                    List<BufferView> actual = new ArrayList<>();
+                    List<View> actual = new ArrayList<>();
                     actual.add(view1);
                     actual.add(view3);
                     actual.add(view5);
@@ -210,7 +210,7 @@ class ViewTreeRepoTest {
         repo.rotate(false);
         assertAll(
                 () -> {
-                    List<BufferView> actual = new ArrayList<>();
+                    List<View> actual = new ArrayList<>();
                     actual.add(view1);
                     actual.add(null);
                     actual.add(view2);
