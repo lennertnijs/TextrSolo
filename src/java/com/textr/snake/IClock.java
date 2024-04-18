@@ -6,4 +6,7 @@ public interface IClock {
     boolean shouldMove();
     void reset();
     void changeSecondsBetweenMove(float f);
+    void start();
+    void stop();
+    boolean isRunning();
 }

@@ -5,8 +5,9 @@ package com.textr.snake;
  */
 public final class GameClock implements IClock{
 
-    private long lastMove;
     private float secondsBetweenMove;
+    private long lastMove;
+    private boolean running;
 
     /**
      * Creates a new {@link GameClock}
@@ -15,9 +16,12 @@ public final class GameClock implements IClock{
     public GameClock(float secondsBetweenMove){
         if(secondsBetweenMove <= 0)
             throw new IllegalArgumentException("Seconds between move is negative or 0.");
-        lastMove = 0;
         this.secondsBetweenMove = secondsBetweenMove;
+        lastMove = 0;
+        running = false;
     }
+
+
 
     public void increase(int increaseInMillis){
         if(increaseInMillis < 0)
@@ -50,4 +54,16 @@ public final class GameClock implements IClock{
             throw new IllegalArgumentException("Factor has to be strictly positive.");
         secondsBetweenMove *= f;
     }
+    public boolean isRunning(){
+        return running;
+    }
+
+    public void start(){
+        this.running = true;
+    }
+
+    public void stop(){
+        this.running = false;
+    }
+
 }

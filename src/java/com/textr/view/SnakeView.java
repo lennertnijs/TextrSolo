@@ -18,7 +18,7 @@ public class SnakeView extends View {
     }
 
     public boolean gameIsRunning(){
-        return snakeGame.isRunning();
+        return snakeGame.isActive();
     }
 
 
@@ -57,7 +57,7 @@ public class SnakeView extends View {
     public void handleInput(Input input){
         InputType inputType = input.getType();
         switch (inputType) {
-            case ENTER -> {if(!snakeGame.isRunning()) restartGame();}
+            case ENTER -> {if(!snakeGame.isActive()) restartGame();}
             case ARROW_UP -> snakeGame.changeSnakeDirection(Direction.UP);
             case ARROW_RIGHT -> snakeGame.changeSnakeDirection(Direction.RIGHT);
             case ARROW_DOWN -> snakeGame.changeSnakeDirection(Direction.DOWN);
@@ -78,7 +78,7 @@ public class SnakeView extends View {
 
     @Override
     public boolean wasUpdated(){
-        return snakeGame.update(10);
+        return snakeGame.update();
     }
 
 }
