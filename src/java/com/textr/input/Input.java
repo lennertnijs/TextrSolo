@@ -1,5 +1,7 @@
 package com.textr.input;
 
+import java.util.Objects;
+
 public class Input {
     private final InputType type;
     private final char character;
@@ -60,5 +62,25 @@ public class Input {
             throw new IllegalStateException("Cannot get character from non-character input");
         }
         return character;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Input input)) return false;
+        if (getType() != input.getType()) return false;
+        if (getType() == InputType.CHARACTER)
+            return getCharacter() == input.getCharacter();
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getType(), getCharacter());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Input{type=%s, characterByte=%d}", type.toString(), (byte) character);
     }
 }
