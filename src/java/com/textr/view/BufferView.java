@@ -6,6 +6,7 @@ import com.textr.input.InputType;
 import com.textr.terminal.Communicator;
 import com.textr.util.*;
 
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -172,6 +173,13 @@ public final class BufferView extends View implements TextListener {
             case CTRL_Z -> {
                 setUpdateState(new JumpToEditState());
                 buffer.undo();
+            }
+            case CTRL_S -> {
+                try {
+                    getBuffer().writeToDisk();
+                } catch (IOException e) {
+                    communicator.sendMessage("Something went wrong when saving, please try again");
+                }
             }
         }
     }

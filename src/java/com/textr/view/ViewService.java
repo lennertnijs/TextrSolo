@@ -1,6 +1,5 @@
 package com.textr.view;
 
-import com.textr.filebuffer.FileBuffer;
 import com.textr.input.Input;
 import com.textr.Settings;
 import com.textr.input.InputType;
@@ -12,7 +11,6 @@ import com.textr.util.Validator;
 import com.textr.drawer.CursorDrawer;
 import com.textr.drawer.ViewDrawer;
 
-import java.io.IOException;
 import java.util.Objects;
 
 public final class ViewService {
@@ -126,20 +124,6 @@ public final class ViewService {
         drawAll();
     }
 
-
-    /**
-     * Saves only if the active view is a BufferView, otherwise does nothing.
-     * Saves the active BufferView's buffer changes permanently.
-     */
-    public void saveBuffer(){
-        if(getActiveView() instanceof BufferView)
-            try {
-                getActiveBuffer().writeToDisk();
-            } catch (IOException e) {
-                communicator.sendMessage("Something went wrong when saving, please try again");
-            }
-    }
-
     /**
      * Rotates the active BufferView and the next BufferView.
      * Then updates the new positions and dimensions.
@@ -150,19 +134,6 @@ public final class ViewService {
         generateViewPositionsAndDimensions();
     }
 
-
-    /**
-     * Gets the active buffer. WARNING: this only works if the active view is a BufferView.
-     * @return The active buffer.
-     * @throws IllegalStateException if the active view isn't a BufferView
-     */
-    private FileBuffer getActiveBuffer(){
-        if(viewRepo.getActive() instanceof BufferView)
-            return ((BufferView) viewRepo.getActive()).getBuffer();
-        else
-            throw new IllegalStateException();
-    }
-
     /**
      * @return The active view.
      */
@@ -171,15 +142,27 @@ public final class ViewService {
     }
 
     /**
-     * Handling input at the ViewService level, allowing some to flow through to the active view.
-     * @param input
+     * Makes this ViewService handle the given input as needed. Input that was not mapped here is sent to the active
+     * view instead, and is handled there.
+     * This method will draw this ViewService object after handling the input.
+     *
+     * Current handled input:
+     * CTRL_P (previous active view)
+     * CTRL_N (next active view)
+     * CTRL_R (rotate clockwise)
+     * CTRL_T (rotate counter-clockwise)
+     * F4     (close active view)
+     * CTRl_G (create snake game view)
+     * CTRL_D (duplicate active view)
+     * TICK   (redraws only if active updated)
+     *
+     * @param input The input to handle on the ViewService level
      */
     public void handleInput(Input input) {
         InputType inputType = input.getType();
         switch (inputType){
             case CTRL_P -> setActiveViewToPrevious();
             case CTRL_N -> setActiveViewToNext();
-            case CTRL_S -> saveBuffer();
             case CTRL_R -> rotateView(false);
             case CTRL_T -> rotateView(true);
             case  F4-> attemptDeleteView();
