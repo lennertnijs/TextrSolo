@@ -123,8 +123,12 @@ public final class LineText implements IText{
         builder.insert(index, character);
 
         // Notify listeners
+        TextUpdateType type = TextUpdateType.CHAR_UPDATE;
+        if (character == '\n')
+            type = TextUpdateType.LINE_UPDATE;
+
         for (TextListener listener: listeners)
-            listener.update(new TextUpdateReference(index, true, TextUpdateType.CHAR_UPDATE), getSkeleton());
+            listener.update(new TextUpdateReference(index, true, type), getSkeleton());
     }
 
     /**
