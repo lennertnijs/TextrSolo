@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -34,7 +36,7 @@ public class FileWriterTest {
 
     @Test
     public void testWriteInvalidPath(){
-        Path p = Paths.get("resources");
-        Assertions.assertDoesNotThrow(() -> FileWriter.write("text", p.toFile()));
+        Path p = Paths.get("test-resources");
+        Assertions.assertThrows(IOException.class, () -> FileWriter.write("text", p.toFile()));
     }
 }

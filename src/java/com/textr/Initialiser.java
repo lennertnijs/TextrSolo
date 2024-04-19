@@ -1,6 +1,5 @@
 package com.textr;
 
-import com.textr.input.InputHandlerRepo;
 import com.textr.terminal.TerminalService;
 import com.textr.view.ViewService;
 
@@ -17,8 +16,6 @@ public class Initialiser {
         if(filePaths.length > terminal.getTerminalArea().getHeight() / 2){
             throw new IllegalArgumentException("Too many input files.");
         }
-        InputHandlerRepo.initialiseInputHandlers(viewService);
-
         viewService.initialiseViews(filePaths);
         viewService.drawAll();
     }

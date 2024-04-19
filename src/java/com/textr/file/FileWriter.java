@@ -1,6 +1,5 @@
 package com.textr.file;
 
-import com.textr.input.InputHandlerRepo;
 import com.textr.Settings;
 
 import java.io.BufferedWriter;
