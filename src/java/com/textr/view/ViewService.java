@@ -14,6 +14,7 @@ import com.textr.util.Validator;
 import com.textr.drawer.CursorDrawer;
 import com.textr.drawer.ViewDrawer;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public final class ViewService {
@@ -134,7 +135,11 @@ public final class ViewService {
      */
     public void saveBuffer(){
         if(getActiveView() instanceof BufferView)
-            getActiveBuffer().writeToDisk();
+            try {
+                getActiveBuffer().writeToDisk();
+            } catch (IOException e) {
+                communicator.sendMessage("Something went wrong when saving, please try again");
+            }
     }
 
     /**
@@ -157,7 +162,7 @@ public final class ViewService {
         if(viewRepo.getActive() instanceof BufferView)
             return ((BufferView) viewRepo.getActive()).getBuffer();
         else
-            throw new IllegalStateException ();
+            throw new IllegalStateException();
     }
 
     /**

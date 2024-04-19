@@ -22,7 +22,7 @@ public class FileWriterTest {
     public void testWrite(){
         String text = "first line\nsecond line\nthird line";
         String text2 = "first line\r\nsecond line\r\nthird line";
-        FileWriter.write(text, new File("resources/write1.txt"));
+        Assertions.assertDoesNotThrow(() -> FileWriter.write(text, new File("resources/write1.txt")));
         Assertions.assertEquals(text2, FileReader.readContents(new File("resources/write1.txt")));
     }
 
@@ -35,6 +35,6 @@ public class FileWriterTest {
     @Test
     public void testWriteInvalidPath(){
         Path p = Paths.get("resources");
-        FileWriter.write("text", p.toFile());
+        Assertions.assertDoesNotThrow(() -> FileWriter.write("text", p.toFile()));
     }
 }
