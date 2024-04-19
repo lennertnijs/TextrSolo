@@ -2,8 +2,8 @@
 'https://plantuml.com/sequence-diagram
 hide footbox
 actor User as u
-participant ":InputHandler" as ih
 participant "InputTranslator" as it
+participant ":InputHandler" as ih
 participant ":ViewService" as vs
 participant "active:\nBufferView" as bv
 participant "Cursor:\nPoint" as p
@@ -11,13 +11,12 @@ participant "active:\nSnakeView" as sv
 participant "snakeGame" as sg
 participant "gameBoard" as bo
 participant "Snake" as sn
-u -> ih: input(Arrowkey)
+u -> it: ARROWKEY
 activate u
-activate ih
-ih -> it: TranslateBytes(Arrowkey)
 activate it
-it --> ih: input := Input.ARROWKEY
-deactivate it
+it --> it: input := Input.ARROW
+it-> ih : handleInput(input)
+activate ih
 ih -> vs: handleInput(input);
 activate vs
 
