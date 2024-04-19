@@ -3,6 +3,7 @@ package com.textr.view;
 import com.textr.filebuffer.ICursor;
 import com.textr.filebuffer.ITextSkeleton;
 import com.textr.filebuffer.TextUpdateReference;
+import com.textr.filebuffer.TextUpdateType;
 import com.textr.util.*;
 
 /**
@@ -23,11 +24,12 @@ public class RemainOnContentState implements UpdateState {
      * When a character gets inserted (resp. deleted) on the same line as the cursor, moves the cursor right (resp.
      * left) if necessary to stay on the same content. In the case of an addition, inserting on the cursor will also
      * move the cursor right.
-     * Then, it moves the anchor point if it is necessary to keep the cursor in view.
+     *
+     * Then, it moves the anchor point up or down a line if it is necessary to keep the same content in view.
      */
     public void update(BufferView view, TextUpdateReference update, ITextSkeleton textStructure) {
         updateCursor(view.getCursor(), update, textStructure);
-        updateAnchor(view.getAnchor(), view.getCursor(), view.getDimensions());
+        updateAnchor(view.getAnchor(), view.getCursor(), update, view.getDimensions());
     }
 
     private void updateCursor(ICursor cursor, TextUpdateReference update, ITextSkeleton skeleton) {
@@ -40,7 +42,13 @@ public class RemainOnContentState implements UpdateState {
             cursor.setInsertIndex(cursor.getInsertIndex() + 1, skeleton);
     }
 
-    private void updateAnchor(Point anchor, ICursor cursor, Dimension2D dimensions) {
+    private void updateAnchor(Point anchor, ICursor cursor, TextUpdateReference update, Dimension2D dimensions) {
+        boolean isLineUpdate = update.type() == TextUpdateType.LINE_UPDATE;
+        boolean isBeforeCursor = update.updateIndex() < cursor.getInsertIndex();
+        if (isLineUpdate && isBeforeCursor) {
+            int displacement = update.isInsertion() ? 1 : -1;
+            anchor.setY(anchor.getY() + displacement);
+        }
         AnchorUpdater.updateAnchor(anchor, cursor.getInsertPoint(), dimensions);
     }
 }
