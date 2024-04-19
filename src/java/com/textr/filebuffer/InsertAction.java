@@ -14,11 +14,14 @@ public final class InsertAction implements Action{
      * @param index The index. Cannot be outside the Text's range.
      * @param character The character.
      * @param text The text. Cannot be null.
+     * @throws IllegalArgumentException If the index is less than 0 or greater than or equal to the character length
      */
     public InsertAction(int index, char character, IText text){
         Objects.requireNonNull(text, "Text is null.");
         if(index < 0 || index > text.getCharAmount())
-            throw new IndexOutOfBoundsException("Index is illegal.");
+            throw new IndexOutOfBoundsException(String.format(
+                    "Index %d out of bounds for length %d of text structure", index, text.getCharAmount()
+            ));
         this.index = index;
         this.character = character;
         this.text = text;
