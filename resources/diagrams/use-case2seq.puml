@@ -5,32 +5,48 @@ actor User as u
 participant ":InputHandler" as ih
 participant "InputTranslator" as it
 participant ":ViewService" as vs
-participant "active:\nFileBuffer" as fb
-participant "CursorMover" as cm
-participant "cursor:\nPoint" as p
-autonumber
+participant "active:\nBufferView" as bv
+participant "Cursor:\nPoint" as p
+participant "active:\nSnakeView" as sv
+participant "snakeGame" as sg
+participant "gameBoard" as bo
+participant "Snake" as sn
 u -> ih: input(Arrowkey)
 activate u
 activate ih
 ih -> it: TranslateBytes(Arrowkey)
 activate it
-it --> ih: Input.ARROWKEY
+it --> ih: input := Input.ARROWKEY
 deactivate it
-ih -> vs: moveCursor(direction);
+ih -> vs: handleInput(input);
 activate vs
 
-vs -> vs: active := getActiveBuffer()
-vs -> fb: moveCursor(direction)
-activate fb
-fb -> cm: move(cursor, direction, text)
-activate cm
+vs -> vs: active := getActiveView()
+alt typeOf active == BufferView
+    vs -> bv: handleInput(input)
+    activate bv
+    bv --> bv: direction := input.getType()
+    bv --> bv: cursor := this.cursor
+    bv --> bv: text := this.buffer.getText().getSkeleton()
+    bv -> p: move(cursor, direction, text)
+    activate p
+    p -> p: setX(newX)
+    p -> p: setY(newY)
+    bv -> bv: updateAnchor()
 
-cm -> p: setX(newX)
-cm -> p: setY(newY)
-deactivate cm
-deactivate fb
 
-vs -> vs: updateAnchor()
+else
+    vs -> sv: handleInput(input)
+    activate sv
+    sv --> sv: direction := input.getType()
+    sv -> sg: changeSnakeDirection(direction)
+    activate sg
+    sg-> bo: changeSnakeDirection(direction)
+    activate bo
+    bo-> sn: changeDirection(direction)
+    activate sn
+
+end
 deactivate vs
 deactivate ih
 deactivate u
