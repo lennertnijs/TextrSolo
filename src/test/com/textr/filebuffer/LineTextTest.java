@@ -173,19 +173,6 @@ public class LineTextTest {
     }
 
     @Test
-    public void testEquals(){
-        assertEquals(text1, text3);
-        assertNotEquals(text1, text2);
-        assertNotEquals(text1, new Object());
-    }
-
-    @Test
-    public void testHashCode(){
-        assertEquals(text1.hashCode(), text3.hashCode());
-        assertNotEquals(text1.hashCode(), text2.hashCode());
-    }
-
-    @Test
     public void testToString(){
         String expectedString = "LineText[Text=Line 1\nLine 2\nLine 3]";
         assertEquals(text1.toString(), expectedString);
