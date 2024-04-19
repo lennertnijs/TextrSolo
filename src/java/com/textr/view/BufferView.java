@@ -160,7 +160,7 @@ public final class BufferView extends View implements TextListener {
             case BACKSPACE -> {
                 if(cursor.getInsertIndex() == 0)
                     return;
-                Action deleteAction = new DeleteAction(cursor.getInsertIndex(),
+                Action deleteAction = new DeleteAction(cursor.getInsertIndex() - 1,
                         buffer.getText().getCharacter(cursor.getInsertIndex() - 1),
                         buffer.getText());
                 buffer.executeAndStore(deleteAction);
