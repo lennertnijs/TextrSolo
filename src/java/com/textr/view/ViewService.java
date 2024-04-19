@@ -11,7 +11,6 @@ import com.textr.util.Validator;
 import com.textr.drawer.CursorDrawer;
 import com.textr.drawer.ViewDrawer;
 
-import java.io.IOException;
 import java.util.Objects;
 
 public final class ViewService {
