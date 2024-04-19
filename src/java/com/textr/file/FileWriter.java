@@ -26,13 +26,11 @@ public final class FileWriter {
      * @param s  The string to write.
      * @param file  The file to write to.
      */
-    public static void write(String s, File file){
+    public static void write(String s, File file) throws IOException {
         Objects.requireNonNull(s, "The text to write is null.");
         Objects.requireNonNull(file, "File is null.");
         try (BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(file))) {
             writer.write(s.replace("\n", Settings.defaultLineSeparator));
-        }catch(IOException e){
-            InputHandlerRepo.setAnythingInputHandler();
         }
     }
 }

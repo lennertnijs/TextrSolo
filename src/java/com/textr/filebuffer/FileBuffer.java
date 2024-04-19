@@ -5,6 +5,7 @@ import com.textr.file.FileWriter;
 import com.textr.util.Validator;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Represents a buffer.
@@ -89,8 +90,9 @@ public final class FileBuffer {
 
     /**
      * Writes this {@link FileBuffer}'s {@link IText} content's to its {@link File}.
+     * @throws IOException if something went wrong when writing to the file
      */
-    public void writeToDisk(){
+    public void writeToDisk() throws IOException {
         FileWriter.write(text.getContent(), file);
         this.setState(BufferState.CLEAN);
     }
