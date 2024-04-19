@@ -58,7 +58,7 @@ public final class LineText implements IText{
      * @param index The index. Cannot be negative or equal/bigger than the amount of lines.
      *
      * @return The line
-     * @throws IllegalArgumentException If the index is invalid.
+     * @throws IllegalArgumentException If the index is less than 0 or greater than or equal to the character length
      */
     public String getLine(int index){
         String[] lines = builder.toString().split("\n", -1);
@@ -91,11 +91,13 @@ public final class LineText implements IText{
      * @param index The index. Cannot be negative, or equal/bigger than the length of the text.
      *
      * @return The character.
-     * @throws IllegalArgumentException If the index is invalid.
+     * @throws IllegalArgumentException If the index is less than 0 or greater than or equal to the character length
      */
     public char getCharacter(int index){
         if(index < 0 || index >= builder.length())
-            throw new IllegalArgumentException("Index is illegal.");
+            throw new IllegalArgumentException(String.format(
+                    "Index %d out of bounds for length %d of text", index, builder.length()
+            ));
         return builder.charAt(index);
     }
 
@@ -115,11 +117,13 @@ public final class LineText implements IText{
      * @param index The index. Cannot be negative or bigger than the length of the content.
      * @param character The character.
      *
-     * @throws IllegalArgumentException If the index is illegal.
+     * @throws IllegalArgumentException If the index is less than 0 or greater than or equal to the character length
      */
     public void insert(int index, char character){
         if(index < 0 || index > builder.length())
-            throw new IllegalArgumentException("Index is illegal.");
+            throw new IllegalArgumentException(String.format(
+                    "Index %d out of bounds for length %d of text", index, builder.length()
+            ));
         builder.insert(index, character);
 
         // Notify listeners
@@ -131,11 +135,13 @@ public final class LineText implements IText{
      * Insert a line break in the text at the given index.
      * @param index The index. Cannot be negative or bigger than the length of the content.
      *
-     * @throws IllegalArgumentException If the index is illegal.
+     * @throws IllegalArgumentException If the index is less than 0 or greater than or equal to the character length
      */
     public void insertLineBreak(int index){
         if(index < 0 || index > builder.length())
-            throw new IllegalArgumentException("Index is illegal.");
+            throw new IllegalArgumentException(String.format(
+                    "Index %d out of bounds for length %d of text", index, builder.length()
+            ));
         builder.insert(index, "\n");
 
         // Notify listeners
@@ -147,11 +153,13 @@ public final class LineText implements IText{
      * Removes the character in the text at the given index.
      * @param index The index. Cannot be negative or equal/bigger than the length of the content.
      *
-     * @throws IllegalArgumentException If the index is illegal.
+     * @throws IllegalArgumentException If the index is less than 0 or greater than or equal to the character length
      */
     public void remove(int index){
         if(index < 0 || index >= builder.length())
-            throw new IllegalArgumentException("Index is illegal.");
+            throw new IllegalArgumentException(String.format(
+                    "Index %d out of bounds for length %d of text", index, builder.length()
+            ));
         char deletedChar = builder.charAt(index);
         builder.deleteCharAt(index);
 
