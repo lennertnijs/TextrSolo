@@ -29,7 +29,7 @@ public class RemainOnContentState implements UpdateState {
      */
     public void update(BufferView view, TextUpdateReference update, ITextSkeleton textStructure) {
         updateCursor(view.getCursor(), update, textStructure);
-        updateAnchor(view.getAnchor(), view.getCursor(), update, view.getDimensions());
+        updateAnchor(view.getAnchor(), view.getCursor(), update, view.getDimensions(), textStructure);
     }
 
     private void updateCursor(ICursor cursor, TextUpdateReference update, ITextSkeleton skeleton) {
@@ -42,10 +42,15 @@ public class RemainOnContentState implements UpdateState {
             cursor.setInsertIndex(cursor.getInsertIndex() + 1, skeleton);
     }
 
-    private void updateAnchor(Point anchor, ICursor cursor, TextUpdateReference update, Dimension2D dimensions) {
+    private void updateAnchor(Point anchor,
+                              ICursor cursor,
+                              TextUpdateReference update,
+                              Dimension2D dimensions,
+                              ITextSkeleton skeleton) {
+        FixedPoint updateLocation = skeleton.convertToPoint(update.updateIndex());
         boolean isLineUpdate = update.type() == TextUpdateType.LINE_UPDATE;
-        boolean isBeforeCursor = update.updateIndex() < cursor.getInsertIndex();
-        if (isLineUpdate && isBeforeCursor) {
+        boolean isBeforeAnchor = updateLocation.getY() < anchor.getY();
+        if (isLineUpdate && isBeforeAnchor) {
             int displacement = update.isInsertion() ? 1 : -1;
             anchor.setY(anchor.getY() + displacement);
         }
