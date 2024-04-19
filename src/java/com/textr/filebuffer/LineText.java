@@ -165,27 +165,6 @@ public final class LineText implements IText{
             listener.update(new TextUpdateReference(index, false, type), getSkeleton());
     }
 
-
-    /**
-     * Compares this {@link LineText} to the given object, and returns True if they're equal. False otherwise.
-     *
-     * @return True if equal, false otherwise.
-     */
-    @Override
-    public boolean equals(Object other){
-        if(!(other instanceof LineText text))
-            return false;
-        return builder.toString().contentEquals(text.builder);
-    }
-
-    /**
-     * @return The hash code of this {@link LineText}.
-     */
-    @Override
-    public int hashCode(){
-        return builder.toString().hashCode();
-    }
-
     /**
      * @return The string representation of this {@link LineText}.
      */
