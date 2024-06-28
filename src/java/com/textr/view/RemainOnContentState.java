@@ -1,9 +1,7 @@
 package com.textr.view;
 
-import com.textr.filebuffer.ICursor;
-import com.textr.filebuffer.ITextSkeleton;
-import com.textr.filebuffer.TextUpdateReference;
-import com.textr.filebuffer.TextUpdateType;
+import com.textr.filebuffer.*;
+import com.textr.filebufferV2.IText;
 import com.textr.util.*;
 
 /**
@@ -27,27 +25,27 @@ public class RemainOnContentState implements UpdateState {
      *
      * Then, it moves the anchor point up or down a line if it is necessary to keep the same content in view.
      */
-    public void update(BufferView view, TextUpdateReference update, ITextSkeleton textStructure) {
-        updateCursor(view.getCursor(), update, textStructure);
-        updateAnchor(view.getAnchor(), view.getCursor(), update, view.getDimensions(), textStructure);
+    public void update(BufferView view, TextUpdateReference update, IText text) {
+        updateCursor(view.getCursor(), update, text);
+        updateAnchor(view.getAnchor(), view.getCursor(), update, view.getDimensions(), text);
     }
 
-    private void updateCursor(ICursor cursor, TextUpdateReference update, ITextSkeleton skeleton) {
+    private void updateCursor(ICursor cursor, TextUpdateReference update, IText text) {
         if (update.updateIndex() < cursor.getInsertIndex()) {
             // Insertion/deletion before cursor must update cursor position
             int displacement = update.isInsertion() ? 1 : -1;
-            cursor.setInsertIndex(cursor.getInsertIndex() + displacement, skeleton);
+            cursor.setInsertIndex(cursor.getInsertIndex() + displacement, text);
         } else if (update.updateIndex() == cursor.getInsertIndex() && update.isInsertion())
             // insertion on cursor must also move cursor
-            cursor.setInsertIndex(cursor.getInsertIndex() + 1, skeleton);
+            cursor.setInsertIndex(cursor.getInsertIndex() + 1, text);
     }
 
     private void updateAnchor(Point anchor,
                               ICursor cursor,
                               TextUpdateReference update,
                               Dimension2D dimensions,
-                              ITextSkeleton skeleton) {
-        FixedPoint updateLocation = skeleton.convertToPoint(update.updateIndex());
+                              IText text) {
+        Point updateLocation = text.convertToPoint(update.updateIndex());
         boolean isLineUpdate = update.type() == TextUpdateType.LINE_UPDATE;
         boolean isBeforeAnchor = updateLocation.getY() < anchor.getY();
         if (isLineUpdate && isBeforeAnchor) {

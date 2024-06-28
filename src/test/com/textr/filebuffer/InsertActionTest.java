@@ -1,5 +1,7 @@
 package com.textr.filebuffer;
 
+import com.textr.filebufferV2.IText;
+import com.textr.filebufferV2.LineText;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +16,7 @@ public class InsertActionTest {
 
     @BeforeEach
     public void initialise(){
-        text = LineText.createFromString("String testing");
+        text = new LineText("String testing");
 
         insertAction = new InsertAction(6, 's', text);
     }

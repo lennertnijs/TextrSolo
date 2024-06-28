@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ChangeHistoryTest {
+class HistoryTest {
 
     Deque<MockAction> toDo;
     Deque<MockAction> done;
@@ -31,7 +31,7 @@ class ChangeHistoryTest {
         MockAction altAction3 = new MockAction();
 
         // Add some actions and execute
-        ChangeHistory history = new ChangeHistory();
+        History history = new History();
         history.executeAndAddAction(action1);
         assertTrue(action1.wasExecuted, "Action added to ChangeHistory was not executed");
         done.push(action1);
@@ -75,7 +75,7 @@ class ChangeHistoryTest {
         MockAction action2 = new MockAction();
 
         // Add some actions and execute
-        ChangeHistory history = new ChangeHistory();
+        History history = new History();
         history.executeAndAddAction(action1);
         done.push(action1);
         checkActionExecution();
@@ -101,7 +101,7 @@ class ChangeHistoryTest {
         MockAction action2 = new MockAction();
 
         // Add some actions and execute
-        ChangeHistory history = new ChangeHistory();
+        History history = new History();
         history.executeAndAddAction(action1);
         done.push(action1);
         checkActionExecution();

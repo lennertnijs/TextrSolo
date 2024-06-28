@@ -103,7 +103,7 @@ public final class ViewService {
      * Attempts to delete the active BufferView. If this BufferView's buffer is Dirty, show user a warning. If it is clean, delete.
      */
     public void attemptDeleteView(){
-        if(getActiveView().markForDeletion()){
+        if(getActiveView().canBeClosed()){
             deleteView();
         }
     }

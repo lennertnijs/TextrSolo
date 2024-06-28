@@ -1,5 +1,7 @@
 package com.textr.filebuffer;
 
+import com.textr.filebufferV2.IText;
+
 import java.util.Objects;
 
 public final class DeleteAction implements Action {

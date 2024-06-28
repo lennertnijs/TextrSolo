@@ -2,10 +2,16 @@ package com.textr.filebuffer;
 
 import com.textr.file.FileReader;
 import com.textr.file.FileWriter;
+import com.textr.filebufferV2.IText;
+import com.textr.filebufferV2.LineText;
+import com.textr.util.Direction;
 import com.textr.util.Validator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Represents a buffer.
@@ -14,21 +20,23 @@ public final class FileBuffer {
 
     private final File file;
     private final IText text;
-    private final ChangeHistory changeHistory;
+    private final Cursor cursor;
     private BufferState state;
+    private final Set<TextListener> listeners;
 
-    private FileBuffer(File file, IText text, BufferState state){
+    private FileBuffer(File file, IText text, Cursor cursor, BufferState state){
         this.file = file;
         this.text = text;
-        this.changeHistory = new ChangeHistory();
         this.state = state;
+        this.cursor = cursor;
+        this.listeners = new HashSet<>();
     }
 
     public static FileBuffer createFromFilePath(String url){
-        Validator.notNull(url, "Cannot create a FileBuffer from a null url.");
-        File f = new File(url);
-        LineText t = LineText.createFromString(FileReader.readContents(f));
-        return new FileBuffer(f, t, BufferState.CLEAN);
+        Objects.requireNonNull(url, "Url is null.");
+        File file = new File(url);
+        LineText text = new LineText(FileReader.readContents(file));
+        return new FileBuffer(file, text, Cursor.createNew(), BufferState.CLEAN);
     }
 
     /**
@@ -45,6 +53,9 @@ public final class FileBuffer {
         return this.text;
     }
 
+    public Cursor getCursor(){
+        return cursor;
+    }
 
     /**
      * @return This file buffer's state.
@@ -64,28 +75,8 @@ public final class FileBuffer {
         this.state = state;
     }
 
-    /**
-     * Undoes the last action performed on this buffer.
-     */
-    public void undo(){
-        changeHistory.undo();
-    }
-
-    /**
-     * Redoes the last action that was undone on this buffer, since last newly performed action.
-     */
-    public void redo(){
-        changeHistory.redo();
-    }
-
-
-    /**
-     * Executes the given action, and saves it into this buffer's action history.
-     * @param action The action to perform on the buffer
-     */
-    public void executeAndStore(Action action){
-        changeHistory.executeAndAddAction(action);
-        setState(BufferState.DIRTY);
+    public void moveCursor(Direction direction){
+        cursor.move(direction, text);
     }
 
     /**
@@ -97,6 +88,18 @@ public final class FileBuffer {
         this.setState(BufferState.CLEAN);
     }
 
+    public void updateAfterInsert(char c, int index){
+        TextUpdateType t = c == '\n' ? TextUpdateType.LINE_UPDATE : TextUpdateType.CHAR_UPDATE;
+        for (TextListener listener: listeners)
+            listener.update(new TextUpdateReference(index, true, t), text);
+    }
+
+    public void updateAfterRemove(char c, int index){
+        TextUpdateType t = c == '\n' ? TextUpdateType.LINE_UPDATE : TextUpdateType.CHAR_UPDATE;
+        for (TextListener listener: listeners)
+            listener.update(new TextUpdateReference(index, false, t), text);
+    }
+
     /**
      * Compares this file buffer to the given object and returns True if they're equal.
      *
@@ -104,12 +107,8 @@ public final class FileBuffer {
      */
     @Override
     public boolean equals(Object o){
-        if(this == o){
-            return true;
-        }
-        if(!(o instanceof FileBuffer fileBuffer)){
+        if(!(o instanceof FileBuffer fileBuffer))
             return false;
-        }
         return this.file.equals(fileBuffer.file) &&
                 this.text.equals(fileBuffer.text) &&
                 this.state == fileBuffer.state;
@@ -140,14 +139,14 @@ public final class FileBuffer {
     }
 
     public void addTextListener(TextListener listener) {
-        this.text.addListener(listener);
+        listeners.add(listener);
     }
 
     public void removeTextListener(TextListener listener) {
-        this.text.removeListener(listener);
+        listeners.remove(listener);
     }
 
     public int getReferenceCount() {
-        return this.text.getListenerCount();
+        return listeners.size();
     }
 }

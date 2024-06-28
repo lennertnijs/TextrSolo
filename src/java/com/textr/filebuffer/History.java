@@ -4,12 +4,12 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Objects;
 
-public final class ChangeHistory {
+public final class History {
 
     private final Deque<Action> undoAbles;
     private final Deque<Action> redoAbles;
 
-    public ChangeHistory(){
+    public History(){
         this.undoAbles = new ArrayDeque<>();
         this.redoAbles = new ArrayDeque<>();
     }

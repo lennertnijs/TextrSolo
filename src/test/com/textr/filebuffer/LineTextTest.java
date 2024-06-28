@@ -1,180 +1,122 @@
 package com.textr.filebuffer;
 
+import com.textr.filebufferV2.LineText;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LineTextTest {
 
-    private String string1;
-    private String string2;
-    private String string3;
-    private LineText text1;
-    private LineText text2;
-    private LineText text3;
-    private ICursor cursor;
+    private LineText linetext;
 
     @BeforeEach
     public void initialise(){
-        string1 = "Line 1\nLine 2\nLine 3";
-        string2 = "Line 1\r\n";
-        string3 = "Line 1\nLine 2\nLine 3";
-        text1 = LineText.createFromString(string1);
-        text2 = LineText.createFromString(string2);
-        text3 = LineText.createFromString(string3);
-        cursor = Cursor.createNew();
+        String string = "Line 1\nLine 2\r\nLine 3\r";
+        linetext = new LineText(string);
     }
 
     @Test
-    public void testConstructor(){
-        String string = "Line 1\n";
-        assertEquals(LineText.createFromString(string2).getContent(), string);
+    public void testConstructorWithNullString(){
+        assertThrows(NullPointerException.class,
+                () -> new LineText(null));
     }
 
     @Test
     public void testGetContent(){
-        assertEquals(text1.getContent(), string1);
+        assertEquals("Line 1\nLine 2\nLine 3\n", linetext.getContent());
     }
 
     @Test
     public void testGetLines(){
-        assertArrayEquals(text1.getLines(), new String[]{"Line 1", "Line 2", "Line 3"});
-        assertArrayEquals(text2.getLines(), new String[]{"Line 1", ""});
-    }
-
-    @Test
-    public void testGetLine(){
-        assertEquals(text1.getLine(0), "Line 1");
-        assertEquals(text1.getLine(1), "Line 2");
-        assertEquals(text2.getLine(1), "");
-    }
-
-    @Test
-    public void testGetLineIllegal(){
-        assertThrows(IndexOutOfBoundsException.class, () -> text1.getLine(-1));
-        assertThrows(IndexOutOfBoundsException.class, () -> text1.getLine(3));
+        assertArrayEquals(new String[]{"Line 1", "Line 2", "Line 3", ""}, linetext.getLines());
     }
 
     @Test
     public void testGetAmountOfLines(){
-        assertEquals(text1.getLineAmount(), 3);
-        assertEquals(text2.getLineAmount(), 2);
+        assertEquals(4, linetext.getLineAmount());
     }
 
     @Test
     public void testGetAmountOfCharacters(){
-        assertEquals(text1.getCharAmount(), 20);
-        assertEquals(text2.getCharAmount(), 7);
+        assertEquals(linetext.getCharAmount(), 21);
     }
 
     @Test
     public void testGetCharacter(){
-        assertEquals(text1.getCharacter(0), 'L');
-        assertEquals(text1.getCharacter(19), '3');
-        assertEquals(text1.getCharacter(6), '\n');
+        assertEquals('L', linetext.getCharacter(0));
+        assertEquals('\n', linetext.getCharacter(6));
+        assertEquals('3', linetext.getCharacter(19));
+        assertEquals('\n', linetext.getCharacter(20));
     }
 
     @Test
-    public void testGetCharacterIllegal(){
-        assertThrows(IllegalArgumentException.class, () -> text1.getCharacter(-1));
-        assertThrows(IllegalArgumentException.class, () -> text1.getCharacter(20));
+    public void testGetCharacterWithIndexNegative(){
+        assertThrows(IndexOutOfBoundsException.class,
+                () -> linetext.getCharacter(-1));
+    }
+
+    @Test
+    public void testGetCharacterWithIndexTooBig(){
+        assertThrows(IndexOutOfBoundsException.class,
+                () -> linetext.getCharacter(20 + 1));
     }
 
     @Test
     public void testInsert(){
-        text1.insert(0, 's');
-        assertEquals(text1.getCharAmount(), 21);
-        assertEquals(text1.getLine(0), "sLine 1");
-        text1.insert(1, 'b');
-        assertEquals(text1.getCharAmount(), 22);
-        assertEquals(text1.getLine(0), "sbLine 1");
-        text1.insert(8, 'y');
-        assertEquals(text1.getCharAmount(), 23);
-        assertEquals(text1.getLine(0), "sbLine 1y");
-        text1.insert(10, 'p');
-        assertEquals(text1.getCharAmount(), 24);
-        assertEquals(text1.getLine(1), "pLine 2");
-        text1.insert(24, 'l');
-        assertEquals(text1.getCharAmount(), 25);
-        assertEquals(text1.getLine(2), "Line 3l");
+        linetext.insert(0, 's');
+        assertEquals(linetext.getContent(), "sLine 1\nLine 2\nLine 3\n");
+        linetext.insert(1, 'b');
+        assertEquals(linetext.getContent(), "sbLine 1\nLine 2\nLine 3\n");
+        linetext.insert(8, 'y');
+        assertEquals(linetext.getContent(), "sbLine 1y\nLine 2\nLine 3\n");
+        linetext.insert(10, 'p');
+        assertEquals(linetext.getContent(), "sbLine 1y\npLine 2\nLine 3\n");
+        linetext.insert(25, 'l');
+        assertEquals(linetext.getContent(), "sbLine 1y\npLine 2\nLine 3\nl");
     }
 
     @Test
-    public void testInsertIllegal(){
-        assertThrows(IllegalArgumentException.class, () -> text1.insert(-1, 's'));
-        assertThrows(IllegalArgumentException.class, () -> text1.insert(21, 's'));
+    public void testInsertWithNegativeIndex(){
+        assertThrows(IndexOutOfBoundsException.class,
+                () -> linetext.insert(-1, 's'));
+    }
+
+    @Test
+    public void testInsertWithIndexTooBig(){
+        assertThrows(IndexOutOfBoundsException.class,
+                () -> linetext.insert(22, 's'));
     }
 
     @Test
     public void testRemove(){
-        text1.remove(0);
-        assertEquals(text1.getCharAmount(), 19);
-        assertEquals(text1.getLine(0), "ine 1");
-        text1.remove(0);
-        assertEquals(text1.getCharAmount(), 18);
-        assertEquals(text1.getLine(0), "ne 1");
+        linetext.remove(0);
+        assertEquals("ine 1\nLine 2\nLine 3\n", linetext.getContent());
+        linetext.remove(5);
+        assertEquals("ine 1Line 2\nLine 3\n", linetext.getContent());
+        linetext.remove(18);
+        assertEquals("ine 1Line 2\nLine 3", linetext.getContent());
     }
 
     @Test
-    public void testRemoveLineBreak(){
-        text1.remove(6);
-        assertEquals(text1.getCharAmount(), 19);
-        assertEquals(text1.getLine(0), "Line 1Line 2");
+    public void testRemoveWithNegativeIndex(){
+        assertThrows(IndexOutOfBoundsException.class,
+                () -> linetext.remove(-1));
     }
 
     @Test
-    public void testRemoveIllegal(){
-        assertThrows(IllegalArgumentException.class, () -> text1.remove(-1));
-        assertThrows(IllegalArgumentException.class, () -> text1.remove(20));
-    }
-
-    @Test
-    public void insertLineBreak(){
-        text1.insertLineBreak(2);
-        assertEquals(text1.getLineAmount(), 4);
-        assertEquals(text1.getCharAmount(), 21);
-        assertEquals(text1.getLine(0), "Li");
-        assertEquals(text1.getLine(1), "ne 1");
-    }
-
-    @Test
-    public void insertLineBreakAtStart(){
-        text1.insertLineBreak(0);
-        assertEquals(text1.getLineAmount(), 4);
-        assertEquals(text1.getCharAmount(), 21);
-        assertEquals(text1.getLine(0), "");
-        assertEquals(text1.getLine(1), "Line 1");
-    }
-
-    @Test
-    public void insertLineBreakAtEnd(){
-        text1.insertLineBreak(20);
-        assertEquals(text1.getLineAmount(), 4);
-        assertEquals(text1.getCharAmount(), 21);
-        assertEquals(text1.getLine(3), "");
-        assertEquals(text1.getLine(2), "Line 3");
-    }
-
-    @Test
-    public void insertLineBreakIllegal(){
-        assertThrows(IllegalArgumentException.class, () -> text1.insertLineBreak(-1));
-        assertThrows(IllegalArgumentException.class, () -> text1.insertLineBreak(21));
-    }
-
-    @Test
-    public void getSkeleton(){
-        assertEquals(text1.getSkeleton(), new TextSkeleton(new ArrayList<>(Arrays.asList(7, 7, 7))));
-        assertEquals(text2.getSkeleton(), new TextSkeleton(new ArrayList<>(List.of(7, 1))));
+    public void testRemoveWithIndexTooBig(){
+        assertThrows(IndexOutOfBoundsException.class,
+                () -> linetext.remove(21));
     }
 
     @Test
     public void testToString(){
-        String expectedString = "LineText[Text=Line 1\nLine 2\nLine 3]";
-        assertEquals(text1.toString(), expectedString);
+        String expected = """
+                LineText[content=Line 1
+                Line 2
+                Line 3
+                ]""";
+        assertEquals(expected, linetext.toString());
     }
 }

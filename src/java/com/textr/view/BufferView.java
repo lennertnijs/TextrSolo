@@ -1,6 +1,7 @@
 package com.textr.view;
 
 import com.textr.filebuffer.*;
+import com.textr.filebufferV2.IText;
 import com.textr.input.Input;
 import com.textr.input.InputType;
 import com.textr.terminal.Communicator;
@@ -17,8 +18,7 @@ import java.util.Objects;
  */
 public final class BufferView extends View implements TextListener {
 
-    private final FileBuffer buffer;
-    private final ICursor cursor;
+    private final BufferEditor bufferEditor;
     private final Point anchor;
 
     /**
@@ -29,19 +29,17 @@ public final class BufferView extends View implements TextListener {
 
     private final Communicator communicator;
 
-    private BufferView(FileBuffer buffer,
-                       ICursor cursor,
-                       Point position,
+    private BufferView(Point position,
                        Dimension2D dimensions,
                        Point anchor,
-                       Communicator communicator){
+                       Communicator communicator,
+                       BufferEditor editor){
         super(position, dimensions);
-        this.buffer = buffer;
-        this.cursor = cursor;
         this.anchor = anchor;
         this.communicator = Objects.requireNonNull(communicator, "BufferView's communicator cannot be null");
         this.updater = new RemainOnContentState();
-        buffer.addTextListener(this);
+        editor.getFileBuffer().addTextListener(this);
+        this.bufferEditor = editor;
     }
 
     public static BufferView createFromFilePath(String url,
@@ -52,16 +50,15 @@ public final class BufferView extends View implements TextListener {
         Validator.notNull(position, "The global position of the BufferView in the Terminal cannot be null.");
         Validator.notNull(dimensions, "The dimensions of the BufferView cannot be null.");
         FileBuffer b = FileBuffer.createFromFilePath(url);
-        return new BufferView(b,
-                Cursor.createNew(),
-                position.copy(),
+        return new BufferView(position.copy(),
                 dimensions.copy(),
                 Point.create(0,0),
-                communicator);
+                communicator,
+                new BufferEditor(new History(), b));
     }
 
-    public FileBuffer getBuffer(){
-        return this.buffer;
+    public BufferEditor getBufferEditor(){
+        return bufferEditor;
     }
 
     /**
@@ -72,16 +69,9 @@ public final class BufferView extends View implements TextListener {
     }
 
     public ICursor getCursor(){
-        return cursor;
+        return bufferEditor.getCursor();
     }
 
-    /**
-     * Returns the current update state of this view.
-     * @return The current UpdateState of this view
-     */
-    public UpdateState getUpdateState() {
-        return this.updater;
-    }
 
     /**
      * Sets this view's update state to the given UpdateState, if it is not null.
@@ -110,9 +100,8 @@ public final class BufferView extends View implements TextListener {
      * @throws IllegalArgumentException If the given direction is null.
      */
     public void moveCursor(Direction direction){
-        Validator.notNull(direction, "Cannot move the cursor in the null direction.");
-        cursor.move(direction, buffer.getText().getSkeleton());
-        AnchorUpdater.updateAnchor(getAnchor(), cursor.getInsertPoint(), getDimensions());
+        bufferEditor.moveCursor(Objects.requireNonNull(direction, "Direction is null."));
+        AnchorUpdater.updateAnchor(anchor, bufferEditor.getCursor().getInsertPoint(), getDimensions());
     }
 
     /**
@@ -124,12 +113,12 @@ public final class BufferView extends View implements TextListener {
     @Override
     public String generateStatusBar(){
         return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: (line, col) = (%d, %d) - State: %s",
-                buffer.getFile().getPath(),
-                buffer.getText().getLineAmount(),
-                buffer.getText().getCharAmount(),
-                cursor.getInsertPoint().getY(),
-                cursor.getInsertPoint().getX(),
-                buffer.getState());
+                bufferEditor.getFileBuffer().getFile().getPath(),
+                bufferEditor.getFileBuffer().getText().getLineAmount(),
+                bufferEditor.getFileBuffer().getText().getCharAmount(),
+                bufferEditor.getCursor().getInsertPoint().getY(),
+                bufferEditor.getCursor().getInsertPoint().getX(),
+                bufferEditor.getFileBuffer().getState());
     }
     /**
      * Handle input at the view level. Only view specific operations happen here, and nothing flows to a deeper level in the chain.
@@ -138,45 +127,25 @@ public final class BufferView extends View implements TextListener {
     public void handleInput(Input input){
         InputType inputType = input.getType();
         switch (inputType) {
-            case CHARACTER -> {
-                Action insertAction = new InsertAction(cursor.getInsertIndex(), input.getCharacter(), buffer.getText());
-                buffer.executeAndStore(insertAction);
-            }
-            case ENTER -> {
-                Action insertAction = new InsertAction(cursor.getInsertIndex(), '\n', buffer.getText());
-                buffer.executeAndStore(insertAction);
-            }
+            case CHARACTER -> bufferEditor.insert(input.getCharacter());
+            case ENTER -> bufferEditor.insert('\n');
             case ARROW_UP -> moveCursor(Direction.UP);
             case ARROW_RIGHT -> moveCursor(Direction.RIGHT);
             case ARROW_DOWN -> moveCursor(Direction.DOWN);
             case ARROW_LEFT -> moveCursor(Direction.LEFT);
-            case DELETE -> {
-                if(cursor.getInsertIndex() == buffer.getText().getCharAmount())
-                    return;
-                Action deleteAction = new DeleteAction(cursor.getInsertIndex(),
-                        buffer.getText().getCharacter(cursor.getInsertIndex()),
-                        buffer.getText());
-                buffer.executeAndStore(deleteAction);
-            }
-            case BACKSPACE -> {
-                if(cursor.getInsertIndex() == 0)
-                    return;
-                Action deleteAction = new DeleteAction(cursor.getInsertIndex() - 1,
-                        buffer.getText().getCharacter(cursor.getInsertIndex() - 1),
-                        buffer.getText());
-                buffer.executeAndStore(deleteAction);
-            }
+            case DELETE -> bufferEditor.deleteAfter();
+            case BACKSPACE -> bufferEditor.deleteBefore();
             case CTRL_U -> {
                 setUpdateState(new JumpToEditState());
-                buffer.redo();
+                bufferEditor.redo();
             }
             case CTRL_Z -> {
                 setUpdateState(new JumpToEditState());
-                buffer.undo();
+                bufferEditor.undo();
             }
             case CTRL_S -> {
                 try {
-                    getBuffer().writeToDisk();
+                    bufferEditor.getFileBuffer().writeToDisk();
                 } catch (IOException e) {
                     communicator.sendMessage("Something went wrong when saving, please try again");
                 }
@@ -192,7 +161,7 @@ public final class BufferView extends View implements TextListener {
     @Override
     public String toString(){
         return String.format("BufferView[buffer = %s, position = %s, dimensions = %s, anchor = %s]",
-                buffer, getPosition(), getDimensions(), anchor);
+                bufferEditor.getFileBuffer(), getPosition(), getDimensions(), anchor);
     }
 
     /**
@@ -204,29 +173,32 @@ public final class BufferView extends View implements TextListener {
     @Override
     public BufferView duplicate(){
         ICursor newCursor = Cursor.createNew(); // TODO: Make clone method for cursor
-        newCursor.setInsertIndex(cursor.getInsertIndex(), buffer.getText().getSkeleton());
-        return new BufferView(this.buffer,
-                newCursor,
-                getPosition().copy(),
+        newCursor.setInsertIndex(bufferEditor.getCursor().getInsertIndex(), bufferEditor.getFileBuffer().getText());
+        return new BufferView(getPosition().copy(),
                 getDimensions().copy(),
                 this.anchor.copy(),
-                this.communicator);
+                this.communicator,
+                bufferEditor);
     }
 
     @Override
-    public void update(TextUpdateReference update, ITextSkeleton structure) {
-        updater.update(this, update, structure);
+    public void update(TextUpdateReference update, IText text) {
+        updater.update(this, update, text);
     }
 
     @Override
-    public boolean markForDeletion() {
-        if (getBuffer().getState() == BufferState.CLEAN || getBuffer().getReferenceCount() > 1) {
-            getBuffer().removeTextListener(this);
+    public boolean canBeClosed() {
+        if (bufferEditor.getFileBuffer().getState() == BufferState.CLEAN) {
+            bufferEditor.getFileBuffer().removeTextListener(this);
+            return true;
+        }
+        if(bufferEditor.getFileBuffer().getReferenceCount() > 1){
+            bufferEditor.getFileBuffer().removeTextListener(this);
             return true;
         }
         if (communicator.requestPermissions(
                 "You have unsaved changes. Are you sure you want to close this FileBuffer?")) {
-            getBuffer().removeTextListener(this);
+            bufferEditor.getFileBuffer().removeTextListener(this);
             return true;
         }
         return false;
