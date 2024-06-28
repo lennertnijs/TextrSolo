@@ -5,6 +5,7 @@ import com.textr.file.FileWriter;
 import com.textr.filebufferV2.IText;
 import com.textr.filebufferV2.LineText;
 import com.textr.util.Direction;
+import com.textr.util.Point;
 import com.textr.util.Validator;
 
 import java.io.File;
@@ -20,15 +21,13 @@ public final class FileBuffer {
 
     private final File file;
     private final IText text;
-    private final Cursor cursor;
     private BufferState state;
     private final Set<TextListener> listeners;
 
-    private FileBuffer(File file, IText text, Cursor cursor, BufferState state){
+    private FileBuffer(File file, IText text, BufferState state){
         this.file = file;
         this.text = text;
         this.state = state;
-        this.cursor = cursor;
         this.listeners = new HashSet<>();
     }
 
@@ -36,7 +35,7 @@ public final class FileBuffer {
         Objects.requireNonNull(url, "Url is null.");
         File file = new File(url);
         LineText text = new LineText(FileReader.readContents(file));
-        return new FileBuffer(file, text, Cursor.createNew(), BufferState.CLEAN);
+        return new FileBuffer(file, text, BufferState.CLEAN);
     }
 
     /**
@@ -53,8 +52,12 @@ public final class FileBuffer {
         return this.text;
     }
 
-    public Cursor getCursor(){
-        return cursor;
+    public int getInsertIndex(){
+        return text.getInsertIndex();
+    }
+
+    public Point getInsertPoint(){
+        return text.convertToPoint(text.getInsertIndex());
     }
 
     /**
@@ -76,7 +79,7 @@ public final class FileBuffer {
     }
 
     public void moveCursor(Direction direction){
-        cursor.move(direction, text);
+        text.move(direction);
     }
 
     /**

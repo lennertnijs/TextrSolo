@@ -12,7 +12,7 @@ import java.util.Objects;
 
 /**
  * Class to represent a view on a {@link FileBuffer}, i.e. a small window onto its contents. This class holds the buffer
- * in question, as well as a {@link ICursor} to specify a location to edit said buffer. It also holds a {@link Point} to
+ * in question, as well as a cursor to specify a location to edit said buffer. It also holds a {@link Point} to
  * represent the anchor of the view, i.e. the top left location of the rectangular section of test that is visible of
  * the file buffer within the view.
  */
@@ -68,8 +68,8 @@ public final class BufferView extends View implements TextListener {
         return anchor;
     }
 
-    public ICursor getCursor(){
-        return bufferEditor.getCursor();
+    public Point getInsertPoint(){
+        return bufferEditor.getFileBuffer().getInsertPoint();
     }
 
 
@@ -101,7 +101,7 @@ public final class BufferView extends View implements TextListener {
      */
     public void moveCursor(Direction direction){
         bufferEditor.moveCursor(Objects.requireNonNull(direction, "Direction is null."));
-        AnchorUpdater.updateAnchor(anchor, bufferEditor.getCursor().getInsertPoint(), getDimensions());
+        AnchorUpdater.updateAnchor(anchor, bufferEditor.getFileBuffer().getInsertPoint(), getDimensions());
     }
 
     /**
@@ -116,8 +116,8 @@ public final class BufferView extends View implements TextListener {
                 bufferEditor.getFileBuffer().getFile().getPath(),
                 bufferEditor.getFileBuffer().getText().getLineAmount(),
                 bufferEditor.getFileBuffer().getText().getCharAmount(),
-                bufferEditor.getCursor().getInsertPoint().getY(),
-                bufferEditor.getCursor().getInsertPoint().getX(),
+                bufferEditor.getFileBuffer().getInsertPoint().getY(),
+                bufferEditor.getFileBuffer().getInsertPoint().getX(),
                 bufferEditor.getFileBuffer().getState());
     }
     /**
@@ -172,12 +172,10 @@ public final class BufferView extends View implements TextListener {
      */
     @Override
     public BufferView duplicate(){
-        ICursor newCursor = Cursor.createNew(); // TODO: Make clone method for cursor
-        newCursor.setInsertIndex(bufferEditor.getCursor().getInsertIndex(), bufferEditor.getFileBuffer().getText());
         return new BufferView(getPosition().copy(),
                 getDimensions().copy(),
-                this.anchor.copy(),
-                this.communicator,
+                anchor.copy(),
+                communicator,
                 bufferEditor);
     }
 

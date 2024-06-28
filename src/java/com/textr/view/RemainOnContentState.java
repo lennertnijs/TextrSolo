@@ -26,22 +26,24 @@ public class RemainOnContentState implements UpdateState {
      * Then, it moves the anchor point up or down a line if it is necessary to keep the same content in view.
      */
     public void update(BufferView view, TextUpdateReference update, IText text) {
-        updateCursor(view.getCursor(), update, text);
-        updateAnchor(view.getAnchor(), view.getCursor(), update, view.getDimensions(), text);
+        updateCursor(update, text);
+        updateAnchor(view.getAnchor(), update, view.getDimensions(), text);
     }
 
-    private void updateCursor(ICursor cursor, TextUpdateReference update, IText text) {
-        if (update.updateIndex() < cursor.getInsertIndex()) {
+    private void updateCursor(TextUpdateReference update, IText text) {
+        if (update.updateIndex() < text.getInsertIndex()) {
             // Insertion/deletion before cursor must update cursor position
-            int displacement = update.isInsertion() ? 1 : -1;
-            cursor.setInsertIndex(cursor.getInsertIndex() + displacement, text);
-        } else if (update.updateIndex() == cursor.getInsertIndex() && update.isInsertion())
+            if(update.isInsertion()){
+                text.move(Direction.RIGHT);
+            }else{
+                text.move(Direction.LEFT);
+            }
+        } else if (update.updateIndex() == text.getInsertIndex() && update.isInsertion())
             // insertion on cursor must also move cursor
-            cursor.setInsertIndex(cursor.getInsertIndex() + 1, text);
+            text.move(Direction.RIGHT);
     }
 
     private void updateAnchor(Point anchor,
-                              ICursor cursor,
                               TextUpdateReference update,
                               Dimension2D dimensions,
                               IText text) {
@@ -52,6 +54,6 @@ public class RemainOnContentState implements UpdateState {
             int displacement = update.isInsertion() ? 1 : -1;
             anchor.setY(anchor.getY() + displacement);
         }
-        AnchorUpdater.updateAnchor(anchor, cursor.getInsertPoint(), dimensions);
+        AnchorUpdater.updateAnchor(anchor, text.convertToPoint(text.getInsertIndex()), dimensions);
     }
 }

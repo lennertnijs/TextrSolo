@@ -1,5 +1,6 @@
 package com.textr.filebufferV2;
 
+import com.textr.util.Direction;
 import com.textr.util.Point;
 
 /**
@@ -16,6 +17,8 @@ public interface IText {
      * @return The text's content as an array of lines. Excludes line breaks.
      */
     String[] getLines();
+
+    int getInsertIndex();
 
     /**
      * @return The amount of lines in this text's content.
@@ -52,6 +55,6 @@ public interface IText {
     void remove(int index);
 
     Point convertToPoint(int index);
-    int convertToIndex(Point point);
     int getLineLength(int lineIndex);
+    void move(Direction direction);
 }

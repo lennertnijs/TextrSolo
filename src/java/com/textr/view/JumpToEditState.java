@@ -1,9 +1,9 @@
 package com.textr.view;
 
-import com.textr.filebuffer.ICursor;
 import com.textr.filebuffer.TextUpdateReference;
 import com.textr.filebufferV2.IText;
 import com.textr.util.Dimension2D;
+import com.textr.util.Direction;
 import com.textr.util.Point;
 
 import java.util.Objects;
@@ -27,17 +27,18 @@ public class JumpToEditState implements UpdateState {
         Objects.requireNonNull(view, "A state cannot update a null view");
         Objects.requireNonNull(update, "A state cannot update a view with a null update reference");
         Objects.requireNonNull(text, "A state cannot update a view using a null text structure");
-        updateCursor(view.getCursor(), update, text);
-        updateAnchor(view.getAnchor(), view.getCursor(), view.getDimensions());
+        updateCursor(update, text);
+        updateAnchor(view.getAnchor(), text, view.getDimensions());
         view.setUpdateState(new RemainOnContentState());
     }
 
-    private void updateCursor(ICursor cursor, TextUpdateReference update, IText text) {
-        int displacement = update.isInsertion() ? 1 : 0; // When insertion, cursor should move to point after
-        cursor.setInsertIndex(update.updateIndex() + displacement, text);
+    private void updateCursor(TextUpdateReference update, IText text) {
+        if(update.isInsertion()){
+            text.move(Direction.RIGHT);
+        }
     }
 
-    private void updateAnchor(Point anchor, ICursor cursor, Dimension2D dimensions) {
-        AnchorUpdater.updateAnchor(anchor, cursor.getInsertPoint(), dimensions);
+    private void updateAnchor(Point anchor, IText text, Dimension2D dimensions) {
+        AnchorUpdater.updateAnchor(anchor, text.convertToPoint(text.getInsertIndex()), dimensions);
     }
 }

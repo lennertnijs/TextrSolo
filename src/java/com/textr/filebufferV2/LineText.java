@@ -1,6 +1,6 @@
 package com.textr.filebufferV2;
 
-import com.textr.util.FixedPoint;
+import com.textr.util.Direction;
 import com.textr.util.Point;
 
 import java.util.*;
@@ -19,6 +19,7 @@ public final class LineText implements IText {
      * The internal line break used.
      */
     private static final char LINEBREAK = '\n';
+    private int insertIndex;
 
     /**
      * Creates a MUTABLE {@link LineText} with the given string.
@@ -30,6 +31,7 @@ public final class LineText implements IText {
         String replacedLineBreaks = text.replace("\r\n", String.valueOf(LINEBREAK))
                                         .replace('\r', LINEBREAK);
         this.builder = new StringBuilder(replacedLineBreaks);
+        this.insertIndex = 0;
     }
 
     /**
@@ -39,11 +41,31 @@ public final class LineText implements IText {
         return builder.toString();
     }
 
+    public int getInsertIndex(){
+        return insertIndex;
+    }
+
     /**
      * @return The text's lines as an array. Does not include any line breaks. (As they are split based on these \n)
      */
     public String[] getLines(){
         return builder.toString().split("\n", -1);
+    }
+
+    /**
+     * Fetches and returns the length of the line at the given row in the text. Includes the line break.
+     * @param lineIndex The line's row index. Cannot be negative. Cannot be equal/greater than the text's amount of rows.
+     *
+     * @return The length.
+     */
+    public int getLineLength(int lineIndex){
+        if(lineIndex < 0 || lineIndex >= getLineAmount()){
+            throw new IllegalArgumentException("Line index is outside text bounds.");
+        }
+        if(lineIndex == getLineAmount() - 1){
+            return builder.toString().split("\n", -1)[lineIndex].length();
+        }
+        return builder.toString().split("\n", -1)[lineIndex].length() + 1;
     }
 
     /**
@@ -96,49 +118,30 @@ public final class LineText implements IText {
         builder.deleteCharAt(index);
     }
 
-    public int getLineLength(int lineIndex){
-        return builder.toString().split("\n", -1)[lineIndex].length();
-    }
-
     /**
-     * Converts the given index to a {@link Point} object based on this text skeleton. Newlines are considered
-     * to be at the end of the line, and they count as one character on that line.
-     * @param index the index to convert to a point object
-     * @return The 2D Point representing the same location as the given index in the text skeleton
+     * Converts the given index to a {@link Point} based on this text's structure.
+     * @param index The index to convert. Cannot be negative. Cannot be bigger than the text's length.
+     *
+     * @return The 2-dimensional {@link Point} representing the 1-dimensional index in context of this text.
      */
     public Point convertToPoint(int index) {
-        if (index < 0 || index > this.getCharAmount()) {
+        if (index < 0 || index > builder.length()) {
             throw new IndexOutOfBoundsException("Index is outside text bounds.");
         }
-        int count = 0;
-        int row = -1;
-        for(int i = 0; i < getLineAmount(); i++){
-            if(index < count + getLineLength(i)) {
-                row = i;
-                break;
+        int row = 0;
+        int column = 0;
+        for(int i = 0; i <= builder.length(); i++){
+            if(i == index){
+                return new Point(column, row);
             }
-            count += getLineLength(i) + 1;
+            if(builder.charAt(i) == '\n'){
+                column = 0;
+                row++;
+            }else{
+                column++;
+            }
         }
-        int col = index - count;
-        return new Point(col, row);
-    }
-
-    /**
-     * Converts the given point into an index representing the same location in the text skeleton. Points at the end of
-     * a line (i.e. with X at the line length) are considered to be on the newline character.
-     * @param point The 2D point to convert to an index
-     * @return The 1D index in the text structure representing the same position as the given 2D point
-     * @throws IllegalArgumentException if the given point is not a valid point in the text structure
-     */
-    public int convertToIndex(Point point) {
-        if (this.getLineAmount() <= point.getY() || this.getLineLength(point.getY()) < point.getX())
-            throw new IllegalArgumentException("Given point does not hold a valid location in this TextSkeleton");
-        int count = 0;
-        for(int i = 0; i < point.getY(); i++){
-            count += this.getLineLength(i);
-        }
-        count += point.getX();
-        return count;
+        throw new IllegalStateException("Should be unreachable.");
     }
 
     /**
@@ -147,5 +150,49 @@ public final class LineText implements IText {
     @Override
     public String toString(){
         return String.format("LineText[content=%s]", builder.toString());
+    }
+
+    public void move(Direction direction){
+        switch(direction){
+            case RIGHT: moveRight();
+            case DOWN: moveDown();
+            case LEFT: moveLeft();
+            case UP: moveUp();
+        }
+    }
+
+    private void moveRight(){
+        if(insertIndex == builder.length() + 1){
+            return;
+        }
+        this.insertIndex++;
+    }
+
+    private void moveUp(){
+        int count = 0;
+        while(insertIndex != 0 || getCharacter(insertIndex) != '\n'){
+            count++;
+            insertIndex--;
+        }
+        if(insertIndex == 0){
+            insertIndex = count;
+            return;
+        }
+        insertIndex--;
+        while(getCharacter(insertIndex) != '\n'){
+            insertIndex--;
+        }
+        this.insertIndex += count;
+    }
+
+    private void moveLeft(){
+        if(insertIndex == 0){
+            return;
+        }
+        this.insertIndex--;
+    }
+
+    private void moveDown(){
+        // do shit
     }
 }

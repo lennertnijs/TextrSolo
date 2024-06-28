@@ -92,7 +92,7 @@ public final class ViewService {
             CursorDrawer.draw(
                     getActiveView().getPosition(),
                     ((BufferView)getActiveView()).getAnchor(),
-                    ((BufferView) getActiveView()).getCursor().getInsertPoint(),
+                    ((BufferView) getActiveView()).getInsertPoint(),
                     terminal
             );
         }

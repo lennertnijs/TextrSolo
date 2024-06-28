@@ -14,12 +14,8 @@ public final class BufferEditor {
         this.fileBuffer = Objects.requireNonNull(buffer, "File buffer is null.");
     }
 
-    public FileBuffer getFileBuffer(){
+    public FileBuffer getFileBuffer() {
         return fileBuffer;
-    }
-
-    public Cursor getCursor(){
-        return fileBuffer.getCursor();
     }
 
     public void moveCursor(Direction direction){
@@ -27,25 +23,25 @@ public final class BufferEditor {
     }
 
     public void insert(char c){
-        Action insertAction = new InsertAction(fileBuffer.getCursor().getInsertIndex(), c, fileBuffer.getText());
+        Action insertAction = new InsertAction(fileBuffer.getInsertIndex(), c, fileBuffer.getText());
         history.executeAndAddAction(insertAction);
     }
 
 
     public void deleteBefore(){
-        if(fileBuffer.getCursor().getInsertIndex() == 0)
+        if(fileBuffer.getInsertIndex() == 0)
             return;
-        Action deleteAction = new DeleteAction(fileBuffer.getCursor().getInsertIndex() - 1,
-                fileBuffer.getText().getCharacter(fileBuffer.getCursor().getInsertIndex() - 1),
+        Action deleteAction = new DeleteAction(fileBuffer.getInsertIndex() - 1,
+                fileBuffer.getText().getCharacter(fileBuffer.getInsertIndex() - 1),
                 fileBuffer.getText());
         history.executeAndAddAction(deleteAction);
     }
 
     public void deleteAfter(){
-        if(fileBuffer.getCursor().getInsertIndex() == fileBuffer.getText().getCharAmount())
+        if(fileBuffer.getInsertIndex() == fileBuffer.getText().getCharAmount())
             return;
-        Action deleteAction = new DeleteAction(fileBuffer.getCursor().getInsertIndex(),
-                fileBuffer.getText().getCharacter(fileBuffer.getCursor().getInsertIndex()),
+        Action deleteAction = new DeleteAction(fileBuffer.getInsertIndex(),
+                fileBuffer.getText().getCharacter(fileBuffer.getInsertIndex()),
                 fileBuffer.getText());
         history.executeAndAddAction(deleteAction);
     }

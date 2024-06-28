@@ -70,7 +70,6 @@ class HistoryTest {
 
     @Test
     void undo() {
-        Cursor dummyCursor = Cursor.createNew();
         MockAction action1 = new MockAction();
         MockAction action2 = new MockAction();
 
@@ -96,7 +95,6 @@ class HistoryTest {
 
     @Test
     void redo() {
-        Cursor dummyCursor = Cursor.createNew();
         MockAction action1 = new MockAction();
         MockAction action2 = new MockAction();
 
