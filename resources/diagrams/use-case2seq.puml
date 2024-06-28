@@ -1,0 +1,53 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+hide footbox
+actor User as u
+participant "InputTranslator" as it
+participant ":InputHandler" as ih
+participant ":ViewService" as vs
+participant "active:\nBufferView" as bv
+participant "Cursor:\nPoint" as p
+participant "active:\nSnakeView" as sv
+participant "snakeGame" as sg
+participant "gameBoard" as bo
+participant "Snake" as sn
+u -> it: ARROWKEY
+activate u
+activate it
+it --> it: input := Input.ARROW
+it-> ih : handleInput(input)
+activate ih
+ih -> vs: handleInput(input);
+activate vs
+
+vs -> vs: active := getActiveView()
+alt typeOf active == BufferView
+    vs -> bv: handleInput(input)
+    activate bv
+    bv --> bv: direction := input.getType()
+    bv --> bv: cursor := this.cursor
+    bv --> bv: text := this.buffer.getText().getSkeleton()
+    bv -> p: move(cursor, direction, text)
+    activate p
+    p -> p: setX(newX)
+    p -> p: setY(newY)
+    bv -> bv: updateAnchor()
+
+
+else
+    vs -> sv: handleInput(input)
+    activate sv
+    sv --> sv: direction := input.getType()
+    sv -> sg: changeSnakeDirection(direction)
+    activate sg
+    sg-> bo: changeSnakeDirection(direction)
+    activate bo
+    bo-> sn: changeDirection(direction)
+    activate sn
+
+end
+deactivate vs
+deactivate ih
+deactivate u
+
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+hide footbox
+
+actor User as u
+participant ":InputHandler" as ih
+participant "InputTranslator" as it
+participant ":ViewService" as vs
+participant "active:\nFileBuffer" as fb
+participant "cursor:\nPoint" as p
+participant "text:\nText" as t
+participant "CursorMover" as cm
+
+u -> ih: input(charByte)
+activate u
+activate ih
+
+ih -> it: TranslateBytes(charByte)
+activate it
+it --> ih: Input.REGULAR_INPUT
+deactivate it
+
+ih -> vs: character := (char) charByte\ninsertCharacter(character)
+activate vs
+
+vs -> vs: active := getActiveBuffer()
+vs -> fb: insertCharacter(character)
+activate fb
+
+fb -> p: y := getY()
+activate p
+fb -> p: x := getX()
+deactivate p
+
+fb -> t: text.insertCharacter(character, y, x)
+activate t
+deactivate t
+
+fb -> fb: setState(BufferState.DIRTY)
+fb -> cm: move(cursor, Direction.RIGHT, text)
+activate cm
+
+cm -> p: setX(newX)
+cm -> p: setY(newY)
+deactivate cm
+deactivate fb
+
+vs -> vs: updateAnchor()
+deactivate vs
+deactivate ih
+deactivate u
+
+
+@enduml

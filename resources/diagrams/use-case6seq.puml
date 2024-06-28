@@ -1,0 +1,39 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+hide footbox
+actor User as u
+participant "InputTranslator" as it
+participant ":InputHandler" as ih
+participant ":ViewService" as vs
+participant ":viewRepo" as vr
+participant ":Terminal" as tr
+participant "Tree" as t
+participant ":LayoutGenerator" as lg
+participant ":View" as v
+u -> it: input(CTRL_T/CTRL_R)
+activate u
+activate it
+it --> it: input := Input.ARROW
+it-> ih : handleInput(input)
+activate ih
+ih -> vs: handleInput(input);
+activate vs
+vs -> vr: rotate(clockwise)
+activate vr
+vr --> vr: active:= this.activeView
+vr -> t : rotate(clockwise, active)
+activate t
+deactivate vr
+vs -> tr: getTerminalArea()
+activate tr
+tr --> vs: terminalArea
+deactivate tr
+vs -> lg: generate(terminalArea)
+loop through layout structure
+    activate lg
+    lg -> v: setposition()
+    activate v
+    lg -> v: resize()
+end
+
+@enduml

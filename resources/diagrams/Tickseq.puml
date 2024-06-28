@@ -1,0 +1,74 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+hide footbox
+actor User as u
+participant "InputTranslator" as it
+participant ":InputHandler" as ih
+participant ":ViewService" as vs
+participant "active:\nBufferView" as bv
+participant "active:\nSnakeView" as sv
+participant "snakeGame" as sg
+participant "Clock" as cl
+participant "gameBoard" as bo
+participant "Snake" as sn
+
+u -> it: inputTimeOut
+activate u
+activate it
+it --> it: input := Input.TICK
+it-> ih : handleInput(input)
+activate ih
+ih -> vs: handleInput(input);
+activate vs
+vs -> vs: active := getActiveView()
+alt typeOf active == BufferView
+    vs -> bv: wasUpdated(TICK.timeIncrement)
+    bv --> vs: updated := false
+else
+    vs -> sv: wasUpdated(TICK.timeIncrement))
+    activate sv
+    sv -> sg: upDate(TICK.timeIncrement))
+    activate sg
+    sg -> cl: isActive()
+    activate cl
+    cl --> sg: (boolean) activeClock
+    deactivate cl
+    alt !activeClock
+        sg --> sv: updated := false
+        sv --> vs: updated := false
+    else
+        sg -> cl : increaseTime(TICK.timeIncrement)
+        activate cl
+        sg -> cl : shouldUpdate()
+        cl --> sg : (boolean) doUpdate
+        deactivate cl
+        alt !doUpdate
+            sg --> sv: updated := false
+            sv --> vs: updated := false
+        else
+            sg -> sg : handleMove()
+            sg -> cl : subtractThreshHold()
+            sg -> bo : willEatOnMove()
+            activate bo
+            bo --> sg : (boolean) eatsOnMove
+            deactivate bo
+            alt eatsOnMove
+                sg-> cl : decreaseThreshHold(0.9f)
+            end
+            sg -> bo : moveSnake()
+            alt !couldMove
+                sg-> clock : stop()
+            end
+            sg --> sv: updated := true
+            sv --> vs: updated := true
+        end
+    end
+end
+alt updated
+    vs -> vs : drawAll()
+end
+deactivate vs
+deactivate ih
+deactivate u
+
+@enduml

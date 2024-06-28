@@ -1,0 +1,56 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+hide footbox
+
+actor User as u
+participant ":InputHandler" as ih
+participant "InputTranslator" as it
+participant ":ViewService" as vs
+participant "active:\nFileBuffer" as fb
+participant "cursor:\nPoint" as p
+participant "text:\nText" as t
+participant "CursorMover" as cm
+
+u -> ih: input(Backspace)
+activate u
+activate ih
+
+ih -> it: TranslateBytes(Backspace)
+activate it
+it --> ih: Input.BACKSPACE
+deactivate it
+
+ih -> vs: deletePrevChar()
+activate vs
+
+vs -> vs: active := getActiveBuffer()
+vs -> fb: removeCharacterBefore()
+activate fb
+
+fb -> p: y := getY()
+activate p
+fb -> p: x := getX()
+deactivate p
+
+fb -> cm: move(cursor, Direction.LEFT, text)
+activate cm
+
+cm -> p: setX(newX)
+cm -> p: setY(newY)
+deactivate cm
+
+fb -> t: text.removeCharacter(y, x)
+activate t
+deactivate t
+
+fb -> fb: setState(BufferState.DIRTY)
+deactivate fb
+
+vs -> vs: updateAnchor()
+deactivate vs
+deactivate ih
+deactivate u
+
+
+@enduml
