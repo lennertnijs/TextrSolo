@@ -47,13 +47,20 @@ public class RemainOnContentState implements UpdateState {
                               TextUpdateReference update,
                               Dimension2D dimensions,
                               IText text) {
-        Point updateLocation = text.convertToPoint(update.updateIndex());
+        //Point updateLocation = text.convertToPoint(update.updateIndex()); // sloppy fix
+        if (update.isInsertion()) {
+            text.move(Direction.RIGHT);
+        } else {
+            text.move(Direction.LEFT);
+        }
+        Point updateLocation = text.getInsertPoint();
+        // end sloppy fix
         boolean isLineUpdate = update.type() == TextUpdateType.LINE_UPDATE;
         boolean isBeforeAnchor = updateLocation.getY() < anchor.getY();
         if (isLineUpdate && isBeforeAnchor) {
             int displacement = update.isInsertion() ? 1 : -1;
             anchor.setY(anchor.getY() + displacement);
         }
-        AnchorUpdater.updateAnchor(anchor, text.convertToPoint(text.getInsertIndex()), dimensions);
+        AnchorUpdater.updateAnchor(anchor, text.getInsertPoint(), dimensions);
     }
 }

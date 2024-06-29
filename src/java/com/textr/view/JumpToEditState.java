@@ -39,6 +39,6 @@ public class JumpToEditState implements UpdateState {
     }
 
     private void updateAnchor(Point anchor, IText text, Dimension2D dimensions) {
-        AnchorUpdater.updateAnchor(anchor, text.convertToPoint(text.getInsertIndex()), dimensions);
+        AnchorUpdater.updateAnchor(anchor, text.getInsertPoint(), dimensions);
     }
 }

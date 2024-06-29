@@ -35,58 +35,59 @@ public final class LineText implements IText {
     }
 
     /**
-     * @return The text's content as a string. Line breaks will be '\n'.
+     * {@inheritDoc}
      */
-    public String getContent(){
-        return builder.toString();
-    }
-
     public int getInsertIndex(){
         return insertIndex;
     }
 
     /**
-     * @return The text's lines as an array. Does not include any line breaks. (As they are split based on these \n)
+     * {@inheritDoc}
+     */
+    public Point getInsertPoint(){
+        return convertToPoint();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getContent(){
+        return builder.toString();
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public String[] getLines(){
         return builder.toString().split("\n", -1);
     }
 
     /**
-     * Fetches and returns the length of the line at the given row in the text. Includes the line break.
-     * @param lineIndex The line's row index. Cannot be negative. Cannot be equal/greater than the text's amount of rows.
-     *
-     * @return The length.
-     */
-    public int getLineLength(int lineIndex){
-        if(lineIndex < 0 || lineIndex >= getLineAmount()){
-            throw new IllegalArgumentException("Line index is outside text bounds.");
-        }
-        if(lineIndex == getLineAmount() - 1){
-            return builder.toString().split("\n", -1)[lineIndex].length();
-        }
-        return builder.toString().split("\n", -1)[lineIndex].length() + 1;
-    }
-
-    /**
-     * @return The amount of lines in this text. Empty lines will count.
+     * {@inheritDoc}
      */
     public int getLineAmount(){
-        return builder.toString().split("\n", -1).length;
+        return getLines().length;
     }
 
     /**
-     * @return The amount of characters. Line breaks count as 1 character.
+     * {@inheritDoc}
+     */
+    public int getLineLength(int rowIndex){
+        if(rowIndex < 0 || rowIndex >= getLineAmount()){
+            throw new IllegalArgumentException("Row index is outside text bounds.");
+        }
+        return getLines()[rowIndex].length();
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public int getCharAmount(){
         return builder.toString().length();
     }
 
     /**
-     * Fetches and returns the character at the given index.
-     * @param index The index. Cannot be negative, or equal/bigger than the length of the text.
-     *
-     * @return The character.
+     * {@inheritDoc}
      */
     public char getCharacter(int index){
         if(index < 0 || index >= builder.length()) {
@@ -96,93 +97,57 @@ public final class LineText implements IText {
     }
 
     /**
-     * Inserts the given character in the text at the given index.
-     * @param index The index. Cannot be negative or bigger than the length of the content.
-     * @param character The character.
+     * {@inheritDoc}
      */
     public void insert(int index, char character){
         if(index < 0 || index > builder.length()) {
             throw new IndexOutOfBoundsException("The insertion index is outside text bounds.");
         }
         builder.insert(index, character);
+        moveRight();
     }
 
     /**
-     * Removes the character in the text at the given index.
-     * @param index The index. Cannot be negative or equal/bigger than the length of the content.
+     * {@inheritDoc}
      */
     public void remove(int index){
         if(index < 0 || index >= builder.length()) {
             throw new IndexOutOfBoundsException("The removal index is outside text bounds.");
         }
         builder.deleteCharAt(index);
+        if(index != insertIndex){
+            moveLeft();
+        }
     }
 
     /**
-     * Converts the given index to a {@link Point} based on this text's structure.
-     * @param index The index to convert. Cannot be negative. Cannot be bigger than the text's length.
-     *
-     * @return The 2-dimensional {@link Point} representing the 1-dimensional index in context of this text.
+     * {@inheritDoc}
      */
-    public Point convertToPoint(int index) {
-        if (index < 0 || index > builder.length()) {
-            throw new IndexOutOfBoundsException("Index is outside text bounds.");
-        }
-        int row = 0;
-        int column = 0;
-        for(int i = 0; i <= builder.length(); i++){
-            if(i == index){
-                return new Point(column, row);
-            }
-            if(builder.charAt(i) == '\n'){
-                column = 0;
-                row++;
-            }else{
-                column++;
-            }
-        }
-        throw new IllegalStateException("Should be unreachable.");
-    }
-
-    /**
-     * @return The string representation.
-     */
-    @Override
-    public String toString(){
-        return String.format("LineText[content=%s]", builder.toString());
-    }
-
     public void move(Direction direction){
         switch(direction){
-            case RIGHT: moveRight();
-            case DOWN: moveDown();
-            case LEFT: moveLeft();
-            case UP: moveUp();
+            case RIGHT -> moveRight();
+            case DOWN -> moveDown();
+            case LEFT -> moveLeft();
+            case UP -> moveUp();
         }
     }
 
     private void moveRight(){
-        if(insertIndex == builder.length() + 1){
+        if(insertIndex >= builder.length()){
             return;
         }
         this.insertIndex++;
     }
 
     private void moveUp(){
-        int count = 0;
-        while(insertIndex != 0 || getCharacter(insertIndex) != '\n'){
-            count++;
-            insertIndex--;
-        }
-        if(insertIndex == 0){
-            insertIndex = count;
+        Point cursorAsPoint = getInsertPoint();
+        if(cursorAsPoint.getY() == 0){
             return;
         }
-        insertIndex--;
-        while(getCharacter(insertIndex) != '\n'){
-            insertIndex--;
-        }
-        this.insertIndex += count;
+        int y = cursorAsPoint.getY() - 1;
+        int x = Math.min(cursorAsPoint.getX(), Math.max(0, getLineLength(y)));
+        Point p = new Point(x, y);
+        this.insertIndex = convertToIndex(p);
     }
 
     private void moveLeft(){
@@ -193,6 +158,50 @@ public final class LineText implements IText {
     }
 
     private void moveDown(){
-        // do shit
+        Point cursorAsPoint = getInsertPoint();
+        if(cursorAsPoint.getY() == getLineAmount() -1){
+            return;
+        }
+        int y = cursorAsPoint.getY() + 1;
+        int x = Math.min(cursorAsPoint.getX(), Math.max(0, getLineLength(y)));
+        Point p = new Point(x, y);
+        this.insertIndex = convertToIndex(p);
+    }
+
+    private Point convertToPoint() {
+        int row = 0;
+        int column = 0;
+        for(int i = 0; i <= builder.length(); i++){
+            if(i == insertIndex){
+                break;
+            }
+            if(builder.charAt(i) == '\n'){
+                column = 0;
+                row++;
+            }else{
+                column++;
+            }
+        }
+        return new Point(column, row);
+    }
+
+    private int convertToIndex(Point point){
+        int count = 0;
+        for(int i = 0; i < getLineAmount(); i++){
+            if(i < point.getY()){
+                count += getLineLength(i) + 1;
+            }else{
+                break;
+            }
+        }
+        return count + point.getX();
+    }
+
+    /**
+     * @return The string representation.
+     */
+    @Override
+    public String toString(){
+        return String.format("LineText[content=%s]", builder.toString());
     }
 }

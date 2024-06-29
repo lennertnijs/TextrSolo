@@ -57,7 +57,7 @@ public final class FileBuffer {
     }
 
     public Point getInsertPoint(){
-        return text.convertToPoint(text.getInsertIndex());
+        return text.getInsertPoint();
     }
 
     /**
