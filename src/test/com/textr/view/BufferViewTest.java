@@ -1,17 +1,5 @@
 package com.textr.view;
 
-import com.textr.filebuffer.BufferState;
-import com.textr.filebuffer.FileBuffer;
-import com.textr.util.Dimension2D;
-import com.textr.util.Direction;
-import com.textr.util.Point;
-import com.textr.Settings;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class BufferViewTest {
 //    private final String url = "resources/test.txt";
 //    private final String url2 = "resources/test2.txt";

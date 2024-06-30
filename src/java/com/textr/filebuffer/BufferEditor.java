@@ -25,6 +25,7 @@ public final class BufferEditor {
     public void insert(char c){
         Action insertAction = new InsertAction(fileBuffer.getInsertIndex(), c, fileBuffer.getText());
         history.executeAndAddAction(insertAction);
+        fileBuffer.updateAfterInsert(c);
     }
 
 
@@ -35,6 +36,7 @@ public final class BufferEditor {
                 fileBuffer.getText().getCharacter(fileBuffer.getInsertIndex() - 1),
                 fileBuffer.getText());
         history.executeAndAddAction(deleteAction);
+        fileBuffer.updateAfterRemove(fileBuffer.getText().getCharacter(fileBuffer.getInsertIndex() - 1));
     }
 
     public void deleteAfter(){
@@ -44,13 +46,16 @@ public final class BufferEditor {
                 fileBuffer.getText().getCharacter(fileBuffer.getInsertIndex()),
                 fileBuffer.getText());
         history.executeAndAddAction(deleteAction);
+        fileBuffer.updateAfterRemove(fileBuffer.getText().getCharacter(fileBuffer.getInsertIndex() - 1));
     }
 
     public void undo(){
         history.undo();
+        // update
     }
 
     public void redo(){
         history.redo();
+        // update
     }
 }

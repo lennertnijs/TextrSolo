@@ -7,7 +7,6 @@ import java.util.*;
 
 /**
  * A class representing a text using a 1-dimensional string builder.
- *
  */
 public final class LineText implements IText {
 
@@ -42,6 +41,13 @@ public final class LineText implements IText {
      */
     public int getInsertIndex(){
         return insertIndex;
+    }
+
+    public void setInsertIndex(int index){
+        if(index < 0 || index >= builder.length()){
+            throw new IllegalArgumentException();
+        }
+        this.insertIndex = index;
     }
 
     /**
@@ -107,7 +113,7 @@ public final class LineText implements IText {
             throw new IndexOutOfBoundsException("The insertion index is outside text bounds.");
         }
         builder.insert(index, character);
-        moveRight();
+        this.insertIndex = index + 1;
     }
 
     /**
@@ -118,9 +124,7 @@ public final class LineText implements IText {
             throw new IndexOutOfBoundsException("The removal index is outside text bounds.");
         }
         builder.deleteCharAt(index);
-        if(index != insertIndex){
-            moveLeft();
-        }
+        this.insertIndex = index;
     }
 
     /**

@@ -2,11 +2,11 @@ package com.textr.filebuffer;
 
 import com.textr.file.FileReader;
 import com.textr.file.FileWriter;
+import com.textr.filebufferV2.BufferState;
 import com.textr.filebufferV2.IText;
 import com.textr.filebufferV2.LineText;
 import com.textr.util.Direction;
 import com.textr.util.Point;
-import com.textr.util.Validator;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,9 +32,9 @@ public final class FileBuffer {
     }
 
     public static FileBuffer createFromFilePath(String url){
-        Objects.requireNonNull(url, "Url is null.");
-        File file = new File(url);
-        LineText text = new LineText(FileReader.readContents(file));
+        File file = new File(Objects.requireNonNull(url, "Url is null."));
+        String fileContents = FileReader.readContents(file);
+        LineText text = new LineText(fileContents);
         return new FileBuffer(file, text, BufferState.CLEAN);
     }
 
@@ -74,8 +74,7 @@ public final class FileBuffer {
      * @throws IllegalArgumentException If the state is null.
      */
     public void setState(BufferState state) {
-        Validator.notNull(state, "Cannot set the file buffer's state to null.");
-        this.state = state;
+        this.state = Objects.requireNonNull(state, "State is null.");
     }
 
     public void moveCursor(Direction direction){
@@ -88,19 +87,37 @@ public final class FileBuffer {
      */
     public void writeToDisk() throws IOException {
         FileWriter.write(text.getContent(), file);
-        this.setState(BufferState.CLEAN);
+        setState(BufferState.CLEAN);
     }
 
-    public void updateAfterInsert(char c, int index){
-        TextUpdateType t = c == '\n' ? TextUpdateType.LINE_UPDATE : TextUpdateType.CHAR_UPDATE;
-        for (TextListener listener: listeners)
-            listener.update(new TextUpdateReference(index, true, t), text);
+    public void insert(char c, int index){
+        text.insert(index, c);
+        for(TextListener listener : listeners){
+            listener.doUpdate(new TextUpdate(getInsertPoint(), OperationType.INSERT_CHARACTER));
+        }
     }
 
-    public void updateAfterRemove(char c, int index){
-        TextUpdateType t = c == '\n' ? TextUpdateType.LINE_UPDATE : TextUpdateType.CHAR_UPDATE;
+
+    public void updateAfterInsert(char c){
         for (TextListener listener: listeners)
-            listener.update(new TextUpdateReference(index, false, t), text);
+            listener.doUpdate(new TextUpdate(getInsertPoint(), OperationType.INSERT_CHARACTER));
+    }
+
+    public void updateAfterRemove(char c){
+        for (TextListener listener: listeners)
+            listener.doUpdate(new TextUpdate(getInsertPoint(), OperationType.INSERT_CHARACTER));
+    }
+
+    public void addTextListener(TextListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeTextListener(TextListener listener) {
+        listeners.remove(listener);
+    }
+
+    public int getReferenceCount() {
+        return listeners.size();
     }
 
     /**
@@ -139,17 +156,5 @@ public final class FileBuffer {
     public String toString(){
         return String.format("FileBuffer[fileId = %s, text = %s, state = %s]",
                 file, text, state);
-    }
-
-    public void addTextListener(TextListener listener) {
-        listeners.add(listener);
-    }
-
-    public void removeTextListener(TextListener listener) {
-        listeners.remove(listener);
-    }
-
-    public int getReferenceCount() {
-        return listeners.size();
     }
 }

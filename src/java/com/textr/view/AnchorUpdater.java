@@ -2,7 +2,8 @@ package com.textr.view;
 
 import com.textr.util.Dimension2D;
 import com.textr.util.Point;
-import com.textr.util.Validator;
+
+import java.util.Objects;
 
 /**
  * Updates the anchor point of a BufferView.
@@ -25,9 +26,9 @@ public final class AnchorUpdater {
      * @throws IllegalArgumentException If the anchor, cursor or dimensions are null.
      */
     public static void updateAnchor(Point anchor, Point cursor, Dimension2D dimensions){
-        Validator.notNull(anchor, "Cannot update a null anchor.");
-        Validator.notNull(cursor, "Cannot update the anchor because the cursor is null.");
-        Validator.notNull(dimensions, "Cannot update the anchor because the dimensions of the terminal are null.");
+        Objects.requireNonNull(anchor, "Cannot update a null anchor.");
+        Objects.requireNonNull(cursor, "Cannot update the anchor because the cursor is null.");
+        Objects.requireNonNull(dimensions, "Cannot update the anchor because the dimensions of the terminal are null.");
         if(cursor.getX() < anchor.getX()){
             anchor.setX(cursor.getX());
         }
@@ -42,5 +43,4 @@ public final class AnchorUpdater {
             anchor.setY(cursor.getY() - dimensions.getHeight() + 2);
         }
     }
-
 }
