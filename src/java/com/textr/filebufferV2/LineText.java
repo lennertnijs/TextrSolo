@@ -43,13 +43,6 @@ public final class LineText implements IText {
         return insertIndex;
     }
 
-    public void setInsertIndex(int index){
-        if(index < 0 || index >= builder.length()){
-            throw new IllegalArgumentException();
-        }
-        this.insertIndex = index;
-    }
-
     /**
      * {@inheritDoc}
      */

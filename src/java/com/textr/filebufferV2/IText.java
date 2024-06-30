@@ -20,7 +20,7 @@ public interface IText {
      * @return The 2-dimensional insert point of the text.
      */
     Point getInsertPoint();
-    void setInsertIndex(int index);
+
     /**
      * @return The text's content as a single string. Uses '\n' line break.
      */
