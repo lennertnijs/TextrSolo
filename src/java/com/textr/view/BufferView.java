@@ -1,8 +1,7 @@
 package com.textr.view;
 
-import com.textr.filebuffer.*;
+import com.textr.filebuffer.BufferEditor;
 import com.textr.filebuffer.FileBuffer;
-import com.textr.filebuffer.OperationType;
 import com.textr.filebuffer.TextUpdate;
 import com.textr.input.Input;
 import com.textr.input.InputType;
@@ -56,8 +55,8 @@ public final class BufferView extends View implements TextListener {
         Objects.requireNonNull(dimensions, "The dimensions of the BufferView cannot be null.");
         FileBuffer b = new FileBuffer(file);
         return new BufferView(position.copy(),
-                dimensions.copy(),
-                Point.create(0,0),
+                dimensions,
+                new Point(0,0),
                 communicator,
                 new BufferEditor(b));
     }
@@ -137,11 +136,6 @@ public final class BufferView extends View implements TextListener {
         if(t.insertPoint().getY() >= anchor.getY()){
             return;
         }
-        if(t.operationType() == OperationType.INSERT_NEWLINE){
-            anchor.incrementY();
-        }else{
-            anchor.decrementY();
-        }
     }
 
     /**
@@ -164,7 +158,7 @@ public final class BufferView extends View implements TextListener {
     @Override
     public BufferView duplicate(){
         return new BufferView(getPosition().copy(),
-                getDimensions().copy(),
+                getDimensions(),
                 anchor.copy(),
                 communicator,
                 bufferEditor);

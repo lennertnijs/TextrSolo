@@ -43,7 +43,7 @@ public final class TermiosTerminalService implements TerminalService {
                     width += b - '0';
                 }
             }
-            return Dimension2D.create(width, height);
+            return new Dimension2D(width, height);
         }catch(IOException e){
             throw new IllegalStateException("Something went wrong while reading the terminal dimensions.");
         }

@@ -20,7 +20,7 @@ public class SnakeGameTest {
     public void initialise(){
         clock = new GameClock(1.0f);
 
-        dimensions = Dimension2D.create(2, 2);
+        dimensions = new Dimension2D(2, 2);
         snake = new Snake(Direction.RIGHT);
         snake.add(new GamePoint(0, 0));
         snake.add(new GamePoint(0, 1));
@@ -67,7 +67,7 @@ public class SnakeGameTest {
 
     @Test
     public void testResizeBoard(){
-        snakeGame.resizeBoard(Dimension2D.create(2, 2));
+        snakeGame.resizeBoard(new Dimension2D(2, 2));
         // cannot test this further, the method just passes the parameter.
     }
 

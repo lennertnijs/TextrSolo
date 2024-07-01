@@ -36,8 +36,8 @@ class ViewTreeRepoTest {
     @BeforeEach
     void initialise(){
         views = new ArrayList<>();
-        Point initPoint = Point.create(0,0);
-        Dimension2D initDimension = Dimension2D.create(10,10);
+        Point initPoint = new Point(0,0);
+        Dimension2D initDimension = new Dimension2D(10,10);
         Settings.defaultLineSeparator = "\r\n";
         view1 = new MockView(initPoint, initDimension);
         views.add(view1);
@@ -54,7 +54,7 @@ class ViewTreeRepoTest {
         repo = new ViewTreeRepo();
         setViewRepo(repo);
         repo.addAll(views);
-        terminalDimensions = Dimension2D.create(100,100);
+        terminalDimensions = new Dimension2D(100,100);
         LayoutGenerator.generate(terminalDimensions);
     }
     @Test

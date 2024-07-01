@@ -30,8 +30,8 @@ class ViewServiceTest {
     @BeforeEach
     void initialise(){
         List<View> views = new ArrayList<>();
-        Point initPoint = Point.create(0,0);
-        Dimension2D initDimension = Dimension2D.create(10,10);
+        Point initPoint = new Point(0,0);
+        Dimension2D initDimension = new Dimension2D(10,10);
         Settings.defaultLineSeparator = "\r\n";
         view1 = new MockView(initPoint, initDimension);
         views.add(view1);
@@ -51,13 +51,13 @@ class ViewServiceTest {
         repo.setActive(view1);
         viewService = new ViewService(repo, new ViewDrawer(terminal), terminal, serviceCommunicator);
         serviceCommunicator.setPermissions(true);
-        Dimension2D terminalDimensions = Dimension2D.create(10, 12);
+        Dimension2D terminalDimensions = new Dimension2D(10, 12);
         LayoutGenerator.generate(terminalDimensions);
     }
 
     @Test
     void ViewService_NullViewRepo(){
-        assertThrows(IllegalArgumentException.class, () -> new ViewService(null,
+        assertThrows(NullPointerException.class, () -> new ViewService(null,
                 new ViewDrawer(terminal),
                 terminal,
                 serviceCommunicator));

@@ -12,23 +12,12 @@ public final class Dimension2D {
     /**
      * Constructor for a {@link Dimension2D}.
      */
-    private Dimension2D(int width, int height){
-        this.width = width;
-        this.height = height;
-    }
-
-    /**
-     * Static factory method to create a {@link Dimension2D} with.
-     * @param width The width. Must be strictly positive
-     * @param height The height. Must be strictly positive
-     *
-     * @return The {@link Dimension2D}
-     */
-    public static Dimension2D create(int width, int height){
+    public Dimension2D(int width, int height){
         if(width <= 0 || height <= 0){
             throw new IllegalArgumentException("Width or height is negative or 0.");
         }
-        return new Dimension2D(width, height);
+        this.width = width;
+        this.height = height;
     }
 
     /**
@@ -47,24 +36,17 @@ public final class Dimension2D {
 
     /**
      * Compares this {@link Dimension2D} to the given object and returns True if they're equal, False otherwise.
-     * @param o The other object
      *
      * @return True if equal, False otherwise.
      */
     @Override
     public boolean equals(Object o){
-        if(this == o){
-            return true;
-        }
-        if(!(o instanceof Dimension2D dimensions)){
+        if(!(o instanceof Dimension2D dimensions))
             return false;
-        }
         return this.width == dimensions.width && this.height == dimensions.height;
     }
 
     /**
-     * Generates and returns a hash code for this {@link Dimension2D}.
-     *
      * @return The hash code
      */
     @Override
@@ -75,16 +57,10 @@ public final class Dimension2D {
     }
 
     /**
-     * Creates and returns a {@link String} representation of this {@link Dimension2D}.
-     *
      * @return The string representation
      */
     @Override
     public String toString(){
         return String.format("Dimension2D[width = %d, height = %d]", width, height);
-    }
-
-    public Dimension2D copy(){
-        return new Dimension2D(this.width, this.height);
     }
 }

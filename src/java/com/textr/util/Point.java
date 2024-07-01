@@ -20,21 +20,6 @@ public final class Point {
     }
 
     /**
-     * Static factory method to create a valid {@link Point} with.
-     * @param x The x coordinate. Cannot be negative
-     * @param y The y coordinate. Cannot be negative
-     *
-     * @return The new point.
-     * @throws IllegalArgumentException If the passed x or y value is negative.
-     */
-    public static Point create(int x, int y){
-        if(x < 0 || y < 0){
-            throw new IllegalArgumentException("x or y is negative.");
-        }
-        return new Point(x, y);
-    }
-
-    /**
      * @return The x coordinate
      */
     public int getX(){
@@ -74,32 +59,9 @@ public final class Point {
         this.y = y;
     }
 
-    /**
-     * Increments the x coordinate of this point by 1.
-     */
-    public void incrementX(){
-        x += 1;
-    }
 
-    /**
-     * Decrements the x coordinate of this point by 1, if it is not already at 0.
-     */
-    public void decrementX(){
-        x = Math.max(x - 1, 0);
-    }
-
-    /**
-     * Increments the y coordinate of this point by 1.
-     */
-    public void incrementY(){
-        y += 1;
-    }
-
-    /**
-     * Decrements the y coordinate of this point by 1, if it is not already at 0.
-     */
-    public void decrementY(){
-        y = Math.max(y - 1, 0);
+    public Point copy(){
+        return new Point(this.x, this.y);
     }
 
 
@@ -111,9 +73,8 @@ public final class Point {
      */
     @Override
     public boolean equals(Object o){
-        if(!(o instanceof Point point)){
+        if(!(o instanceof Point point))
             return false;
-        }
         return x == point.x && y == point.y;
     }
 
@@ -124,24 +85,17 @@ public final class Point {
      */
     @Override
     public int hashCode(){
-        int result = x;
+        int result = 17;
+        result = 31 * result * x;
         result = 31 * result + y;
         return result;
     }
 
     /**
-     * Creates and returns a {@link String} representation of this point.
-     *
      * @return The string representation
      */
     @Override
     public String toString(){
         return String.format("Point[x = %d, y = %d]", x, y);
     }
-
-    public Point copy(){
-        return new Point(this.x, this.y);
-    }
-
-
 }

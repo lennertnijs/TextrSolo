@@ -12,9 +12,9 @@ public class PointTest {
 
     @BeforeEach
     public void initialise(){
-        point1 = Point.create(1,2);
-        point2 = Point.create(5,5);
-        point3 = Point.create(1,2);
+        point1 = new Point(1,2);
+        point2 = new Point(5,5);
+        point3 = new Point(1,2);
     }
 
     @Test
@@ -24,21 +24,13 @@ public class PointTest {
                 () -> Assertions.assertEquals(point1.getY(), 2)
         );
     }
-
-    @Test
-    public void testIllegalCreation(){
-        Assertions.assertAll(
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Point.create(-1, 1)),
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Point.create(1, -1))
-        );
-    }
-
+    
     @Test
     public void testSetters(){
         point1.setX(5);
         point1.setY(7);
         Assertions.assertAll(
-                () -> Assertions.assertEquals(point1, Point.create(5, 7))
+                () -> Assertions.assertEquals(point1, new Point(5, 7))
         );
     }
 
@@ -47,25 +39,6 @@ public class PointTest {
         Assertions.assertAll(
                 () -> Assertions.assertThrows(IllegalArgumentException.class, () -> point1.setX(-1)),
                 () -> Assertions.assertThrows(IllegalArgumentException.class, () -> point1.setY(-1))
-        );
-    }
-
-    @Test
-    public void testIncrements(){
-        point1.incrementX();
-        point1.incrementY();
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(point1, Point.create(2, 3))
-        );
-    }
-
-    @Test
-    public void testDecrements(){
-        point1.decrementX();
-        point1.decrementX();
-        point1.decrementY();
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(point1, Point.create(0, 1))
         );
     }
 

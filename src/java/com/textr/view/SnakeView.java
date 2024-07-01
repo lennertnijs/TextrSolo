@@ -39,7 +39,7 @@ public class SnakeView extends View {
                 snake.add(snakeSegment);
         }
         FoodManager foodManager = new FoodManager();
-        Dimension2D dimensions = Dimension2D.create(getDimensions().getWidth() - 1, getDimensions().getHeight() - 1);
+        Dimension2D dimensions = new Dimension2D(getDimensions().getWidth() - 1, getDimensions().getHeight() - 1);
         GameBoard board = GameBoard.createNew(dimensions, snake, foodManager);
         for(int i = 0; i < 12; i++)
             board.spawnFood();
@@ -76,7 +76,7 @@ public class SnakeView extends View {
     @Override
     public void resize(Dimension2D dimensions){
         this.setDimensions(dimensions);
-        Dimension2D boardDimensions = Dimension2D.create(dimensions.getWidth()-1, dimensions.getHeight()-1);
+        Dimension2D boardDimensions = new Dimension2D(dimensions.getWidth()-1, dimensions.getHeight()-1);
         snakeGame.resizeBoard(boardDimensions);
     }
 

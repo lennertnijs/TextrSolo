@@ -30,7 +30,7 @@ public class GameBoardTest {
         snakeMiddle = new GamePoint(1, 0);
         snakeTail = new GamePoint(2, 0);
         food = new GamePoint(0, 2);
-        dimensions = Dimension2D.create(20, 10);
+        dimensions = new Dimension2D(20, 10);
         snake = new Snake(Direction.UP);
         foodManager = new FoodManager();
 
@@ -39,7 +39,7 @@ public class GameBoardTest {
         snake.add(snakeTail);
         foodManager.add(food);
         board = GameBoard.createNew(dimensions, snake, foodManager);
-        board2 = GameBoard.createNew(Dimension2D.create(200, 200), snake, foodManager);
+        board2 = GameBoard.createNew(new Dimension2D(200, 200), snake, foodManager);
         board3 = GameBoard.createNew(dimensions, snake, foodManager);
     }
 
@@ -119,7 +119,7 @@ public class GameBoardTest {
 
     @Test
     public void testCutHeightSnakeBottom(){
-        board.resize(Dimension2D.create(20, 5));
+        board.resize(new Dimension2D(20, 5));
         assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
     }
 
@@ -128,7 +128,7 @@ public class GameBoardTest {
     public void testCutHeightSnakeTop(){
         for(int i = 0; i < 7; i++)
             board.moveSnake(); // sets snake head at (0,7)
-        board.resize(Dimension2D.create(20, 5));
+        board.resize(new Dimension2D(20, 5));
         GamePoint snakeHead = new GamePoint(0, 2);
         GamePoint snakeMiddle = new GamePoint(0, 1);
         GamePoint snakeTail = new GamePoint(0, 0);
@@ -139,7 +139,7 @@ public class GameBoardTest {
     public void testCutHeightSnakeMiddle(){
         for(int i = 0; i < 5; i++)
             board.moveSnake(); // sets snake head at (0,5)
-        board.resize(Dimension2D.create(20, 5));
+        board.resize(new Dimension2D(20, 5));
         GamePoint snakeHead = new GamePoint(0, 2);
         GamePoint snakeMiddle = new GamePoint(0, 1);
         GamePoint snakeTail = new GamePoint(0, 0);
@@ -148,7 +148,7 @@ public class GameBoardTest {
 
     @Test
     public void testIncreaseHeightSlightly(){
-        board.resize(Dimension2D.create(20, 12));
+        board.resize(new Dimension2D(20, 12));
         GamePoint snakeHead = new GamePoint(0, 2);
         GamePoint snakeMiddle = new GamePoint(1, 2);
         GamePoint snakeTail = new GamePoint(2, 2);
@@ -157,7 +157,7 @@ public class GameBoardTest {
 
     @Test
     public void testIncreaseHeightMassively(){
-        board.resize(Dimension2D.create(20, 30));
+        board.resize(new Dimension2D(20, 30));
         GamePoint snakeHead = new GamePoint(0, 15);
         GamePoint snakeMiddle = new GamePoint(1, 15);
         GamePoint snakeTail = new GamePoint(2, 15);
@@ -166,7 +166,7 @@ public class GameBoardTest {
 
     @Test
     public void testCutWidthSnakeLeft(){
-        board.resize(Dimension2D.create(10, 10));
+        board.resize(new Dimension2D(10, 10));
         assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
     }
 
@@ -176,7 +176,7 @@ public class GameBoardTest {
         board.changeSnakeDirection(Direction.RIGHT);
         for(int i = 0; i < 15; i++)
             board.moveSnake(); // sets snake head at (15, 1)
-        board.resize(Dimension2D.create(10, 10));
+        board.resize(new Dimension2D(10, 10));
         GamePoint snakeHead = new GamePoint(5, 1);
         GamePoint snakeMiddle = new GamePoint(4, 1);
         GamePoint snakeTail = new GamePoint(3, 1);
@@ -189,7 +189,7 @@ public class GameBoardTest {
         board.changeSnakeDirection(Direction.RIGHT);
         for(int i = 0; i < 10; i++)
             board.moveSnake(); // sets snake head at (10, 1)
-        board.resize(Dimension2D.create(10, 10));
+        board.resize(new Dimension2D(10, 10));
         GamePoint snakeHead = new GamePoint(5, 1);
         GamePoint snakeMiddle = new GamePoint(4, 1);
         GamePoint snakeTail = new GamePoint(3, 1);
@@ -198,7 +198,7 @@ public class GameBoardTest {
 
     @Test
     public void testIncreaseWidthSlightly(){
-        board.resize(Dimension2D.create(22, 10));
+        board.resize(new Dimension2D(22, 10));
         GamePoint snakeHead = new GamePoint(2, 0);
         GamePoint snakeMiddle = new GamePoint(3, 0);
         GamePoint snakeTail = new GamePoint(4, 0);
@@ -207,7 +207,7 @@ public class GameBoardTest {
 
     @Test
     public void testIncreaseWidthMassively(){
-        board.resize(Dimension2D.create(50, 10));
+        board.resize(new Dimension2D(50, 10));
         GamePoint snakeHead = new GamePoint(25, 0);
         GamePoint snakeMiddle = new GamePoint(26, 0);
         GamePoint snakeTail = new GamePoint(27, 0);
@@ -216,7 +216,7 @@ public class GameBoardTest {
 
     @Test
     public void testResizeLosePartOfSnake(){
-        board.resize(Dimension2D.create(2, 10));
+        board.resize(new Dimension2D(2, 10));
         GamePoint snakeHead = new GamePoint(0, 0);
         GamePoint snakeMiddle = new GamePoint(1, 0);
         assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle)));
@@ -224,7 +224,7 @@ public class GameBoardTest {
 
     @Test
     public void resizeBothDimensionsPartly(){
-        board.resize(Dimension2D.create(30, 15));
+        board.resize(new Dimension2D(30, 15));
         GamePoint snakeHead = new GamePoint(10, 5);
         GamePoint snakeMiddle = new GamePoint(11, 5);
         GamePoint snakeTail = new GamePoint(12, 5);
@@ -233,7 +233,7 @@ public class GameBoardTest {
 
     @Test
     public void resizeBothDimensionsImmensely(){
-        board.resize(Dimension2D.create(70, 50));
+        board.resize(new Dimension2D(70, 50));
         GamePoint snakeHead = new GamePoint(35, 25);
         GamePoint snakeMiddle = new GamePoint(36, 25);
         GamePoint snakeTail = new GamePoint(37, 25);
@@ -246,14 +246,14 @@ public class GameBoardTest {
         board.changeSnakeDirection(Direction.RIGHT);
         for(int i = 0; i < 13; i++)
             board.moveSnake();; // head at (13, 1)
-        board.resize(Dimension2D.create(10, 20)); // was (20, 10)
+        board.resize(new Dimension2D(10, 20)); // was (20, 10)
         GamePoint snakeHead = new GamePoint(5, 10);
         GamePoint snakeMiddle = new GamePoint(4, 10);
         GamePoint snakeTail = new GamePoint(3, 10);
         assertEquals(board.getSnakePoints(), new ArrayList<>(List.of(snakeHead, snakeMiddle, snakeTail)));
 
 
-        board.resize(Dimension2D.create(20, 10));
+        board.resize(new Dimension2D(20, 10));
         GamePoint snakeHead2 = new GamePoint(10, 5);
         GamePoint snakeMiddle2 = new GamePoint(9, 5);
         GamePoint snakeTail2 = new GamePoint(8, 5);

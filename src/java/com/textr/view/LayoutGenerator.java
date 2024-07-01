@@ -16,14 +16,14 @@ public final class LayoutGenerator {
      * @throws IllegalStateException If there are no buffers.
      */
     public static void generate(Dimension2D dimension2D ){
-        Point topLeft = Point.create(0,0);
+        Point topLeft = new Point(0,0);
         int terminalWidth = dimension2D.getWidth();
         int terminalHeight = dimension2D.getHeight();
         if(viewRepo.rootIsVertical()){
-            generateLayoutsVerticalSubTree(topLeft, Point.create(terminalWidth, terminalHeight), viewRepo.getRoot() );
+            generateLayoutsVerticalSubTree(topLeft, new Point(terminalWidth, terminalHeight), viewRepo.getRoot() );
             return;
         }
-        generateLayoutsHorizontalSubTree(topLeft,Point.create(terminalWidth, terminalHeight),viewRepo.getRoot());
+        generateLayoutsHorizontalSubTree(topLeft,new Point(terminalWidth, terminalHeight),viewRepo.getRoot());
 
 }
 
@@ -39,16 +39,16 @@ public static void generateLayoutsVerticalSubTree(Point topLeft, Point bottomRig
     int remainder = ((bottomRight.getY()-topLeft.getY()) % rootlayout.getChildren().size());
     int y = topLeft.getY();
     for(Node<View> child : rootlayout.getChildren()){
-        Point position = Point.create(topLeft.getX(), y);
+        Point position = new Point(topLeft.getX(), y);
         int LayoutHeight = remainder-- > 0 ? heightPerLayout + 1 : heightPerLayout;
-        Dimension2D dimensions = Dimension2D.create(bottomRight.getX()-topLeft.getX(), LayoutHeight);
+        Dimension2D dimensions = new Dimension2D(bottomRight.getX()-topLeft.getX(), LayoutHeight);
         if(child.hasValue()){
             View toAdd = child.getValue();
             toAdd.setPosition(position);
             toAdd.resize(dimensions);
         }
         else{
-            Point parameterbottomright = Point.create(position.getX()+dimensions.getWidth(),position.getY()+dimensions.getHeight());
+            Point parameterbottomright = new Point(position.getX()+dimensions.getWidth(),position.getY()+dimensions.getHeight());
             generateLayoutsHorizontalSubTree(position, parameterbottomright, child);
         }
         y += LayoutHeight;
@@ -68,16 +68,16 @@ public static void generateLayoutsHorizontalSubTree(Point topLeft, Point bottomR
     int remainder = ((bottomRight.getX()-topLeft.getX()) % rootlayout.getChildren().size());
     int x = topLeft.getX();
     for(Node<View> child : rootlayout.getChildren()){
-        Point position = Point.create(x, topLeft.getY());
+        Point position = new Point(x, topLeft.getY());
         int LayoutWidth = remainder-- > 0 ? widthPerLayout + 1 : widthPerLayout;
-        Dimension2D dimensions = Dimension2D.create(LayoutWidth, bottomRight.getY()-topLeft.getY());
+        Dimension2D dimensions = new Dimension2D(LayoutWidth, bottomRight.getY()-topLeft.getY());
         if(child.hasValue()){
             View toAdd = child.getValue();
             toAdd.setPosition(position);
             toAdd.resize(dimensions);
         }
         else{
-            Point parameterbottomright = Point.create(position.getX()+dimensions.getWidth(),position.getY()+dimensions.getHeight());
+            Point parameterbottomright = new Point(position.getX()+dimensions.getWidth(),position.getY()+dimensions.getHeight());
             generateLayoutsVerticalSubTree(position, parameterbottomright, child);
         }
         x += LayoutWidth;

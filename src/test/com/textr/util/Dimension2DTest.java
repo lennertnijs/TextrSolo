@@ -12,9 +12,9 @@ public class Dimension2DTest {
 
     @BeforeEach
     public void initialise(){
-        dimensions1 = Dimension2D.create(15, 10);
-        dimensions2 = Dimension2D.create(10, 15);
-        dimensions3 = Dimension2D.create(15, 10);
+        dimensions1 = new Dimension2D(15, 10);
+        dimensions2 = new Dimension2D(10, 15);
+        dimensions3 = new Dimension2D(15, 10);
     }
 
 
@@ -29,8 +29,8 @@ public class Dimension2DTest {
     @Test
     public void testConstructorInvalid(){
         Assertions.assertAll(
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Dimension2D.create(0, 10)),
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> Dimension2D.create(10, 0))
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> new Dimension2D(0, 10)),
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> new Dimension2D(10, 0))
         );
     }
 

@@ -50,8 +50,8 @@ public final class ViewService {
         FileBuffer.setFileWriter(new FileWriter());
         for(String url : filePaths){
             File file = new File(url);
-            Point dummyPosition = Point.create(0, 0);
-            Dimension2D dummyDimensions = Dimension2D.create(1,1);
+            Point dummyPosition = new Point(0, 0);
+            Dimension2D dummyDimensions = new Dimension2D(1,1);
             BufferView view = BufferView.createFromFilePath(file, dummyPosition, dummyDimensions, communicator);
             viewRepo.add(view);
         }
@@ -194,7 +194,7 @@ public final class ViewService {
     }
 
     private void addGame() {
-        SnakeView newGame = new SnakeView(Point.create(0,0), Dimension2D.create(10,10));
+        SnakeView newGame = new SnakeView(new Point(0,0), new Dimension2D(10,10));
         viewRepo.addNextTo(newGame, getActiveView());
         generateViewPositionsAndDimensions();
         setActiveViewToNext();
