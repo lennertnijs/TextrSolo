@@ -134,7 +134,7 @@ public final class Node<T> {
         if(!this.hasParent() || !node.hasParent()){
             return false;
         }
-        return this.parent.equals(node.parent);
+        return parent.equals(node.parent);
     }
 
     /**
@@ -148,7 +148,7 @@ public final class Node<T> {
     public void replaceChild(Node<T> oldChild, Node<T> newChild){
         Validator.notNull(oldChild, "Cannot replace a null Node.");
         Validator.notNull(newChild, "Cannot replace by a null Node.");
-        int index = this.children.indexOf(oldChild);
+        int index = children.indexOf(oldChild);
         if(index != -1){
             this.children.set(index, newChild);
             newChild.parent= this;
@@ -166,12 +166,8 @@ public final class Node<T> {
      */
     @Override
     public boolean equals(Object o){
-        if(this == o){
-            return true;
-        }
-        if(!(o instanceof Node<?> node)){
+        if(!(o instanceof Node<?> node))
             return false;
-        }
         boolean equalValues = (t != null && node.t != null) ? t.equals(node.t) : t == node.t;
         return equalValues && children.equals(node.children);
     }

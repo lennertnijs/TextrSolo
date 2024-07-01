@@ -3,11 +3,13 @@ package com.textr.drawer;
 import com.textr.snake.GamePoint;
 import com.textr.snake.IGameBoard;
 import com.textr.terminal.TerminalService;
+import com.textr.util.Point;
 import com.textr.util.Validator;
 import com.textr.view.BufferView;
 import com.textr.view.SnakeView;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Draws a view.
@@ -105,5 +107,14 @@ public final class ViewDrawer{
             terminal.printText(view.getPosition().getX()+j,view.getPosition().getY() + view.getDimensions().getHeight() - 1, "_");
         }
 
+    }
+
+    public void draw(Point position, Point anchor, Point cursor){
+        Objects.requireNonNull(position, "Cannot draw the cursor because the position is null.");
+        Objects.requireNonNull(anchor, "Cannot draw the cursor because the anchor is null.");
+        Objects.requireNonNull(cursor, "Cannot draw the cursor because the cursor position is null.");
+        int x = position.getX() + (cursor.getX() - anchor.getX());
+        int y = position.getY() + (cursor.getY() - anchor.getY());
+        terminal.moveCursor(x, y);
     }
 }

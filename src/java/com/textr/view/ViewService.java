@@ -11,7 +11,6 @@ import com.textr.terminal.TerminalService;
 import com.textr.util.Dimension2D;
 import com.textr.util.Point;
 import com.textr.util.Validator;
-import com.textr.drawer.CursorDrawer;
 import com.textr.drawer.ViewDrawer;
 
 import java.io.File;
@@ -96,11 +95,10 @@ public final class ViewService {
                     viewDrawer.draw((SnakeView) view, statusBar);
         }
         if(viewRepo.getActive() instanceof BufferView){
-            CursorDrawer.draw(
+            viewDrawer.draw(
                     getActiveView().getPosition(),
                     ((BufferView)getActiveView()).getAnchor(),
-                    ((BufferView) getActiveView()).getInsertPoint(),
-                    terminal
+                    ((BufferView) getActiveView()).getInsertPoint()
             );
         }
     }
