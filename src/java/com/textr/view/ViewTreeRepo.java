@@ -149,7 +149,7 @@ public final class ViewTreeRepo implements IViewRepo {
      * Stores the given View next to the existing one.
      * @param newView The new View. Cannot be null.
      * @param existing the view it'll be placed next to
-     * @throws IllegalArgumentException If the given newview is null.
+     * @throws IllegalArgumentException If the given new view is null.
      */
     @Override
     public void addNextTo(View newView, View existing){

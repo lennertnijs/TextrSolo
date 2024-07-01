@@ -24,6 +24,6 @@ public interface IViewRepo {
     void rotate(boolean clockwise);
     List<View> getAllAtDepth(int depth);
 
-    Node getRoot();
+    Node<View> getRoot();
 
 }
