@@ -3,6 +3,8 @@ package com.textr.view;
 import com.textr.filebuffer.*;
 import com.textr.filebufferV2.FileBuffer;
 import com.textr.filebufferV2.History;
+import com.textr.filebufferV2.OperationType;
+import com.textr.filebufferV2.TextUpdate;
 import com.textr.input.Input;
 import com.textr.input.InputType;
 import com.textr.terminal.Communicator;
@@ -146,10 +148,10 @@ public final class BufferView extends View implements TextListener {
     }
 
     public void doUpdate(TextUpdate t){
-        if(t.point.getY() >= anchor.getY()){
+        if(t.insertPoint().getY() >= anchor.getY()){
             return;
         }
-        if(t.operationType == OperationType.INSERT_NEWLINE){
+        if(t.operationType() == OperationType.INSERT_NEWLINE){
             anchor.incrementY();
         }else{
             anchor.decrementY();

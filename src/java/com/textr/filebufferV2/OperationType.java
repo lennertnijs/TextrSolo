@@ -1,5 +1,8 @@
-package com.textr.filebuffer;
+package com.textr.filebufferV2;
 
+/**
+ * Represents an operation type in a buffer text.
+ */
 public enum OperationType {
 
     INSERT_CHARACTER,

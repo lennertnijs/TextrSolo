@@ -2,12 +2,7 @@ package com.textr.filebufferV2;
 
 import com.textr.file.IFileReader;
 import com.textr.file.IFileWriter;
-import com.textr.filebuffer.OperationType;
-import com.textr.filebuffer.TextListener;
-import com.textr.filebuffer.TextUpdate;
-import com.textr.filebufferV2.BufferState;
-import com.textr.filebufferV2.IText;
-import com.textr.filebufferV2.LineText;
+import com.textr.view.TextListener;
 import com.textr.util.Direction;
 import com.textr.util.Point;
 
@@ -16,6 +11,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import static com.textr.filebufferV2.OperationType.*;
 
 /**
  * Represents a buffer.
@@ -113,7 +110,8 @@ public final class FileBuffer {
      */
     public void insert(char c, int index){
         text.insert(c, index);
-        notifyListeners(new TextUpdate(getInsertPoint(index), OperationType.INSERT_CHARACTER));
+        OperationType type = c == '\n' ? INSERT_NEWLINE : INSERT_CHARACTER;
+        notifyListeners(new TextUpdate(getInsertPoint(index), type));
     }
 
     /**
@@ -122,8 +120,10 @@ public final class FileBuffer {
      * @param index The index. Cannot be negative. Cannot be equal/larger than the length of the internal text.
      */
     public void delete(int index){
+        char c = text.getCharacter(index);
         text.delete(index);
-        notifyListeners(new TextUpdate(getInsertPoint(index), OperationType.DELETE_CHARACTER));
+        OperationType type = c == '\n' ? DELETE_NEWLINE : DELETE_CHARACTER;
+        notifyListeners(new TextUpdate(getInsertPoint(index), type));
     }
 
     /**
