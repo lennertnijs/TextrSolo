@@ -13,7 +13,7 @@ public class Initialiser {
         String[] filePaths = handleArguments(args);
         terminal.enterRawInputMode();
         terminal.clearScreen();
-        if(filePaths.length > terminal.getTerminalArea().getHeight() / 2){
+        if(filePaths.length > terminal.getTerminalArea().height() / 2){
             throw new IllegalArgumentException("Too many input files.");
         }
         viewService.initialiseViews(filePaths);

@@ -1,47 +1,27 @@
 package com.textr.util;
 
 /**
- * Class to represent 2D dimensions.
- * 2D dimensions means a width and a height.
+ * Class to represent 2D dimensions, aka a width and a height.
  */
-public final class Dimension2D {
-
-    private final int width;
-    private final int height;
+public record Dimension2D(int width, int height) {
 
     /**
-     * Constructor for a {@link Dimension2D}.
+     * Creates an IMMUTABLE {@link Dimension2D}.
      */
-    public Dimension2D(int width, int height){
-        if(width <= 0 || height <= 0){
+    public Dimension2D {
+        if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException("Width or height is negative or 0.");
         }
-        this.width = width;
-        this.height = height;
     }
 
     /**
-     * @return This {@link Dimension2D}'s width
-     */
-    public int getWidth(){
-        return this.width;
-    }
-
-    /**
-     * @return This {@link Dimension2D}'s height
-     */
-    public int getHeight(){
-        return this.height;
-    }
-
-    /**
-     * Compares this {@link Dimension2D} to the given object and returns True if they're equal, False otherwise.
+     * Compares two objects and returns true if they're equal dimension2D's. Returns false otherwise.
      *
-     * @return True if equal, False otherwise.
+     * @return True if equal. False otherwise.
      */
     @Override
-    public boolean equals(Object o){
-        if(!(o instanceof Dimension2D dimensions))
+    public boolean equals(Object o) {
+        if (!(o instanceof Dimension2D dimensions))
             return false;
         return this.width == dimensions.width && this.height == dimensions.height;
     }
@@ -50,9 +30,10 @@ public final class Dimension2D {
      * @return The hash code
      */
     @Override
-    public int hashCode(){
-        int result = width;
+    public int hashCode() {
+        int result = 17;
         result = 31 * result + width;
+        result = 31 * result + height;
         return result;
     }
 
@@ -60,7 +41,7 @@ public final class Dimension2D {
      * @return The string representation
      */
     @Override
-    public String toString(){
-        return String.format("Dimension2D[width = %d, height = %d]", width, height);
+    public String toString() {
+        return String.format("Dimension2D[width=%d, height=%d]", width, height);
     }
 }

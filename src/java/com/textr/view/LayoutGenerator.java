@@ -17,8 +17,8 @@ public final class LayoutGenerator {
      */
     public static void generate(Dimension2D dimension2D ){
         Point topLeft = new Point(0,0);
-        int terminalWidth = dimension2D.getWidth();
-        int terminalHeight = dimension2D.getHeight();
+        int terminalWidth = dimension2D.width();
+        int terminalHeight = dimension2D.height();
         if(viewRepo.rootIsVertical()){
             generateLayoutsVerticalSubTree(topLeft, new Point(terminalWidth, terminalHeight), viewRepo.getRoot() );
             return;
@@ -47,7 +47,7 @@ public static void generateLayoutsVerticalSubTree(Point topLeft, Point bottomRig
             toAdd.setDimensions(dimensions);
         }
         else{
-            Point parameterbottomright = new Point(position.getX()+dimensions.getWidth(),position.getY()+dimensions.getHeight());
+            Point parameterbottomright = new Point(position.getX()+dimensions.width(),position.getY()+dimensions.height());
             generateLayoutsHorizontalSubTree(position, parameterbottomright, child);
         }
         y += LayoutHeight;
@@ -76,7 +76,7 @@ public static void generateLayoutsHorizontalSubTree(Point topLeft, Point bottomR
             toAdd.setDimensions(dimensions);
         }
         else{
-            Point parameterbottomright = new Point(position.getX()+dimensions.getWidth(),position.getY()+dimensions.getHeight());
+            Point parameterbottomright = new Point(position.getX()+dimensions.width(),position.getY()+dimensions.height());
             generateLayoutsVerticalSubTree(position, parameterbottomright, child);
         }
         x += LayoutWidth;

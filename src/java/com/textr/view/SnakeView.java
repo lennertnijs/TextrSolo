@@ -9,12 +9,23 @@ import com.textr.util.Point;
 
 import java.util.Objects;
 
-public class SnakeView extends View {
+/**
+ * Represents a view in which one can play a snake game.
+ */
+public final class SnakeView extends View {
 
+    /**
+     * The snake game.
+     */
     private SnakeGame snakeGame;
 
-    public SnakeView(Point pos, Dimension2D dimensions){
-        super(pos, dimensions);
+    /**
+     * Creates a MUTABLE {@link SnakeView} in which a snake game is played.
+     * @param position The position. Cannot be null.
+     * @param dimensions The dimensions. Cannot be null.
+     */
+    public SnakeView(Point position, Dimension2D dimensions){
+        super(position, dimensions);
         snakeGame = initializeGame();
     }
 
@@ -36,12 +47,12 @@ public class SnakeView extends View {
     public SnakeGame initializeGame(){
         Snake snake = new Snake(Direction.RIGHT);
         for(int i = 0; i < 6; i++) {
-            GamePoint snakeSegment = new GamePoint(getDimensions().getWidth() / 2 - i, getDimensions().getHeight() / 2);
+            GamePoint snakeSegment = new GamePoint(getDimensions().width() / 2 - i, getDimensions().height() / 2);
             if(isWithinBoundaries(snakeSegment))
                 snake.add(snakeSegment);
         }
         FoodManager foodManager = new FoodManager();
-        Dimension2D dimensions = new Dimension2D(getDimensions().getWidth() - 1, getDimensions().getHeight() - 1);
+        Dimension2D dimensions = new Dimension2D(getDimensions().width() - 1, getDimensions().height() - 1);
         GameBoard board = GameBoard.createNew(dimensions, snake, foodManager);
         for(int i = 0; i < 12; i++)
             board.spawnFood();
@@ -50,7 +61,13 @@ public class SnakeView extends View {
     }
 
     private boolean isWithinBoundaries(GamePoint p){
-        return p.x() >= 0 && p.y() >= 0 && p.x() < getDimensions().getWidth()-1 && p.y() < getDimensions().getHeight()-1;
+        return p.x() >= 0 && p.y() >= 0 && p.x() < getDimensions().width()-1 && p.y() < getDimensions().height()-1;
+    }
+
+    @Override
+    public void setDimensions(Dimension2D dimensions){
+        this.dimensions = Objects.requireNonNull(dimensions, "Dimensions is null.");
+        snakeGame.resizeBoard(new Dimension2D(dimensions.width()-1, dimensions.height()-1));
     }
 
 
@@ -73,12 +90,6 @@ public class SnakeView extends View {
     @Override
     public String generateStatusBar(){
         return String.format("Score: %d", snakeGame.getBoard().getScore());
-    }
-
-    @Override
-    public void setDimensions(Dimension2D dimensions){
-        this.dimensions = Objects.requireNonNull(dimensions, "Dimensions is null.");
-        snakeGame.resizeBoard(new Dimension2D(dimensions.getWidth()-1, dimensions.getHeight()-1));
     }
 
     @Override

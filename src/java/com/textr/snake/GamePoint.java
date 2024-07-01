@@ -32,6 +32,14 @@ public record GamePoint(int x, int y) {
         return x == gamePoint.x && y == gamePoint.y;
     }
 
+    @Override
+    public int hashCode(){
+        int result = 17;
+        result = result * 31 + x;
+        result = result * 31 + y;
+        return result;
+    }
+
     /**
      * Creates a {@link String} representation of this {@link GamePoint} and returns it.
      */

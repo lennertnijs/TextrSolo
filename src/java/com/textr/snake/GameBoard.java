@@ -49,11 +49,11 @@ public final class GameBoard implements IGameBoard{
         Objects.requireNonNull(dimensions, "Dimensions is null.");
         Objects.requireNonNull(snake, "SnakeManager is null.");
         for(GamePoint p : snake.getBody())
-            if(p.x() < 0 || p.y() < 0 || p.x() >= dimensions.getWidth() || p.y() >= dimensions.getHeight())
+            if(p.x() < 0 || p.y() < 0 || p.x() >= dimensions.width() || p.y() >= dimensions.height())
                 throw new IllegalArgumentException("Snake has segments outside the GameBoard.");
         Objects.requireNonNull(foodManager, "FoodManager is null.");
         for(GamePoint p : foodManager.getFoods())
-            if(p.x() < 0 || p.y() < 0 || p.x() >= dimensions.getWidth() || p.y() >= dimensions.getHeight())
+            if(p.x() < 0 || p.y() < 0 || p.x() >= dimensions.width() || p.y() >= dimensions.height())
                 throw new IllegalArgumentException("FoodManager has food outside the GameBoard.");
         return new GameBoard(dimensions, snake.copy(), foodManager.copy(), 0);
     }
@@ -134,8 +134,8 @@ public final class GameBoard implements IGameBoard{
      * @return The {@link GamePoint}.
      */
     private GamePoint generateRandomPoint(){
-        int randomX = (int) (Math.random() * dimensions.getWidth());
-        int randomY = (int) (Math.random() * dimensions.getHeight());
+        int randomX = (int) (Math.random() * dimensions.width());
+        int randomY = (int) (Math.random() * dimensions.height());
         return new GamePoint(randomX, randomY);
     }
 
@@ -146,7 +146,7 @@ public final class GameBoard implements IGameBoard{
      * @return True if within boundaries. False otherwise.
      */
     private boolean isOutOfBounds(GamePoint p){
-        return p.x() < 0 || p.y() < 0 || p.x() >= dimensions.getWidth() || p.y() >= dimensions.getHeight();
+        return p.x() < 0 || p.y() < 0 || p.x() >= dimensions.width() || p.y() >= dimensions.height();
     }
 
     /**
@@ -157,12 +157,12 @@ public final class GameBoard implements IGameBoard{
      */
     public void resize(Dimension2D dimensions){
         Objects.requireNonNull(dimensions, "Dimensions is null.");
-        boolean isHeightChange = dimensions.getHeight() != this.dimensions.getHeight();
-        boolean isWidthChange = dimensions.getWidth() != this.dimensions.getWidth();
+        boolean isHeightChange = dimensions.height() != this.dimensions.height();
+        boolean isWidthChange = dimensions.width() != this.dimensions.width();
         if(isHeightChange)
-            handleHeightChange(dimensions.getHeight());
+            handleHeightChange(dimensions.height());
         if(isWidthChange)
-            handleWidthChange(dimensions.getWidth());
+            handleWidthChange(dimensions.width());
     }
 
     /**
@@ -179,7 +179,7 @@ public final class GameBoard implements IGameBoard{
      * @param newHeight The new height. Cannot be negative.
      */
     private void handleHeightChange(int newHeight){
-        int oldHeight = this.dimensions.getHeight();
+        int oldHeight = this.dimensions.height();
         boolean isShrink = newHeight < oldHeight;
         Vector2D translationVector;
         if(isShrink){
@@ -190,7 +190,7 @@ public final class GameBoard implements IGameBoard{
             int adjustForTopEdge =  Math.min(newHeight / 2, newHeight - oldHeight);
             translationVector = new Vector2D(0, adjustForTopEdge - snake.getHead().y());
         }
-        this.dimensions = new Dimension2D(this.dimensions.getWidth(), newHeight);
+        this.dimensions = new Dimension2D(this.dimensions.width(), newHeight);
         translateSnake(translationVector);
         translateFoods(translationVector);
     }
@@ -209,7 +209,7 @@ public final class GameBoard implements IGameBoard{
      * @param newWidth The new width. Cannot be negative.
      */
     private void handleWidthChange(int newWidth){
-        int oldWidth = this.dimensions.getWidth();
+        int oldWidth = this.dimensions.width();
         boolean isShrink = newWidth < oldWidth;
         Vector2D translationVector;
         if(isShrink){
@@ -220,7 +220,7 @@ public final class GameBoard implements IGameBoard{
             int adjustedForRightEdge =  Math.min(newWidth / 2, newWidth - oldWidth);
             translationVector = new Vector2D(adjustedForRightEdge - snake.getHead().x(), 0);
         }
-        this.dimensions = new Dimension2D(newWidth, this.dimensions.getHeight());
+        this.dimensions = new Dimension2D(newWidth, this.dimensions.height());
         translateSnake(translationVector);
         translateFoods(translationVector);
     }
@@ -273,7 +273,7 @@ public final class GameBoard implements IGameBoard{
      * Spawns a new food, if there is space for it.
      */
     public void spawnFood(){
-        boolean entireBoardFilled = snake.getLength() + foodManager.getFoodCount() == dimensions.getHeight() * dimensions.getWidth();
+        boolean entireBoardFilled = snake.getLength() + foodManager.getFoodCount() == dimensions.height() * dimensions.width();
         if(!entireBoardFilled)
             foodManager.add(generateRandomEmptyPoint());
     }

@@ -35,12 +35,12 @@ public final class AnchorUpdater {
         if(cursor.getY() < anchor.getY()){
             anchor.setY(cursor.getY());
         }
-        if(cursor.getX() > anchor.getX() + dimensions.getWidth() - 1){
-            anchor.setX(cursor.getX() - dimensions.getWidth() + 1);
+        if(cursor.getX() > anchor.getX() + dimensions.width() - 1){
+            anchor.setX(cursor.getX() - dimensions.width() + 1);
         }
         // -2 because the rows are have a status bar so -1
-        if(cursor.getY() > anchor.getY() + dimensions.getHeight() - 2){
-            anchor.setY(cursor.getY() - dimensions.getHeight() + 2);
+        if(cursor.getY() > anchor.getY() + dimensions.height() - 2){
+            anchor.setY(cursor.getY() - dimensions.height() + 2);
         }
     }
 }

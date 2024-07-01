@@ -107,8 +107,8 @@ public class GameBoardTest {
         assertEquals(board.getScore(), 11);
         assertTrue(board.getFoods().get(0).x() >= 0);
         assertTrue(board.getFoods().get(0).y() >= 0);
-        assertTrue(board.getFoods().get(0).x() < board.getDimensions().getWidth());
-        assertTrue(board.getFoods().get(0).y() < board.getDimensions().getHeight());
+        assertTrue(board.getFoods().get(0).x() < board.getDimensions().width());
+        assertTrue(board.getFoods().get(0).y() < board.getDimensions().height());
     }
 
     @Test
@@ -275,7 +275,7 @@ public class GameBoardTest {
 
     @Test
     public void testToString(){
-        String expectedString = "GameBoard[dimensions=Dimension2D[width = 20, height = 10], snake=Snake[body=[GamePoint[x=0, y=0], GamePoint[x=1, y=0], GamePoint[x=2, y=0]], headDirection=UP, toGrow=0], foodManager=FoodManager[foods=[GamePoint[x=0, y=2]]], score=0]";
+        String expectedString = "GameBoard[dimensions=Dimension2D[width=20, height=10], snake=Snake[body=[GamePoint[x=0, y=0], GamePoint[x=1, y=0], GamePoint[x=2, y=0]], headDirection=UP, toGrow=0], foodManager=FoodManager[foods=[GamePoint[x=0, y=2]]], score=0]";
         assertEquals(board.toString(), expectedString);
     }
 }

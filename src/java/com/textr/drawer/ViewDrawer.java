@@ -32,7 +32,7 @@ public final class ViewDrawer{
     public void draw(BufferView view, String statusBar) {
         Objects.requireNonNull(view, "Cannot draw a null BufferView.");
         Objects.requireNonNull(statusBar, "Cannot draw the BufferView because the status bar is null.");
-        int height = view.getDimensions().getHeight();
+        int height = view.getDimensions().height();
         int x = view.getPosition().getX();
         int startY = view.getPosition().getY();
         int maxY = startY + height - 1;
@@ -40,12 +40,12 @@ public final class ViewDrawer{
         for(int i = view.getAnchor().getY(); i < Math.min(lines.length, view.getAnchor().getY() + height - 1); i++){
             // only need to draw if any text is in these columns
             if(lines[i].length() > view.getAnchor().getX()){
-                int maxColIndex = Math.min(view.getAnchor().getX() + view.getDimensions().getWidth(), lines[i].length());
+                int maxColIndex = Math.min(view.getAnchor().getX() + view.getDimensions().width(), lines[i].length());
                 terminal.printText(x, startY, lines[i].substring(view.getAnchor().getX(), maxColIndex));
             }
             startY++;
         }
-        int maxStatusBarIndex = Math.min(view.getDimensions().getWidth(), statusBar.length());
+        int maxStatusBarIndex = Math.min(view.getDimensions().width(), statusBar.length());
         terminal.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
         drawScrollBar(view);
     }
@@ -60,7 +60,7 @@ public final class ViewDrawer{
     public void draw(SnakeView view, String statusBar) {
         Objects.requireNonNull(view, "Cannot draw a null BufferView.");
         Objects.requireNonNull(statusBar, "Cannot draw the BufferView because the status bar is null.");
-        int height = view.getDimensions().getHeight();
+        int height = view.getDimensions().height();
         int x = view.getPosition().getX();
         int baseY = view.getPosition().getY()+ height - 2;
         int maxY = view.getPosition().getY() + height - 1;
@@ -84,7 +84,7 @@ public final class ViewDrawer{
         }
         else
             terminal.printText(x, baseY, "GAME OVER - Press Enter to restart");
-        int maxStatusBarIndex = Math.min(view.getDimensions().getWidth(), statusBar.length());
+        int maxStatusBarIndex = Math.min(view.getDimensions().width(), statusBar.length());
         drawBordersGame(view);
         terminal.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
 
@@ -93,17 +93,17 @@ public final class ViewDrawer{
     private void drawScrollBar(BufferView view){
         int maxY = view.getBufferEditor().getFileBuffer().getText().getLineAmount() - 1;
         int currentY = view.getInsertPoint().getY();
-        int yBar = Math.round(((float)currentY / (float)maxY) * (view.getDimensions().getHeight() - 1));
-        terminal.printText(view.getPosition().getX() + view.getDimensions().getWidth() - 1,
+        int yBar = Math.round(((float)currentY / (float)maxY) * (view.getDimensions().height() - 1));
+        terminal.printText(view.getPosition().getX() + view.getDimensions().width() - 1,
                                                             yBar + view.getPosition().getY(), "|");
     }
     private void drawBordersGame(SnakeView view){
-        for(int i = 0; i<view.getDimensions().getHeight(); i++) {
-            terminal.printText(view.getPosition().getX() + view.getDimensions().getWidth() - 1,
+        for(int i = 0; i<view.getDimensions().height(); i++) {
+            terminal.printText(view.getPosition().getX() + view.getDimensions().width() - 1,
                     view.getPosition().getY() + i, "|");
         }
-        for (int j= 0; j<view.getDimensions().getWidth(); j++){
-            terminal.printText(view.getPosition().getX()+j,view.getPosition().getY() + view.getDimensions().getHeight() - 1, "_");
+        for (int j = 0; j<view.getDimensions().width(); j++){
+            terminal.printText(view.getPosition().getX()+j,view.getPosition().getY() + view.getDimensions().height() - 1, "_");
         }
 
     }
