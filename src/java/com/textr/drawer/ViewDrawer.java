@@ -25,12 +25,13 @@ public final class ViewDrawer{
     }
 
     public void drawAll(IViewRepo viewRepo){
+        terminal.clearScreen();
         for(View view : viewRepo.getAll()){
             if(view instanceof BufferView bufferView){
                 String statusBar = bufferView.generateStatusBar();
                 if(bufferView.equals(viewRepo.getActive())){
                     statusBar = "Active: " + statusBar;
-                    draw(bufferView.getPosition(), bufferView.getAnchor(), bufferView.getInsertPoint());
+                    //draw(bufferView.getPosition(), bufferView.getAnchor(), bufferView.getInsertPoint());
                 }
                 draw(bufferView, statusBar);
             }

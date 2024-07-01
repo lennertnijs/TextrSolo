@@ -101,7 +101,6 @@ public final class ViewService {
             }
             default -> viewRepo.getActive().handleInput(input);
         }
-        layoutGenerator.generate(dimensions);
         viewDrawer.drawAll(viewRepo);
     }
 

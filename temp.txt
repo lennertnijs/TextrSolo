@@ -1,5 +1,2 @@
-the cursor is buffer editor/view specific -> add it to the bufferEditor.
-insert/remove can pass this index, and return the new result
-
-adding the filebuffer instead of text into actions will make it so you can pass all the work through insert/remove() in
-filebuffer, thus making the text update calls to the listeners easy peasy
+The new drawing seems off.
+Also, the snake tick stuff gets resized every tick, causing a regenerate!
