@@ -20,6 +20,11 @@ public class MockView extends View {
         receivedInput.add(input);
     }
 
+    @Override
+    public String generateStatusBar() {
+        return null;
+    }
+
     public List<Input> getReceivedInputs() {
         return receivedInput;
     }
