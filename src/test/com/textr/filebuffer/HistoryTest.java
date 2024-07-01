@@ -4,6 +4,7 @@ import com.textr.file.IFileReader;
 import com.textr.file.IFileWriter;
 import com.textr.filebufferV2.BufferState;
 import com.textr.filebufferV2.FileBuffer;
+import com.textr.filebufferV2.History;
 import com.textr.filebufferV2.InsertAction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

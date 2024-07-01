@@ -1,6 +1,4 @@
-package com.textr.filebuffer;
-
-import com.textr.filebufferV2.Action;
+package com.textr.filebufferV2;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
