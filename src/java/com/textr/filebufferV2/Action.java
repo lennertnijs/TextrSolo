@@ -1,4 +1,4 @@
-package com.textr.bufferEditor;
+package com.textr.filebufferV2;
 
 public interface Action {
 

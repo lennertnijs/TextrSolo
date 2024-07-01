@@ -1,7 +1,6 @@
 package com.textr.filebuffer;
 
-import com.textr.bufferEditor.DeleteAction;
-import com.textr.bufferEditor.InsertAction;
+import com.textr.filebufferV2.DeleteAction;
 import com.textr.file.IFileReader;
 import com.textr.file.IFileWriter;
 import com.textr.filebufferV2.BufferState;

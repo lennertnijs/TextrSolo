@@ -1,164 +1,112 @@
 package com.textr.filebuffer;
 
-import com.textr.bufferEditor.Action;
+import com.textr.file.IFileReader;
+import com.textr.file.IFileWriter;
+import com.textr.filebufferV2.BufferState;
+import com.textr.filebufferV2.FileBuffer;
+import com.textr.filebufferV2.InsertAction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-import java.util.Deque;
-import java.util.LinkedList;
+import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class HistoryTest {
+public final class HistoryTest {
 
-    Deque<MockAction> toDo;
-    Deque<MockAction> done;
-    Deque<MockAction> removed;
+    private final File file = Mockito.mock(File.class);
+    private final IFileReader fileReader = new MockFileReader();
+    private final IFileWriter fileWriter = new MockFileWriter();
+    private FileBuffer fileBuffer;
+    private InsertAction action1;
+    private InsertAction action2;
+    private final String text = "This is a mock text.";
+    private History history;
 
     @BeforeEach
-    void setUp() {
-        toDo = new LinkedList<>();
-        done = new LinkedList<>();
-        removed = new LinkedList<>();
+    public void initialise(){
+        FileBuffer.setFileReader(fileReader);
+        FileBuffer.setFileWriter(fileWriter);
+        fileBuffer = new FileBuffer(file);
+        action1 = new InsertAction('c', 15, fileBuffer);
+        history = new History();
     }
 
     @Test
-    void executeAndAddAction() {
-        MockAction action1 = new MockAction();
-        MockAction action2 = new MockAction();
-        MockAction action3 = new MockAction();
-        MockAction action4 = new MockAction();
-
-        MockAction altAction3 = new MockAction();
-
-        // Add some actions and execute
-        History history = new History();
+    public void testExecuteAndAdd(){
         history.executeAndAddAction(action1);
-        assertTrue(action1.wasExecuted, "Action added to ChangeHistory was not executed");
-        done.push(action1);
+        assertEquals("This is a mock ctext.", fileBuffer.getText().getContent());
+        assertEquals(BufferState.DIRTY, fileBuffer.getState());
+
+        action2 = new InsertAction('d', 5, fileBuffer);
         history.executeAndAddAction(action2);
-        assertTrue(action2.wasExecuted, "Action added to ChangeHistory was not executed");
-        done.push(action2);
-        history.executeAndAddAction(action3);
-        assertTrue(action3.wasExecuted, "Action added to ChangeHistory was not executed");
-        done.push(action3);
-        history.executeAndAddAction(action4);
-        assertTrue(action4.wasExecuted, "Action added to ChangeHistory was not executed");
-        done.push(action4);
-
-        // Undo a few operations
-        history.undo();
-        done.pop();
-        toDo.push(action4);
-        assertFalse(action4.wasExecuted);
-        history.undo();
-        done.pop();
-        toDo.push(action3);
-        assertFalse(action3.wasExecuted);
-
-        // Add a new action
-        history.executeAndAddAction(altAction3);
-        assertTrue(altAction3.wasExecuted, "Action added to ChangeHistory was not executed");
-        removed = new LinkedList<>(toDo);
-        toDo.clear();
-        done.push(altAction3);
-
-        checkActionExecution();
-        // Redoing should have no effect
-        history.redo();
-        checkActionExecution();
+        assertEquals("This dis a mock ctext.", fileBuffer.getText().getContent());
+        assertEquals(BufferState.DIRTY, fileBuffer.getState());
     }
 
     @Test
-    void undo() {
-        MockAction action1 = new MockAction();
-        MockAction action2 = new MockAction();
-
-        // Add some actions and execute
-        History history = new History();
+    public void testUndo(){
         history.executeAndAddAction(action1);
-        done.push(action1);
-        checkActionExecution();
+        action2 = new InsertAction('d', 5, fileBuffer);
         history.executeAndAddAction(action2);
-        done.push(action2);
-        checkActionExecution();
 
-        // Undo actions
-        history.undo();
-        done.pop();
-        toDo.push(action2);
-        checkActionExecution();
-        history.undo();
-        done.pop();
-        toDo.push(action1);
-        checkActionExecution();
+        history.undo(3);
+        assertEquals("This is a mock ctext.", fileBuffer.getText().getContent());
+        assertEquals(BufferState.DIRTY, fileBuffer.getState());
     }
 
     @Test
-    void redo() {
-        MockAction action1 = new MockAction();
-        MockAction action2 = new MockAction();
+    public void testUndoReturnValues(){
+        assertEquals(15 + 1, history.executeAndAddAction(action1));
+        action2 = new InsertAction('d', 5, fileBuffer);
+        assertEquals(5 + 1, history.executeAndAddAction(action2));
 
-        // Add some actions and execute
-        History history = new History();
-        history.executeAndAddAction(action1);
-        done.push(action1);
-        checkActionExecution();
-        history.executeAndAddAction(action2);
-        done.push(action2);
-        checkActionExecution();
-
-        // Undo actions
-        history.undo();
-        done.pop();
-        toDo.push(action2);
-        checkActionExecution();
-        history.undo();
-        done.pop();
-        toDo.push(action1);
-        checkActionExecution();
-
-        // Redo actions
-        history.redo();
-        toDo.pop();
-        done.push(action1);
-        checkActionExecution();
-        history.redo();
-        toDo.pop();
-        done.push(action2);
-        checkActionExecution();
+        assertEquals(5, history.undo(3));
     }
 
-    private void checkActionExecution() {
-        for (MockAction action: toDo) {
-            assertFalse(action.wasExecuted, "Action supposed to be yet to do was executed");
-        }
-        for (MockAction action: done) {
-            assertTrue(action.wasExecuted, "Action supposed to be done was not yet executed");
-        }
-        for (MockAction action: removed) {
-            assertFalse(action.wasExecuted, "Action removed after new Action is still considered executed");
-        }
+    @Test
+    public void testUndoWithNothing(){
+        assertEquals(3, history.undo(3));
+    }
+
+    @Test
+    public void testRedo(){
+        history.executeAndAddAction(action1);
+        action2 = new InsertAction('d', 5, fileBuffer);
+        history.executeAndAddAction(action2);
+
+        history.undo(3);
+
+        history.redo(3);
+        assertEquals("This dis a mock ctext.", fileBuffer.getText().getContent());
+        assertEquals(BufferState.DIRTY, fileBuffer.getState());
+    }
+
+    @Test
+    public void testRedoReturnValues(){
+        assertEquals(15 + 1, history.executeAndAddAction(action1));
+        action2 = new InsertAction('d', 5, fileBuffer);
+        assertEquals(5 + 1, history.executeAndAddAction(action2));
+
+        assertEquals(5, history.undo(3));
+
+        assertEquals(6, history.redo(3));
+    }
+
+    @Test
+    public void testRedoWithNothing(){
+        assertEquals(3, history.redo(3));
+    }
+
+    @Test
+    public void testExecuteAndStoreClearsRedoAbles(){
+        history.executeAndAddAction(action1);
+        action2 = new InsertAction('d', 5, fileBuffer);
+
+        history.undo(3);
+        history.executeAndAddAction(action2);
+        assertEquals(3, history.redo(3));
     }
 }
 
-class MockAction implements Action {
-
-    boolean wasExecuted = false;
-
-    @Override
-    public int execute() {
-        if (wasExecuted)
-            throw new IllegalStateException("Action executed twice");
-        wasExecuted = true;
-        return -1;
-    }
-
-    @Override
-    public int undo() {
-        if (!wasExecuted)
-            throw new IllegalStateException("Un-executed action undone");
-        wasExecuted = false;
-        return -1;
-    }
-}

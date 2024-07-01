@@ -1,8 +1,8 @@
 package com.textr.filebuffer;
 
-import com.textr.bufferEditor.Action;
-import com.textr.bufferEditor.DeleteAction;
-import com.textr.bufferEditor.InsertAction;
+import com.textr.filebufferV2.Action;
+import com.textr.filebufferV2.DeleteAction;
+import com.textr.filebufferV2.InsertAction;
 import com.textr.filebufferV2.FileBuffer;
 import com.textr.util.Direction;
 import com.textr.util.Point;
@@ -54,16 +54,10 @@ public final class BufferEditor {
     }
 
     public void undo(){
-        int index = history.undo();
-        if(index != -1){
-            this.insertIndex = index;
-        }
+        this.insertIndex = history.undo(insertIndex);
     }
 
     public void redo(){
-        int index = history.redo();
-        if(index != -1){
-            this.insertIndex = index;
-        }
+        this.insertIndex = history.redo(insertIndex);
     }
 }

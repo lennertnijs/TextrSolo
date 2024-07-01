@@ -1,7 +1,4 @@
-package com.textr.bufferEditor;
-
-import com.textr.filebufferV2.BufferState;
-import com.textr.filebufferV2.FileBuffer;
+package com.textr.filebufferV2;
 
 import java.util.Objects;
 
