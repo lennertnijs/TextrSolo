@@ -15,7 +15,7 @@ public final class FileWriter implements IFileWriter{
     /**
      * Private constructor, has no use.
      */
-    private FileWriter(){
+    public FileWriter(){
     }
 
     /**

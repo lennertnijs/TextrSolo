@@ -1,6 +1,6 @@
 package com.textr.filebuffer;
 
-import com.textr.filebufferV2.Action;
+import com.textr.bufferEditor.Action;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

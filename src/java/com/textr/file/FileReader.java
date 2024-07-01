@@ -13,7 +13,7 @@ public final class FileReader implements IFileReader {
     /**
      * Private constructor. No use.
      */
-    private FileReader(){
+    public FileReader(){
     }
 
     /**

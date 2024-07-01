@@ -1,10 +1,13 @@
-package com.textr.filebuffer;
+package com.textr.bufferEditor;
 
-import com.textr.filebufferV2.Action;
+import com.textr.filebufferV2.BufferState;
 import com.textr.filebufferV2.FileBuffer;
 
 import java.util.Objects;
 
+/**
+ * Represents an insert action.
+ */
 public final class InsertAction implements Action {
 
     /**
@@ -19,6 +22,10 @@ public final class InsertAction implements Action {
      * The file buffer in which to insert.
      */
     private final FileBuffer buffer;
+    /**
+     * Indicates whether this action execution made the buffer dirty.
+     */
+    private final boolean madeDirty;
 
     /**
      * Creates an IMMUTABLE {@link InsertAction}.
@@ -34,6 +41,7 @@ public final class InsertAction implements Action {
         this.character = c;
         this.index = index;
         this.buffer = buffer;
+        this.madeDirty = buffer.getState() == BufferState.CLEAN;
     }
 
     /**
@@ -41,6 +49,9 @@ public final class InsertAction implements Action {
      */
     public int execute(){
         buffer.insert(character, index);
+        if(madeDirty){
+            buffer.setState(BufferState.DIRTY);
+        }
         return index + 1;
     }
 
@@ -49,6 +60,9 @@ public final class InsertAction implements Action {
      */
     public int undo(){
         buffer.delete(index);
+        if(madeDirty){
+            buffer.setState(BufferState.CLEAN);
+        }
         return index;
     }
 }

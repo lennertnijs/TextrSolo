@@ -1,5 +1,8 @@
 package com.textr.view;
 
+import com.textr.file.FileReader;
+import com.textr.file.FileWriter;
+import com.textr.filebufferV2.FileBuffer;
 import com.textr.input.Input;
 import com.textr.Settings;
 import com.textr.input.InputType;
@@ -45,6 +48,8 @@ public final class ViewService {
             Settings.RUNNING = false;
             return;
         }
+        FileBuffer.setFileReader(new FileReader());
+        FileBuffer.setFileWriter(new FileWriter());
         for(String url : filePaths){
             File file = new File(url);
             Point dummyPosition = Point.create(0, 0);
