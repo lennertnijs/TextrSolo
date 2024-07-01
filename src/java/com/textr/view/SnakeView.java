@@ -18,68 +18,70 @@ public final class SnakeView extends View {
      * The snake game.
      */
     private SnakeGame snakeGame;
+    /**
+     * The snake game initializer. Is used to initialise new games, holding the settings.
+     */
+    private final SnakeGameInitializer initializer;
 
     /**
      * Creates a MUTABLE {@link SnakeView} in which a snake game is played.
      * @param position The position. Cannot be null.
      * @param dimensions The dimensions. Cannot be null.
+     * @param initializer The snake game initializer. Cannot be null.
      */
-    public SnakeView(Point position, Dimension2D dimensions){
+    public SnakeView(Point position, Dimension2D dimensions, SnakeGameInitializer initializer){
         super(position, dimensions);
-        snakeGame = initializeGame();
+        this.initializer = Objects.requireNonNull(initializer, "Initializer is null.");
     }
 
+    /**
+     * @return True if the game is running. False otherwise.
+     */
     public boolean gameIsRunning(){
         return snakeGame.isRunning();
     }
 
-
+    /**
+     * @return The snake game's game board.
+     */
     public IGameBoard getGameBoard(){
         return snakeGame.getBoard();
-
     }
-
-    public void restartGame(){
-        this.snakeGame = initializeGame();
-        snakeGame.start();
-    }
-
-    public SnakeGame initializeGame(){
-        Snake snake = new Snake(Direction.RIGHT);
-        for(int i = 0; i < 6; i++) {
-            GamePoint snakeSegment = new GamePoint(getDimensions().width() / 2 - i, getDimensions().height() / 2);
-            if(isWithinBoundaries(snakeSegment))
-                snake.add(snakeSegment);
-        }
-        FoodManager foodManager = new FoodManager();
-        Dimension2D dimensions = new Dimension2D(getDimensions().width() - 1, getDimensions().height() - 1);
-        GameBoard board = GameBoard.createNew(dimensions, snake, foodManager);
-        for(int i = 0; i < 12; i++)
-            board.spawnFood();
-        IClock clock = new GameClock(1f);
-        return new SnakeGame(board, clock);
-    }
-
-    private boolean isWithinBoundaries(GamePoint p){
-        return p.x() >= 0 && p.y() >= 0 && p.x() < getDimensions().width()-1 && p.y() < getDimensions().height()-1;
-    }
-
-    @Override
-    public void setDimensions(Dimension2D dimensions){
-        this.dimensions = Objects.requireNonNull(dimensions, "Dimensions is null.");
-        snakeGame.resizeBoard(new Dimension2D(dimensions.width()-1, dimensions.height()-1));
-    }
-
 
 
     /**
-     * Handle input at the view level. Only view specific operations happen here, and nothing flows to a deeper level in the chain.
+     * (Re)starts the snake game.
+     */
+    public void startGame(){
+        this.snakeGame = initializer.initialise(dimensions);
+        snakeGame.start();
+    }
+
+    /**
+     * Sets the dimensions of this view to the given dimensions.
+     * Also restarts the snake game to fit within the new dimensions.
+     * @param dimensions The new dimensions. Cannot be null.
+     */
+    @Override
+    public void setDimensions(Dimension2D dimensions){
+        this.dimensions = Objects.requireNonNull(dimensions, "Dimensions is null.");
+        startGame();
+    }
+
+    /**
+     * Handles snake view specific input, if mapped.
+     * - Enter: if the game is not running, restart the game
+     * - Arrow key: change the snake's direction (if allowed)
      */
     @Override
     public void handleInput(Input input){
         InputType inputType = input.getType();
         switch (inputType) {
-            case ENTER -> {if(!snakeGame.isRunning()) restartGame();}
+            case ENTER -> {
+                if(!snakeGame.isRunning()) {
+                    startGame();
+                }
+            }
             case ARROW_UP -> snakeGame.changeSnakeDirection(Direction.UP);
             case ARROW_RIGHT -> snakeGame.changeSnakeDirection(Direction.RIGHT);
             case ARROW_DOWN -> snakeGame.changeSnakeDirection(Direction.DOWN);
@@ -87,14 +89,22 @@ public final class SnakeView extends View {
         }
     }
 
-    @Override
-    public String generateStatusBar(){
-        return String.format("Score: %d", snakeGame.getBoard().getScore());
-    }
-
+    /**
+     * Updates the game's clock with 10 milliseconds.
+     * Returns true if any changes happened in the game's field.
+     */
     @Override
     public boolean wasUpdated(){
         return snakeGame.update(10);
     }
 
+    /**
+     * Generates the status bar for a snake game.
+     *
+     * @return The snake game status bar.
+     */
+    @Override
+    public String generateStatusBar(){
+        return String.format("Score: %d", snakeGame.getBoard().getScore());
+    }
 }

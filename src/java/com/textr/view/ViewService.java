@@ -169,7 +169,7 @@ public final class ViewService {
             case CTRL_R -> rotateView(false);
             case CTRL_T -> rotateView(true);
             case  F4-> attemptDeleteView();
-            case CTRL_G -> addGame();
+            case CTRL_G -> addSnakeGame();
             case CTRL_D -> duplicateView();
             case TICK -> {
                 if(!getActiveView().wasUpdated())
@@ -192,11 +192,11 @@ public final class ViewService {
         drawAll();
     }
 
-    private void addGame() {
-        SnakeView newGame = new SnakeView(new Point(0,0), new Dimension2D(10,10));
+    private void addSnakeGame() {
+        SnakeView newGame = new SnakeView(new Point(0,0), new Dimension2D(10,10), new SnakeGameInitializer(6, 12));
         viewRepo.addNextTo(newGame, getActiveView());
         generateViewPositionsAndDimensions();
         setActiveViewToNext();
-        ((SnakeView)getActiveView()).restartGame();
+        ((SnakeView)getActiveView()).startGame();
     }
 }

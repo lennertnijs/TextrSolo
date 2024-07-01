@@ -62,12 +62,9 @@ public abstract class View {
     /**
      * @return True if an update happened, in a constantly drawing tick-base view. False, otherwise.
      */
-    public boolean wasUpdated() { return false; }
-
-    /**
-     * Generates the status bar to be shown at the bottom of the view.
-     */
-    public abstract String generateStatusBar();
+    public boolean wasUpdated() {
+        return false;
+    }
 
     /**
      * @return True if the view can be closed. False, if not currently closeable.
@@ -75,6 +72,11 @@ public abstract class View {
     public boolean canBeClosed() {
         return true;
     }
+
+    /**
+     * Generates the status bar to be shown at the bottom of the view.
+     */
+    public abstract String generateStatusBar();
 
     /**
      * @return A duplicate version of this view, if supported.
