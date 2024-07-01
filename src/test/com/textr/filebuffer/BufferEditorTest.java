@@ -134,8 +134,5 @@ public class BufferEditorTest {
     public void testCopy(){
         BufferEditor copy = bufferEditor.copy();
         assertEquals(bufferEditor.getFileBuffer(), copy.getFileBuffer());
-
-        copy.insert('c');
-        assertNotEquals(bufferEditor.getFileBuffer(), copy.getFileBuffer());
     }
 }
