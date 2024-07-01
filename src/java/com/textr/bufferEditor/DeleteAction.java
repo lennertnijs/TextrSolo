@@ -29,15 +29,14 @@ public final class DeleteAction implements Action {
 
     /**
      * Creates an IMMUTABLE {@link InsertAction}.
-     * @param c The character to be inserted.
      * @param index The index at which to insert. Cannot be negative or bigger than the length of the buffer's text.
      * @param buffer The file buffer in which to insert. Cannot be null.
      */
-    public DeleteAction(char c, int index, FileBuffer buffer){
+    public DeleteAction(int index, FileBuffer buffer){
         Objects.requireNonNull(buffer, "Text is null.");
         if(index < 0 || index >= buffer.getText().getCharAmount())
             throw new IndexOutOfBoundsException("Index is out of text bounds.");
-        this.character = c;
+        this.character = buffer.getText().getCharacter(index);
         this.index = index;
         this.fileBuffer = buffer;
         this.madeDirty = fileBuffer.getState() == BufferState.CLEAN;

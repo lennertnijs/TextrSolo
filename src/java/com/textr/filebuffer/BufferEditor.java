@@ -42,16 +42,14 @@ public final class BufferEditor {
     public void deleteBefore(){
         if(insertIndex == 0)
             return;
-        char toDelete = fileBuffer.getText().getCharacter(insertIndex - 1);
-        Action deleteAction = new DeleteAction(toDelete, insertIndex - 1, fileBuffer);
+        Action deleteAction = new DeleteAction( insertIndex - 1, fileBuffer);
         this.insertIndex = history.executeAndAddAction(deleteAction);
     }
 
     public void deleteAfter(){
         if(insertIndex == fileBuffer.getText().getCharAmount())
             return;
-        char toDelete = fileBuffer.getText().getCharacter(insertIndex);
-        Action deleteAction = new DeleteAction(toDelete, insertIndex, fileBuffer);
+        Action deleteAction = new DeleteAction(insertIndex, fileBuffer);
         this.insertIndex = history.executeAndAddAction(deleteAction);
     }
 
