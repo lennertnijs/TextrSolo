@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.textr.view.LayoutGenerator.setViewRepo;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ViewTreeRepoTest {
@@ -29,8 +28,8 @@ class ViewTreeRepoTest {
 
     private Dimension2D terminalDimensions;
     private ViewTreeRepo repo;
-
     private List<View> views;
+    private LayoutGenerator layoutGenerator;
 
 
     @BeforeEach
@@ -52,10 +51,9 @@ class ViewTreeRepoTest {
         view6 = new MockView(initPoint, initDimension);
         views.add(view6);
         repo = new ViewTreeRepo();
-        setViewRepo(repo);
         repo.addAll(views);
         terminalDimensions = new Dimension2D(100,100);
-        LayoutGenerator.generate(terminalDimensions);
+        layoutGenerator = new LayoutGenerator(repo);
     }
     @Test
     void testAdd(){
@@ -116,7 +114,7 @@ class ViewTreeRepoTest {
                 },
                 () -> assertEquals(repo.getAllAtDepth(2), List.of(view3, view2))
         );
-        LayoutGenerator.generate(terminalDimensions);
+        layoutGenerator.generate(terminalDimensions);
         repo.setActive(view3);
         repo.rotate(true);
         assertAll(
@@ -131,7 +129,7 @@ class ViewTreeRepoTest {
                     assertEquals(repo.getAllAtDepth(1), actual);
                 }
         );
-        LayoutGenerator.generate(terminalDimensions);
+        layoutGenerator.generate(terminalDimensions);
         repo.setActive(view2);
         repo.rotate(false);
         assertAll(
@@ -146,7 +144,7 @@ class ViewTreeRepoTest {
                 },
                 () -> assertEquals(repo.getAllAtDepth(2), List.of(view2, view4))
         );
-        LayoutGenerator.generate(terminalDimensions);
+        layoutGenerator.generate(terminalDimensions);
         repo.setActive(view4);
         repo.rotate(true);
         assertAll(
@@ -160,7 +158,7 @@ class ViewTreeRepoTest {
                 },
                 () -> assertEquals(repo.getAllAtDepth(2), List.of(view2, view5, view4))
         );
-        LayoutGenerator.generate(terminalDimensions);
+        layoutGenerator.generate(terminalDimensions);
         repo.setActive(view4);
         repo.rotate(false);
         assertAll(
@@ -173,7 +171,7 @@ class ViewTreeRepoTest {
                 },
                 () -> assertEquals(repo.getAllAtDepth(2), List.of(view2, view5, view4, view6))
         );
-        LayoutGenerator.generate(terminalDimensions);
+        layoutGenerator.generate(terminalDimensions);
 
         repo.setActive(view3);
         repo.rotate(false);
@@ -188,7 +186,7 @@ class ViewTreeRepoTest {
                 },
                 () -> assertEquals(repo.getAllAtDepth(2), List.of(view5, view4, view6))
         );
-        LayoutGenerator.generate(terminalDimensions);
+        layoutGenerator.generate(terminalDimensions);
 
         repo.setActive(view2);
         repo.rotate(true);
@@ -204,7 +202,7 @@ class ViewTreeRepoTest {
                 },
                 () -> assertEquals(repo.getAllAtDepth(2), List.of(view4, view6))
         );
-        LayoutGenerator.generate(terminalDimensions);
+        layoutGenerator.generate(terminalDimensions);
 
         repo.setActive(view3);
         repo.rotate(false);
@@ -220,7 +218,7 @@ class ViewTreeRepoTest {
                 () -> assertEquals(repo.getAllAtDepth(2), List.of(view3,view5,view4, view6))
 
         );
-        LayoutGenerator.generate(terminalDimensions);
+        layoutGenerator.generate(terminalDimensions);
     }
 
 }

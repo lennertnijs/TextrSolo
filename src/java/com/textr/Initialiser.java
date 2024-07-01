@@ -18,7 +18,6 @@ public class Initialiser {
             throw new IllegalArgumentException("Too many input files.");
         }
         viewService.initialiseViews(filePaths, new TerminalCommunicator(terminal));
-        viewService.drawAll();
     }
 
 

@@ -2,9 +2,9 @@ package com.textr;
 
 import com.textr.drawer.ViewDrawer;
 import com.textr.input.InputTranslator;
-import com.textr.terminal.Communicator;
 import com.textr.terminal.TerminalCommunicator;
 import com.textr.terminal.TermiosTerminalService;
+import com.textr.view.LayoutGenerator;
 import com.textr.view.ViewTreeRepo;
 import com.textr.view.ViewService;
 
@@ -14,8 +14,8 @@ public class Main {
         final ViewTreeRepo viewRepo = new ViewTreeRepo();
         final TermiosTerminalService terminal = new TermiosTerminalService();
         final ViewDrawer viewDrawer = new ViewDrawer(terminal);
-        final Communicator communicator = new TerminalCommunicator(terminal);
-        final ViewService viewService = new ViewService(viewRepo, viewDrawer, terminal.getTerminalArea());
+        final ViewService viewService = new ViewService(viewRepo, viewDrawer, terminal.getTerminalArea(),
+                new LayoutGenerator(viewRepo));
         final InputTranslator translator = new InputTranslator(terminal);
 
         Initialiser.initialise(viewService, args, terminal);

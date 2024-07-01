@@ -5,17 +5,18 @@ import com.textr.util.Dimension2D;
 import com.textr.util.Point;
 
 public final class LayoutGenerator {
-    private static IViewRepo viewRepo;
+    private final IViewRepo viewRepo;
 
-    public static void setViewRepo(IViewRepo repo){
-        viewRepo = repo;
+    public LayoutGenerator(IViewRepo repo){
+        this.viewRepo = repo;
     }
+
     /** Generate a list of views that completely covers the terminal area, one stacked atop the other vertically.
      * @param dimension2D  the dimensions of the terminal
      * @throws IllegalArgumentException If the list of buffers is or contains null.
      * @throws IllegalStateException If there are no buffers.
      */
-    public static void generate(Dimension2D dimension2D ){
+    public void generate(Dimension2D dimension2D ){
         Point topLeft = new Point(0,0);
         int terminalWidth = dimension2D.width();
         int terminalHeight = dimension2D.height();
@@ -33,7 +34,7 @@ public final class LayoutGenerator {
  * @throws IllegalArgumentException If the list of buffers is or contains null.
  * @throws IllegalStateException If there are no buffers.
  */
-public static void generateLayoutsVerticalSubTree(Point topLeft, Point bottomRight, Node<View> rootLayout){
+public void generateLayoutsVerticalSubTree(Point topLeft, Point bottomRight, Node<View> rootLayout){
     int heightPerLayout = ((bottomRight.getY()-topLeft.getY()) / rootLayout.getChildren().size());
     int remainder = ((bottomRight.getY()-topLeft.getY()) % rootLayout.getChildren().size());
     int y = topLeft.getY();
@@ -62,7 +63,7 @@ public static void generateLayoutsVerticalSubTree(Point topLeft, Point bottomRig
  * @throws IllegalArgumentException If the list of buffers is or contains null.
  * @throws IllegalStateException If there are no buffers.
  */
-public static void generateLayoutsHorizontalSubTree(Point topLeft, Point bottomRight, Node<View> rootLayout){
+public void generateLayoutsHorizontalSubTree(Point topLeft, Point bottomRight, Node<View> rootLayout){
     int widthPerLayout = ((bottomRight.getX()-topLeft.getX()) / rootLayout.getChildren().size());
     int remainder = ((bottomRight.getX()-topLeft.getX()) % rootLayout.getChildren().size());
     int x = topLeft.getX();

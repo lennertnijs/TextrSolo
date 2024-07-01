@@ -6,7 +6,6 @@ import com.textr.filebuffer.TextUpdate;
 import com.textr.input.Input;
 import com.textr.input.InputType;
 import com.textr.terminal.Communicator;
-import com.textr.terminal.TerminalCommunicator;
 import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
 import com.textr.util.Point;
@@ -128,6 +127,10 @@ public final class BufferView extends View implements TextListener {
             return true;
         }
         return false;
+    }
+
+    public void prepareForClosure(){
+        bufferEditor.getFileBuffer().removeTextListener(this);
     }
 
     /**

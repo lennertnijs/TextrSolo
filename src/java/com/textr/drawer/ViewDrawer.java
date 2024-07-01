@@ -5,7 +5,9 @@ import com.textr.snake.IGameBoard;
 import com.textr.terminal.TerminalService;
 import com.textr.util.Point;
 import com.textr.view.BufferView;
+import com.textr.view.IViewRepo;
 import com.textr.view.SnakeView;
+import com.textr.view.View;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +22,26 @@ public final class ViewDrawer{
     public ViewDrawer(TerminalService terminal){
         Objects.requireNonNull(terminal, "Cannot instantiate ViewDrawer with null TerminalService");
         this.terminal = terminal;
+    }
+
+    public void drawAll(IViewRepo viewRepo){
+        for(View view : viewRepo.getAll()){
+            if(view instanceof BufferView bufferView){
+                String statusBar = bufferView.generateStatusBar();
+                if(bufferView.equals(viewRepo.getActive())){
+                    statusBar = "Active: " + statusBar;
+                    draw(bufferView.getPosition(), bufferView.getAnchor(), bufferView.getInsertPoint());
+                }
+                draw(bufferView, statusBar);
+            }
+            if(view instanceof SnakeView snakeView){
+                String statusBar = snakeView.generateStatusBar();
+                if(snakeView.equals(viewRepo.getActive())) {
+                    statusBar = "Active: " + statusBar;
+                }
+                draw(snakeView, statusBar);
+            }
+        }
     }
 
     /**

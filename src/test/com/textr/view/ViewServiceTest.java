@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.textr.view.LayoutGenerator.setViewRepo;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ViewServiceTest {

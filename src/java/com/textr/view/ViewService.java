@@ -19,12 +19,14 @@ public final class ViewService {
     private final IViewRepo viewRepo;
     private final ViewDrawer viewDrawer;
     private final Dimension2D dimensions;
+    private final LayoutGenerator layoutGenerator;
 
-    public ViewService(IViewRepo viewRepo, ViewDrawer viewDrawer, Dimension2D dimensions){
+    public ViewService(IViewRepo viewRepo, ViewDrawer viewDrawer,
+                       Dimension2D dimensions, LayoutGenerator layoutGenerator){
         this.viewRepo = Objects.requireNonNull(viewRepo, "View repository is null.");
         this.viewDrawer = Objects.requireNonNull(viewDrawer, "View drawer is null.");
         this.dimensions = Objects.requireNonNull(dimensions, "Dimensions is null.");
-        LayoutGenerator.setViewRepo(viewRepo);
+        this.layoutGenerator = Objects.requireNonNull(layoutGenerator, "Layout generator is null.");
     }
 
     /**
@@ -45,93 +47,26 @@ public final class ViewService {
             viewRepo.add(view);
         }
         viewRepo.setActive(viewRepo.get(0));
-        generateViewPositionsAndDimensions();
+        layoutGenerator.generate(dimensions);
+        viewDrawer.drawAll(viewRepo);
     }
-
-
-    /**
-     * Sets positions & dimensions for all the existing Views, according to their hierarchical structure.
-     */
-    private void generateViewPositionsAndDimensions(){
-        LayoutGenerator.generate(dimensions);
-    }
-
-    /**
-     * Sets the active BufferView to the next BufferView.
-     */
-    public void setActiveViewToNext(){
-        viewRepo.setNextActive();
-    }
-
-    /**
-     * Sets the active BufferView to the previous BufferView.
-     */
-    public void setActiveViewToPrevious(){
-        viewRepo.setPreviousActive();
-    }
-
-    /**
-     * Draws all the Views and the cursor.
-     */
-    public void drawAll(){
-        // terminal.clearScreen(); // FIXME: Shouldn't drawing be in drawer?
-        for(View view: viewRepo.getAll()){
-                String statusBar = viewRepo.getActive().equals(view) ? "ACTIVE: " + view.generateStatusBar() : view.generateStatusBar();
-                if(view instanceof BufferView)
-                    viewDrawer.draw((BufferView) view, statusBar);
-                else
-                    viewDrawer.draw((SnakeView) view, statusBar);
-        }
-        if(viewRepo.getActive() instanceof BufferView){
-            viewDrawer.draw(
-                    getActiveView().getPosition(),
-                    ((BufferView)getActiveView()).getAnchor(),
-                    ((BufferView) getActiveView()).getInsertPoint()
-            );
-        }
-    }
-
 
     /**
      * Attempts to delete the active BufferView. If this BufferView's buffer is Dirty, show user a warning. If it is clean, delete.
      */
     public void attemptDeleteView(){
-        if(getActiveView().canBeClosed()){
-            deleteView();
+        if(!viewRepo.getActive().canBeClosed()){
+            return;
         }
-    }
-
-    /**
-     * Deletes the view from the repository and moves the active file buffer to the next.
-     * Then updates the views to take up the screen.
-     */
-    public void deleteView(){
         if(viewRepo.getSize() == 1){
             Settings.RUNNING = false;
             return;
         }
-        View oldActive = getActiveView();
+        View oldActive = viewRepo.getActive();
         viewRepo.setNextActive();
         viewRepo.remove(oldActive);
-        generateViewPositionsAndDimensions();
-        drawAll();
-    }
-
-    /**
-     * Rotates the active BufferView and the next BufferView.
-     * Then updates the new positions and dimensions.
-     * @param clockwise The boolean. Indicates whether clockwise, or not.
-     */
-    public void rotateView(boolean clockwise){
-        viewRepo.rotate(clockwise);
-        generateViewPositionsAndDimensions();
-    }
-
-    /**
-     * @return The active view.
-     */
-    private View getActiveView(){
-        return viewRepo.getActive();
+        layoutGenerator.generate(dimensions);
+        viewDrawer.drawAll(viewRepo);
     }
 
     /**
@@ -153,39 +88,40 @@ public final class ViewService {
     public void handleInput(Input input) {
         InputType inputType = input.getType();
         switch (inputType){
-            case CTRL_P -> setActiveViewToPrevious();
-            case CTRL_N -> setActiveViewToNext();
-            case CTRL_R -> rotateView(false);
-            case CTRL_T -> rotateView(true);
+            case CTRL_P -> viewRepo.setPreviousActive();
+            case CTRL_N -> viewRepo.setNextActive();
+            case CTRL_R -> viewRepo.rotate(false);
+            case CTRL_T -> viewRepo.rotate(true);
             case  F4-> attemptDeleteView();
             case CTRL_G -> addSnakeGame();
             case CTRL_D -> duplicateView();
             case TICK -> {
-                if(!getActiveView().wasUpdated())
+                if(!viewRepo.getActive().wasUpdated())
                     return;
             }
-            default -> getActiveView().handleInput(input);
+            default -> viewRepo.getActive().handleInput(input);
         }
-        drawAll();
+        layoutGenerator.generate(dimensions);
+        viewDrawer.drawAll(viewRepo);
     }
 
     private void duplicateView() {
         View dupeView;
         try {
-            dupeView = getActiveView().duplicate();
+            dupeView = viewRepo.getActive().duplicate();
         } catch (UnsupportedOperationException e) {
             return;
         }
-        viewRepo.addNextTo(dupeView, getActiveView());
-        generateViewPositionsAndDimensions();
-        drawAll();
+        viewRepo.addNextTo(dupeView, viewRepo.getActive());
+        layoutGenerator.generate(dimensions);
+        viewDrawer.drawAll(viewRepo);
     }
 
     private void addSnakeGame() {
         SnakeView newGame = new SnakeView(new Point(0,0), new Dimension2D(10,10), new SnakeGameInitializer(6, 12));
-        viewRepo.addNextTo(newGame, getActiveView());
-        generateViewPositionsAndDimensions();
-        setActiveViewToNext();
-        ((SnakeView)getActiveView()).restartGame();
+        viewRepo.addNextTo(newGame, viewRepo.getActive());
+        layoutGenerator.generate(dimensions);
+        viewRepo.setNextActive();
+        ((SnakeView)viewRepo.getActive()).restartGame();
     }
 }
