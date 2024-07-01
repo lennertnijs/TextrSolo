@@ -7,7 +7,6 @@ import com.textr.input.Input;
 import com.textr.Settings;
 import com.textr.input.InputType;
 import com.textr.terminal.Communicator;
-import com.textr.terminal.TerminalService;
 import com.textr.util.Dimension2D;
 import com.textr.util.Point;
 import com.textr.drawer.ViewDrawer;
@@ -18,30 +17,20 @@ import java.util.Objects;
 public final class ViewService {
 
     private final IViewRepo viewRepo;
-    private final TerminalService terminal; // FIXME: ViewService shouldn't be coupled to Terminal, only to Drawer(s)
     private final ViewDrawer viewDrawer;
+    private final Dimension2D dimensions;
 
-    /**
-     * The object used for communication with an external source
-     */
-    private final Communicator communicator;
-
-    public ViewService(IViewRepo viewRepo, ViewDrawer viewDrawer, TerminalService terminal, Communicator communicator){
-        Objects.requireNonNull(viewRepo, "Cannot initiate a ViewService with a null IViewRepo");
-        Objects.requireNonNull(viewDrawer, "Cannot initiate a ViewService with a null ViewDrawer");
-        Objects.requireNonNull(terminal, "Cannot initiate a ViewService with a null TerminalService");
-        this.viewRepo = viewRepo;
-        this.viewDrawer = viewDrawer;
-        this.terminal = terminal;
-        this.communicator = Objects.requireNonNull(communicator,
-                "Cannot initiate a ViewService with a null Communicator");
+    public ViewService(IViewRepo viewRepo, ViewDrawer viewDrawer, Dimension2D dimensions){
+        this.viewRepo = Objects.requireNonNull(viewRepo, "View repository is null.");
+        this.viewDrawer = Objects.requireNonNull(viewDrawer, "View drawer is null.");
+        this.dimensions = Objects.requireNonNull(dimensions, "Dimensions is null.");
         LayoutGenerator.setViewRepo(viewRepo);
     }
 
     /**
      * Creates and stores Views for all the existing Files.
      */
-    public void initialiseViews(String[] filePaths){
+    public void initialiseViews(String[] filePaths, Communicator communicator){
         if(filePaths.length == 0){
             Settings.RUNNING = false;
             return;
@@ -64,7 +53,7 @@ public final class ViewService {
      * Sets positions & dimensions for all the existing Views, according to their hierarchical structure.
      */
     private void generateViewPositionsAndDimensions(){
-        LayoutGenerator.generate(terminal.getTerminalArea()); // FIXME: Pass area as argument (perhaps?)
+        LayoutGenerator.generate(dimensions);
     }
 
     /**
@@ -85,7 +74,7 @@ public final class ViewService {
      * Draws all the Views and the cursor.
      */
     public void drawAll(){
-        terminal.clearScreen(); // FIXME: Shouldn't drawing be in drawer?
+        // terminal.clearScreen(); // FIXME: Shouldn't drawing be in drawer?
         for(View view: viewRepo.getAll()){
                 String statusBar = viewRepo.getActive().equals(view) ? "ACTIVE: " + view.generateStatusBar() : view.generateStatusBar();
                 if(view instanceof BufferView)

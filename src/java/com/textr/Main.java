@@ -15,7 +15,7 @@ public class Main {
         final TermiosTerminalService terminal = new TermiosTerminalService();
         final ViewDrawer viewDrawer = new ViewDrawer(terminal);
         final Communicator communicator = new TerminalCommunicator(terminal);
-        final ViewService viewService = new ViewService(viewRepo, viewDrawer, terminal, communicator);
+        final ViewService viewService = new ViewService(viewRepo, viewDrawer, terminal.getTerminalArea());
         final InputTranslator translator = new InputTranslator(terminal);
 
         Initialiser.initialise(viewService, args, terminal);
