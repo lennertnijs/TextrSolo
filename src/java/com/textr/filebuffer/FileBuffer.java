@@ -19,11 +19,29 @@ import java.util.Set;
  */
 public final class FileBuffer {
 
+    /**
+     * The file over which this is a buffer
+     */
     private final File file;
+    /**
+     * The buffer text.
+     */
     private final IText text;
+    /**
+     * The buffer state, i.e. clean of dirty.
+     */
     private BufferState state;
+    /**
+     * The set of listeners, all of whom are using this same file buffer.
+     */
     private final Set<TextListener> listeners;
+    /**
+     * The file reader, used to read files. Must be set before using the class.
+     */
     public static IFileReader fileReader;
+    /**
+     * The file writer, used to write to disk. Must be set before using the class.
+     */
     private static IFileWriter fileWriter;
 
     public FileBuffer(File file){
