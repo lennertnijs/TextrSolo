@@ -4,6 +4,8 @@ import com.textr.file.IFileReader;
 import com.textr.file.IFileWriter;
 import com.textr.filebufferV2.BufferState;
 import com.textr.filebufferV2.FileBuffer;
+import com.textr.filebufferV2.OperationType;
+import com.textr.filebufferV2.TextUpdate;
 import com.textr.util.Direction;
 import com.textr.util.Point;
 import org.junit.jupiter.api.BeforeEach;
@@ -154,6 +156,33 @@ public class FileBufferTest {
     public void testRemoveListenerWithNull(){
         assertThrows(NullPointerException.class,
                 () -> fileBuffer.removeTextListener(null));
+    }
+
+    @Test
+    public void testInsertWithListener(){
+        MockTextListener mockTextListener = new MockTextListener();
+        fileBuffer.addTextListener(mockTextListener);
+        fileBuffer.insert('c', 17);
+        assertEquals(new TextUpdate(new Point(17, 0), OperationType.INSERT_CHARACTER),
+                mockTextListener.getTextUpdate());
+
+        fileBuffer.insert('\n', 17);
+        assertEquals(new TextUpdate(new Point(17, 0), OperationType.INSERT_NEWLINE),
+                mockTextListener.getTextUpdate());
+    }
+
+    @Test
+    public void testDeleteWithListener(){
+        MockTextListener mockTextListener = new MockTextListener();
+        fileBuffer.addTextListener(mockTextListener);
+        fileBuffer.delete(17);
+        assertEquals(new TextUpdate(new Point(17, 0), OperationType.DELETE_CHARACTER),
+                mockTextListener.getTextUpdate());
+
+        fileBuffer.insert('\n', 17);
+        fileBuffer.delete(17);
+        assertEquals(new TextUpdate(new Point(17, 0), OperationType.DELETE_NEWLINE),
+                mockTextListener.getTextUpdate());
     }
 
     @Test
