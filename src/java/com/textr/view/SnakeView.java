@@ -25,6 +25,7 @@ public final class SnakeView extends View {
 
     /**
      * Creates a MUTABLE {@link SnakeView} in which a snake game is played.
+     * Does NOT start the snake game.
      * @param position The position. Cannot be null.
      * @param dimensions The dimensions. Cannot be null.
      * @param initializer The snake game initializer. Cannot be null.
@@ -32,6 +33,8 @@ public final class SnakeView extends View {
     public SnakeView(Point position, Dimension2D dimensions, SnakeGameInitializer initializer){
         super(position, dimensions);
         this.initializer = Objects.requireNonNull(initializer, "Initializer is null.");
+        this.snakeGame = initializer.initialise(dimensions);
+        snakeGame.start();
     }
 
     /**
@@ -48,11 +51,10 @@ public final class SnakeView extends View {
         return snakeGame.getBoard();
     }
 
-
     /**
-     * (Re)starts the snake game.
+     * Restarts the snake game.
      */
-    public void startGame(){
+    public void restartGame(){
         this.snakeGame = initializer.initialise(dimensions);
         snakeGame.start();
     }
@@ -65,7 +67,7 @@ public final class SnakeView extends View {
     @Override
     public void setDimensions(Dimension2D dimensions){
         this.dimensions = Objects.requireNonNull(dimensions, "Dimensions is null.");
-        startGame();
+        restartGame();
     }
 
     /**
@@ -79,7 +81,7 @@ public final class SnakeView extends View {
         switch (inputType) {
             case ENTER -> {
                 if(!snakeGame.isRunning()) {
-                    startGame();
+                    restartGame();
                 }
             }
             case ARROW_UP -> snakeGame.changeSnakeDirection(Direction.UP);

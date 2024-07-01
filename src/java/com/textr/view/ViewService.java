@@ -197,6 +197,6 @@ public final class ViewService {
         viewRepo.addNextTo(newGame, getActiveView());
         generateViewPositionsAndDimensions();
         setActiveViewToNext();
-        ((SnakeView)getActiveView()).startGame();
+        ((SnakeView)getActiveView()).restartGame();
     }
 }
