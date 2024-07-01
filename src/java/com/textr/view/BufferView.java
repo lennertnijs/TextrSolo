@@ -26,12 +26,6 @@ public final class BufferView extends View implements TextListener {
 
     private final BufferEditor bufferEditor;
     private final Point anchor;
-
-    /**
-     * The current update state of the view, responsible for adjusting the cursor and anchor point when an edit is
-     * observed on the contents of the view.
-     */
-
     private final Communicator communicator;
 
     private BufferView(Point position,
@@ -77,14 +71,6 @@ public final class BufferView extends View implements TextListener {
     }
 
     /**
-     * Resizes this BufferView
-     * @param dimensions = the new dimensions of the view
-     */
-    public void resize(Dimension2D dimensions){
-        setDimensions(dimensions);
-    }
-
-    /**
      * Generates and returns a status bar for the given FileBuffer.
      *
      * @return The status bar.
@@ -108,8 +94,8 @@ public final class BufferView extends View implements TextListener {
     public void handleInput(Input input){
         InputType inputType = input.getType();
         switch (inputType) {
-            case CHARACTER -> insert(input.getCharacter());
-            case ENTER -> insert('\n');
+            case CHARACTER -> bufferEditor.insert(input.getCharacter());
+            case ENTER -> bufferEditor.insert('\n');
             case DELETE -> bufferEditor.deleteAfter();
             case BACKSPACE -> bufferEditor.deleteBefore();
             case ARROW_UP -> bufferEditor.moveCursor(Direction.UP);
@@ -126,27 +112,21 @@ public final class BufferView extends View implements TextListener {
                 }
             }
         }
-    }
-
-    public void insert(char c){
-        bufferEditor.insert(c);
+        AnchorUpdater.updateAnchor(anchor, bufferEditor.getInsertPoint(), getDimensions());
     }
 
     public void doUpdate(TextUpdate t){
-        if(t.insertPoint().getY() >= anchor.getY()){
-            return;
-        }
     }
 
-    /**
-     * Creates and returns a {@link String} representation of this view.
-     *
-     * @return The string representation.
-     */
     @Override
-    public String toString(){
-        return String.format("BufferView[buffer = %s, position = %s, dimensions = %s, anchor = %s]",
-                bufferEditor.getFileBuffer(), getPosition(), getDimensions(), anchor);
+    public boolean canBeClosed() {
+        FileBuffer buffer = bufferEditor.getFileBuffer();
+        String msg = "You have unsaved changes. Are you sure you want to close this FileBuffer?";
+        if (buffer.getListenerCount() > 1 || buffer.getState() == CLEAN || communicator.requestPermissions(msg)) {
+            buffer.removeTextListener(this);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -157,21 +137,15 @@ public final class BufferView extends View implements TextListener {
      */
     @Override
     public BufferView duplicate(){
-        return new BufferView(getPosition().copy(),
-                getDimensions(),
-                anchor.copy(),
-                communicator,
-                bufferEditor);
+        return new BufferView(getPosition().copy(), getDimensions(), anchor.copy(), communicator, bufferEditor.copy());
     }
 
+    /**
+     * @return The string representation.
+     */
     @Override
-    public boolean canBeClosed() {
-        FileBuffer buffer = bufferEditor.getFileBuffer();
-        String msg = "You have unsaved changes. Are you sure you want to close this FileBuffer?";
-        if (buffer.getState() == CLEAN || buffer.getListenerCount() > 1 || communicator.requestPermissions(msg)) {
-            buffer.removeTextListener(this);
-            return true;
-        }
-        return false;
+    public String toString(){
+        return String.format("BufferView[buffer = %s, position = %s, dimensions = %s, anchor = %s]",
+                bufferEditor.getFileBuffer(), getPosition(), getDimensions(), anchor);
     }
 }

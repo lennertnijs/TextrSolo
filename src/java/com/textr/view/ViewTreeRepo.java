@@ -152,7 +152,7 @@ public final class ViewTreeRepo implements IViewRepo {
      * @throws IllegalArgumentException If the given newview is null.
      */
     @Override
-    public void addNextTo(View newView, View existing ){
+    public void addNextTo(View newView, View existing){
         Objects.requireNonNull(newView, "Cannot store a null View.");
         Objects.requireNonNull(existing, "Cannot store a null View.");
         Node<View> sibling = tree.getNode(existing);

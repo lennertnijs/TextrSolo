@@ -7,6 +7,8 @@ import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
 import com.textr.util.Point;
 
+import java.util.Objects;
+
 public class SnakeView extends View {
 
     private SnakeGame snakeGame;
@@ -74,10 +76,9 @@ public class SnakeView extends View {
     }
 
     @Override
-    public void resize(Dimension2D dimensions){
-        this.setDimensions(dimensions);
-        Dimension2D boardDimensions = new Dimension2D(dimensions.getWidth()-1, dimensions.getHeight()-1);
-        snakeGame.resizeBoard(boardDimensions);
+    public void setDimensions(Dimension2D dimensions){
+        this.dimensions = Objects.requireNonNull(dimensions, "Dimensions is null.");
+        snakeGame.resizeBoard(new Dimension2D(dimensions.getWidth()-1, dimensions.getHeight()-1));
     }
 
     @Override

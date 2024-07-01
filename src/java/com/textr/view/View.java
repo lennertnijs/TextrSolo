@@ -6,84 +6,79 @@ import com.textr.util.Point;
 
 import java.util.Objects;
 
+/**
+ * An abstract class holding some of the shared view-related fields and methods.
+ */
 public abstract class View {
 
-    private Point position;
-    private Dimension2D dimensions;
+    /**
+     * The position of the view.
+     */
+    protected Point position;
+    /**
+     * The dimensions of the view.
+     */
+    protected Dimension2D dimensions;
 
     public View(Point position, Dimension2D dimensions) {
-        this.position = position;
-        this.dimensions = dimensions;
+        this.position = Objects.requireNonNull(position, "Position is null.");
+        this.dimensions = Objects.requireNonNull(dimensions, "Dimensions is null.");
     }
 
     /**
-     * @return This view's position. (0-based)
+     * @return The 0-based position.
      */
     public Point getPosition(){
         return this.position;
     }
 
     /**
-     * @return This view's dimensions.
+     * @return The dimensions.
      */
     public Dimension2D getDimensions() {return this.dimensions;}
 
     /**
-     * Sets this view's Position
-     * @param position = the new position of the view
+     * Sets this view's position to the given point.
+     * @param position The new position. Cannot be null.
      */
     public void setPosition(Point position){
-        this.position = Objects.requireNonNull(position, "Cannot set the new Position of a View to null");
+        this.position = Objects.requireNonNull(position, "Position is null.");
     }
 
     /**
-     * Sets this view's Dimensions
-     * @param dimensions = the new dimensions of the view
+     * Sets this view's dimensions to the given dimensions.
+     * @param dimensions The new dimensions. Cannot be null.
      */
     public void setDimensions(Dimension2D dimensions){
-        this.dimensions = Objects.requireNonNull(dimensions, "Cannot set the new Dimension of a View to null");
+        this.dimensions = Objects.requireNonNull(dimensions, "Dimensions is null.");
     }
 
     /**
      * Handle view-specific input.
-     * @param input
+     * @param input The input. Cannot be null.
      */
     public abstract void handleInput(Input input);
 
     /**
-     * Increments the timer of the view if relevant, and returns whether that changed something requiring a redraw.
+     * @return True if an update happened, in a constantly drawing tick-base view. False, otherwise.
      */
-    public boolean wasUpdated() {
-        return false;
-    }
+    public boolean wasUpdated() { return false; }
 
     /**
-     * Resizes this view to the new dimensions.
-     * @param dimensions the new dimensions of the view.
+     * Generates the status bar to be shown at the bottom of the view.
      */
-    public void resize(Dimension2D dimensions){
-    }
+    public abstract String generateStatusBar();
 
     /**
-     * generate the statusbar of this view
-     * @return
-     */
-    public String generateStatusBar() {
-        return "";
-    }
-
-    /**
-     * Marks this View for deletion, and allows the internal data of the view to adapt if necessary.
-     * @return true if the view was successfully marked for deletion, false if the internal data prevents deletion.
+     * @return True if the view can be closed. False, if not currently closeable.
      */
     public boolean canBeClosed() {
         return true;
     }
 
     /**
-     * Creates a duplicate version of this view. (optional operation)
-     * @return A duplicate version of this view
-     * @throws UnsupportedOperationException if duplication isn't supported by this view type
+     * @return A duplicate version of this view, if supported.
+     * @throws UnsupportedOperationException If duplication isn't supported by this view.
      */
     public View duplicate() {
         throw new UnsupportedOperationException();

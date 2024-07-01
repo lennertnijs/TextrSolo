@@ -149,7 +149,6 @@ public final class ViewService {
      * Makes this ViewService handle the given input as needed. Input that was not mapped here is sent to the active
      * view instead, and is handled there.
      * This method will draw this ViewService object after handling the input.
-     *
      * Current handled input:
      * CTRL_P (previous active view)
      * CTRL_N (next active view)
