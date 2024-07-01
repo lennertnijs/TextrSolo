@@ -1,7 +1,7 @@
 package com.textr.filebuffer;
 
-import com.textr.file.FileReader;
-import com.textr.file.FileWriter;
+import com.textr.file.IFileReader;
+import com.textr.file.IFileWriter;
 import com.textr.filebufferV2.BufferState;
 import com.textr.filebufferV2.IText;
 import com.textr.filebufferV2.LineText;
@@ -23,19 +23,14 @@ public final class FileBuffer {
     private final IText text;
     private BufferState state;
     private final Set<TextListener> listeners;
+    public static IFileReader fileReader;
+    private static IFileWriter fileWriter;
 
-    private FileBuffer(File file, IText text, BufferState state){
-        this.file = file;
-        this.text = text;
-        this.state = state;
+    public FileBuffer(File file){
+        this.file = Objects.requireNonNull(file, "File is null.");
+        this.text = new LineText(fileReader.read(file));
+        this.state = BufferState.CLEAN;
         this.listeners = new HashSet<>();
-    }
-
-    public static FileBuffer createFromFilePath(String url){
-        File file = new File(Objects.requireNonNull(url, "Url is null."));
-        String fileContents = FileReader.readContents(file);
-        LineText text = new LineText(fileContents);
-        return new FileBuffer(file, text, BufferState.CLEAN);
     }
 
     /**
@@ -84,78 +79,97 @@ public final class FileBuffer {
      *
      * @return The updated insert index.
      */
-    public int moveCursor(int index, Direction direction){
+    public int move(int index, Direction direction){
+        Objects.requireNonNull(direction, "Direction is null.");
         return text.move(direction, index);
     }
 
-    public int insert(char c, int index){
+    /**
+     * Inserts the given character at the given index in the text. DOES NOT MOVE THE INSERT INDEX
+     * After deletion. notifies all listeners of the update.
+     * @param c The character.
+     * @param index The index. Cannot be negative. Cannot be larger than the length of the internal text.
+     */
+    public void insert(char c, int index){
         text.insert(c, index);
-        for(TextListener listener : listeners){
-            listener.doUpdate(new TextUpdate(getInsertPoint(index), OperationType.INSERT_CHARACTER));
-        }
-        return index + 1;
+        notifyListeners(new TextUpdate(getInsertPoint(index), OperationType.INSERT_CHARACTER));
     }
 
+    /**
+     * Deletes the character at the given index from the text. DOES NOT MOVE THE INSERT INDEX.
+     * After deletion. notifies all listeners of the update.
+     * @param index The index. Cannot be negative. Cannot be equal/larger than the length of the internal text.
+     */
     public void delete(int index){
         text.delete(index);
+        notifyListeners(new TextUpdate(getInsertPoint(index), OperationType.DELETE_CHARACTER));
     }
 
+    /**
+     * Notifies all the listeners with the given update.
+     * @param textUpdate The text update. Cannot be null.
+     */
+    private void notifyListeners(TextUpdate textUpdate){
+        for(TextListener listener : listeners){
+            listener.doUpdate(textUpdate);
+        }
+    }
+
+    /**
+     * Adds the given listener to the list of listeners.
+     * @param listener The listener. Cannot be null.
+     */
     public void addTextListener(TextListener listener) {
-        listeners.add(listener);
+        listeners.add(Objects.requireNonNull(listener, "Listener is null."));
     }
 
+    /**
+     * Removes the given listener from the list of listeners.
+     * @param listener The listener. Cannot be null.
+     */
     public void removeTextListener(TextListener listener) {
-        listeners.remove(listener);
+        listeners.remove(Objects.requireNonNull(listener, "Listener is null."));
     }
 
-    public int getReferenceCount() {
+    /**
+     * @return The amount of distinct listeners.
+     */
+    public int getListenerCount() {
         return listeners.size();
     }
 
     /**
-     * Writes this {@link FileBuffer}'s {@link IText} content's to its {@link File}.
-     * @throws IOException if something went wrong when writing to the file
+     * Writes the text's content to this file buffer's file.
+     * Also sets the buffer state to CLEAN.
+     *
+     * @throws IOException If something went wrong when writing to the file.
      */
     public void writeToDisk() throws IOException {
-        FileWriter.write(text.getContent(), file);
+        fileWriter.write(text.getContent(), file);
         this.state = BufferState.CLEAN;
     }
 
     /**
-     * Compares this file buffer to the given object and returns True if they're equal.
-     *
-     * @return True if equal, false otherwise.
+     * Sets the FileBuffer class' {@link IFileReader} to the given file reader.
+     * @param fr The file reader. Cannot be null
      */
-    @Override
-    public boolean equals(Object o){
-        if(!(o instanceof FileBuffer fileBuffer))
-            return false;
-        return file.equals(fileBuffer.file) &&
-                text.equals(fileBuffer.text) &&
-                state == fileBuffer.state;
+    public static void setFileReader(IFileReader fr){
+        fileReader = Objects.requireNonNull(fr, "File reader is null.");
     }
 
     /**
-     * Creates and returns a hash code for this file buffer.
-     *
-     * @return The hash code
+     * Sets the FileBuffer class' {@link IFileWriter} to the given file writer.
+     * @param fw The file writer. Cannot be null
      */
-    @Override
-    public int hashCode(){
-        int result = file.hashCode();
-        result = 31 * result + text.hashCode();
-        result = 31 * result + state.hashCode();
-        return result;
+    public static void setFileWriter(IFileWriter fw){
+        fileWriter = Objects.requireNonNull(fw, "File writer is null.");
     }
 
     /**
-     * Creates and returns a {@link String} representation of this file buffer.
-     *
      * @return The string representation
      */
     @Override
     public String toString(){
-        return String.format("FileBuffer[fileId = %s, text = %s, state = %s]",
-                file, text, state);
+        return String.format("FileBuffer[file=%s, text=%s, state=%s]", file, text, state);
     }
 }

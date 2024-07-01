@@ -1,8 +1,10 @@
 package com.textr.filebuffer;
 
+import com.textr.filebufferV2.Action;
+
 import java.util.Objects;
 
-public final class InsertAction implements Action{
+public final class InsertAction implements Action {
 
     private final char character;
     private final int index;
@@ -12,17 +14,16 @@ public final class InsertAction implements Action{
      * Creates a new {@link InsertAction}.
      * Stores the 1D index and the inserted character.
      * @param index The index. Cannot be outside the Text's range.
-     * @param character The character.
+     * @param c The character.
      * @throws IllegalArgumentException If the index is less than 0 or greater than or equal to the character length
      */
-    public InsertAction(int index, char character, FileBuffer buffer){
+    public InsertAction(char c, int index, FileBuffer buffer){
         Objects.requireNonNull(buffer, "Text is null.");
-        if(index < 0 || index > buffer.getText().getCharAmount())
-            throw new IndexOutOfBoundsException(String.format(
-                    "Index %d out of bounds for length %d of text structure", index,  buffer.getText().getCharAmount()
-            ));
+        if(index < 0 || index > buffer.getText().getCharAmount()) {
+            throw new IndexOutOfBoundsException("Index out of buffer bounds.");
+        }
         this.index = index;
-        this.character = character;
+        this.character = c;
         this.buffer = buffer;
     }
 
@@ -30,13 +31,15 @@ public final class InsertAction implements Action{
      * Executes this {@link InsertAction}.
      */
     public int execute(){
-        return buffer.insert(character, index);
+        buffer.insert(character, index);
+        return index + 1;
     }
 
     /**
      * Undoes this {@link InsertAction}.
      */
-    public void undo(){
+    public int undo(){
         buffer.delete(index);
+        return index;
     }
 }

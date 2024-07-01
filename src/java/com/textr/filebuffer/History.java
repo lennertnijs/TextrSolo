@@ -1,5 +1,7 @@
 package com.textr.filebuffer;
 
+import com.textr.filebufferV2.Action;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Objects;
@@ -28,22 +30,22 @@ public final class History {
     /**
      * Undoes the last performed {@link Action}.
      */
-    public void undo(){
+    public int undo(){
         if(undoAbles.size() == 0)
-            return;
+            return -1;
         Action action = undoAbles.removeLast();
         redoAbles.addLast(action);
-        action.undo();
+        return action.undo();
     }
 
     /**
      * Redoes the last {@link Action} that was undone.
      */
-    public void redo(){
+    public int redo(){
         if(redoAbles.size() == 0)
-            return;
+            return -1;
         Action action = redoAbles.removeLast();
-        action.execute();
         undoAbles.addLast(action);
+        return action.execute();
     }
 }

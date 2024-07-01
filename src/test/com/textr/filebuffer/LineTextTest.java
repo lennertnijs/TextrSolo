@@ -35,13 +35,13 @@ public class LineTextTest {
 
     @Test
     public void testGetInsertPointWithNegativeIndex(){
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(IndexOutOfBoundsException.class,
                 () -> linetext.getInsertPoint(-1));
     }
 
     @Test
     public void testGetInsertPointWithIndexTooBig(){
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(IndexOutOfBoundsException.class,
                 () -> linetext.getInsertPoint(21 + 1));
     }
 

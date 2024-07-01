@@ -1,5 +1,6 @@
 package com.textr.filebuffer;
 
+import com.textr.filebufferV2.Action;
 import com.textr.util.Direction;
 import com.textr.util.Point;
 
@@ -26,11 +27,11 @@ public final class BufferEditor {
     }
 
     public void moveCursor(Direction direction){
-        this.insertIndex = fileBuffer.moveCursor(insertIndex, direction);
+        this.insertIndex = fileBuffer.move(insertIndex, direction);
     }
 
     public void insert(char c){
-        Action insertAction = new InsertAction(insertIndex, c, fileBuffer);
+        Action insertAction = new InsertAction(c, insertIndex, fileBuffer);
         this.insertIndex = history.executeAndAddAction(insertAction);
     }
 
@@ -48,16 +49,20 @@ public final class BufferEditor {
             return;
         char toDelete = fileBuffer.getText().getCharacter(insertIndex);
         Action deleteAction = new DeleteAction(insertIndex, toDelete, fileBuffer);
-        this.insertIndex =history.executeAndAddAction(deleteAction);
+        this.insertIndex = history.executeAndAddAction(deleteAction);
     }
 
     public void undo(){
-        history.undo();
-        // update
+        int index = history.undo();
+        if(index != -1){
+            this.insertIndex = index;
+        }
     }
 
     public void redo(){
-        history.redo();
-        // update
+        int index = history.redo();
+        if(index != -1){
+            this.insertIndex = index;
+        }
     }
 }

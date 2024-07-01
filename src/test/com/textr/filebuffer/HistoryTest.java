@@ -1,5 +1,6 @@
 package com.textr.filebuffer;
 
+import com.textr.filebufferV2.Action;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -154,9 +155,10 @@ class MockAction implements Action {
     }
 
     @Override
-    public void undo() {
+    public int undo() {
         if (!wasExecuted)
             throw new IllegalStateException("Un-executed action undone");
         wasExecuted = false;
+        return -1;
     }
 }

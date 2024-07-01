@@ -36,7 +36,7 @@ public final class LineText implements IText {
      */
     public Point getInsertPoint(int index){
         if(index < 0 || index > builder.length()){
-            throw new IllegalArgumentException("Index outside text's bounds.");
+            throw new IndexOutOfBoundsException("Index outside text's bounds.");
         }
         return convertToPoint(index);
     }
@@ -99,8 +99,6 @@ public final class LineText implements IText {
         builder.insert(index, c);
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -116,6 +114,9 @@ public final class LineText implements IText {
      */
     public int move(Direction direction, int index){
         Objects.requireNonNull(direction, "Direction is null.");
+        if(index < 0 || index > builder.length()){
+            throw new IndexOutOfBoundsException("Index is negative or bigger than the length of the content.");
+        }
         switch(direction){
             case RIGHT -> { return moveRight(index);}
             case DOWN -> {return moveDown(index);}
@@ -222,6 +223,9 @@ public final class LineText implements IText {
         return count + point.getX();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public IText copy(){
         return new LineText(builder.toString());

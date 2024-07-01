@@ -1,5 +1,7 @@
 package com.textr.filebuffer;
 
+import com.textr.filebufferV2.Action;
+
 import java.util.Objects;
 
 public final class DeleteAction implements Action {
@@ -36,7 +38,8 @@ public final class DeleteAction implements Action {
     /**
      * Undoes this {@link DeleteAction}.
      */
-    public void undo(){
+    public int undo(){
         fileBuffer.insert(character, index);
+        return index + 1;
     }
 }

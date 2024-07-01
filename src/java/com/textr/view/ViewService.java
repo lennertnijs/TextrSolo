@@ -11,6 +11,7 @@ import com.textr.util.Validator;
 import com.textr.drawer.CursorDrawer;
 import com.textr.drawer.ViewDrawer;
 
+import java.io.File;
 import java.util.Objects;
 
 public final class ViewService {
@@ -45,9 +46,10 @@ public final class ViewService {
             return;
         }
         for(String url : filePaths){
+            File file = new File(url);
             Point dummyPosition = Point.create(0, 0);
             Dimension2D dummyDimensions = Dimension2D.create(1,1);
-            BufferView view = BufferView.createFromFilePath(url, dummyPosition, dummyDimensions, communicator);
+            BufferView view = BufferView.createFromFilePath(file, dummyPosition, dummyDimensions, communicator);
             viewRepo.add(view);
         }
         viewRepo.setActive(viewRepo.get(0));

@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * A class for reading a file's contents.
  */
-public final class FileReader {
+public final class FileReader implements IFileReader {
 
     /**
      * Private constructor. No use.
@@ -24,7 +24,7 @@ public final class FileReader {
      * @throws IllegalArgumentException If a non-ASCII character was found.
      * @throws IllegalArgumentException If a non-supported line break was found.
      */
-    public static String readContents(File file){
+    public String read(File file){
         Objects.requireNonNull(file, "File is null.");
         try(FileInputStream f = new FileInputStream(file)){
             DataInputStream data = new DataInputStream(f);

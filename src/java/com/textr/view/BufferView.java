@@ -9,6 +9,7 @@ import com.textr.util.Direction;
 import com.textr.util.Point;
 import com.textr.util.Validator;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -44,14 +45,14 @@ public final class BufferView extends View implements TextListener {
         this.bufferEditor = editor;
     }
 
-    public static BufferView createFromFilePath(String url,
+    public static BufferView createFromFilePath(File file,
                                                 Point position,
                                                 Dimension2D dimensions,
                                                 Communicator communicator){
-        Validator.notNull(url, "The url of a file buffer cannot be null.");
+        Validator.notNull(file, "The url of a file buffer cannot be null.");
         Validator.notNull(position, "The global position of the BufferView in the Terminal cannot be null.");
         Validator.notNull(dimensions, "The dimensions of the BufferView cannot be null.");
-        FileBuffer b = FileBuffer.createFromFilePath(url);
+        FileBuffer b = new FileBuffer(file);
         return new BufferView(position.copy(),
                 dimensions.copy(),
                 Point.create(0,0),
@@ -183,7 +184,7 @@ public final class BufferView extends View implements TextListener {
     public boolean canBeClosed() {
         FileBuffer buffer = bufferEditor.getFileBuffer();
         String msg = "You have unsaved changes. Are you sure you want to close this FileBuffer?";
-        if (buffer.getState() == CLEAN || buffer.getReferenceCount() > 1 || communicator.requestPermissions(msg)) {
+        if (buffer.getState() == CLEAN || buffer.getListenerCount() > 1 || communicator.requestPermissions(msg)) {
             buffer.removeTextListener(this);
             return true;
         }
