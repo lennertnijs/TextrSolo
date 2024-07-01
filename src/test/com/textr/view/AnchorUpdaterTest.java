@@ -1,13 +1,5 @@
 package com.textr.view;
 
-import com.textr.filebuffer.FileBuffer;
-import com.textr.util.Dimension2D;
-import com.textr.util.Point;
-import com.textr.Settings;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 public class AnchorUpdaterTest {
 
 //    private final String url = "resources/test.txt";

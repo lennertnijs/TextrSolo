@@ -1,7 +1,10 @@
-package com.textr.filebuffer;
+package com.textr.filebufferV2;
 
 import com.textr.file.IFileReader;
 import com.textr.file.IFileWriter;
+import com.textr.filebuffer.OperationType;
+import com.textr.filebuffer.TextListener;
+import com.textr.filebuffer.TextUpdate;
 import com.textr.filebufferV2.BufferState;
 import com.textr.filebufferV2.IText;
 import com.textr.filebufferV2.LineText;

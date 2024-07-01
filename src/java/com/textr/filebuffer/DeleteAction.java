@@ -1,6 +1,7 @@
 package com.textr.filebuffer;
 
 import com.textr.filebufferV2.Action;
+import com.textr.filebufferV2.FileBuffer;
 
 import java.util.Objects;
 

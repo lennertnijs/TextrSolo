@@ -1,6 +1,7 @@
 package com.textr.view;
 
 import com.textr.filebuffer.*;
+import com.textr.filebufferV2.FileBuffer;
 import com.textr.input.Input;
 import com.textr.input.InputType;
 import com.textr.terminal.Communicator;
