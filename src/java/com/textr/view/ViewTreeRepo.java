@@ -2,9 +2,9 @@ package com.textr.view;
 
 import com.textr.tree.Node;
 import com.textr.tree.Tree;
-import com.textr.util.Validator;
 
 import java.util.List;
+import java.util.Objects;
 
 public final class ViewTreeRepo implements IViewRepo {
 
@@ -26,7 +26,7 @@ public final class ViewTreeRepo implements IViewRepo {
     }
 
     @Override
-    public Node getRoot(){
+    public Node<View> getRoot(){
         return tree.getRoot();
     }
     /**
@@ -54,7 +54,7 @@ public final class ViewTreeRepo implements IViewRepo {
      */
     @Override
     public void setActive(View view) {
-        Validator.notNull(view, "Cannot set the active BufferView to a null.");
+        Objects.requireNonNull(view, "Cannot set the active BufferView to a null.");
         this.active = view;
     }
 
@@ -67,7 +67,7 @@ public final class ViewTreeRepo implements IViewRepo {
      */
     @Override
     public void add(View view){
-        Validator.notNull(view, "Cannot store a null View.");
+        Objects.requireNonNull(view, "Cannot store a null View.");
         tree.addChildToRoot(new Node<>(view));
     }
 
@@ -80,9 +80,9 @@ public final class ViewTreeRepo implements IViewRepo {
      */
     @Override
     public void addAll(List<View> views){
-        Validator.notNull(views, "Cannot store views from a null List.");
+        Objects.requireNonNull(views, "Cannot store views from a null List.");
         for(View view : views){
-            Validator.notNull(view, "Cannot store a null View.");
+            Objects.requireNonNull(view, "Cannot store a null View.");
         }
         for(View view : views){
             add(view);
@@ -95,7 +95,7 @@ public final class ViewTreeRepo implements IViewRepo {
      */
     @Override
     public void remove(View view) {
-        Validator.notNull(view, "Cannot remove a null BufferView from the Tree.");
+        Objects.requireNonNull(view, "Cannot remove a null BufferView from the Tree.");
         tree.remove(view);
         tree.restoreInvariants();
     }
@@ -116,7 +116,9 @@ public final class ViewTreeRepo implements IViewRepo {
      */
     @Override
     public View get(int index){
-        Validator.withinRange(index, 0, tree.getSize() - 1, "Cannot retrieve an element at in invalid index.");
+        if(index < 0 || index >= tree.getSize()){
+            throw new IndexOutOfBoundsException("Index is out of bounds.");
+        }
         return tree.getAllValues().get(index);
     }
 
@@ -151,8 +153,8 @@ public final class ViewTreeRepo implements IViewRepo {
      */
     @Override
     public void addNextTo(View newView, View existing ){
-        Validator.notNull(newView, "Cannot store a null View.");
-        Validator.notNull(existing, "Cannot store a null View.");
+        Objects.requireNonNull(newView, "Cannot store a null View.");
+        Objects.requireNonNull(existing, "Cannot store a null View.");
         Node<View> sibling = tree.getNode(existing);
         int placement = sibling.getParent().getChildren().indexOf(sibling)+1;
         tree.addChildToNodeAt(new Node<>(newView),sibling.getParent(),placement);
@@ -174,7 +176,9 @@ public final class ViewTreeRepo implements IViewRepo {
      */
     @Override
     public List<View> getAllAtDepth(int depth){
-        Validator.notNegativeOrZero(depth, "Cannot check the nodes at the given negative or zero depth.");
+        if(depth <= 0){
+            throw new IllegalArgumentException("Depth is negative or 0.");
+        }
         return tree.getAllAtDepth(depth);
     }
 }

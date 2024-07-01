@@ -10,7 +10,6 @@ import com.textr.terminal.Communicator;
 import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
 import com.textr.util.Point;
-import com.textr.util.Validator;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,9 +51,9 @@ public final class BufferView extends View implements TextListener {
                                                 Point position,
                                                 Dimension2D dimensions,
                                                 Communicator communicator){
-        Validator.notNull(file, "The url of a file buffer cannot be null.");
-        Validator.notNull(position, "The global position of the BufferView in the Terminal cannot be null.");
-        Validator.notNull(dimensions, "The dimensions of the BufferView cannot be null.");
+        Objects.requireNonNull(file, "The url of a file buffer cannot be null.");
+        Objects.requireNonNull(position, "The global position of the BufferView in the Terminal cannot be null.");
+        Objects.requireNonNull(dimensions, "The dimensions of the BufferView cannot be null.");
         FileBuffer b = new FileBuffer(file);
         return new BufferView(position.copy(),
                 dimensions.copy(),

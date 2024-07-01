@@ -4,7 +4,6 @@ import com.textr.snake.GamePoint;
 import com.textr.snake.IGameBoard;
 import com.textr.terminal.TerminalService;
 import com.textr.util.Point;
-import com.textr.util.Validator;
 import com.textr.view.BufferView;
 import com.textr.view.SnakeView;
 
@@ -19,7 +18,7 @@ public final class ViewDrawer{
     private final TerminalService terminal;
 
     public ViewDrawer(TerminalService terminal){
-        Validator.notNull(terminal, "Cannot instantiate ViewDrawer with null TerminalService");
+        Objects.requireNonNull(terminal, "Cannot instantiate ViewDrawer with null TerminalService");
         this.terminal = terminal;
     }
 
@@ -31,8 +30,8 @@ public final class ViewDrawer{
      * @throws IllegalArgumentException If any parameter is null.
      */
     public void draw(BufferView view, String statusBar) {
-        Validator.notNull(view, "Cannot draw a null BufferView.");
-        Validator.notNull(statusBar, "Cannot draw the BufferView because the status bar is null.");
+        Objects.requireNonNull(view, "Cannot draw a null BufferView.");
+        Objects.requireNonNull(statusBar, "Cannot draw the BufferView because the status bar is null.");
         int height = view.getDimensions().getHeight();
         int x = view.getPosition().getX();
         int startY = view.getPosition().getY();
@@ -59,8 +58,8 @@ public final class ViewDrawer{
      * @throws IllegalArgumentException If any parameter is null.
      */
     public void draw(SnakeView view, String statusBar) {
-        Validator.notNull(view, "Cannot draw a null BufferView.");
-        Validator.notNull(statusBar, "Cannot draw the BufferView because the status bar is null.");
+        Objects.requireNonNull(view, "Cannot draw a null BufferView.");
+        Objects.requireNonNull(statusBar, "Cannot draw the BufferView because the status bar is null.");
         int height = view.getDimensions().getHeight();
         int x = view.getPosition().getX();
         int baseY = view.getPosition().getY()+ height - 2;

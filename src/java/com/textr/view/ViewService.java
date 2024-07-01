@@ -10,7 +10,6 @@ import com.textr.terminal.Communicator;
 import com.textr.terminal.TerminalService;
 import com.textr.util.Dimension2D;
 import com.textr.util.Point;
-import com.textr.util.Validator;
 import com.textr.drawer.ViewDrawer;
 
 import java.io.File;
@@ -28,9 +27,9 @@ public final class ViewService {
     private final Communicator communicator;
 
     public ViewService(IViewRepo viewRepo, ViewDrawer viewDrawer, TerminalService terminal, Communicator communicator){
-        Validator.notNull(viewRepo, "Cannot initiate a ViewService with a null IViewRepo");
-        Validator.notNull(viewDrawer, "Cannot initiate a ViewService with a null ViewDrawer");
-        Validator.notNull(terminal, "Cannot initiate a ViewService with a null TerminalService");
+        Objects.requireNonNull(viewRepo, "Cannot initiate a ViewService with a null IViewRepo");
+        Objects.requireNonNull(viewDrawer, "Cannot initiate a ViewService with a null ViewDrawer");
+        Objects.requireNonNull(terminal, "Cannot initiate a ViewService with a null TerminalService");
         this.viewRepo = viewRepo;
         this.viewDrawer = viewDrawer;
         this.terminal = terminal;

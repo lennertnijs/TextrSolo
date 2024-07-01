@@ -25,8 +25,9 @@ public final class Dimension2D {
      * @return The {@link Dimension2D}
      */
     public static Dimension2D create(int width, int height){
-        Validator.notNegativeOrZero(width, "Cannot create a Dimension2D with a negative or zero width.");
-        Validator.notNegativeOrZero(height, "Cannot create a Dimension2D with a negative or zero height.");
+        if(width <= 0 || height <= 0){
+            throw new IllegalArgumentException("Width or height is negative or 0.");
+        }
         return new Dimension2D(width, height);
     }
 

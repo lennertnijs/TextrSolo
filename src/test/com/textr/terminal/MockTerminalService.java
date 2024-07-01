@@ -1,7 +1,7 @@
 package com.textr.terminal;
 
 import com.textr.util.Dimension2D;
-import com.textr.util.FixedPoint;
+import com.textr.util.Point;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -38,8 +38,8 @@ public class MockTerminalService implements TerminalService {
         this.cursorY = y;
     }
 
-    public FixedPoint getCursorLocation() {
-        return new FixedPoint(cursorX, cursorY);
+    public Point getCursorLocation() {
+        return new Point(cursorX, cursorY);
     }
 
     @Override

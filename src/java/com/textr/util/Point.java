@@ -28,8 +28,9 @@ public final class Point {
      * @throws IllegalArgumentException If the passed x or y value is negative.
      */
     public static Point create(int x, int y){
-        Validator.notNegative(x, "Cannot create a Point with a negative x value.");
-        Validator.notNegative(y, "Cannot create a Point with a negative y value.");
+        if(x < 0 || y < 0){
+            throw new IllegalArgumentException("x or y is negative.");
+        }
         return new Point(x, y);
     }
 
@@ -54,7 +55,9 @@ public final class Point {
      * @throws IllegalArgumentException If the given x is negative.
      */
     public void setX(int x){
-        Validator.notNegative(x, "Cannot set this point's x coordinate to a negative value.");
+        if(x < 0){
+            throw new IllegalArgumentException("X is negative.");
+        }
         this.x = x;
     }
 
@@ -65,7 +68,9 @@ public final class Point {
      * @throws IllegalArgumentException If the given y is negative.
      */
     public void setY(int y){
-        Validator.notNegative(y, "Cannot set this point's y coordinate to a negative value.");
+        if(y < 0){
+            throw new IllegalArgumentException("Y is negative.");
+        }
         this.y = y;
     }
 
@@ -106,9 +111,6 @@ public final class Point {
      */
     @Override
     public boolean equals(Object o){
-        if(this == o){
-            return true;
-        }
         if(!(o instanceof Point point)){
             return false;
         }

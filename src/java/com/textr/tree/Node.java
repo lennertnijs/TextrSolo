@@ -1,10 +1,9 @@
 package com.textr.tree;
 
-import com.textr.util.Validator;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * Represents a Generic Node that stores a value.
@@ -78,7 +77,7 @@ public final class Node<T> {
      * @throws IllegalArgumentException If the given child is null.
      */
     public void addChild(Node<T> child){
-        Validator.notNull(child, "Cannot add a null child Node.");
+        Objects.requireNonNull(child, "Cannot add a null child Node.");
         children.add(child);
         child.parent = this;
     }
@@ -90,7 +89,7 @@ public final class Node<T> {
      * @throws IllegalArgumentException If the given child is null.
      */
     public void addChildAt(Node<T> child, int position) {
-        Validator.notNull(child, "Cannot add a null child Node.");
+        Objects.requireNonNull(child, "Cannot add a null child Node.");
         children.add(position, child);
         child.parent = this;
     }
@@ -103,10 +102,10 @@ public final class Node<T> {
      * @throws IllegalArgumentException If the given list of children is or contains null.
      */
     public void addChildren(List<Node<T>> children){
-        Validator.notNull(children, "Cannot add a null List of child Nodes.");
+        Objects.requireNonNull(children, "Cannot add a null List of child Nodes.");
         this.children.addAll(children);
         for(Node<T> child : children){
-            Validator.notNull(child, "Cannot add a null List of child Nodes.");
+            Objects.requireNonNull(child, "Cannot add a null List of child Nodes.");
             child.parent = this;
         }
     }
@@ -118,7 +117,7 @@ public final class Node<T> {
      * @throws IllegalArgumentException If the given Node is null.
      */
     public void removeChild(Node<T> child){
-        Validator.notNull(child, "Cannot remove a null child Node.");
+        Objects.requireNonNull(child, "Cannot remove a null child Node.");
         children.remove(child);
     }
 
@@ -130,7 +129,7 @@ public final class Node<T> {
      * @throws IllegalArgumentException If the given Node is null.
      */
     public boolean isSiblingWith(Node<T> node){
-        Validator.notNull(node, "Cannot check sibling relationship with a null Node.");
+        Objects.requireNonNull(node, "Cannot check sibling relationship with a null Node.");
         if(!this.hasParent() || !node.hasParent()){
             return false;
         }
@@ -146,8 +145,8 @@ public final class Node<T> {
      * @throws NoSuchElementException If the given old Node does not exist within this Node's children.
      */
     public void replaceChild(Node<T> oldChild, Node<T> newChild){
-        Validator.notNull(oldChild, "Cannot replace a null Node.");
-        Validator.notNull(newChild, "Cannot replace by a null Node.");
+        Objects.requireNonNull(oldChild, "Cannot replace a null Node.");
+        Objects.requireNonNull(newChild, "Cannot replace by a null Node.");
         int index = children.indexOf(oldChild);
         if(index != -1){
             this.children.set(index, newChild);

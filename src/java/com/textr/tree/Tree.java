@@ -1,10 +1,9 @@
 package com.textr.tree;
 
-import com.textr.util.Validator;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * Generic Tree class that can optionally store an Object of type T.
@@ -69,7 +68,7 @@ public final class Tree<T> implements ITree<T>{
      * @throws IllegalArgumentException If the given parameter is null.
      */
     public boolean contains(T t){
-        Validator.notNull(t, "Cannot check whether the Tree contains a null Value.");
+        Objects.requireNonNull(t, "Cannot check whether the Tree contains a null Value.");
         return containsValueDFS(root, t);
     }
 
@@ -81,7 +80,7 @@ public final class Tree<T> implements ITree<T>{
      * @throws IllegalArgumentException If the given Node is null.
      */
     public boolean contains(Node<T> node){
-        Validator.notNull(node, "Cannot check whether the Tree contains a null Node.");
+        Objects.requireNonNull(node, "Cannot check whether the Tree contains a null Node.");
         return containsDFS(root, node);
     }
 
@@ -96,7 +95,7 @@ public final class Tree<T> implements ITree<T>{
      * @throws NoSuchElementException If the given value does not reside in a Node in the Tree.
      */
     public int getDepth(T t){
-        Validator.notNull(t, "Cannot look for a null Value.");
+        Objects.requireNonNull(t, "Cannot look for a null Value.");
         if(!contains(t)){
             throw new NoSuchElementException("No Node with the given value exists in the Tree.");
         }
@@ -113,7 +112,7 @@ public final class Tree<T> implements ITree<T>{
      * @throws NoSuchElementException If the given Node does not reside in the Tree.
      */
     public int getDepth(Node<T> node){
-        Validator.notNull(node, "Cannot look for a null Node.");
+        Objects.requireNonNull(node, "Cannot look for a null Node.");
         if(node.equals(root)){
             return 0;
         }
@@ -133,7 +132,7 @@ public final class Tree<T> implements ITree<T>{
      * @throws NoSuchElementException If this value does not reside inside the tree.
      */
     public Node<T> getNode(T t){
-        Validator.notNull(t, "Cannot get a Tree Node with a null value.");
+        Objects.requireNonNull(t, "Cannot get a Tree Node with a null value.");
         if(!contains(t)){
             throw new NoSuchElementException("No matching element was found.");
         }
@@ -164,7 +163,7 @@ public final class Tree<T> implements ITree<T>{
      * @throws IllegalStateException If a Node with the given value already exists in the Tree.
      */
     public void addChildToRoot(Node<T> child){
-        Validator.notNull(child, "Cannot add a null Node as a child to the root of the Tree.");
+        Objects.requireNonNull(child, "Cannot add a null Node as a child to the root of the Tree.");
         if(child.hasValue() && contains(child.getValue())){
             throw new IllegalStateException("A Node with the given value already exists in the Tree.");
         }
@@ -180,8 +179,8 @@ public final class Tree<T> implements ITree<T>{
      * @throws IllegalStateException If the child's value already resides in the Tree.
      */
     public void addChildToNode(Node<T> child, Node<T> parent){
-        Validator.notNull(child, "Cannot add a null Node as a child.");
-        Validator.notNull(parent, "Cannot add a child Node to a null parent Node.");
+        Objects.requireNonNull(child, "Cannot add a null Node as a child.");
+        Objects.requireNonNull(parent, "Cannot add a child Node to a null parent Node.");
         if(child.hasValue() && contains(child.getValue())){
             throw new IllegalStateException("A Node with the given value already exists in the Tree.");
         }
@@ -197,8 +196,8 @@ public final class Tree<T> implements ITree<T>{
      * @throws IllegalStateException If the child's value already resides in the Tree.
      */
     public void addChildToNodeAt(Node<T> child, Node<T> parent, int position) {
-        Validator.notNull(child, "Cannot add a null Node as a child.");
-        Validator.notNull(parent, "Cannot add a child Node to a null parent Node.");
+        Objects.requireNonNull(child, "Cannot add a null Node as a child.");
+        Objects.requireNonNull(parent, "Cannot add a child Node to a null parent Node.");
         if(child.hasValue() && contains(child.getValue())){
             throw new IllegalStateException("A Node with the given value already exists in the Tree.");
         }
@@ -211,7 +210,7 @@ public final class Tree<T> implements ITree<T>{
      * @throws IllegalArgumentException If the given value is null.
      */
     public void remove(T t){
-        Validator.notNull(t, "Cannot remove a Node of a null Value.");
+        Objects.requireNonNull(t, "Cannot remove a Node of a null Value.");
         removeNodeFromValueDFS(root, t);
     }
 
@@ -223,7 +222,7 @@ public final class Tree<T> implements ITree<T>{
      * @throws IllegalArgumentException If the given Nodes is null.
      */
     public void remove(Node<T> node){
-        Validator.notNull(node, "Cannot remove a null Node.");
+        Objects.requireNonNull(node, "Cannot remove a null Node.");
         removeNodeDFS(root, node);
     }
 
