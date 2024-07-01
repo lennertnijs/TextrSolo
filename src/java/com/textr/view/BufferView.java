@@ -61,7 +61,7 @@ public final class BufferView extends View implements TextListener {
                 dimensions.copy(),
                 Point.create(0,0),
                 communicator,
-                new BufferEditor(new History(), b));
+                new BufferEditor(b));
     }
 
     public BufferEditor getBufferEditor(){
@@ -85,18 +85,6 @@ public final class BufferView extends View implements TextListener {
      */
     public void resize(Dimension2D dimensions){
         setDimensions(dimensions);
-    }
-
-    /**
-     * Moves the cursor of the active buffer by 1 unit in the given direction.
-     * Then calls for an update of the anchor.
-     * @param direction The direction. Cannot be null.
-     *
-     * @throws IllegalArgumentException If the given direction is null.
-     */
-    public void moveCursor(Direction direction){
-        bufferEditor.moveCursor(Objects.requireNonNull(direction, "Direction is null."));
-        AnchorUpdater.updateAnchor(anchor, bufferEditor.getInsertPoint(), getDimensions());
     }
 
     /**
@@ -127,10 +115,10 @@ public final class BufferView extends View implements TextListener {
             case ENTER -> insert('\n');
             case DELETE -> bufferEditor.deleteAfter();
             case BACKSPACE -> bufferEditor.deleteBefore();
-            case ARROW_UP -> moveCursor(Direction.UP);
-            case ARROW_RIGHT -> moveCursor(Direction.RIGHT);
-            case ARROW_DOWN -> moveCursor(Direction.DOWN);
-            case ARROW_LEFT -> moveCursor(Direction.LEFT);
+            case ARROW_UP -> bufferEditor.moveCursor(Direction.UP);
+            case ARROW_RIGHT -> bufferEditor.moveCursor(Direction.RIGHT);
+            case ARROW_DOWN -> bufferEditor.moveCursor(Direction.DOWN);
+            case ARROW_LEFT -> bufferEditor.moveCursor(Direction.LEFT);
             case CTRL_U -> bufferEditor.redo();
             case CTRL_Z -> bufferEditor.undo();
             case CTRL_S -> {
