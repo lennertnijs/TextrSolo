@@ -1,4 +1,4 @@
-package com.textr.filebufferV2;
+package com.textr.filebuffer;
 
 /**
  * Represents an operation type in a buffer text.

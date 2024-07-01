@@ -1,5 +1,6 @@
-package com.textr.filebufferV2;
+package com.textr.filebuffer;
 
+import com.textr.filebuffer.OperationType;
 import com.textr.util.Point;
 
 import java.util.Objects;

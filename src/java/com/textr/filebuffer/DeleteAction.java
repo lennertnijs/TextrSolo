@@ -1,4 +1,4 @@
-package com.textr.filebufferV2;
+package com.textr.filebuffer;
 
 import java.util.Objects;
 

@@ -1,4 +1,4 @@
-package com.textr.filebufferV2;
+package com.textr.filebuffer;
 
 import com.textr.util.Direction;
 import com.textr.util.Point;

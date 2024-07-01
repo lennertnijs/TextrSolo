@@ -1,10 +1,9 @@
 package com.textr.view;
 
 import com.textr.filebuffer.*;
-import com.textr.filebufferV2.FileBuffer;
-import com.textr.filebufferV2.History;
-import com.textr.filebufferV2.OperationType;
-import com.textr.filebufferV2.TextUpdate;
+import com.textr.filebuffer.FileBuffer;
+import com.textr.filebuffer.OperationType;
+import com.textr.filebuffer.TextUpdate;
 import com.textr.input.Input;
 import com.textr.input.InputType;
 import com.textr.terminal.Communicator;
@@ -17,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.textr.filebufferV2.BufferState.CLEAN;
+import static com.textr.filebuffer.BufferState.CLEAN;
 
 /**
  * Class to represent a view on a {@link FileBuffer}, i.e. a small window onto its contents. This class holds the buffer

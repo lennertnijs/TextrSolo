@@ -1,6 +1,5 @@
 package com.textr.filebuffer;
 
-import com.textr.filebufferV2.TextUpdate;
 import com.textr.view.TextListener;
 
 public class MockTextListener implements TextListener {

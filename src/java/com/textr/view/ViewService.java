@@ -2,7 +2,7 @@ package com.textr.view;
 
 import com.textr.file.FileReader;
 import com.textr.file.FileWriter;
-import com.textr.filebufferV2.FileBuffer;
+import com.textr.filebuffer.FileBuffer;
 import com.textr.input.Input;
 import com.textr.Settings;
 import com.textr.input.InputType;

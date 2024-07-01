@@ -1,4 +1,4 @@
-package com.textr.filebufferV2;
+package com.textr.filebuffer;
 
 import com.textr.file.IFileReader;
 import com.textr.file.IFileWriter;
@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import static com.textr.filebufferV2.OperationType.*;
+import static com.textr.filebuffer.OperationType.*;
 
 /**
  * Represents a buffer.

@@ -2,10 +2,6 @@ package com.textr.filebuffer;
 
 import com.textr.file.IFileReader;
 import com.textr.file.IFileWriter;
-import com.textr.filebufferV2.BufferState;
-import com.textr.filebufferV2.FileBuffer;
-import com.textr.filebufferV2.OperationType;
-import com.textr.filebufferV2.TextUpdate;
 import com.textr.util.Direction;
 import com.textr.util.Point;
 import org.junit.jupiter.api.BeforeEach;

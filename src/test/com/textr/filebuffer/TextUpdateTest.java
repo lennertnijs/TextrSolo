@@ -1,7 +1,5 @@
 package com.textr.filebuffer;
 
-import com.textr.filebufferV2.OperationType;
-import com.textr.filebufferV2.TextUpdate;
 import com.textr.util.Point;
 import org.junit.jupiter.api.Test;
 

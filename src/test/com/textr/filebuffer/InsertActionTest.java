@@ -1,10 +1,7 @@
 package com.textr.filebuffer;
 
-import com.textr.filebufferV2.InsertAction;
 import com.textr.file.IFileReader;
 import com.textr.file.IFileWriter;
-import com.textr.filebufferV2.BufferState;
-import com.textr.filebufferV2.FileBuffer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

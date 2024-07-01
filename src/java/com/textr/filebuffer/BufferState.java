@@ -1,4 +1,4 @@
-package com.textr.filebufferV2;
+package com.textr.filebuffer;
 
 /**
  * Used to represent the state of a {@link FileBuffer}.
