@@ -15,10 +15,6 @@ public final class LineText implements IText {
      */
     private final StringBuilder builder;
     /**
-     * The text's 1-dimensional insert index.
-     */
-    private int insertIndex;
-    /**
      * The internal line break used.
      */
     private static final char LINEBREAK = '\n';
@@ -33,21 +29,16 @@ public final class LineText implements IText {
         String replacedLineBreaks = text.replace("\r\n", String.valueOf(LINEBREAK))
                                         .replace('\r', LINEBREAK);
         this.builder = new StringBuilder(replacedLineBreaks);
-        this.insertIndex = 0;
     }
 
     /**
      * {@inheritDoc}
      */
-    public int getInsertIndex(){
-        return insertIndex;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Point getInsertPoint(){
-        return convertToPoint();
+    public Point getInsertPoint(int index){
+        if(index < 0 || index > builder.length()){
+            throw new IllegalArgumentException("Index outside text's bounds.");
+        }
+        return convertToPoint(index);
     }
 
     /**
@@ -101,56 +92,57 @@ public final class LineText implements IText {
     /**
      * {@inheritDoc}
      */
-    public void insert(int index, char character){
+    public void insert(char c, int index){
         if(index < 0 || index > builder.length()) {
             throw new IndexOutOfBoundsException("The insertion index is outside text bounds.");
         }
-        builder.insert(index, character);
-        this.insertIndex = index + 1;
+        builder.insert(index, c);
     }
+
+
 
     /**
      * {@inheritDoc}
      */
-    public void remove(int index){
+    public void delete(int index){
         if(index < 0 || index >= builder.length()) {
             throw new IndexOutOfBoundsException("The removal index is outside text bounds.");
         }
         builder.deleteCharAt(index);
-        this.insertIndex = index;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void move(Direction direction){
+    public int move(Direction direction, int index){
         Objects.requireNonNull(direction, "Direction is null.");
         switch(direction){
-            case RIGHT -> moveRight();
-            case DOWN -> moveDown();
-            case LEFT -> moveLeft();
-            case UP -> moveUp();
+            case RIGHT -> { return moveRight(index);}
+            case DOWN -> {return moveDown(index);}
+            case LEFT -> {return moveLeft(index);}
+            case UP -> {return moveUp(index);}
+            default -> throw new RuntimeException();
         }
     }
 
     /**
      * Moves the insert index one to the right, if not already in the rightmost position.
      */
-    private void moveRight(){
-        if(insertIndex >= builder.length()){
-            return;
+    private int moveRight(int index){
+        if(index >= builder.length()){
+            return index;
         }
-        this.insertIndex++;
+        return index + 1;
     }
 
     /**
      * Moves the insert index one to the left, if not already in the leftmost position.
      */
-    private void moveLeft(){
-        if(insertIndex == 0){
-            return;
+    private int moveLeft(int index){
+        if(index == 0){
+            return index;
         }
-        this.insertIndex--;
+        return index - 1;
     }
 
     /**
@@ -159,15 +151,15 @@ public final class LineText implements IText {
      * it transforms the insert index into a 2-dimensional insert point, with which it can
      * quickly move upwards, update appropriately and then convert back to the 1-dimensional insert index.
      */
-    private void moveUp(){
-        Point insertPoint = getInsertPoint();
+    private int moveUp(int index){
+        Point insertPoint = getInsertPoint(index);
         if(insertPoint.getY() == 0){
-            return;
+            return index;
         }
         int y = insertPoint.getY() - 1;
         int x = Math.min(insertPoint.getX(), getLineLength(y));
         Point p = new Point(x, y);
-        this.insertIndex = convertToIndex(p);
+        return convertToIndex(p);
     }
 
     /**
@@ -176,15 +168,15 @@ public final class LineText implements IText {
      * it transforms the insert index into a 2-dimensional insert point, with which it can
      * quickly move down, update appropriately and then convert back to the 1-dimensional insert index.
      */
-    private void moveDown(){
-        Point cursorAsPoint = getInsertPoint();
+    private int moveDown(int index){
+        Point cursorAsPoint = getInsertPoint(index);
         if(cursorAsPoint.getY() == getLineAmount() -1){
-            return;
+            return index;
         }
         int y = cursorAsPoint.getY() + 1;
         int x = Math.min(cursorAsPoint.getX(), getLineLength(y));
         Point p = new Point(x, y);
-        this.insertIndex = convertToIndex(p);
+        return convertToIndex(p);
     }
 
     /**
@@ -193,11 +185,11 @@ public final class LineText implements IText {
      * behaviour will be undefined.
      * @return The point.
      */
-    private Point convertToPoint() {
+    private Point convertToPoint(int index) {
         int row = 0;
         int column = 0;
         for(int i = 0; i <= builder.length(); i++){
-            if(i == insertIndex){
+            if(i == index){
                 break;
             }
             if(builder.charAt(i) == '\n'){
@@ -230,11 +222,16 @@ public final class LineText implements IText {
         return count + point.getX();
     }
 
+    @Override
+    public IText copy(){
+        return new LineText(builder.toString());
+    }
+
     /**
      * @return The string representation.
      */
     @Override
     public String toString(){
-        return String.format("LineText[content={%s}, insertIndex=%d]", builder.toString(), insertIndex);
+        return String.format("LineText[content={%s}]", builder.toString());
     }
 }

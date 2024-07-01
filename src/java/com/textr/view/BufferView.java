@@ -1,7 +1,6 @@
 package com.textr.view;
 
 import com.textr.filebuffer.*;
-import com.textr.filebufferV2.IText;
 import com.textr.input.Input;
 import com.textr.input.InputType;
 import com.textr.terminal.Communicator;
@@ -72,7 +71,7 @@ public final class BufferView extends View implements TextListener {
     }
 
     public Point getInsertPoint(){
-        return bufferEditor.getFileBuffer().getInsertPoint();
+        return bufferEditor.getInsertPoint();
     }
 
     /**
@@ -92,7 +91,7 @@ public final class BufferView extends View implements TextListener {
      */
     public void moveCursor(Direction direction){
         bufferEditor.moveCursor(Objects.requireNonNull(direction, "Direction is null."));
-        AnchorUpdater.updateAnchor(anchor, bufferEditor.getFileBuffer().getInsertPoint(), getDimensions());
+        AnchorUpdater.updateAnchor(anchor, bufferEditor.getInsertPoint(), getDimensions());
     }
 
     /**
@@ -108,8 +107,8 @@ public final class BufferView extends View implements TextListener {
                 buffer.getFile().getPath(),
                 buffer.getText().getLineAmount(),
                 buffer.getText().getCharAmount(),
-                buffer.getInsertPoint().getY(),
-                buffer.getInsertPoint().getX(),
+                bufferEditor.getInsertPoint().getY(),
+                bufferEditor.getInsertPoint().getX(),
                 buffer.getState());
     }
     /**

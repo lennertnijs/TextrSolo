@@ -18,11 +18,11 @@ public final class History {
      * Executes the {@link Action} and stores it for possible undo.
      * @param action The action. Cannot be null.
      */
-    public void executeAndAddAction(Action action){
+    public int executeAndAddAction(Action action){
         Objects.requireNonNull(action, "Action is null.");
-        action.execute();
         undoAbles.add(action);
         redoAbles.clear();
+        return action.execute();
     }
 
     /**
@@ -32,8 +32,8 @@ public final class History {
         if(undoAbles.size() == 0)
             return;
         Action action = undoAbles.removeLast();
-        action.undo();
         redoAbles.addLast(action);
+        action.undo();
     }
 
     /**

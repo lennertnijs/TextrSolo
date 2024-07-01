@@ -5,7 +5,7 @@ public interface Action {
     /**
      * Executes the {@link Action}.
      */
-    void execute();
+    int execute();
 
     /**
      * Undoes the {@link Action}.

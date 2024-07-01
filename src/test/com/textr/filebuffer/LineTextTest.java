@@ -26,13 +26,23 @@ public class LineTextTest {
     }
 
     @Test
-    public void testGetInsertIndex(){
-        assertEquals(0, linetext.getInsertIndex());
+    public void testGetInsertPoint(){
+        assertEquals(new Point(0, 0), linetext.getInsertPoint(0));
+        assertEquals(new Point(6, 0), linetext.getInsertPoint(6));
+        assertEquals(new Point(1, 1), linetext.getInsertPoint(8));
+        assertEquals(new Point(0, 3), linetext.getInsertPoint(21));
     }
 
     @Test
-    public void testGetInsertPoint(){
-        assertEquals(new Point(0, 0), linetext.getInsertPoint());
+    public void testGetInsertPointWithNegativeIndex(){
+        assertThrows(IllegalArgumentException.class,
+                () -> linetext.getInsertPoint(-1));
+    }
+
+    @Test
+    public void testGetInsertPointWithIndexTooBig(){
+        assertThrows(IllegalArgumentException.class,
+                () -> linetext.getInsertPoint(21 + 1));
     }
 
     @Test
@@ -97,177 +107,131 @@ public class LineTextTest {
 
     @Test
     public void testInsert(){
-        linetext.insert(0, 's');
+        linetext.insert('s', 0);
         assertEquals(linetext.getContent(), "sLine 1\nLine 2\nLine 3\n");
-        linetext.insert(1, 'b');
+        linetext.insert('b', 1);
         assertEquals(linetext.getContent(), "sbLine 1\nLine 2\nLine 3\n");
-        linetext.insert(8, 'y');
+        linetext.insert('y', 8);
         assertEquals(linetext.getContent(), "sbLine 1y\nLine 2\nLine 3\n");
-        linetext.insert(10, 'p');
+        linetext.insert( 'p', 10);
         assertEquals(linetext.getContent(), "sbLine 1y\npLine 2\nLine 3\n");
-        linetext.insert(25, 'l');
+        linetext.insert('l', 25);
         assertEquals(linetext.getContent(), "sbLine 1y\npLine 2\nLine 3\nl");
-        linetext.insert(26, '\n');
+        linetext.insert('\n', 26);
         assertEquals(linetext.getContent(), "sbLine 1y\npLine 2\nLine 3\nl\n");
     }
 
     @Test
     public void testInsertWithNegativeIndex(){
         assertThrows(IndexOutOfBoundsException.class,
-                () -> linetext.insert(-1, 's'));
+                () -> linetext.insert( 's', -1));
     }
 
     @Test
     public void testInsertWithIndexTooBig(){
         assertThrows(IndexOutOfBoundsException.class,
-                () -> linetext.insert(21 + 1, 's'));
+                () -> linetext.insert('s', 21 + 1));
     }
 
     @Test
     public void testRemove(){
-        linetext.remove(0);
+        linetext.delete(0);
         assertEquals("ine 1\nLine 2\nLine 3\n", linetext.getContent());
-        linetext.remove(5);
+        linetext.delete(5);
         assertEquals("ine 1Line 2\nLine 3\n", linetext.getContent());
-        linetext.remove(18);
+        linetext.delete(18);
         assertEquals("ine 1Line 2\nLine 3", linetext.getContent());
     }
 
     @Test
     public void testRemoveWithNegativeIndex(){
         assertThrows(IndexOutOfBoundsException.class,
-                () -> linetext.remove(-1));
+                () -> linetext.delete(-1));
     }
 
     @Test
     public void testRemoveWithIndexTooBig(){
         assertThrows(IndexOutOfBoundsException.class,
-                () -> linetext.remove(21));
+                () -> linetext.delete(21));
     }
 
     @Test
     public void testMoveRight(){
-        for(int i = 0; i < 22; i++){
-            assertEquals(i, linetext.getInsertIndex());
-            linetext.move(Direction.RIGHT);
+        for(int i = 0; i < 21; i++){
+            assertEquals(i + 1, linetext.move(Direction.RIGHT, i));
         }
         // arrived at end -> don't move further
-        linetext.move(Direction.RIGHT);
-        assertEquals(21, linetext.getInsertIndex());
-        linetext.move(Direction.RIGHT);
-        assertEquals(21, linetext.getInsertIndex());
+        assertEquals(21, linetext.move(Direction.RIGHT, 21));
     }
 
     @Test
     public void testMoveLeft(){
-        for(int i = 0; i < 22; i++){
-            linetext.move(Direction.RIGHT);
-        }
-
-        for(int i = 21; i >= 0; i--){
-            assertEquals(i, linetext.getInsertIndex());
-            linetext.move(Direction.LEFT);
+        for(int i = 21; i > 0; i--){
+            assertEquals(i - 1, linetext.move(Direction.LEFT, i));
         }
         // arrived at the beginning -> don't move left more
-        linetext.move(Direction.LEFT);
-        assertEquals(0, linetext.getInsertIndex());
-        linetext.move(Direction.LEFT);
-        assertEquals(0, linetext.getInsertIndex());
+        assertEquals(0, linetext.move(Direction.LEFT, 0));
     }
 
     @Test
     public void testMoveUpLineLengthsEqual(){
         LineText text = new LineText("Line 1\nLine 2\nLine 3");
-        for(int i = 0; i < 22; i++){
-            text.move(Direction.RIGHT);
-        }
 
-        assertEquals(20, text.getInsertIndex());
-        text.move(Direction.UP);
-        assertEquals(13, text.getInsertIndex());
-        text.move(Direction.UP);
-        assertEquals(6, text.getInsertIndex());
-        text.move(Direction.UP);
-        assertEquals(6, text.getInsertIndex());
-
-        // arrived at first line -> don't move up again
-        text.move(Direction.UP);
-        assertEquals(6, text.getInsertIndex());
-        text.move(Direction.UP);
-        assertEquals(6, text.getInsertIndex());
+        assertEquals(13, text.move(Direction.UP, 20));
+        assertEquals(6, text.move(Direction.UP, 13));
+        assertEquals(6, text.move(Direction.UP, 6));
     }
 
     @Test
     public void testMoveUpLineLengthsDontMatch(){
         LineText text = new LineText("Line 1\nL\nLine 3");
-        for(int i = 0; i < 50; i++){
-            text.move(Direction.RIGHT);
-        }
-        assertEquals(15, text.getInsertIndex());
-        assertEquals(new Point(6, 2), text.getInsertPoint());
 
-        text.move(Direction.UP);
-        assertEquals(8, text.getInsertIndex());
-        assertEquals(new Point(1, 1), text.getInsertPoint());
-
-        text.move(Direction.UP);
-        assertEquals(1, text.getInsertIndex());
-        assertEquals(new Point(1, 0), text.getInsertPoint());
-
-        // arrived at top line
-        text.move(Direction.UP);
-        assertEquals(1, text.getInsertIndex());
-        text.move(Direction.UP);
-        assertEquals(1, text.getInsertIndex());
+        assertEquals(8, text.move(Direction.UP, 15));
+        assertEquals(1, text.move(Direction.UP, 8));
+        assertEquals(1, text.move(Direction.UP, 1));
     }
 
     @Test
     public void testMoveDownLineLengthsMatch(){
         LineText text = new LineText("Line 1\nLine 2\nLine 3");
 
-        assertEquals(0, text.getInsertIndex());
-        text.move(Direction.DOWN);
-        assertEquals(7, text.getInsertIndex());
-        text.move(Direction.DOWN);
-        assertEquals(14, text.getInsertIndex());
-        // end line, so stay
-        text.move(Direction.DOWN);
-        assertEquals(14, text.getInsertIndex());
+        assertEquals(7, text.move(Direction.DOWN, 0));
+        assertEquals(14, text.move(Direction.DOWN, 7));
+        assertEquals(14, text.move(Direction.DOWN, 14));
     }
 
 
     @Test
     public void testMoveDownLineLengthsDiffer(){
         LineText text = new LineText("Line 1\nL\nLine 3");
-        for(int i = 0; i < 6; i++){
-            text.move(Direction.RIGHT);
-        }
 
-        assertEquals(6, text.getInsertIndex());
-        assertEquals(new Point(6, 0), text.getInsertPoint());
 
-        text.move(Direction.DOWN);
-        assertEquals(8, text.getInsertIndex());
-        assertEquals(new Point(1, 1), text.getInsertPoint());
-
-        text.move(Direction.DOWN);
-        assertEquals(10, text.getInsertIndex());
-        assertEquals(new Point(1, 2), text.getInsertPoint());
-
-        // at end, so don't move down
-        text.move(Direction.DOWN);
-        assertEquals(10, text.getInsertIndex());
+        assertEquals(8, text.move(Direction.DOWN, 6));
+        assertEquals(10, text.move(Direction.DOWN, 8));
+        assertEquals(10, text.move(Direction.DOWN, 10));
     }
 
     @Test
     public void testMoveWithNullDirection(){
         assertThrows(NullPointerException.class,
-                () -> linetext.move(null));
+                () -> linetext.move(null, 0));
+    }
+
+    @Test
+    public void testCopy(){
+        IText copy = linetext.copy();
+        assertEquals(linetext.getContent(), copy.getContent());
+        copy.insert('c', 1);
+        assertNotEquals(linetext.getContent(), copy.getContent());
     }
 
     @Test
     public void testToString(){
-        String expected = "LineText[content={Line 1\nLine 2\nLine 3\n}, insertIndex=0]";
+        String expected = """
+                LineText[content={Line 1
+                Line 2
+                Line 3
+                }]""";
         assertEquals(expected, linetext.toString());
     }
 }

@@ -39,73 +39,65 @@ public final class FileBuffer {
     }
 
     /**
-     * @return This file buffer's {@link File} id.
+     * @return The {@link File}.
      */
     public File getFile(){
-        return this.file;
+        return file;
     }
 
     /**
-     * @return This file buffer's text.
+     * @return A copy of the {@link IText}.
      */
     public IText getText(){
-        return this.text;
-    }
-
-    public int getInsertIndex(){
-        return text.getInsertIndex();
-    }
-
-    public Point getInsertPoint(){
-        return text.getInsertPoint();
+        return text.copy();
     }
 
     /**
-     * @return This file buffer's state.
+     * Creates and returns the respective 2-dimensional insert point for the given 1-dimensional insert index.
+     * @param index The index. Cannot be negative. Cannot be bigger than the internal text's length.
+     *
+     * @return The insert point.
+     */
+    public Point getInsertPoint(int index){
+        return text.getInsertPoint(index);
+    }
+
+    /**
+     * @return The state of the buffer.
      */
     public BufferState getState(){
-        return this.state;
+        return state;
     }
 
     /**
      * Sets the state of this file buffer to the given state.
      * @param state The new state. Cannot be null.
-     *
-     * @throws IllegalArgumentException If the state is null.
      */
     public void setState(BufferState state) {
         this.state = Objects.requireNonNull(state, "State is null.");
     }
 
-    public void moveCursor(Direction direction){
-        text.move(direction);
-    }
-
     /**
-     * Writes this {@link FileBuffer}'s {@link IText} content's to its {@link File}.
-     * @throws IOException if something went wrong when writing to the file
+     * Moves the 1-dimensional insert index 1 unit in the given direction, within the context of the internal text.
+     * @param index The index. Cannot be negative. Cannot be larger than the length of the internal text.
+     * @param direction The direction. Cannot be null.
+     *
+     * @return The updated insert index.
      */
-    public void writeToDisk() throws IOException {
-        FileWriter.write(text.getContent(), file);
-        setState(BufferState.CLEAN);
+    public int moveCursor(int index, Direction direction){
+        return text.move(direction, index);
     }
 
-    public void insert(char c, int index){
-        text.insert(index, c);
+    public int insert(char c, int index){
+        text.insert(c, index);
         for(TextListener listener : listeners){
-            listener.doUpdate(new TextUpdate(getInsertPoint(), OperationType.INSERT_CHARACTER));
+            listener.doUpdate(new TextUpdate(getInsertPoint(index), OperationType.INSERT_CHARACTER));
         }
+        return index + 1;
     }
 
-
-    public void updateAfterInsert(char c){
-        for (TextListener listener: listeners)
-            listener.doUpdate(new TextUpdate(getInsertPoint(), OperationType.INSERT_CHARACTER));
-    }
-
-    public void updateAfterRemove(char c){
-        for (TextListener listener: listeners)
-            listener.doUpdate(new TextUpdate(getInsertPoint(), OperationType.INSERT_CHARACTER));
+    public void delete(int index){
+        text.delete(index);
     }
 
     public void addTextListener(TextListener listener) {
@@ -121,6 +113,15 @@ public final class FileBuffer {
     }
 
     /**
+     * Writes this {@link FileBuffer}'s {@link IText} content's to its {@link File}.
+     * @throws IOException if something went wrong when writing to the file
+     */
+    public void writeToDisk() throws IOException {
+        FileWriter.write(text.getContent(), file);
+        this.state = BufferState.CLEAN;
+    }
+
+    /**
      * Compares this file buffer to the given object and returns True if they're equal.
      *
      * @return True if equal, false otherwise.
@@ -129,9 +130,9 @@ public final class FileBuffer {
     public boolean equals(Object o){
         if(!(o instanceof FileBuffer fileBuffer))
             return false;
-        return this.file.equals(fileBuffer.file) &&
-                this.text.equals(fileBuffer.text) &&
-                this.state == fileBuffer.state;
+        return file.equals(fileBuffer.file) &&
+                text.equals(fileBuffer.text) &&
+                state == fileBuffer.state;
     }
 
     /**

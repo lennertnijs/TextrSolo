@@ -146,10 +146,11 @@ class MockAction implements Action {
     boolean wasExecuted = false;
 
     @Override
-    public void execute() {
+    public int execute() {
         if (wasExecuted)
             throw new IllegalStateException("Action executed twice");
         wasExecuted = true;
+        return -1;
     }
 
     @Override

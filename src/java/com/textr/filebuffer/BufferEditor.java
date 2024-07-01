@@ -1,6 +1,7 @@
 package com.textr.filebuffer;
 
 import com.textr.util.Direction;
+import com.textr.util.Point;
 
 import java.util.Objects;
 
@@ -8,45 +9,46 @@ public final class BufferEditor {
 
     private final History history;
     private final FileBuffer fileBuffer;
+    private int insertIndex;
 
     public BufferEditor(History history, FileBuffer buffer){
         this.history = Objects.requireNonNull(history, "History is null.");
         this.fileBuffer = Objects.requireNonNull(buffer, "File buffer is null.");
+        this.insertIndex = 0;
     }
 
     public FileBuffer getFileBuffer() {
         return fileBuffer;
     }
 
+    public Point getInsertPoint(){
+        return fileBuffer.getInsertPoint(insertIndex);
+    }
+
     public void moveCursor(Direction direction){
-        fileBuffer.moveCursor(direction);
+        this.insertIndex = fileBuffer.moveCursor(insertIndex, direction);
     }
 
     public void insert(char c){
-        Action insertAction = new InsertAction(fileBuffer.getInsertIndex(), c, fileBuffer.getText());
-        history.executeAndAddAction(insertAction);
-        fileBuffer.updateAfterInsert(c);
+        Action insertAction = new InsertAction(insertIndex, c, fileBuffer);
+        this.insertIndex = history.executeAndAddAction(insertAction);
     }
 
 
     public void deleteBefore(){
-        if(fileBuffer.getInsertIndex() == 0)
+        if(insertIndex == 0)
             return;
-        Action deleteAction = new DeleteAction(fileBuffer.getInsertIndex() - 1,
-                fileBuffer.getText().getCharacter(fileBuffer.getInsertIndex() - 1),
-                fileBuffer.getText());
-        history.executeAndAddAction(deleteAction);
-        fileBuffer.updateAfterRemove(fileBuffer.getText().getCharacter(fileBuffer.getInsertIndex() - 1));
+        char toDelete = fileBuffer.getText().getCharacter(insertIndex - 1);
+        Action deleteAction = new DeleteAction(insertIndex - 1, toDelete, fileBuffer);
+        this.insertIndex = history.executeAndAddAction(deleteAction);
     }
 
     public void deleteAfter(){
-        if(fileBuffer.getInsertIndex() == fileBuffer.getText().getCharAmount())
+        if(insertIndex == fileBuffer.getText().getCharAmount())
             return;
-        Action deleteAction = new DeleteAction(fileBuffer.getInsertIndex(),
-                fileBuffer.getText().getCharacter(fileBuffer.getInsertIndex()),
-                fileBuffer.getText());
-        history.executeAndAddAction(deleteAction);
-        fileBuffer.updateAfterRemove(fileBuffer.getText().getCharacter(fileBuffer.getInsertIndex() - 1));
+        char toDelete = fileBuffer.getText().getCharacter(insertIndex);
+        Action deleteAction = new DeleteAction(insertIndex, toDelete, fileBuffer);
+        this.insertIndex =history.executeAndAddAction(deleteAction);
     }
 
     public void undo(){

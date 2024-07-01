@@ -8,18 +8,14 @@ import com.textr.util.Point;
  */
 public interface IText {
 
-    /**
-     * @return The 1-dimensional insert index of the text.
-     */
-    int getInsertIndex();
 
     /**
-     * Generates and returns the 2-dimensional insert point of the text.
-     * This point is fully independent of the internal text's index, so changes will not have any impact.
+     * Generates and returns the 2-dimensional insert point of the 1-dimensional insert index in context of the text.
+     * @param index The 1-dimensional insert index. Cannot be negative. Cannot be bigger than the length of the text.
      *
      * @return The 2-dimensional insert point of the text.
      */
-    Point getInsertPoint();
+    Point getInsertPoint(int index);
 
     /**
      * @return The text's content as a single string. Uses '\n' line break.
@@ -60,20 +56,20 @@ public interface IText {
 
     /**
      * Inserts the given character in the text at the given index.
+     * @param c The character.
      * @param index The index. Cannot be negative or bigger than the length of the content.
-     * @param character The character.
      *
      * @throws IndexOutOfBoundsException If the index is negative or bigger than the length of the text.
      */
-    void insert(int index, char character);
+    void insert(char c, int index);
 
     /**
-     * Removes the character in the text at the given index.
-     * @param index The index. Cannot be negative or equal/bigger than the length of the content.
-     *
-     * @throws IndexOutOfBoundsException If the index is negative or equal/bigger than the length of the text.
+     * Deletes whatever character is in the text at the given insert index.
+     * Note that, for any insert index, the character at the same index is BEHIND that insert index.
+     * Thus, all deletions are treated as DELETE AFTER.
+     * @param index The index. Cannot be negative. Cannot be bigger than the length of the content.
      */
-    void remove(int index);
+    void delete(int index);
 
     /**
      * Moves the insert index 1 unit in the given direction.
@@ -86,5 +82,10 @@ public interface IText {
      * - Moving down in the last line of the text.
      * @param direction The direction. Cannot be null.
      */
-    void move(Direction direction);
+    int move(Direction direction, int index);
+
+    /**
+     * @return A deep copy
+     */
+    IText copy();
 }
