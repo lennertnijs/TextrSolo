@@ -1,7 +1,6 @@
 package com.textr;
 
 import com.textr.drawer.ViewDrawer;
-import com.textr.input.InputHandler;
 import com.textr.input.InputTranslator;
 import com.textr.terminal.Communicator;
 import com.textr.terminal.TerminalCommunicator;
@@ -17,11 +16,11 @@ public class Main {
         final ViewDrawer viewDrawer = new ViewDrawer(terminal);
         final Communicator communicator = new TerminalCommunicator(terminal);
         final ViewService viewService = new ViewService(viewRepo, viewDrawer, terminal, communicator);
-        final InputHandler handler = new InputHandler(viewService, new InputTranslator(terminal));
+        final InputTranslator translator = new InputTranslator(terminal);
 
         Initialiser.initialise(viewService, args, terminal);
         while(Settings.RUNNING){
-            handler.handleInput();
+            viewService.handleInput(translator.getNextInput());
         }
         terminal.leaveRawInputMode();
         terminal.clearScreen();
