@@ -11,12 +11,13 @@ import com.textr.view.ViewService;
 public class Main {
 
     public static void main(String[] args){
-        final ViewTreeRepo viewRepo = new ViewTreeRepo();
-        final TermiosTerminalService terminal = new TermiosTerminalService();
-        final ViewDrawer viewDrawer = new ViewDrawer(terminal);
-        final ViewService viewService = new ViewService(viewRepo, viewDrawer, terminal.getTerminalArea(),
+        ViewTreeRepo viewRepo = new ViewTreeRepo();
+        TermiosTerminalService terminal = new TermiosTerminalService();
+        ViewDrawer viewDrawer = new ViewDrawer(terminal);
+        terminal.enterRawInputMode();
+        ViewService viewService = new ViewService(viewRepo, viewDrawer, terminal.getTerminalArea(),
                 new LayoutGenerator(viewRepo));
-        final InputTranslator translator = new InputTranslator(terminal);
+        InputTranslator translator = new InputTranslator(terminal);
 
         Initialiser.initialise(viewService, args, terminal);
         while(Settings.RUNNING){

@@ -31,7 +31,7 @@ public final class ViewDrawer{
                 String statusBar = bufferView.generateStatusBar();
                 if(bufferView.equals(viewRepo.getActive())){
                     statusBar = "Active: " + statusBar;
-                    //draw(bufferView.getPosition(), bufferView.getAnchor(), bufferView.getInsertPoint());
+                    drawCursor(bufferView.getPosition(), bufferView.getAnchor(), bufferView.getInsertPoint());
                 }
                 draw(bufferView, statusBar);
             }
@@ -131,7 +131,7 @@ public final class ViewDrawer{
 
     }
 
-    public void draw(Point position, Point anchor, Point cursor){
+    public void drawCursor(Point position, Point anchor, Point cursor){
         Objects.requireNonNull(position, "Cannot draw the cursor because the position is null.");
         Objects.requireNonNull(anchor, "Cannot draw the cursor because the anchor is null.");
         Objects.requireNonNull(cursor, "Cannot draw the cursor because the cursor position is null.");
