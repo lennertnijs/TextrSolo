@@ -1,33 +1,41 @@
 package com.textr.util;
 
 /**
- * Class to represent a 2D point (0-based).
- * This means that the point can have any non-negative values.
+ * Represents a 2-dimensional point.
  */
 public final class Point {
 
+    /**
+     * The x value.
+     */
     private int x;
+    /**
+     * The y value.
+     */
     private int y;
 
     /**
-     * Private constructor for an {@link Point}. (0-based)
-     * @param x The x coordinate
-     * @param y The y coordinate
+     * Creates a MUTABLE {@link Point}.
+     * @param x The x coordinate. Cannot be negative.
+     * @param y The y coordinate. Cannot be negative.
      */
     public Point(int x, int y){
+        if(x < 0 || y < 0){
+            throw new IllegalArgumentException("Coordinate is negative.");
+        }
         this.x = x;
         this.y = y;
     }
 
     /**
-     * @return The x coordinate
+     * @return The x coordinate.
      */
     public int getX(){
         return x;
     }
 
     /**
-     * @return The y coordinate
+     * @return The y coordinate.
      */
     public int getY(){
         return y;
@@ -35,9 +43,7 @@ public final class Point {
 
     /**
      * Sets the x coordinate of this point to the given x.
-     * @param x The new x coordinate.
-     *
-     * @throws IllegalArgumentException If the given x is negative.
+     * @param x The new x coordinate. Cannot be negative.
      */
     public void setX(int x){
         if(x < 0){
@@ -48,9 +54,7 @@ public final class Point {
 
     /**
      * Sets the y coordinate of this point to the given y.
-     * @param y The new y coordinate.
-     *
-     * @throws IllegalArgumentException If the given y is negative.
+     * @param y The new y coordinate. Cannot be negative.
      */
     public void setY(int y){
         if(y < 0){
@@ -59,15 +63,16 @@ public final class Point {
         this.y = y;
     }
 
-
+    /**
+     * @return A copy of this point.
+     */
     public Point copy(){
-        return new Point(this.x, this.y);
+        return new Point(x, y);
     }
 
 
     /**
-     * Compares this point to the given object. Returns True if equal, False otherwise.
-     * @param o The object
+     * Compares two objects and returns true if they're equal points. Returns false otherwise.
      *
      * @return True if equal, false otherwise.
      */
@@ -79,8 +84,6 @@ public final class Point {
     }
 
     /**
-     * Generates and returns a hash code for this point.
-     *
      * @return The hash code
      */
     @Override
@@ -96,6 +99,6 @@ public final class Point {
      */
     @Override
     public String toString(){
-        return String.format("Point[x = %d, y = %d]", x, y);
+        return String.format("(%d, %d)", x, y);
     }
 }

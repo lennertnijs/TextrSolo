@@ -36,7 +36,7 @@ public class TextUpdateTest {
     @Test
     public void testToString(){
         String expected = "TextUpdate[" +
-                "insertPoint=Point[x = 5, y = 15], " +
+                "insertPoint=(5, 15), " +
                 "operationType=INSERT_CHARACTER" +
                 "]";
         assertEquals(expected, textUpdate.toString());
