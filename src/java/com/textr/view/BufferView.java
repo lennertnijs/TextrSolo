@@ -22,76 +22,47 @@ import static com.textr.filebuffer.BufferState.CLEAN;
  * represent the anchor of the view, i.e. the top left location of the rectangular section of test that is visible of
  * the file buffer within the view.
  */
-public final class BufferView extends View implements TextListener {
+public final class BufferView implements View, TextListener {
 
+    private Point position;
+    private Dimension2D dimensions;
     private final BufferEditor bufferEditor;
     private final Point anchor;
     private final Communicator communicator;
 
-    private BufferView(Point position,
-                       Dimension2D dimensions,
-                       Point anchor,
-                       Communicator communicator,
-                       BufferEditor editor){
-        super(position, dimensions);
-        this.anchor = anchor;
-        this.communicator = Objects.requireNonNull(communicator, "BufferView's communicator cannot be null");
-        editor.getFileBuffer().addTextListener(this);
-        this.bufferEditor = editor;
+    public BufferView(Builder b){
+        this.position = b.position;
+        this.dimensions = b.dimensions;
+        this.bufferEditor = b.bufferEditor;
+        this.anchor = b.anchor;
+        this.communicator = b.communicator;
     }
 
-    public static BufferView createFromFilePath(File file,
-                                                Point position,
-                                                Dimension2D dimensions,
-                                                Communicator communicator){
-        Objects.requireNonNull(file, "The url of a file buffer cannot be null.");
-        Objects.requireNonNull(position, "The global position of the BufferView in the Terminal cannot be null.");
-        Objects.requireNonNull(dimensions, "The dimensions of the BufferView cannot be null.");
-        FileBuffer b = new FileBuffer(file);
-        return new BufferView(position.copy(),
-                dimensions,
-                new Point(0,0),
-                communicator,
-                new BufferEditor(b));
-    }
-
-    public BufferEditor getBufferEditor(){
-        return bufferEditor;
-    }
-
-    /**
-     * @return This view's anchor point. (0-based)
-     */
-    public Point getAnchor(){
-        return anchor;
-    }
-
-    public Point getInsertPoint(){
-        return bufferEditor.getInsertPoint();
-    }
-
-    /**
-     * Generates and returns a status bar for the given FileBuffer.
-     *
-     * @return The status bar.
-     * @throws IllegalArgumentException If the given buffer is null.
-     */
     @Override
-    public String generateStatusBar(){
-        FileBuffer buffer = bufferEditor.getFileBuffer();
-        return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: (line, col) = (%d, %d) - State: %s",
-                buffer.getFile().getPath(),
-                buffer.getText().getLineAmount(),
-                buffer.getText().getCharAmount(),
-                bufferEditor.getInsertPoint().getY(),
-                bufferEditor.getInsertPoint().getX(),
-                buffer.getState());
+    public Point getPosition(){
+        return position.copy();
     }
+
+    @Override
+    public void setPosition(Point position){
+        this.position = Objects.requireNonNull(position, "Position is null.");
+    }
+
+    @Override
+    public Dimension2D getDimensions(){
+        return dimensions;
+    }
+
+    @Override
+    public void setDimensions(Dimension2D dimensions){
+        this.dimensions = Objects.requireNonNull(dimensions, "Dimensions is null.");
+    }
+
     /**
      * Handle input at the view level. Only view specific operations happen here, and nothing flows to a deeper level in the chain.
      */
     @Override
-    public void handleInput(Input input){
+    public boolean handleInput(Input input){
         InputType inputType = input.getType();
         switch (inputType) {
             case CHARACTER -> bufferEditor.insert(input.getCharacter());
@@ -111,26 +82,40 @@ public final class BufferView extends View implements TextListener {
                     communicator.sendMessage("Something went wrong when saving, please try again");
                 }
             }
+            default -> {return false;}
         }
         AnchorUpdater.updateAnchor(anchor, bufferEditor.getInsertPoint(), getDimensions());
-    }
-
-    public void doUpdate(TextUpdate t){
+        return true;
     }
 
     @Override
-    public boolean canBeClosed() {
+    public boolean canClose(){
         FileBuffer buffer = bufferEditor.getFileBuffer();
         String msg = "You have unsaved changes. Are you sure you want to close this FileBuffer?";
-        if (buffer.getListenerCount() > 1 || buffer.getState() == CLEAN || communicator.requestPermissions(msg)) {
-            buffer.removeTextListener(this);
-            return true;
-        }
-        return false;
+        return buffer.getListenerCount() > 1 || buffer.getState() == CLEAN || communicator.requestPermissions(msg);
     }
 
-    public void prepareForClosure(){
+    @Override
+    public void prepareToClose(){
         bufferEditor.getFileBuffer().removeTextListener(this);
+    }
+
+    /**
+     * Generates and returns a status bar for the given FileBuffer.
+     *
+     * @return The status bar.
+     * @throws IllegalArgumentException If the given buffer is null.
+     */
+    @Override
+    public String getStatusBar(){
+        FileBuffer buffer = bufferEditor.getFileBuffer();
+        return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: (line, col) = (%d, %d) - State: %s",
+                buffer.getFile().getPath(),
+                buffer.getText().getLineAmount(),
+                buffer.getText().getCharAmount(),
+                bufferEditor.getInsertPoint().getY(),
+                bufferEditor.getInsertPoint().getX(),
+                buffer.getState());
     }
 
     /**
@@ -141,7 +126,25 @@ public final class BufferView extends View implements TextListener {
      */
     @Override
     public BufferView duplicate(){
-        return new BufferView(getPosition().copy(), getDimensions(), anchor.copy(), communicator, bufferEditor.copy());
+        return builder().fileBuffer(bufferEditor.getFileBuffer()).communicator(communicator).build();
+    }
+
+    public BufferEditor getBufferEditor(){
+        return bufferEditor;
+    }
+
+    /**
+     * @return This view's anchor point. (0-based)
+     */
+    public Point getAnchor(){
+        return anchor;
+    }
+
+    public Point getInsertPoint(){
+        return bufferEditor.getInsertPoint();
+    }
+
+    public void doUpdate(TextUpdate t){
     }
 
     /**
@@ -151,5 +154,71 @@ public final class BufferView extends View implements TextListener {
     public String toString(){
         return String.format("BufferView[buffer = %s, position = %s, dimensions = %s, anchor = %s]",
                 bufferEditor.getFileBuffer(), getPosition(), getDimensions(), anchor);
+    }
+
+    public static Builder builder(){
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private File file = null;
+        private Point position = null;
+        private Dimension2D dimensions = null;
+        private Communicator communicator = null;
+        private Point anchor = null;
+        private FileBuffer fileBuffer = null;
+        private BufferEditor bufferEditor = null;
+
+        private Builder(){
+        }
+
+        public Builder file(File file){
+            this.file = file;
+            return this;
+        }
+
+        public Builder fileBuffer(FileBuffer fileBuffer){
+            this.fileBuffer = fileBuffer;
+            return this;
+        }
+
+        public Builder position(Point position){
+            this.position = position;
+            return this;
+        }
+
+        public Builder dimensions(Dimension2D dimensions){
+            this.dimensions = dimensions;
+            return this;
+        }
+
+        public Builder communicator(Communicator communicator){
+            this.communicator = communicator;
+            return this;
+        }
+
+        public Builder anchor(Point anchor){
+            this.anchor = anchor;
+            return this;
+        }
+
+        public BufferView build(){
+            Objects.requireNonNull(communicator, "Communicator is null.");
+            if(file == null){
+                if(fileBuffer == null){
+                    throw new NullPointerException("No file or file buffer is set.");
+                }else{
+                    this.bufferEditor = new BufferEditor(fileBuffer);
+                }
+            }else{
+                FileBuffer buffer = new FileBuffer(file);
+                this.bufferEditor = new BufferEditor(buffer);
+            }
+            if(anchor == null){
+                this.anchor = new Point(0, 0);
+            }
+            return new BufferView(this);
+        }
     }
 }

@@ -27,19 +27,17 @@ public final class ViewDrawer{
     public void drawAll(IViewRepo viewRepo){
         terminal.clearScreen();
         for(View view : viewRepo.getAll()){
+            String statusBar = view.getStatusBar();
+            if(view.equals(viewRepo.getActive())){
+                statusBar = "Active: " + statusBar;
+            }
             if(view instanceof BufferView bufferView){
-                String statusBar = bufferView.generateStatusBar();
                 if(bufferView.equals(viewRepo.getActive())){
-                    statusBar = "Active: " + statusBar;
                     drawCursor(bufferView.getPosition(), bufferView.getAnchor(), bufferView.getInsertPoint());
                 }
                 draw(bufferView, statusBar);
             }
             if(view instanceof SnakeView snakeView){
-                String statusBar = snakeView.generateStatusBar();
-                if(snakeView.equals(viewRepo.getActive())) {
-                    statusBar = "Active: " + statusBar;
-                }
                 draw(snakeView, statusBar);
             }
         }

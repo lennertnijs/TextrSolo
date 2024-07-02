@@ -58,7 +58,7 @@ public final class SnakeViewTest {
 
     @Test
     public void testCanBeClosed(){
-        assertTrue(snakeView.canBeClosed());
+        assertTrue(snakeView.canClose());
     }
 
     @Test
@@ -80,16 +80,9 @@ public final class SnakeViewTest {
 
     @Test
     public void testRestartGame(){
-        snakeView.wasUpdated();
         snakeView.getGameBoard().changeSnakeDirection(Direction.DOWN);
         snakeView.restartGame();
         assertEquals(snakeView.getGameBoard().getSnakeDirection(), Direction.RIGHT);
-    }
-
-    @Test
-    public void testWasUpdated(){
-        assertFalse(snakeView.wasUpdated());
-        assertFalse(snakeView.wasUpdated());
     }
 
     @Test
@@ -136,6 +129,6 @@ public final class SnakeViewTest {
     @Test
     public void testGenerateStatusBar(){
         String statusBar = "Score: 0";
-        assertEquals(statusBar, snakeView.generateStatusBar());
+        assertEquals(statusBar, snakeView.getStatusBar());
     }
 }

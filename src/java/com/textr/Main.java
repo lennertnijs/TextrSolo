@@ -21,7 +21,7 @@ public class Main {
 
         Initialiser.initialise(viewService, args, terminal);
         while(Settings.RUNNING){
-            viewService.handleInput(translator.getNextInput());
+            viewService.input(translator.getNextInput());
         }
         terminal.leaveRawInputMode();
         terminal.clearScreen();

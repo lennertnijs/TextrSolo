@@ -41,9 +41,7 @@ public final class ViewService {
         FileBuffer.setFileWriter(new FileWriter());
         for(String url : filePaths){
             File file = new File(url);
-            Point dummyPosition = new Point(0, 0);
-            Dimension2D dummyDimensions = new Dimension2D(1,1);
-            BufferView view = BufferView.createFromFilePath(file, dummyPosition, dummyDimensions, communicator);
+            BufferView view = BufferView.builder().file(file).communicator(communicator).build();;
             viewRepo.add(view);
         }
         viewRepo.setActive(viewRepo.get(0));
@@ -55,7 +53,7 @@ public final class ViewService {
      * Attempts to delete the active BufferView. If this BufferView's buffer is Dirty, show user a warning. If it is clean, delete.
      */
     public void attemptDeleteView(){
-        if(!viewRepo.getActive().canBeClosed()){
+        if(!viewRepo.getActive().canClose()){
             return;
         }
         if(viewRepo.getSize() == 1){
@@ -67,6 +65,13 @@ public final class ViewService {
         viewRepo.remove(oldActive);
         layoutGenerator.generate(dimensions);
         viewDrawer.drawAll(viewRepo);
+    }
+
+    public void input(Input input){
+        if(handleInput(input)){
+            layoutGenerator.generate(dimensions);
+            viewDrawer.drawAll(viewRepo);
+        }
     }
 
     /**
@@ -85,23 +90,19 @@ public final class ViewService {
      *
      * @param input The input to handle on the ViewService level
      */
-    public void handleInput(Input input) {
+    public boolean handleInput(Input input) {
         InputType inputType = input.getType();
         switch (inputType){
             case CTRL_P -> viewRepo.setPreviousActive();
             case CTRL_N -> viewRepo.setNextActive();
             case CTRL_R -> viewRepo.rotate(false);
             case CTRL_T -> viewRepo.rotate(true);
-            case  F4-> attemptDeleteView();
+            case F4 -> attemptDeleteView();
             case CTRL_G -> addSnakeGame();
             case CTRL_D -> duplicateView();
-            case TICK -> {
-                if(!viewRepo.getActive().wasUpdated())
-                    return;
-            }
-            default -> viewRepo.getActive().handleInput(input);
+            default -> {return viewRepo.getActive().handleInput(input);}
         }
-        viewDrawer.drawAll(viewRepo);
+        return true;
     }
 
     private void duplicateView() {
