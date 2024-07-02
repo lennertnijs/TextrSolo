@@ -166,7 +166,7 @@ public final class BufferView implements View, TextListener {
         private Point position = null;
         private Dimension2D dimensions = null;
         private Communicator communicator = null;
-        private Point anchor = null;
+        private Point anchor = new Point(0 ,0);
         private FileBuffer fileBuffer = null;
         private BufferEditor bufferEditor = null;
 
