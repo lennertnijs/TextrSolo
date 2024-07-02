@@ -17,12 +17,12 @@ import java.util.Objects;
 
 public final class ViewService {
 
-    private final IViewRepo viewRepo;
+    private final ViewRepository viewRepo;
     private final ViewDrawer viewDrawer;
     private final Dimension2D dimensions;
     private final LayoutGenerator layoutGenerator;
 
-    public ViewService(IViewRepo viewRepo, ViewDrawer viewDrawer,
+    public ViewService(ViewRepository viewRepo, ViewDrawer viewDrawer,
                        Dimension2D dimensions, LayoutGenerator layoutGenerator){
         this.viewRepo = Objects.requireNonNull(viewRepo, "View repository is null.");
         this.viewDrawer = Objects.requireNonNull(viewDrawer, "View drawer is null.");

@@ -5,7 +5,7 @@ import com.textr.snake.IGameBoard;
 import com.textr.terminal.TerminalService;
 import com.textr.util.Point;
 import com.textr.view.BufferView;
-import com.textr.view.IViewRepo;
+import com.textr.view.ViewRepository;
 import com.textr.view.SnakeView;
 import com.textr.view.View;
 
@@ -24,7 +24,7 @@ public final class ViewDrawer{
         this.terminal = terminal;
     }
 
-    public void drawAll(IViewRepo viewRepo){
+    public void drawAll(ViewRepository viewRepo){
         terminal.clearScreen();
         for(View view : viewRepo.getAll()){
             String statusBar = view.getStatusBar();
@@ -104,7 +104,6 @@ public final class ViewDrawer{
         int maxStatusBarIndex = Math.min(view.getDimensions().width(), statusBar.length());
         drawBordersGame(view);
         terminal.printText(x, maxY, statusBar.substring(0, maxStatusBarIndex));
-
     }
   
     private void drawScrollBar(BufferView view){

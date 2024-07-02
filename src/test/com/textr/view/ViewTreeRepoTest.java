@@ -28,7 +28,7 @@ class ViewTreeRepoTest {
     private View view6;
 
     private Dimension2D terminalDimensions;
-    private ViewTreeRepo repo;
+    private ViewTreeRepository repo;
     private List<View> views;
     private LayoutGenerator layoutGenerator;
 
@@ -51,7 +51,7 @@ class ViewTreeRepoTest {
         views.add(view5);
         view6 = new MockView(initPoint, initDimension);
         views.add(view6);
-        repo = new ViewTreeRepo();
+        repo = new ViewTreeRepository();
         repo.addAll(views);
         terminalDimensions = new Dimension2D(100,100);
         layoutGenerator = new LayoutGenerator(repo);

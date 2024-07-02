@@ -107,12 +107,11 @@ public final class BufferView implements View, TextListener {
      */
     @Override
     public String getStatusBar(){
-        return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: (%d, %d) - State: %s",
+        return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: %s - State: %s",
                 bufferEditor.getFileBuffer().getFile().getPath(),
                 getText().getLineAmount(),
                 getText().getCharAmount(),
-                bufferEditor.getInsertPoint().getY(),
-                bufferEditor.getInsertPoint().getX(),
+                bufferEditor.getInsertPoint(),
                 bufferEditor.getFileBuffer().getState());
     }
 
@@ -147,12 +146,11 @@ public final class BufferView implements View, TextListener {
             return;
         }
         if(t.operationType() == OperationType.INSERT_NEWLINE){
-            bufferEditor.moveCursor(Direction.DOWN);
+            anchor.setY(anchor.getY() + 1);
         }
         if(t.operationType() == OperationType.DELETE_NEWLINE){
-            bufferEditor.moveCursor(Direction.UP);
+            anchor.setY(Math.max(anchor.getY() - 1, 0));
         }
-        updateAnchor();
     }
 
     private void updateAnchor(){

@@ -6,14 +6,14 @@ import com.textr.tree.Tree;
 import java.util.List;
 import java.util.Objects;
 
-public final class ViewTreeRepo implements IViewRepo {
+public final class ViewTreeRepository implements ViewRepository {
 
 
     private Tree<View> tree;
     private View active;
 
 
-    public ViewTreeRepo(){
+    public ViewTreeRepository(){
         tree = new Tree<>();
     }
 

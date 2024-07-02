@@ -1,2 +1,3 @@
-The new drawing seems off.
-Also, the snake tick stuff gets resized every tick, causing a regenerate!
+There seems to be a rotation bug, probably related to the drawing.
+The cursor is not being drawn.
+Text update stuff isnt yet being done for drawing in the horizontal lines

@@ -4,7 +4,7 @@ import com.textr.tree.Node;
 
 import java.util.List;
 
-public interface IViewRepo {
+public interface ViewRepository {
 
     boolean rootIsVertical();
     int getSize();

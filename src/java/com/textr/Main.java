@@ -4,13 +4,13 @@ import com.textr.service.ViewDrawer;
 import com.textr.input.InputTranslator;
 import com.textr.terminal.TermiosTerminalService;
 import com.textr.service.LayoutGenerator;
-import com.textr.view.ViewTreeRepo;
+import com.textr.view.ViewTreeRepository;
 import com.textr.service.ViewService;
 
 public class Main {
 
     public static void main(String[] args){
-        ViewTreeRepo viewRepo = new ViewTreeRepo();
+        ViewTreeRepository viewRepo = new ViewTreeRepository();
         TermiosTerminalService terminal = new TermiosTerminalService();
         ViewDrawer viewDrawer = new ViewDrawer(terminal);
         terminal.enterRawInputMode();

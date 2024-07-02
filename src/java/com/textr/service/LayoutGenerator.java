@@ -3,13 +3,13 @@ package com.textr.service;
 import com.textr.tree.Node;
 import com.textr.util.Dimension2D;
 import com.textr.util.Point;
-import com.textr.view.IViewRepo;
+import com.textr.view.ViewRepository;
 import com.textr.view.View;
 
 public final class LayoutGenerator {
-    private final IViewRepo viewRepo;
+    private final ViewRepository viewRepo;
 
-    public LayoutGenerator(IViewRepo repo){
+    public LayoutGenerator(ViewRepository repo){
         this.viewRepo = repo;
     }
 
