@@ -2,6 +2,7 @@ package com.textr.view;
 
 import com.textr.filebuffer.BufferEditor;
 import com.textr.filebuffer.FileBuffer;
+import com.textr.filebuffer.IText;
 import com.textr.filebuffer.TextUpdate;
 import com.textr.input.Input;
 import com.textr.input.InputType;
@@ -26,16 +27,17 @@ public final class BufferView implements View, TextListener {
 
     private Point position;
     private Dimension2D dimensions;
-    private final BufferEditor bufferEditor;
     private final Point anchor;
+    private final BufferEditor bufferEditor;
     private final Communicator communicator;
 
-    public BufferView(Builder b){
-        this.position = b.position;
-        this.dimensions = b.dimensions;
-        this.bufferEditor = b.bufferEditor;
-        this.anchor = b.anchor;
-        this.communicator = b.communicator;
+    private BufferView(Builder builder){
+        this.position = builder.position;
+        this.dimensions = builder.dimensions;
+        this.bufferEditor = builder.bufferEditor;
+        this.anchor = builder.anchor;
+        this.communicator = builder.communicator;
+        bufferEditor.getFileBuffer().addTextListener(this);
     }
 
     @Override
@@ -73,8 +75,8 @@ public final class BufferView implements View, TextListener {
             case ARROW_RIGHT -> bufferEditor.moveCursor(Direction.RIGHT);
             case ARROW_DOWN -> bufferEditor.moveCursor(Direction.DOWN);
             case ARROW_LEFT -> bufferEditor.moveCursor(Direction.LEFT);
-            case CTRL_U -> bufferEditor.redo();
             case CTRL_Z -> bufferEditor.undo();
+            case CTRL_U -> bufferEditor.redo();
             case CTRL_S -> {
                 try {
                     bufferEditor.getFileBuffer().writeToDisk();
@@ -108,14 +110,13 @@ public final class BufferView implements View, TextListener {
      */
     @Override
     public String getStatusBar(){
-        FileBuffer buffer = bufferEditor.getFileBuffer();
-        return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: (line, col) = (%d, %d) - State: %s",
-                buffer.getFile().getPath(),
-                buffer.getText().getLineAmount(),
-                buffer.getText().getCharAmount(),
+        return String.format("File path: %s - Lines: %d - Characters: %d - Cursor: (%d, %d) - State: %s",
+                bufferEditor.getFileBuffer().getFile().getPath(),
+                getText().getLineAmount(),
+                getText().getCharAmount(),
                 bufferEditor.getInsertPoint().getY(),
                 bufferEditor.getInsertPoint().getX(),
-                buffer.getState());
+                bufferEditor.getFileBuffer().getState());
     }
 
     /**
@@ -129,15 +130,15 @@ public final class BufferView implements View, TextListener {
         return builder().fileBuffer(bufferEditor.getFileBuffer()).communicator(communicator).build();
     }
 
-    public BufferEditor getBufferEditor(){
-        return bufferEditor;
+    public IText getText(){
+        return bufferEditor.getFileBuffer().getText();
     }
 
     /**
      * @return This view's anchor point. (0-based)
      */
     public Point getAnchor(){
-        return anchor;
+        return anchor.copy();
     }
 
     public Point getInsertPoint(){
@@ -147,28 +148,19 @@ public final class BufferView implements View, TextListener {
     public void doUpdate(TextUpdate t){
     }
 
-    /**
-     * @return The string representation.
-     */
-    @Override
-    public String toString(){
-        return String.format("BufferView[buffer = %s, position = %s, dimensions = %s, anchor = %s]",
-                bufferEditor.getFileBuffer(), getPosition(), getDimensions(), anchor);
-    }
-
     public static Builder builder(){
         return new Builder();
     }
 
     public static class Builder {
 
-        private File file = null;
-        private Point position = null;
-        private Dimension2D dimensions = null;
-        private Communicator communicator = null;
+        private Point position = new Point(0, 0);
+        private Dimension2D dimensions = new Dimension2D(1, 1);
         private Point anchor = new Point(0 ,0);
+        private File file = null;
         private FileBuffer fileBuffer = null;
         private BufferEditor bufferEditor = null;
+        private Communicator communicator = null;
 
         private Builder(){
         }
@@ -204,19 +196,19 @@ public final class BufferView implements View, TextListener {
         }
 
         public BufferView build(){
+            Objects.requireNonNull(position, "Position is null.");
+            Objects.requireNonNull(dimensions, "Dimensions is null.");
+            Objects.requireNonNull(anchor, "Anchor is null.");
             Objects.requireNonNull(communicator, "Communicator is null.");
-            if(file == null){
-                if(fileBuffer == null){
+            if(fileBuffer == null){
+                if(file == null){
                     throw new NullPointerException("No file or file buffer is set.");
                 }else{
+                    this.fileBuffer =  new FileBuffer(file);
                     this.bufferEditor = new BufferEditor(fileBuffer);
                 }
             }else{
-                FileBuffer buffer = new FileBuffer(file);
-                this.bufferEditor = new BufferEditor(buffer);
-            }
-            if(anchor == null){
-                this.anchor = new Point(0, 0);
+                this.bufferEditor = new BufferEditor(fileBuffer);
             }
             return new BufferView(this);
         }

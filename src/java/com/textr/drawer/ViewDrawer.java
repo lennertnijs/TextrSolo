@@ -57,7 +57,7 @@ public final class ViewDrawer{
         int x = view.getPosition().getX();
         int startY = view.getPosition().getY();
         int maxY = startY + height - 1;
-        String[] lines = view.getBufferEditor().getFileBuffer().getText().getLines();
+        String[] lines = view.getText().getLines();
         for(int i = view.getAnchor().getY(); i < Math.min(lines.length, view.getAnchor().getY() + height - 1); i++){
             // only need to draw if any text is in these columns
             if(lines[i].length() > view.getAnchor().getX()){
@@ -112,7 +112,7 @@ public final class ViewDrawer{
     }
   
     private void drawScrollBar(BufferView view){
-        int maxY = view.getBufferEditor().getFileBuffer().getText().getLineAmount() - 1;
+        int maxY = view.getText().getLineAmount() - 1;
         int currentY = view.getInsertPoint().getY();
         int yBar = Math.round(((float)currentY / (float)maxY) * (view.getDimensions().height() - 1));
         terminal.printText(view.getPosition().getX() + view.getDimensions().width() - 1,
