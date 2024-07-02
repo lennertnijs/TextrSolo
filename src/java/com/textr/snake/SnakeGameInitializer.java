@@ -1,4 +1,4 @@
-package com.textr.view;
+package com.textr.snake;
 
 import com.textr.snake.*;
 import com.textr.util.Dimension2D;

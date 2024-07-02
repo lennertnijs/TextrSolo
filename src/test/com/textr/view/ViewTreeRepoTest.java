@@ -1,6 +1,7 @@
 package com.textr.view;
 
 import com.textr.Settings;
+import com.textr.service.LayoutGenerator;
 import com.textr.util.Dimension2D;
 import com.textr.util.Point;
 
@@ -88,6 +89,16 @@ class ViewTreeRepoTest {
         assertEquals(repo.getActive(), view4);
         repo.setPreviousActive();
         assertEquals(repo.getActive(), view2);
+    }
+
+    @Test
+    public void testAddToNext(){
+        View mockView = new MockView(new Point(0, 0), new Dimension2D(5, 5));
+        repo.setActive(view1);
+        repo.addNextTo(mockView, view1);
+        assertEquals(view1, repo.getActive());
+        repo.setNextActive();
+        assertEquals(mockView, repo.getActive());
     }
 
     @Test

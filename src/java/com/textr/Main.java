@@ -1,12 +1,11 @@
 package com.textr;
 
-import com.textr.drawer.ViewDrawer;
+import com.textr.service.ViewDrawer;
 import com.textr.input.InputTranslator;
-import com.textr.terminal.TerminalCommunicator;
 import com.textr.terminal.TermiosTerminalService;
-import com.textr.view.LayoutGenerator;
+import com.textr.service.LayoutGenerator;
 import com.textr.view.ViewTreeRepo;
-import com.textr.view.ViewService;
+import com.textr.service.ViewService;
 
 public class Main {
 

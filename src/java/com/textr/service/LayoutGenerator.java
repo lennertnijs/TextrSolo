@@ -1,8 +1,10 @@
-package com.textr.view;
+package com.textr.service;
 
 import com.textr.tree.Node;
 import com.textr.util.Dimension2D;
 import com.textr.util.Point;
+import com.textr.view.IViewRepo;
+import com.textr.view.View;
 
 public final class LayoutGenerator {
     private final IViewRepo viewRepo;
@@ -16,15 +18,15 @@ public final class LayoutGenerator {
      * @throws IllegalArgumentException If the list of buffers is or contains null.
      * @throws IllegalStateException If there are no buffers.
      */
-    public void generate(Dimension2D dimension2D ){
+    public void generate(Dimension2D dimension2D){
         Point topLeft = new Point(0,0);
         int terminalWidth = dimension2D.width();
         int terminalHeight = dimension2D.height();
         if(viewRepo.rootIsVertical()){
             generateLayoutsVerticalSubTree(topLeft, new Point(terminalWidth, terminalHeight), viewRepo.getRoot() );
-            return;
+        }else{
+            generateLayoutsHorizontalSubTree(topLeft,new Point(terminalWidth, terminalHeight),viewRepo.getRoot());
         }
-        generateLayoutsHorizontalSubTree(topLeft,new Point(terminalWidth, terminalHeight),viewRepo.getRoot());
 
 }
 

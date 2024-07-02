@@ -1,9 +1,6 @@
 package com.textr.view;
 
-import com.textr.filebuffer.BufferEditor;
-import com.textr.filebuffer.FileBuffer;
-import com.textr.filebuffer.IText;
-import com.textr.filebuffer.TextUpdate;
+import com.textr.filebuffer.*;
 import com.textr.input.Input;
 import com.textr.input.InputType;
 import com.textr.terminal.Communicator;
@@ -86,7 +83,7 @@ public final class BufferView implements View, TextListener {
             }
             default -> {return false;}
         }
-        AnchorUpdater.updateAnchor(anchor, bufferEditor.getInsertPoint(), getDimensions());
+        updateAnchor();
         return true;
     }
 
@@ -146,6 +143,33 @@ public final class BufferView implements View, TextListener {
     }
 
     public void doUpdate(TextUpdate t){
+        if(t.insertPoint().getY() >= anchor.getY()){
+            return;
+        }
+        if(t.operationType() == OperationType.INSERT_NEWLINE){
+            bufferEditor.moveCursor(Direction.DOWN);
+        }
+        if(t.operationType() == OperationType.DELETE_NEWLINE){
+            bufferEditor.moveCursor(Direction.UP);
+        }
+        updateAnchor();
+    }
+
+    private void updateAnchor(){
+        Point cursor = bufferEditor.getInsertPoint();
+        if(cursor.getX() < anchor.getX()){
+            anchor.setX(cursor.getX());
+        }
+        if(cursor.getY() < anchor.getY()){
+            anchor.setY(cursor.getY());
+        }
+        if(cursor.getX() > anchor.getX() + dimensions.width() - 1){
+            anchor.setX(cursor.getX() - dimensions.width() + 1);
+        }
+        // -2 because the rows are have a status bar so -1
+        if(cursor.getY() > anchor.getY() + dimensions.height() - 2){
+            anchor.setY(cursor.getY() - dimensions.height() + 2);
+        }
     }
 
     public static Builder builder(){

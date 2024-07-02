@@ -1,8 +1,9 @@
 package com.textr;
 
+import com.textr.Settings;
 import com.textr.terminal.TerminalCommunicator;
 import com.textr.terminal.TerminalService;
-import com.textr.view.ViewService;
+import com.textr.service.ViewService;
 
 import java.util.Arrays;
 

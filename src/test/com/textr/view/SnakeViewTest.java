@@ -2,6 +2,7 @@ package com.textr.view;
 
 import com.textr.input.Input;
 import com.textr.input.InputType;
+import com.textr.snake.SnakeGameInitializer;
 import com.textr.util.Dimension2D;
 import com.textr.util.Direction;
 import com.textr.util.Point;
@@ -86,6 +87,12 @@ public final class SnakeViewTest {
     }
 
     @Test
+    public void testPrepareToClose(){
+        // does nothing
+        snakeView.prepareToClose();
+    }
+
+    @Test
     public void testHandleInputENTER(){
         Input input = Input.createSpecialInput(InputType.ENTER);
         snakeView.handleInput(input);
@@ -124,6 +131,16 @@ public final class SnakeViewTest {
         Input input = Input.createSpecialInput(InputType.ARROW_LEFT);
         snakeView.handleInput(input);
         assertEquals(snakeView.getGameBoard().getSnakeDirection(), Direction.RIGHT); // does not change, not possible
+    }
+
+    @Test
+    public void testHandleInputTICK(){
+        assertFalse(snakeView.handleInput(Input.createSpecialInput(InputType.TICK)));
+    }
+
+    @Test
+    public void testHandleInputDEFAULT(){
+        assertFalse(snakeView.handleInput(Input.createSpecialInput(InputType.ESCAPE)));
     }
 
     @Test

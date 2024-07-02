@@ -1,4 +1,4 @@
-package com.textr.view;
+package com.textr.service;
 
 import com.textr.file.FileReader;
 import com.textr.file.FileWriter;
@@ -6,10 +6,11 @@ import com.textr.filebuffer.FileBuffer;
 import com.textr.input.Input;
 import com.textr.Settings;
 import com.textr.input.InputType;
+import com.textr.snake.SnakeGameInitializer;
 import com.textr.terminal.Communicator;
 import com.textr.util.Dimension2D;
 import com.textr.util.Point;
-import com.textr.drawer.ViewDrawer;
+import com.textr.view.*;
 
 import java.io.File;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package com.textr.drawer;
+package com.textr.service;
 
 import com.textr.snake.GamePoint;
 import com.textr.snake.IGameBoard;
@@ -30,11 +30,11 @@ public final class ViewDrawer{
             String statusBar = view.getStatusBar();
             if(view.equals(viewRepo.getActive())){
                 statusBar = "Active: " + statusBar;
+                if(view instanceof  BufferView b){
+                    drawCursor(b.getPosition(), b.getAnchor(), b.getInsertPoint());
+                }
             }
             if(view instanceof BufferView bufferView){
-                if(bufferView.equals(viewRepo.getActive())){
-                    drawCursor(bufferView.getPosition(), bufferView.getAnchor(), bufferView.getInsertPoint());
-                }
                 draw(bufferView, statusBar);
             }
             if(view instanceof SnakeView snakeView){
@@ -50,9 +50,7 @@ public final class ViewDrawer{
      *
      * @throws IllegalArgumentException If any parameter is null.
      */
-    public void draw(BufferView view, String statusBar) {
-        Objects.requireNonNull(view, "Cannot draw a null BufferView.");
-        Objects.requireNonNull(statusBar, "Cannot draw the BufferView because the status bar is null.");
+    private void draw(BufferView view, String statusBar) {
         int height = view.getDimensions().height();
         int x = view.getPosition().getX();
         int startY = view.getPosition().getY();
@@ -78,9 +76,7 @@ public final class ViewDrawer{
      *
      * @throws IllegalArgumentException If any parameter is null.
      */
-    public void draw(SnakeView view, String statusBar) {
-        Objects.requireNonNull(view, "Cannot draw a null BufferView.");
-        Objects.requireNonNull(statusBar, "Cannot draw the BufferView because the status bar is null.");
+    private void draw(SnakeView view, String statusBar) {
         int height = view.getDimensions().height();
         int x = view.getPosition().getX();
         int baseY = view.getPosition().getY()+ height - 2;
@@ -129,7 +125,7 @@ public final class ViewDrawer{
 
     }
 
-    public void drawCursor(Point position, Point anchor, Point cursor){
+    private void drawCursor(Point position, Point anchor, Point cursor){
         Objects.requireNonNull(position, "Cannot draw the cursor because the position is null.");
         Objects.requireNonNull(anchor, "Cannot draw the cursor because the anchor is null.");
         Objects.requireNonNull(cursor, "Cannot draw the cursor because the cursor position is null.");
